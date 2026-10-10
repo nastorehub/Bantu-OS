@@ -6,8 +6,8 @@ Herald OS runs on NasTech Agent (https://github.com/nastechresearch/nastech-agen
 Copyright (c) 2025 NasTech Research, released under the MIT License. It uses
 NasTech Agent without modifying it, and includes the following material from it:
 
-- apps/desktop/src/assets/brand/nastech-avatar.png, the NasTech agent avatar
-  (apps/desktop/public/brand/herald-icon.png as the NasTech agent avatar).
+- apps/desktop/src/assets/brand/nastech-avatar.png and apps/desktop/src/assets/brand/nastech-agent/, the
+  upstream NasTech avatar, desktop icons, SVG marks, website logos and favicons.
 - The TypeScript gateway client and generated wire contract
   (apps/shared/src upstream). They are downloaded at build time into
   upstream/nastech-agent/ (pinned by upstream/UPSTREAM.lock), re-exported by
