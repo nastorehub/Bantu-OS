@@ -29,7 +29,7 @@ describe('parseUnifiedDiff', () => {
     expect(files[1]).toMatchObject({ path: 'app.js', created: false, added: [1, 11], removed: 1 })
   })
 
-  it("reads Hermes's rendered transcript diff (colours, banner, a/ → b/ headers)", () => {
+  it("reads NasTech's rendered transcript diff (colours, banner, a/ → b/ headers)", () => {
     const diff = [
       '  ┊ review diff',
       '\u001b[38;2;218;165;32ma//Users/me/site/styles.css → b//Users/me/site/styles.css\u001b[0m',

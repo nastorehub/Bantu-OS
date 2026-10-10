@@ -31,7 +31,7 @@ export interface TransformSession {
   transient: boolean
   /** What the drags did, for the step's name. */
   did: Set<Change>
-  /** The state last shown, to notice a change made from elsewhere (Hermes, an undo). */
+  /** The state last shown, to notice a change made from elsewhere (NasTech, an undo). */
   shown: DocState
 }
 
@@ -87,7 +87,7 @@ export function sessionFor(doc: CanvasDocument): TransformSession | null {
     return next
   }
 
-  // Something else changed the document (an undo, Hermes): the session is over, and the preview stays as that change left it.
+  // Something else changed the document (an undo, NasTech): the session is over, and the preview stays as that change left it.
   $transform.set(null)
   doc.interacting = false
 

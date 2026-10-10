@@ -1,7 +1,7 @@
 // Self-healing speech providers: when the configured STT/TTS provider cannot run (no API key, a
-// managed gateway the account is not entitled to, a missing local package), switch the Hermes
+// managed gateway the account is not entitled to, a missing local package), switch the NasTech
 // config to the free provider that needs nothing, say so once, and retry. The conversation must
-// not fail because `hermes tools` was left pointing at a service the user never set up.
+// not fail because `nastech tools` was left pointing at a service the user never set up.
 import { rest } from '../rest.ts'
 
 export type SpeechKind = 'stt' | 'tts'
@@ -34,7 +34,7 @@ export async function currentProvider(kind: SpeechKind): Promise<string | null> 
 
 /**
  * Run `attempt`; if it fails with a provider-setup error and the free provider is not already in
- * use, switch the Hermes config to it and run `attempt` once more. `onSwitched` reports the change.
+ * use, switch the NasTech config to it and run `attempt` once more. `onSwitched` reports the change.
  */
 export async function withProviderFallback<T>(kind: SpeechKind, attempt: () => Promise<T>, onSwitched?: (from: string | null, to: string) => void): Promise<T> {
   try {
@@ -51,7 +51,7 @@ export async function withProviderFallback<T>(kind: SpeechKind, attempt: () => P
       throw error
     }
 
-    // Same deep-merge write the Settings page uses; `hermes tools` sees the same value.
+    // Same deep-merge write the Settings page uses; `nastech tools` sees the same value.
     await rest.put('/api/config', { config: { [kind]: { provider: to } } })
     switched.add(kind)
     onSwitched?.(from, to)

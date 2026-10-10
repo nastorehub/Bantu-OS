@@ -5,7 +5,7 @@ import { deriveAgentName, missionIcon, STATUS_LABEL, STATUS_TONE } from './missi
 
 export function MissionCard({ mission, selected, onSelect }: { mission: Mission; selected: boolean; onSelect: () => void }) {
   const Icon = missionIcon(mission.title)
-  const agent = mission.agents[0] ? deriveAgentName(mission.goal) : 'Hermes'
+  const agent = mission.agents[0] ? deriveAgentName(mission.goal) : 'NasTech'
   const step = mission.currentStep || STATUS_LABEL[mission.status]
   const showProgress = mission.status === 'active' || mission.status === 'queued'
 

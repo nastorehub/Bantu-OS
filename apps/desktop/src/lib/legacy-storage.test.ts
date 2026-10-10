@@ -17,15 +17,15 @@ function memoryStorage(entries: Record<string, string>) {
 }
 
 describe('migrateLegacyStorage', () => {
-  it('moves hermes-os. keys to herald-os. and leaves other keys alone', () => {
-    const storage = memoryStorage({ 'hermes-os.panels': '{"today":true}', 'hermes-os.a11y.text-size': 'large', other: '1' })
+  it('moves nastech-os. keys to herald-os. and leaves other keys alone', () => {
+    const storage = memoryStorage({ 'nastech-os.panels': '{"today":true}', 'nastech-os.a11y.text-size': 'large', other: '1' })
 
     expect(migrateLegacyStorage(storage)).toBe(2)
     expect(Object.fromEntries(storage.data)).toEqual({ other: '1', 'herald-os.panels': '{"today":true}', 'herald-os.a11y.text-size': 'large' })
   })
 
   it('keeps a value already saved under the new name', () => {
-    const storage = memoryStorage({ 'hermes-os.panels': 'old', 'herald-os.panels': 'new' })
+    const storage = memoryStorage({ 'nastech-os.panels': 'old', 'herald-os.panels': 'new' })
 
     migrateLegacyStorage(storage)
 

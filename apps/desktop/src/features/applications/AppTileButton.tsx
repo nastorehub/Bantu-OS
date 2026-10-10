@@ -6,7 +6,7 @@ import type { LauncherTile } from './app-catalog.ts'
 export const TILE_ICON = 68
 
 /**
- * One launcher tile: a 68px icon area with a label underneath. Hermes apps render the blue glass
+ * One launcher tile: a 68px icon area with a label underneath. NasTech apps render the blue glass
  * AppTile; native apps fetch their icon lazily once the tile scrolls into view, showing a neutral
  * placeholder until then and their initial if they have none. Keyboard focus stays in the search
  * field, so `active` is the roving ring.
@@ -73,7 +73,7 @@ export const AppTileButton = memo(function AppTileButton({
       className={cn('group flex w-full flex-col items-center gap-2 rounded-xl px-1.5 pt-2.5 pb-2 transition-colors duration-150 hover:bg-white/6', active && 'bg-white/8 ring-2 ring-accent-strong/70')}
     >
       <span className="flex items-center justify-center transition-transform duration-150 group-active:scale-95" style={{ width: TILE_ICON, height: TILE_ICON }}>
-        {tile.kind === 'hermes' ? (
+        {tile.kind === 'nastech' ? (
           <AppTile id={tile.icon} size={TILE_ICON} />
         ) : iconUrl ? (
           <img src={iconUrl} alt="" width={TILE_ICON} height={TILE_ICON} draggable={false} loading="lazy" className="size-[68px] rounded-[18px] object-contain" />

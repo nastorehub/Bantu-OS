@@ -11,7 +11,7 @@ import { messageOf } from '../../canvas/errors.ts'
 import { Menu, type MenuItemDef } from '../../files/Menu.tsx'
 import { bindOfficeRelay } from '../agent.ts'
 import { $nameQuestion, loadCommentName } from '../comment-name.ts'
-import { AskHermesBar } from '../hermes/AskHermesBar.tsx'
+import { AskNasTechBar } from '../nastech/AskNasTechBar.tsx'
 import type { OfficeSession } from '../session.ts'
 import type { OfficeDocument } from '../types.ts'
 import { CommentNamePrompt } from './CommentNamePrompt.tsx'
@@ -134,7 +134,7 @@ function StatusBar<Model>({ session, doc, noun }: { session: OfficeSession<Model
         </button>
       )}
       <span className={cn('ml-auto min-w-0 truncate', fresh && notice.tone === 'error' && 'text-danger')}>{fresh ? notice.message : ''}</span>
-      {doc && <AskHermesBar app={session.adapter.app} docKey={doc.key} noun={noun} focusDocument={() => doc.editor?.focus?.()} />}
+      {doc && <AskNasTechBar app={session.adapter.app} docKey={doc.key} noun={noun} focusDocument={() => doc.editor?.focus?.()} />}
     </div>
   )
 }
@@ -213,7 +213,7 @@ export function OfficeWindow<Model>({ session, menus, payload, start, noun, canO
   const requestedAt = payload?.at
   const newDocument = onNew ?? (() => session.create())
 
-  // A file handed over by Herald (Files, the viewer, Hermes), or a new document asked for.
+  // A file handed over by Herald (Files, the viewer, NasTech), or a new document asked for.
   useEffect(() => {
     if (requested) {
       session.open(requested).catch((error: unknown) => session.notify(`Could not open ${requested.split('/').pop()}: ${messageOf(error)}`, 'error'))
@@ -222,7 +222,7 @@ export function OfficeWindow<Model>({ session, menus, payload, start, noun, canO
     }
   }, [requested, command, requestedAt])
 
-  // Main keeps track of what each Office window has open (Hermes's commands work on what is in front).
+  // Main keeps track of what each Office window has open (NasTech's commands work on what is in front).
   useEffect(() => {
     const element = root.current
     const focused = () => session.report(true)

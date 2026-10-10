@@ -336,7 +336,7 @@ export function filterItems(items: FileItem[], options: { showHidden: boolean; k
 
 const NATURAL_WORDS = new Set(['find', 'show', 'my', 'from', 'yesterday', 'today', 'screenshots', 'last', 'week', 'recent', 'all', 'with', 'that', 'where', 'search', 'get', 'list', 'which', 'about', 'the'])
 
-/** Plain text filters the listing; sentences go to Hermes. */
+/** Plain text filters the listing; sentences go to NasTech. */
 export function looksLikeNaturalLanguage(query: string): boolean {
   const words = query.trim().split(/\s+/).filter(Boolean)
 
@@ -351,13 +351,13 @@ export function looksLikeNaturalLanguage(query: string): boolean {
   return words.some(word => NATURAL_WORDS.has(word.toLowerCase().replace(/[^a-z]/g, '')))
 }
 
-export function askHermesToFind(query: string): void {
-  showPage('hermes')
+export function askNasTechToFind(query: string): void {
+  showPage('nastech')
   void sendPrompt(`Find files: ${query}. Use system_find_files and list the paths.`)
 }
 
-export function askHermesAbout(path: string): void {
-  showPage('hermes')
+export function askNasTechAbout(path: string): void {
+  showPage('nastech')
   void sendPrompt(`Take a look at ${path} and tell me what it is and what I might do with it.`)
 }
 

@@ -32,7 +32,7 @@ const SECTIONS: { id: SectionId; label: string; icon: ComponentType<{ size?: num
   { id: 'appearance', label: 'Appearance', icon: IconPalette, view: AppearanceSection },
   { id: 'software', label: 'Software', icon: IconApps, view: SoftwareSection },
   { id: 'plugins', label: 'Plugins', icon: IconPuzzle, view: PluginsSection },
-  { id: 'agents', label: 'Hermes & agents', icon: IconRobot, view: AgentsSection },
+  { id: 'agents', label: 'NasTech & agents', icon: IconRobot, view: AgentsSection },
   { id: 'usage', label: 'Usage', icon: IconGauge, view: UsageSection },
   { id: 'voice', label: 'Voice', icon: IconMicrophone, view: VoiceSection },
   { id: 'commands', label: 'Voice commands', icon: IconListDetails, view: VoiceCommandsSection },

@@ -1,4 +1,4 @@
-// What is on screen, as one line for Hermes: the folder the Files page shows and the selected file,
+// What is on screen, as one line for NasTech: the folder the Files page shows and the selected file,
 // and the document in a viewer window in front. Spoken requests carry it, after the line about what
 // Herald Office has open, so "this folder", "this file" and "this sheet" have a referent; typed ones
 // can ask `os_ui action=state`. Pure, so it is tested in node.
@@ -11,7 +11,7 @@ export interface FilesView {
 }
 
 export interface ScreenFacts {
-  /** The Hermes window's page. */
+  /** The NasTech window's page. */
   page: string
   /** What the Files page lists (whether or not it is the page in view). */
   files: FilesView | null

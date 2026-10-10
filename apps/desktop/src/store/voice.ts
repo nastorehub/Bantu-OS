@@ -54,7 +54,7 @@ export const $voice = atom<VoiceSnapshot>({
 
 /** True while a conversation is running (any state past armed). */
 export const $voiceActive = computed($voice, voice => voice.state !== 'off' && voice.state !== 'armed')
-/** The Hermes session the conversation's turns go to: its approval cards can be answered by voice. */
+/** The NasTech session the conversation's turns go to: its approval cards can be answered by voice. */
 export const $voiceSessionId = atom<string | null>(null)
 /** Combined input/output level for the orb, 0..1. */
 export const $voiceLevel = computed([$voice, $micLevel, $speakLevel], (voice, mic, speak) => (voice.state === 'speaking' ? speak : Math.min(1, mic * 4)))
@@ -99,8 +99,8 @@ function recordLiveSeconds(seconds: number): void {
   patch({ live: { ...$voice.get().live, todaySeconds: Math.round(total) } })
 }
 
-/** The last Hermes turn of this conversation used its tools; cleared when a fast-path command runs. */
-let hermesActed = false
+/** The last NasTech turn of this conversation used its tools; cleared when a fast-path command runs. */
+let nastechActed = false
 
 /** How long a spoken request waits for the turn it interrupted (an Office call cannot stop halfway) to end. */
 const SETTLE_MS = 15_000
@@ -114,7 +114,7 @@ interface TurnEnd {
   error?: string
 }
 
-/** A spoken request sent to Hermes: where its reply starts, and the ends its session reported before anyone followed it. */
+/** A spoken request sent to NasTech: where its reply starts, and the ends its session reported before anyone followed it. */
 interface SentTurn {
   /** Index of the request in the chat; the reply is everything after it. */
   from: number
@@ -155,7 +155,7 @@ function watchEnds(sessionId: string, queued: boolean): SentTurn {
   return turn
 }
 
-/** The chat a spoken request goes to: the one the Hermes window shows, or a new one. */
+/** The chat a spoken request goes to: the one the NasTech window shows, or a new one. */
 async function voiceSession(): Promise<string> {
   const active = $activeChatId.get()
 
@@ -186,7 +186,7 @@ function observeTurn(sessionId: string, handlers: TurnHandlers): () => void {
   let done = false
   let skipped = false
   let starting: ReturnType<typeof setTimeout> | null = null
-  hermesActed = false
+  nastechActed = false
 
   /** Stop following; the tools the turn ran, or null when it was over already. */
   const stop = (): string[] | null => {
@@ -204,7 +204,7 @@ function observeTurn(sessionId: string, handlers: TurnHandlers): () => void {
     turn.release()
     const current = $chats.get()[sessionId]
     const tools = current ? toolsSince(current.messages, fromIndex) : []
-    hermesActed = tools.length > 0
+    nastechActed = tools.length > 0
 
     return tools
   }
@@ -299,10 +299,10 @@ function observeTurn(sessionId: string, handlers: TurnHandlers): () => void {
   return () => void stop()
 }
 
-/** Voice fast path: a matching registry command runs immediately; a failed run falls back to Hermes. */
+/** Voice fast path: a matching registry command runs immediately; a failed run falls back to NasTech. */
 export async function runVoiceIntent(text: string): Promise<{ handled: boolean; spoken: string; ok: boolean }> {
-  // Right after Hermes moved or changed something, "undo that" is about its change, not the text field.
-  const intent = matchIntent(text, undefined, { afterHermesAction: hermesActed })
+  // Right after NasTech moved or changed something, "undo that" is about its change, not the text field.
+  const intent = matchIntent(text, undefined, { afterNasTechAction: nastechActed })
 
   if (!intent) {
     return { handled: false, spoken: '', ok: false }
@@ -311,11 +311,11 @@ export async function runVoiceIntent(text: string): Promise<{ handled: boolean; 
   const result = await runCommand(intent.command, intent.args, { source: 'voice' })
 
   if (!result.ok) {
-    // The words matched but the OS could not do it (unknown name, nothing selected): let Hermes reason.
+    // The words matched but the OS could not do it (unknown name, nothing selected): let NasTech reason.
     return { handled: false, spoken: result.error ?? result.summary, ok: false }
   }
 
-  hermesActed = false
+  nastechActed = false
 
   return { handled: true, spoken: result.spoken ?? result.summary, ok: true }
 }
@@ -423,7 +423,7 @@ export async function startVoice(reason: VoiceStartReason = 'button'): Promise<v
   }
 
   if (!$gatewayReady.get()) {
-    notify({ title: 'Voice', body: 'Hermes is still connecting; try again in a moment.', level: 'warn' })
+    notify({ title: 'Voice', body: 'NasTech is still connecting; try again in a moment.', level: 'warn' })
 
     return
   }
@@ -472,7 +472,7 @@ function idleState(): VoiceState {
 export async function endConversation(reason: ConversationEndReason = 'user', detail?: string): Promise<void> {
   const current = engine
   engine = null
-  hermesActed = false
+  nastechActed = false
   $voiceSessionId.set(null)
   stopFallbackAudio()
 
@@ -545,7 +545,7 @@ export function setLiveSessionSeconds(seconds: number): void {
   patch({ live: { ...$voice.get().live, sessionSeconds: seconds } })
 }
 
-/** Speak a line, switching the Hermes TTS provider to the free one when the configured one cannot run. */
+/** Speak a line, switching the NasTech TTS provider to the free one when the configured one cannot run. */
 export function speakWithFreeFallback(text: string, signal?: { stopped: boolean }): Promise<void> {
   return withProviderFallback(
     'tts',
@@ -630,7 +630,7 @@ async function tuneLocalStt(): Promise<void> {
   }
 }
 
-/** Wire the voice layer once per renderer window; only the Hermes window runs conversations. */
+/** Wire the voice layer once per renderer window; only the NasTech window runs conversations. */
 export function bindVoice(): () => void {
   if (bound || !isMainSurface) {
     return () => undefined
@@ -673,7 +673,7 @@ export function bindVoice(): () => void {
   })
   const offReady = $gatewayReady.subscribe(ready => {
     if (!ready && engine) {
-      void endConversation('connection-lost', 'Lost the connection to Hermes.')
+      void endConversation('connection-lost', 'Lost the connection to NasTech.')
     }
 
     if (ready) {

@@ -6,7 +6,7 @@ import { heraldOsDataDir } from './paths.ts'
 import { readPrefs, writePrefs } from './prefs.ts'
 
 describe('the name on comments in the prefs', () => {
-  const saved = process.env.HERMES_HOME
+  const saved = process.env.NASTECH_HOME
   let root = ''
   const file = () => path.join(root, 'herald-os', 'prefs.json')
   const onDisk = () => JSON.parse(fs.readFileSync(file(), 'utf8')) as Record<string, unknown>
@@ -18,15 +18,15 @@ describe('the name on comments in the prefs', () => {
 
   beforeEach(() => {
     root = fs.mkdtempSync(path.join(os.tmpdir(), 'herald-prefs-'))
-    process.env.HERMES_HOME = root
+    process.env.NASTECH_HOME = root
     expect(heraldOsDataDir()).toBe(path.join(root, 'herald-os'))
   })
 
   afterEach(() => {
     if (saved === undefined) {
-      delete process.env.HERMES_HOME
+      delete process.env.NASTECH_HOME
     } else {
-      process.env.HERMES_HOME = saved
+      process.env.NASTECH_HOME = saved
     }
 
     fs.rmSync(root, { recursive: true, force: true })

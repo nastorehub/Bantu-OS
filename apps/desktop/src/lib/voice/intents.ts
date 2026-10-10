@@ -1,7 +1,7 @@
 // The voice fast path: match a transcript against the command registry's phrases without a model
 // round-trip. Deliberately conservative: only whole-utterance matches count, destructive commands
-// never match here (they go to Hermes for the approval card), and anything unmatched is handed to
-// Hermes unchanged. Pure, so the grammar is unit-tested in node.
+// never match here (they go to NasTech for the approval card), and anything unmatched is handed to
+// NasTech unchanged. Pure, so the grammar is unit-tested in node.
 import { type CommandPhrase, type CommandSummary, listCommands } from '../../store/os-commands.ts'
 import { dictationRemainder } from './dictation.ts'
 
@@ -14,16 +14,16 @@ export interface IntentMatch {
 }
 
 const FILLERS = [
-  // The wake phrase as transcribers hear it: "hey Hermes", "hey herpes", "hey, …" with the name lost.
-  /^(hey|ok|okay|hi|hello|yo)(?:[,!\s]|\.(?=\s|$))+((hermes|herm[eèi]s|herpes|hermies|harmes|her mess)(?:[,!\s]|\.(?=\s|$))*)?/i,
-  /^(hermes|herm[eè]s)(?:[,!\s]|\.(?=\s|$))+/i,
+  // The wake phrase as transcribers hear it: "hey NasTech", "hey herpes", "hey, …" with the name lost.
+  /^(hey|ok|okay|hi|hello|yo)(?:[,!\s]|\.(?=\s|$))+((nastech|herm[eèi]s|herpes|hermies|harmes|her mess)(?:[,!\s]|\.(?=\s|$))*)?/i,
+  /^(nastech|herm[eè]s)(?:[,!\s]|\.(?=\s|$))+/i,
   /^(please|now)[,\s]+/i,
   /^(can|could|would|will) you (please )?/i,
   /^(i want to|i'?d like to|i would like to|i need to|let'?s|just)\s+/i,
   /^(go ahead and|please go ahead and)\s+/i
 ]
 
-const TRAILERS = [/[,\s]+please$/i, /[,\s]+(for me|now|thanks|thank you)$/i, /[,\s]+hermes$/i]
+const TRAILERS = [/[,\s]+please$/i, /[,\s]+(for me|now|thanks|thank you)$/i, /[,\s]+nastech$/i]
 
 /** Drop the wake word and leading politeness, keeping the user's casing and punctuation. */
 export function stripFillers(text: string): string {
@@ -150,12 +150,12 @@ const BARE_FILE = /^(?:https?:\/\/)?(?:www\.)?[\w-]+(?:[.-][\w-]+)*\.(?:pdf|docx
  */
 const BUILD_REQUEST = /^(?:create|build|make|design|code|develop|generate|put together|spin up)(?: me| us| for me)? ((?:an?|some) (?:[\w'&-]+ ){0,4}?(?:website|web site|site|web page|webpage|landing page|web app|app|application|online store|store|shop|portfolio|blog|game|dashboard|page)\b.*)$/
 
-/** Words that mean the utterance is a request for Hermes to think, not a shell command. */
-const HERMES_MARKERS = /\b(why|how come|explain|summari[sz]e|write|draft|fix|debug|refactor|research|compare|analy[sz]e|tell me about|what do you think)\b/i
+/** Words that mean the utterance is a request for NasTech to think, not a shell command. */
+const NASTECH_MARKERS = /\b(why|how come|explain|summari[sz]e|write|draft|fix|debug|refactor|research|compare|analy[sz]e|tell me about|what do you think)\b/i
 
 /**
  * Sorting, renaming or filing documents ("rename it properly and put it where it belongs", "file the
- * invoices in this folder"): Hermes has to read the files first, so no command matches these.
+ * invoices in this folder"): NasTech has to read the files first, so no command matches these.
  */
 const FILING_REQUEST = /\b(renam(?:e|ing)|organi[sz]e|tidy up|sort (?:out|through)|where (?:it|they|this|these|those|that) (?:belongs?|goes|go|should go))\b|(?:^|\b(?:and|then|to|please|also)\s+)file (?:it|them|this|these|those|that|the|my|all|every|everything)\b/i
 
@@ -168,7 +168,7 @@ const MODIFIER = `(?!(?:${LINKS}|an?|the|my|our|this|it)\\b)[\\w'&-]+`
 const THING = `(?:${DOCUMENTS}|${PARTS})s?\\b`
 
 /**
- * Making or changing what a document holds: Hermes does that work in Herald Docs, Sheets and
+ * Making or changing what a document holds: NasTech does that work in Herald Docs, Sheets and
  * Slides, so these never fill a command's slot ("build me {goal}", "make {name} bigger") or start a
  * build; a whole command phrase ("new document", "make it bigger") still runs.
  */
@@ -196,20 +196,20 @@ const NAMED_FILE = /\.[a-z0-9]{1,5}$|\s+dot\s+[a-z0-9]{1,5}$/i
 /** Commands that look a file, folder or app up by its name: a description is no name. */
 const LOOKUP_COMMANDS = new Set(['open.any', 'file.open', 'files.search'])
 
-/** Commands whose "that" is ambiguous right after Hermes acted. */
+/** Commands whose "that" is ambiguous right after NasTech acted. */
 const UNDO_COMMANDS = new Set(['edit.undo', 'edit.redo'])
 
 export interface MatchContext {
   /**
-   * The previous turn of the conversation was Hermes using its tools (it moved a file, say). "Undo
-   * that" then means Hermes's change, so it goes to Hermes instead of the text field's undo.
+   * The previous turn of the conversation was NasTech using its tools (it moved a file, say). "Undo
+   * that" then means NasTech's change, so it goes to NasTech instead of the text field's undo.
    */
-  afterHermesAction?: boolean
+  afterNasTechAction?: boolean
 }
 
 /**
  * Match one utterance against the registry. Returns null when nothing matches confidently; the
- * caller then sends the utterance to Hermes. `commands` defaults to the live registry.
+ * caller then sends the utterance to NasTech. `commands` defaults to the live registry.
  */
 export function matchIntent(text: string, commands: readonly CommandSummary[] = listCommands({ includeHidden: true }), context: MatchContext = {}): IntentMatch | null {
   // Dictation first: "type …" keeps the exact words (any length, any question) for the text field.
@@ -244,7 +244,7 @@ export function matchIntent(text: string, commands: readonly CommandSummary[] = 
     return { command: 'build.start', args: { goal }, title: `Build: ${goal.slice(0, 60)}`, confidence: 0.85 }
   }
 
-  if (!utterance || utterance.split(' ').length > 14 || HERMES_MARKERS.test(utterance) || FILING_REQUEST.test(utterance)) {
+  if (!utterance || utterance.split(' ').length > 14 || NASTECH_MARKERS.test(utterance) || FILING_REQUEST.test(utterance)) {
     return null
   }
 
@@ -259,7 +259,7 @@ export function matchIntent(text: string, commands: readonly CommandSummary[] = 
       continue
     }
 
-    if (context.afterHermesAction && UNDO_COMMANDS.has(entry.command.id)) {
+    if (context.afterNasTechAction && UNDO_COMMANDS.has(entry.command.id)) {
       return null
     }
 
@@ -280,12 +280,12 @@ export function matchIntent(text: string, commands: readonly CommandSummary[] = 
       continue
     }
 
-    // Slot values that are themselves whole requests ("open the file I edited yesterday") are for Hermes.
+    // Slot values that are themselves whole requests ("open the file I edited yesterday") are for NasTech.
     if (entry.slots.some(slot => String(args[slot]).split(' ').length > 6)) {
       continue
     }
 
-    // "Show me the invoice from Acme": only Hermes can find a document by what it says.
+    // "Show me the invoice from Acme": only NasTech can find a document by what it says.
     if (LOOKUP_COMMANDS.has(entry.command.id) && !entry.byName && entry.slots.some(slot => describesDocument(String(args[slot])))) {
       continue
     }

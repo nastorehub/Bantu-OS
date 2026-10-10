@@ -5,28 +5,28 @@ a Mac it is `Alt` instead, because macOS keeps `Command` for itself. `Super+K` s
 shortcut on screen. Herald's own pages also answer to `Ctrl` on Linux, so `Ctrl+K` and `Ctrl+1`
 work everywhere.
 
-## Hermes and Herald OS
+## NasTech and Herald OS
 
 | Action | macOS | Herald OS Linux |
 | --- | --- | --- |
 | Command bar | `Cmd+K` | `Super+Shift+Space` or `Ctrl+K` |
 | All applications | `Cmd+Shift+A` | `Super+A` |
-| Talk to Hermes | `Alt+Space` | `Super+V` |
+| Talk to NasTech | `Alt+Space` | `Super+V` |
 | Dictate into any app (again, or a pause, to finish) | `Cmd+Ctrl+X` | `Super+Ctrl+X` |
 | Emoji, typed into any app | `Cmd+Ctrl+E` | `Super+Ctrl+E` |
 | Ask about part of the screen | `Cmd+Shift+S` | `Super+Shift+S` |
 | Ask about the focused window | | `Super+Space` |
-| Screenshot of the whole screen, to Hermes | | `Super+Ctrl+Shift+S` |
+| Screenshot of the whole screen, to NasTech | | `Super+Ctrl+Shift+S` |
 | Herald OS menu: apps, themes, updates | | `Super+M` or `Super+Alt+Space` |
 | Show these hotkeys | | `Super+K` |
-| Overview, Hermes, Missions, Memory, Files, Automations, Connections | `Cmd+1` ... `Cmd+7` | `Ctrl+1` ... `Ctrl+7` |
+| Overview, NasTech, Missions, Memory, Files, Automations, Connections | `Cmd+1` ... `Cmd+7` | `Ctrl+1` ... `Ctrl+7` |
 | Settings | `Cmd+,` | `Super+,` |
 | Terminal | `Cmd+8` | `Super+Return` |
 | Files | | `Super+E` |
 | Browser | | `Super+Shift+Return` |
 | System monitor | | `Super+I` |
 | Missions | | `Super+Shift+M` |
-| The Hermes window | | ``Super+` `` |
+| The NasTech window | | ``Super+` `` |
 | Toggle the sidebar | `Cmd+\` | `Ctrl+\` |
 | Clipboard history | | `Super+Ctrl+V` |
 | Lock, power menu | | `Super+Ctrl+L`, `Super+Escape` |
@@ -64,7 +64,7 @@ work everywhere.
 | Screenshot of the window, of the screen | `Super+Print`, `Super+Shift+Print` |
 | Record the screen (again to stop) | `Super+Alt+Print` |
 | Pick a colour from the screen | `Super+Ctrl+Print` |
-| Ask Hermes about part of the screen | `Super+Shift+S` |
+| Ask NasTech about part of the screen | `Super+Shift+S` |
 
 ## Herald Canvas
 
@@ -85,7 +85,7 @@ them all. `Cmd` on a Mac is `Ctrl` on Herald OS Linux.
 ## Omarchy keys (Herald OS Linux)
 
 Coming from Omarchy? Settings > General > Keymap, or `herald-os keymap omarchy`, makes `Super+C`,
-`Super+X` and `Super+V` copy, cut and paste in every app, terminals included. Talking to Hermes
+`Super+X` and `Super+V` copy, cut and paste in every app, terminals included. Talking to NasTech
 moves to `Super+Shift+V` and centring a column to `Super+Ctrl+C`; `herald-os keymap herald` switches
 back.
 
@@ -94,4 +94,4 @@ back.
 On Herald OS Linux, add binds to `~/.config/niri/local.kdl`, which Herald OS never overwrites; any
 `herald-os` command can be a bind, and binding a key Herald OS already uses replaces it.
 [Make it yours](make-it-yours.md#keyboard-shortcuts) has examples, including switching a key off,
-and Hermes can write them for you: "add a shortcut that opens Obsidian".
+and NasTech can write them for you: "add a shortcut that opens Obsidian".

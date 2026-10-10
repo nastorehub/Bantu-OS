@@ -71,7 +71,7 @@ describe('automatic levels', () => {
     expect(autoLevels(new Uint8ClampedArray(8), 'color')).toBeNull()
   })
 
-  it('reads the kind Hermes asks for', () => {
+  it('reads the kind NasTech asks for', () => {
     expect(autoModeFrom(undefined)).toBe('tone')
     expect(autoModeFrom('Auto Contrast')).toBe('contrast')
     expect(autoModeFrom('colour')).toBe('color')

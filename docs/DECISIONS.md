@@ -2,18 +2,18 @@
 
 Short records of the decisions that shape Herald OS. Newest last.
 
-## ADR-001: Consume upstream Hermes, do not fork it
+## ADR-001: Consume upstream NasTech, do not fork it
 
-Herald OS runs against the user's installed Hermes runtime (`$HERMES_HOME/hermes-agent`), which
-`hermes update` keeps current. The only upstream code compiled into the shell is
+Herald OS runs against the user's installed NasTech runtime (`$NASTECH_HOME/nastech-agent`), which
+`nastech update` keeps current. The only upstream code compiled into the shell is
 `apps/shared/src` (JSON-RPC client and generated contract), vendored as a pinned snapshot in
 `upstream/` and refreshed by `scripts/sync-upstream.sh`. Rationale: the runtime moves fast
 (facade-plus-siblings decomposition, ~39k tests); a fork would fall behind within weeks, and the
 upstream wire contract is already stable and generated.
 
-## ADR-002: New lean shell instead of lifting the Hermes Desktop renderer
+## ADR-002: New lean shell instead of lifting the NasTech Desktop renderer
 
-Hermes Desktop's renderer is ~585k lines and its chat, session and store layers are coupled to a
+NasTech Desktop's renderer is ~585k lines and its chat, session and store layers are coupled to a
 multi-connection pane shell. Herald OS needs a fullscreen environment with a different information
 architecture, so it builds its own renderer on the same transport. Desktop is used as a reference
 for patterns (backend ladder, ready handshake, terminal IPC, design tokens), not copied.
@@ -21,7 +21,7 @@ for patterns (backend ladder, ready handshake, terminal IPC, design tokens), not
 ## ADR-003: Sessions use `source: "herald_os"`
 
 Upstream folds the `desktop_ui` toolset into sessions whose source is `desktop`. Those tools need
-client handlers that only Hermes Desktop implements. Herald OS declares its own source so the agent
+client handlers that only NasTech Desktop implements. Herald OS declares its own source so the agent
 never sees tools it cannot complete.
 
 ## ADR-004: The system bridge is an out-of-tree plugin executing on the backend host
@@ -32,14 +32,14 @@ server-side behind a `HostAdapter` abstraction. Client-side execution (for remot
 deferred until upstream exposes a generic plugin server-request hook; the adapter boundary keeps
 that move mechanical.
 
-Amendment (session scope): the tools are offered and run only in sessions Herald OS starts. Hermes
+Amendment (session scope): the tools are offered and run only in sessions Herald OS starts. NasTech
 enables a plugin toolset on every platform that has not saved a list without it, and the backend
-shares the `cli` platform's list with the `hermes` CLI, so the person's Telegram, Discord, cron and
+shares the `cli` platform's list with the `nastech` CLI, so the person's Telegram, Discord, cron and
 terminal sessions got the system tools, with read and act tiers running unprompted. No toolset list
 can say "Herald OS sessions only", and `HERALD_OS=1` is not enough either: the backend runs cron
 in-process, and a messaging gateway it starts inherits its environment. Every handler is wrapped to
 run only when the turn's bound session source is `herald_os` (ADR-003), read through
-`gateway.session_context.get_session_env` as Hermes's own tools read it; the availability check hides
+`gateway.session_context.get_session_env` as NasTech's own tools read it; the availability check hides
 the schemas from other surfaces and is registered uncached (`tools.registry.no_cache_check_fn`) so
 one session's verdict is never served to another. Proposed upstream: pass the session source to
 handlers with the other context keywords, or let a toolset declare the session sources it serves.
@@ -76,7 +76,7 @@ The pinned upstream snapshot delivers `approval` / `clarify` / `sudo` / `secret`
 JSON-RPC requests. The runtime most users have installed today (0.21.0) still emits them as
 `<kind>.request` events answered through `<kind>.respond` RPCs. Herald OS folds the legacy shape
 into the same `ServerRequest` object (`apps/desktop/src/lib/legacy-requests.ts`), so cards and stores
-have one code path and an older runtime keeps working until `hermes update` moves it forward.
+have one code path and an older runtime keeps working until `nastech update` moves it forward.
 The fallback is narrow, named, and covered by unit tests, as upstream's compatibility rule asks.
 
 ## ADR-010: System tools stay directly callable
@@ -94,16 +94,16 @@ per-session or per-plugin switch and `tools.tool_search.defer` can only add tool
 set. With the tools kept to Herald OS sessions (ADR-004 amendment) it no longer puts Herald OS's
 schemas into other sessions; what it still changes there is that their own plugin and MCP tools are
 listed directly. So every setup (bootstrap, the app's first start, `herald-os setup`) says what each
-step changes, stops at the first `hermes` step that fails, and writes the value it found to
-`$HERMES_HOME/herald-os/tool-search-before` before turning it off; Settings > Hermes & agents > Tool
+step changes, stops at the first `nastech` step that fails, and writes the value it found to
+`$NASTECH_HOME/herald-os/tool-search-before` before turning it off; Settings > NasTech & agents > Tool
 search (and the `agents.toolSearch.set` command) is the promised switch, and `herald-os setup --undo` puts
-the value back with the rest. docs/SYSTEM-BRIDGE.md lists everything Herald OS changes in Hermes.
+the value back with the rest. docs/SYSTEM-BRIDGE.md lists everything Herald OS changes in NasTech.
 
-## ADR-011: Backend is spawned with HERMES_DESKTOP=1
+## ADR-011: Backend is spawned with NASTECH_DESKTOP=1
 
 Upstream keys three behaviours on this flag: the loopback token-auth exemption when a public
 dashboard URL is configured, the in-process cron ticker (no gateway is running), and orphan
-reaping of backends the app previously spawned. Herald OS owns its backend exactly the way Hermes
+reaping of backends the app previously spawned. Herald OS owns its backend exactly the way NasTech
 Desktop does, so it sets the flag (plus `HERALD_OS=1` for its own consumers). Session platform is
 still taken from `source: "herald_os"`, never from this env var, in line with upstream's
 "surface capability is a property of the session" rule.
@@ -127,12 +127,12 @@ sees. This proves the experience before any security or packaging work. See `doc
 - **`cage` as the Stage 1 compositor.** A kiosk compositor gives the shell the whole output with no
   code of our own; foreign apps stack fullscreen on top. Window management between foreign apps
   needs our own wlroots compositor and is deferred to Stage 2 with the capability broker.
-- **`greetd` autologin.** `default_session` runs the compositor as the `hermes` user on VT1 and
+- **`greetd` autologin.** `default_session` runs the compositor as the `nastech` user on VT1 and
   respawns it when it exits; there is no greeter UI. Crash recovery for free.
 - **Electron on Wayland via Ozone, kiosk mode gated by `HERALD_OS_KIOSK=1`.** The same shell binary
   runs windowed on macOS and as the session on Linux; `window.ts` branches on the env var, not the
   platform, so a Linux developer can still run it windowed under GNOME.
-- **The backend stays shell-managed.** `hermes serve` is spawned by Electron exactly as on macOS.
+- **The backend stays shell-managed.** `nastech serve` is spawned by Electron exactly as on macOS.
   A systemd user unit would add a second lifecycle model before the broker (Stage 2) gives it a
   reason to exist.
 - **SELinux permissive on the Stage 1 VM.** greetd and cage have no tailored policy; enforcing
@@ -144,32 +144,32 @@ sees. This proves the experience before any security or packaging work. See `doc
 ## ADR-013: Two voice engines behind one voice core; the free one is the default
 
 Herald OS talks and listens through `apps/desktop/src/store/voice.ts` and two interchangeable engines
-(`apps/desktop/src/lib/voice/*-engine.ts`). Hermes is the brain in both: sessions, tools, memory and
+(`apps/desktop/src/lib/voice/*-engine.ts`). NasTech is the brain in both: sessions, tools, memory and
 approvals never move.
 
 - **Chained (default, no extra cost).** Renderer mic -> energy endpointing -> `POST
   /api/audio/transcribe` -> `prompt.submit` with `surface: "voice-live"` (upstream's spoken-reply
   note: short, no markdown) -> `/api/audio/speak-stream` sentence by sentence while the reply
   streams. Providers are whatever `stt.provider` / `tts.provider` say in the runtime's config
-  (Nous-managed OpenAI audio for subscribers, `local` faster-whisper and `edge` for free, keys for
+  (NasTech-managed OpenAI audio for subscribers, `local` faster-whisper and `edge` for free, keys for
   the rest). Turn latency is about two seconds; barge-in and an end-of-speech cue keep it
   conversational.
 - **Live (opt-in, $0.05 per open minute).** OpenAI `gpt-live-1` over WebRTC with client
   delegation, exactly the contract upstream's Desktop implements: every `session.delegation.created`
-  becomes a Hermes turn and the reply returns as `session.commentary.append`. It is the only path
+  becomes a NasTech turn and the reply returns as `session.commentary.append`. It is the only path
   with true full duplex and sub-second replies, and the only one that costs per minute, so the
   engine opens a session only for a conversation, closes it after `liveIdleSeconds` of silence,
   refuses to open past `liveDailyCapMinutes`, and shows the running meter on the orb.
-- **Rejected: gpt-realtime as the brain.** Cheaper audio, but it would either replace Hermes's
+- **Rejected: gpt-realtime as the brain.** Cheaper audio, but it would either replace NasTech's
   tools and memory or need a second function-call bridge to reach them.
 - **Wake word stays in the runtime.** `wake.start` / `wake.feed` / `wake.detected` with
-  openWakeWord's bundled "hey hermes" model; the shell streams 16 kHz PCM when the runtime asks
+  openWakeWord's bundled "hey nastech" model; the shell streams 16 kHz PCM when the runtime asks
   for client capture and otherwise lets it open the host mic. No second detector to maintain.
 - **One microphone graph.** `audio-capture.ts` opens the mic once and fans frames out to the wake
   feed, the utterance recorder, the barge-in monitor and the WebRTC sender, so the menu-bar
   indicator is literally "the mic is open".
-- **Config writes go through `PUT /api/config`** (deep merge), the same path the Hermes dashboard
-  uses, so `hermes tools` and Herald OS Settings never fight over the file.
+- **Config writes go through `PUT /api/config`** (deep merge), the same path the NasTech dashboard
+  uses, so `nastech tools` and Herald OS Settings never fight over the file.
 
 ## ADR-014: One command registry; the agent drives the UI through a control socket
 
@@ -183,27 +183,27 @@ handlers that voice needed (automations, connections, mission start, pause-all, 
 - **Fast path before the model.** A pure matcher (`lib/voice/intents.ts`) compiles each command's
   phrases into whole-utterance grammars. A confident match runs locally (no tokens, under 100 ms)
   and the voice speaks the result; destructive commands never match, and long or reasoning-shaped
-  utterances fall through to Hermes. A failed run also falls through, so the words are never lost.
-- **Agent -> UI over the control socket, in both shell modes.** Hermes runs in the backend and had
+  utterances fall through to NasTech. A failed run also falls through, so the words are never lost.
+- **Agent -> UI over the control socket, in both shell modes.** NasTech runs in the backend and had
   no way to reach the UI on macOS (the Linux `ControlSocket` was panels-only; upstream's `desktop_ui`
-  is gated to Hermes Desktop sessions; plugins cannot emit WebSocket events). The Electron main
+  is gated to NasTech Desktop sessions; plugins cannot emit WebSocket events). The Electron main
   process now serves a JSON-lines Unix socket in desktop mode too (`heraldOsDataDir()/control.sock`)
   and hands the backend its path and a per-launch token; `ui`, `ui-list` and `ui-state` requests are
-  forwarded to the Hermes window over IPC and answered with the command's result. The bridge plugin's
+  forwarded to the NasTech window over IPC and answered with the command's result. The bridge plugin's
   `os_ui` tool is the client; the command's declared tier drives the existing approval gate and audit.
-  Rejected: reusing `desktop_ui` (handlers live in Hermes Desktop), notifications as commands (no
+  Rejected: reusing `desktop_ui` (handlers live in NasTech Desktop), notifications as commands (no
   results, not extensible), a gateway server-request (needs core changes; still the long-term path).
 - **Show the work.** Commands return a `highlight` target; items carry `data-os-target` and a small
   highlighter scrolls and pulses them; an action HUD captions each voice/agent command. `tool.complete`
-  events from Hermes's own memory/cron/file tools map to the matching `*.show` command during voice
-  conversations (or with the Follow Hermes preference), never while the user is typing.
+  events from NasTech's own memory/cron/file tools map to the matching `*.show` command during voice
+  conversations (or with the Follow NasTech preference), never while the user is typing.
 
 ## ADR-015: The Studio watches builds through gateway events, not the desktop source
 
-"Build me a website" should let the person watch Hermes work: files appearing, the code with its
+"Build me a website" should let the person watch NasTech work: files appearing, the code with its
 changes marked, commands and dev-server output, and the running site. Upstream already streams most
 of it to any client: `tool.start` (full arguments, including the content `write_file` is writing),
-`tool.complete` with `inline_diff` (Hermes's rendered review diff: ANSI colours and
+`tool.complete` with `inline_diff` (NasTech's rendered review diff: ANSI colours and
 `a/<path> → b/<path>` headers before ordinary hunks), and `agent.terminal.output` / `terminal.close`
 for background processes. The Studio (`apps/desktop/src/features/studio/`, model in `lib/studio-model.ts`,
 store in `store/studio.ts`) folds those events per session, for every session the shell knows, so
@@ -212,14 +212,14 @@ store in `store/studio.ts`) folds those events per session, for every session th
 - **Own preview command instead of `open_preview`.** Upstream's preview tools (`open_preview`,
   `read_preview`, `drive_preview`) are in the `desktop_ui` toolset, which the gateway enables only
   for sessions whose source is `desktop`. Herald OS sessions keep `source: "herald_os"` (ADR-003);
-  claiming to be Hermes Desktop would also advertise panes Herald OS does not implement. The
+  claiming to be NasTech Desktop would also advertise panes Herald OS does not implement. The
   Studio detects local server addresses in process output and exposes `studio.preview` through
-  `os_ui` for Hermes to name one explicitly; a `preview.open` event, if one ever arrives, is honoured.
+  `os_ui` for NasTech to name one explicitly; a `preview.open` event, if one ever arrives, is honoured.
 - **`build.start` owns the setup.** It creates `~/Projects/<slug>` (the `projectsRoot` pref), starts
   a session with that folder as its working directory, opens the Studio and sends a brief that asks
   for `write_file` / `patch` (so every file is visible as it is written), background servers and a
   preview. Voice matches "create / build / make a website for …" on the fast path; longer requests
-  reach Hermes, which calls `build.start` through `os_ui`.
+  reach NasTech, which calls `build.start` through `os_ui`.
 - **Previews are their own locked-down view.** `web.openPreview` uses a separate partition, allows
   http(s) and `file://` inside the project folder only, and supports `navigate` / `reload`; the
   Studio reloads it after file changes and retries while a dev server is still starting.
@@ -229,26 +229,26 @@ store in `store/studio.ts`) folds those events per session, for every session th
   working and never again after the user closes it; other sessions that start writing code only get
   a one-time caption ("say 'show me' to watch").
 
-## ADR-016: Hermes OS is now Herald OS
+## ADR-016: NasTech OS is now Herald OS
 
-The project is named after the Herald mobile app and uses its logo, the winged H. Hermes stays the
-name of the agent inside it: "Ask Hermes", the "hey hermes" wake word, the `hermes` CLI, `~/.hermes`
-and `packages/hermes-client` (a client for the Hermes gateway) keep their names.
+The project is named after the Herald mobile app and uses its logo, the winged H. NasTech stays the
+name of the agent inside it: "Ask NasTech", the "hey nastech" wake word, the `nastech` CLI, `~/.nastech`
+and `packages/nastech-client` (a client for the NasTech gateway) keep their names.
 
 - **Renamed identifiers.** `herald-os` for packages (`@herald-os/*`), the Linux CLI and session files,
   the bridge plugin (`herald-os-bridge`) and its skill; `HERALD_OS_*` environment variables;
   `herald_os` for the toolset, the session source and approval rule keys; `window.heraldOS`;
   `persist:herald-*` web partitions; app id `dev.iamluke.heraldos`.
 - **Existing installs carry over without manual steps.** At launch, Electron main merges
-  `$HERMES_HOME/hermes-os` into `herald-os` and moves the `Hermes OS` Chromium profile (local storage,
-  web-window logins) and its partitions; the renderer moves `hermes-os.*` local-storage keys; the
+  `$NASTECH_HOME/nastech-os` into `herald-os` and moves the `NasTech OS` Chromium profile (local storage,
+  web-window logins) and its partitions; the renderer moves `nastech-os.*` local-storage keys; the
   bridge plugin performs the same data-folder merge if it runs first; `npm run bootstrap` relinks the
-  plugin and rewrites the Hermes config (enabled plugin, toolset lists, "always allow" approvals);
+  plugin and rewrites the NasTech config (enabled plugin, toolset lists, "always allow" approvals);
   on Linux, `linux/migrations/2026-10-03-herald-os-rename.sh` moves per-user state and retires the
   old session files.
-- **Old names are still read where users set them.** `HERMES_OS_*` variables (Electron main, the
-  bridge, the Linux session), the `hermes_os` config section, and sessions saved with
-  `source: "hermes_os"` (listed alongside new ones).
+- **Old names are still read where users set them.** `NASTECH_OS_*` variables (Electron main, the
+  bridge, the Linux session), the `nastech_os` config section, and sessions saved with
+  `source: "nastech_os"` (listed alongside new ones).
 
 ## ADR-017: Fedora stays the base of Herald OS Linux; Arch is a package target
 
@@ -286,7 +286,7 @@ an aarch64 qcow2 that boots straight into Herald OS.
 
 - **Provisioning splits in two.** What every machine needs (packages, the session, the CLI, themes,
   Plymouth, greetd, the shell from the release tarball at `/usr/share/herald-os/app`) runs at image
-  build time (`linux/image/packages.sh`); what belongs to a person (Hermes, its sign-in, the default
+  build time (`linux/image/packages.sh`); what belongs to a person (NasTech, its sign-in, the default
   apps) runs at first login (`linux/image/firstboot.sh`).
 - **Updates can be undone.** `herald-os update` runs `bootc upgrade`, which stages the new image for
   the next boot; `herald-os rollback` runs `bootc rollback`, and the boot menu keeps the previous
@@ -298,7 +298,7 @@ an aarch64 qcow2 that boots straight into Herald OS.
 - **The installer asks little.** Anaconda with a kickstart that leaves the storage screen to the
   person, who can encrypt the disk (Anaconda's "Encrypt my data", off by default) and install
   beside Windows; a kickstart passed with `inst.ks=` installs unattended. The
-  first-boot setup in the shell (name, password, Wi-Fi, Hermes sign-in) also covers handing a machine
+  first-boot setup in the shell (name, password, Wi-Fi, NasTech sign-in) also covers handing a machine
   to a new owner, which `herald-os reset` returns to.
 - **Secure by default on release images.** firewalld with only LocalSend and mDNS open, SSH off,
   Secure Boot through Fedora's signed shim, fingerprint (`fprintd`) and security keys (`pam-u2f`)
@@ -329,17 +329,17 @@ checks every call against the manifest and what the user granted.
   `~/.config/herald-os/plugins/<id>`, validates the manifest and leaves the plugin off until it is
   enabled in Settings > Plugins (or at a terminal, with `herald-os plugin enable`), as Omarchy does.
   Enabling grants exactly what the manifest asks for then; a later manifest that asks for more turns
-  the plugin off until the user agrees again. Hermes can install, update and remove plugins but not
+  the plugin off until the user agrees again. NasTech can install, update and remove plugins but not
   turn them on. Saved files reload the plugin live.
-- **Hermes's extension model is unchanged.** Agent capabilities stay in backend Hermes plugins such as
-  the bridge, behind the approval gate; widgets are UI that Hermes can also write for you.
+- **NasTech's extension model is unchanged.** Agent capabilities stay in backend NasTech plugins such as
+  the bridge, behind the approval gate; widgets are UI that NasTech can also write for you.
 
 ## ADR-020: Herald Canvas is a WebGL2 editor on Compositor's project format
 
-Herald OS needs an image editor that Hermes can work in while the person watches, and that the
+Herald OS needs an image editor that NasTech can work in while the person watches, and that the
 person can use on their own. Herald Canvas is built into the shell: a React editor over a WebGL2
 compositor, projects in the `.comp` format that Compositor uses on the Mac, AI tools that run on the
-device, and every change Hermes makes going through the command registry (ADR-014) as one undoable
+device, and every change NasTech makes going through the command registry (ADR-014) as one undoable
 step.
 
 - **Compositor's format, written from its documentation.** A `.comp` project is a folder with
@@ -347,7 +347,7 @@ step.
   documentation, without its code, so projects move between the two. The reader holds every value
   to the ranges Compositor accepts (it refuses a whole project over one value outside them), keeps
   fields it does not use, and writes the images first and the manifest last, atomically. A watcher
-  turns outside changes (Hermes, a script, Compositor) into undoable steps.
+  turns outside changes (NasTech, a script, Compositor) into undoable steps.
 - **A WebGL2 compositor.** Layers are composited on the GPU in premultiplied half floats (8 bits on
   software renderers), with the blend modes in a shader, pass-through folders, masks, clipping, and
   adjustments and effects as passes. The view composites only what is on screen, at the screen's
@@ -365,7 +365,7 @@ step.
 - **Our own PatchMatch.** Content-Aware Fill and the Spot Healing Brush use a PatchMatch written for
   Herald Canvas, in a worker: no download, no licence question, and good on the textures people
   remove things from.
-- **Generative fill goes through Hermes.** Herald saves the area and its mask and asks Hermes, which
+- **Generative fill goes through NasTech.** Herald saves the area and its mask and asks NasTech, which
   makes the picture with its own image generation tool (the person's provider) and places it with
   the canvas tool. Herald never calls an image API itself, so credentials, costs and the request
   stay in one place the person can see.
@@ -376,7 +376,7 @@ step.
 Alternatives considered:
 
 - **Rejected: an existing editor (GIMP, Krita, a web editor).** A separate app could only be scripted
-  through files, not watched as it works, and none shares a project format Hermes can edit on disk
+  through files, not watched as it works, and none shares a project format NasTech can edit on disk
   and Compositor can open. Photopea is a closed online service.
 - **Rejected: a 2D canvas or the processor for compositing.** A 2D canvas rounds premultiplied
   colour, so semi-transparent pixels drift on every save, and neither keeps blend modes,
@@ -420,13 +420,13 @@ Compositor lacks. What only Herald has goes in fields of its own beside a record
 depth phases of Sheets, Docs and Slides, and final with the polish phase: printing, the
 measurements below on the Mac and on Herald OS Linux under software rendering, and the licences.
 
-Herald OS needs documents, spreadsheets and presentations that Hermes can work in while the person
+Herald OS needs documents, spreadsheets and presentations that NasTech can work in while the person
 watches, and that open and save the files people already have. Herald Docs, Herald Sheets and
 Herald Slides are built into the shell, the way Herald Canvas is (ADR-020), each on the engine that
 suits it: Sheets on Univer's open-source packages, Docs on TipTap 3, and Slides on a DOM slide
 editor of Herald's own with TipTap text boxes. They share one Office window (tabs, sessions, the
 save policy, the fidelity dialog, backups and PDF export) and read and write Office files through
-converters of our own. Each app has a document API that Hermes's commands work through, on the
+converters of our own. Each app has a document API that NasTech's commands work through, on the
 document open in a window or on a file on disk, each change one step to undo; the commands
 themselves go through the command registry (ADR-014).
 
@@ -450,7 +450,7 @@ themselves go through the command registry (ADR-014).
   what ExcelJS reads badly taken from the package itself. Both workers load from the app, so the
   Content Security Policy needs no change (`worker-src` falls back to `script-src 'self'`), and
   Univer uses no `eval`.
-- **Headless Univer for Hermes.** A command on a workbook that is not open in a window loads it
+- **Headless Univer for NasTech.** A command on a workbook that is not open in a window loads it
   into a Univer instance with nothing drawn but every plugin that keeps data in the workbook
   (Univer leaves out of a snapshot what no plugin loaded), changes it through Univer's Facade API
   as one undo group and writes it back, in about 40 ms with its recalculation; a file holding what
@@ -474,7 +474,7 @@ themselves go through the command registry (ADR-014).
   the numbers in its cells, again as they change: column, bar, line, area, pie, doughnut, scatter
   and combo charts, recommended from the shape of the selection. A chart's ranges move with rows
   and columns inserted or deleted. ECharts is built with only what these charts draw and loads the
-  first time a chart shows. In a workbook with nothing drawn (Hermes on a file that is not open)
+  first time a chart shows. In a workbook with nothing drawn (NasTech on a file that is not open)
   the same change goes through Univer's drawing mutation, and Herald files it for undo. Univer's
   own charts are in its paid tier.
 - **Excel charts written by Herald, and Herald's part in a workbook.** ExcelJS writes no charts,
@@ -515,7 +515,7 @@ themselves go through the command registry (ADR-014).
   formula rules with input messages and error alerts, and keeps every rule. Comment threads, with
   their replies, authors and resolved state, and notes are written as Excel writes them (threaded
   comments with their persons, notes with their VML). Univer keeps comment threads out of its undo
-  history, so adding or deleting a comment cannot be undone; Hermes's commands say so.
+  history, so adding or deleting a comment cannot be undone; NasTech's commands say so.
 - **Herald Docs on TipTap 3 (MIT).** A document is TipTap's JSON with its page size, margins and
   style looks on the document node. The editor, the converters, the print view and the document
   API share that one schema, which builds without a window, so the API changes a live editor or a
@@ -621,7 +621,7 @@ themselves go through the command registry (ADR-014).
   backgrounds, the header and footer, the theme, a layout's name and whether it shows the master's
   drawings, and putting Herald's master back). Each change there goes back into the deck's master,
   passed down as above, as one step of the deck's own history: undo and redo stay the deck's while
-  the view is open and after it closes, a change Hermes makes to the slides meanwhile is a step of
+  the view is open and after it closes, a change NasTech makes to the slides meanwhile is a step of
   the same history, and what is saved and presented is always the deck itself.
 - **Themes: Herald's thirteen, the person's own, and a theme for chosen slides.** Elements name
   theme colour slots and the theme's two fonts, so a theme repaints a deck without touching what was
@@ -636,7 +636,7 @@ themselves go through the command registry (ADR-014).
   background, drawn on two sample slides as it changes, with a warning where text would read below
   4.5:1. Saved, a theme goes onto the deck or the picked slides and among the person's own themes,
   kept for every deck in one file, `office/slide-themes.json` in the Herald OS data folder
-  (`~/.hermes/herald-os`), written whole on every change, one save after another, and checked as a
+  (`~/.nastech/herald-os`), written whole on every change, one save after another, and checked as a
   deck's theme is when read; their ids (`custom-` and the name) never take a built-in theme's place.
 - **Transitions as PowerPoint names them.** A slide comes in by its own transition or by the deck's:
   none, fade, push, wipe, cover, uncover, split or zoom, each with the way it goes (push, wipe,
@@ -695,7 +695,7 @@ themselves go through the command registry (ADR-014).
   Sheets opens (an Excel workbook or CSV) becomes a table of the text its cells show, numbers in
   their formats, on the slide in front, sized to its text, or on slides of its own after it, going
   on over further slides under its header row when it is too tall for one. The converters load only
-  when a file is picked. Hermes's `slides.fromDocument` and `slides.insertRange` run the same code,
+  when a file is picked. NasTech's `slides.fromDocument` and `slides.insertRange` run the same code,
   with the heading level that starts a slide and speaker notes for every paragraph as options of
   the rules; fields read as the text they show, a note's marker stays with the note in the speaker
   notes, and a table of contents is passed over.
@@ -782,10 +782,10 @@ themselves go through the command registry (ADR-014).
   Herald OS Linux in a QEMU VM under software rendering, in panels mode, each app opens in about
   0.5 s, files of the same sizes in 0.31 s, 0.87 s and 0.30 s, a keystroke at 50 pages reaches the
   screen in 64 ms (80 ms at the 95th percentile, 7 ms of it the window's work), and a window with
-  the 50,000-cell workbook holds 340 MB; Hermes's commands land in the window that has the
+  the 50,000-cell workbook holds 340 MB; NasTech's commands land in the window that has the
   document, in under 0.1 s.
-- **Hermes in the depth features.** Each depth feature is a command on its app's model API (35
-  for Sheets, 26 for Docs, 25 for Slides), so Hermes, voice, the command bar and `herald-os os`
+- **NasTech in the depth features.** Each depth feature is a command on its app's model API (35
+  for Sheets, 26 for Docs, 25 for Slides), so NasTech, voice, the command bar and `herald-os os`
   reach them alike, and the bridge's `sheets`, `docs` and `slides` tools have an action for each.
   Reading is `read`, changing is `act`, and removing what the person made (a chart, a name,
   validation rules, a comment, a note, a header or footer, a section break, a table of contents, an
@@ -793,8 +793,8 @@ themselves go through the command registry (ADR-014).
   asks. An edit batch asks as its most guarded op does, its ops matched in any case as the shell
   takes them, and a change to a file that is not open asks every time unless it only previews.
   Slides' `fromDocument` and `insertRange` run the editor's own conversions. Review > Review
-  with Hermes goes through the document's Ask Hermes bar: Hermes reads the document and leaves its
-  clarity, grammar and tone comments on exact passages in one `add_comments` call, signed Hermes
+  with NasTech goes through the document's Ask NasTech bar: NasTech reads the document and leaves its
+  clarity, grammar and tone comments on exact passages in one `add_comments` call, signed NasTech
   and one step to undo, without changing the text.
 - **One name on comments.** The name on the person's comments, replies and notes is one
   preference for every Office app, in Herald's prefs. The first time they comment, a small

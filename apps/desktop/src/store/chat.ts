@@ -8,7 +8,7 @@ import { refreshSessions, rememberRuntimeId } from './sessions.ts'
 
 export const SESSION_SOURCE = 'herald_os'
 /** Sessions this shell lists: its own (including those saved before the rename) and other interactive clients. */
-export const LISTED_SESSION_SOURCES: ReadonlySet<string> = new Set([SESSION_SOURCE, 'hermes_os', 'desktop', 'cli', 'tui'])
+export const LISTED_SESSION_SOURCES: ReadonlySet<string> = new Set([SESSION_SOURCE, 'nastech_os', 'desktop', 'cli', 'tui'])
 
 /** Live chat state per runtime session id. */
 export const $chats = map<Record<string, ChatState>>({})
@@ -31,7 +31,7 @@ const CHAT_EVENTS = new Set<GatewayEvent['type']>([
   'error'
 ])
 
-/** Chats started in the background for a surface that shows their replies itself (an Office window's Ask Hermes bar). */
+/** Chats started in the background for a surface that shows their replies itself (an Office window's Ask NasTech bar). */
 const quietChats = new Set<string>()
 
 function adopt(result: SessionCreateResult | SessionResumeResult, fallbackStored?: string): ChatState {
@@ -73,7 +73,7 @@ export function bindChatEvents(): () => void {
     }
 
     if (event.type === 'message.complete' && $activeChatId.get() !== sid && !quietChats.has(sid)) {
-      notify({ title: next.title || 'Hermes', body: 'Finished a turn in another session', level: 'info', surface: 'chat' })
+      notify({ title: next.title || 'NasTech', body: 'Finished a turn in another session', level: 'info', surface: 'chat' })
     }
 
     if (event.type === 'session.title') {
@@ -82,7 +82,7 @@ export function bindChatEvents(): () => void {
   })
 }
 
-/** A new chat; it becomes the one the Hermes window shows unless `activate` is false, and then its turns end without a notification. */
+/** A new chat; it becomes the one the NasTech window shows unless `activate` is false, and then its turns end without a notification. */
 export async function createChat(options: { cwd?: string; title?: string; activate?: boolean } = {}): Promise<ChatState> {
   const cwd = options.cwd ?? $prefs.get().defaultCwd ?? $env.get()?.homeDir ?? null
   const result = await gatewayRequest('session.create', { source: SESSION_SOURCE, cwd, title: options.title ?? null })

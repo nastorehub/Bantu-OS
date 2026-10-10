@@ -6,7 +6,7 @@ const mac: CrashReport = { id: 'ips:1', app: 'Safari', pid: 42, reason: 'EXC_BAD
 const linux: CrashReport = { id: 'coredump:7:1', app: 'firefox', pid: 7, exe: '/usr/bin/firefox', reason: 'SIGSEGV', at: 1_000_000, source: 'coredump' }
 
 describe('crashPrompt', () => {
-  it('points Hermes at the report file on macOS', () => {
+  it('points NasTech at the report file on macOS', () => {
     const text = crashPrompt(mac, 1_000_000 + 3 * 60_000)
 
     expect(text).toContain('Safari crashed 3 minutes ago (EXC_BAD_ACCESS (SIGSEGV)).')
@@ -15,7 +15,7 @@ describe('crashPrompt', () => {
     expect(text).toContain('diagnose-crash skill')
   })
 
-  it('points Hermes at the core dump on Linux', () => {
+  it('points NasTech at the core dump on Linux', () => {
     const text = crashPrompt(linux, 1_000_000)
 
     expect(text).toContain('firefox crashed just now (SIGSEGV).')

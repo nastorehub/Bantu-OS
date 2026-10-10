@@ -56,7 +56,7 @@ export async function runHeraldOs(argv: string[]): Promise<CliOutcome> {
   }
 }
 
-/** Run a command and relay a toast describing the result to the Hermes window (silent when the CLI is unavailable). */
+/** Run a command and relay a toast describing the result to the NasTech window (silent when the CLI is unavailable). */
 export async function runHeraldOsWithToast(argv: string[], title: string): Promise<CliOutcome> {
   const outcome = await runHeraldOs(argv)
 

@@ -65,7 +65,7 @@ export function deriveAgentName(goal: string): string {
     return 'Writing agent'
   }
 
-  return 'Hermes agent'
+  return 'NasTech agent'
 }
 
 export function activityIcon(kind: ActivityEntry['kind']): TablerIcon {

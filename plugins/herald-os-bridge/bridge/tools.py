@@ -53,15 +53,15 @@ class ToolSpec:
 
 
 def bridge_enabled() -> bool:
-    """``herald_os.bridge.enabled`` in config.yaml (default on; the pre-rename ``hermes_os`` section is
+    """``herald_os.bridge.enabled`` in config.yaml (default on; the pre-rename ``nastech_os`` section is
     still read). ``HERALD_OS_BRIDGE_DISABLED=1`` turns the bridge off for one process."""
     if os_env("BRIDGE_DISABLED") == "1":
         return False
     try:
-        from hermes_cli.config import load_config
+        from nastech_cli.config import load_config
 
         config = load_config() or {}
-        section = config.get("herald_os") or config.get("hermes_os") or {}
+        section = config.get("herald_os") or config.get("nastech_os") or {}
         bridge = section.get("bridge") if isinstance(section, dict) else None
         if isinstance(bridge, dict) and bridge.get("enabled") is False:
             return False
@@ -451,7 +451,7 @@ def handle_system_kill_process(args: dict[str, Any], **_: Any) -> str:
         return fail(str(exc))
 
     if any(t["pid"] in (0, 1, os.getpid(), os.getppid()) for t in targets):
-        return fail("Refusing to stop a system-critical process or Hermes itself.")
+        return fail("Refusing to stop a system-critical process or NasTech itself.")
     label = ", ".join(f"{t['name']} (pid {t['pid']})" for t in targets)
     summary = f"{'force kill' if force else 'terminate'} {label}"
 
@@ -621,7 +621,7 @@ def plan_targets(ops: list[FileOp]) -> tuple[list[Path | None], list[str]]:
     return targets, problems
 
 
-# What each applied batch would take to reverse, per Hermes session (newest last), so "undo that"
+# What each applied batch would take to reverse, per NasTech session (newest last), so "undo that"
 # replays the exact operations instead of the model retyping long paths. Paths only, a few per session.
 UNDO_PER_SESSION = 10
 UNDO_SESSIONS = 20
@@ -674,7 +674,7 @@ def drop_undo(session: str, undo_id: str) -> None:
 
 
 def handle_system_files(args: dict[str, Any], **context: Any) -> str:
-    # Hermes passes the conversation's session id to plugin tools; undo stays within it.
+    # NasTech passes the conversation's session id to plugin tools; undo stays within it.
     session = str(context.get("session_id") or context.get("task_id") or "default")
     undoing: dict[str, Any] | None = None
     if str(args.get("action") or "") == "undo":
@@ -951,7 +951,7 @@ def handle_system_control(args: dict[str, Any], **_: Any) -> str:
         enabled = bool(args.get("enabled", True))
         return _guarded("system_control", Tier.ACT, action, f"turn dark mode {'on' if enabled else 'off'}", args, (), lambda: (adapter.set_dark_mode(enabled), {"dark_mode": enabled})[1])
     if action == "notify":
-        title = str(args.get("title") or "Hermes")
+        title = str(args.get("title") or "NasTech")
         body = str(args.get("body") or "")
         if not body:
             return fail("notify needs body")
@@ -1055,9 +1055,9 @@ SYSTEM_OS_SCHEMA = _schema(
     "Widget plugins: plugin_list, plugin_add (url: a git repository; it arrives turned off), plugin_update (id), plugin_disable (id), plugin_remove (id). "
     "Turning a plugin on is the user's call after reading what it asks for: point them to Settings > Plugins. "
     "Reminders: reminder (duration like 20m or 1h30m, message), reminders_list, reminders_clear. "
-    "notice (kind=time|battery|weather) shows a status notice. screenshot captures the screen and hands it to Hermes; ocr reads the text on screen. "
+    "notice (kind=time|battery|weather) shows a status notice. screenshot captures the screen and hands it to NasTech; ocr reads the text on screen. "
     "lock locks the session; suspend puts the computer to sleep. Themes: theme_list, theme_set (name), theme_current. update updates Herald OS. "
-    "Hermes shell: show_page (page: overview, hermes, missions, memory, files, automations, connections, settings), open_window (window=terminal|system|chat-popout), launch (name: an installed app), notify (title, body?). "
+    "NasTech shell: show_page (page: overview, nastech, missions, memory, files, automations, connections, settings), open_window (window=terminal|system|chat-popout), launch (name: an installed app), notify (title, body?). "
     "Spaces: focus_workspace (name), close_focused_window. install/remove/update and suspend ask the user to confirm. "
     "Only available on Herald OS Linux; on macOS this tool is unavailable (use system_open / system_control instead).",
     {
@@ -1079,7 +1079,7 @@ SYSTEM_OS_SCHEMA = _schema(
         "duration": _desc(_STR, "For reminder: how long from now, e.g. 90s, 20m, 1h, 1h30m, or a plain number of minutes."),
         "message": _desc(_STR, "For reminder: what to remind the user about."),
         "kind": _enum("time", "battery", "weather", description="For notice."),
-        "page": _desc(_STR, "For show_page: the Hermes page id (overview, hermes, missions, memory, files, automations, connections, settings)."),
+        "page": _desc(_STR, "For show_page: the NasTech page id (overview, nastech, missions, memory, files, automations, connections, settings)."),
         "window": _enum("terminal", "system", "chat-popout", description="For open_window."),
         "title": _desc(_STR, "For notify."),
         "body": _desc(_STR, "For notify: optional body text."),
@@ -1293,7 +1293,7 @@ OS_UI_SCHEMA = _schema(
     "After using other tools whose result lives on a page (memory, cronjob, files), run page.open so the user sees it. Destructive commands (forget, delete, trash) ask the user for approval. "
     "When the user asks you to build, create or make something new (a website, app, landing page, store, game), do not write it yourself in a scratch or temporary folder: run command=build.start with args={\"goal\": \"<what they asked for>\"}. It creates a project folder, starts a session that builds it there and opens the Studio so they watch it happen; then just tell them it has started. "
     "Changing Herald OS itself is different: for widgets, themes, fonts, the menu bar, control-menu entries, branding or keybindings, first read skill_view name=\"herald-os-bridge:herald-os-tailor\", which has the formats. "
-    "A Herald OS widget is a folder in ~/.config/herald-os/plugins/<id> with a manifest.json; it is not a Hermes Desktop plugin or a build.start project, and the user turns it on in Settings > Plugins. "
+    "A Herald OS widget is a folder in ~/.config/herald-os/plugins/<id> with a manifest.json; it is not a NasTech Desktop plugin or a build.start project, and the user turns it on in Settings > Plugins. "
     "How to act as this computer's operating environment: skill_view name=\"herald-os-bridge:herald-os\".",
     {
         "action": {"type": "string", "enum": ["run", "list", "state"], "description": "run a command, list the catalogue, or read the screen state"},
@@ -1935,7 +1935,7 @@ DOCS_SCHEMA = _schema(
     "Herald Docs, the word processor built into Herald OS: letters, reports, essays, resumes, notes and any other document, in the Docs window the person watches or in Word (.docx), Markdown (.md) and text files. "
     "Look before you change anything: action=list shows the documents open in Herald Docs (list_all: everything open in Herald Docs, Sheets and Slides, with what is selected in each), read gives a document's outline and its content as Markdown (part=selection: the selected and the marked text; part=comments, notes, headers, sections or tocs: those), find finds text; open shows a file, and new starts a document (blank, from a template, or with the content you write from the person's brief). "
     "Change it with write (Markdown: headings, bold and italic, lists, tables, links, pictures from files), replace, format (paragraph styles, bold, colour, highlight, size, alignment, links), table, image, page (paper, orientation, margins) and insert_range (a Herald Sheets range as a table: work across documents, such as a budget's figures in a report). "
-    "It lays out real pages and reviews them too: headers and footers (set_header, set_footer: \"Page {page} of {pages}\", dates), page numbers and fields (insert_field), footnotes and endnotes (insert_note), sections and page setup (insert_section_break; page section= sets one section's paper, orientation and margins), comments and reviews (read part=comments, add_comment, reply_to_comment, resolve_comment, delete_comment; review a document with ONE add_comments call; yours are signed Hermes), tables of contents (insert_toc, update_tocs), templates (list_templates, then new template=) and statistics (words, reading time, reading ease). "
+    "It lays out real pages and reviews them too: headers and footers (set_header, set_footer: \"Page {page} of {pages}\", dates), page numbers and fields (insert_field), footnotes and endnotes (insert_note), sections and page setup (insert_section_break; page section= sets one section's paper, orientation and margins), comments and reviews (read part=comments, add_comment, reply_to_comment, resolve_comment, delete_comment; review a document with ONE add_comments call; yours are signed NasTech), tables of contents (insert_toc, update_tocs), templates (list_templates, then new template=) and statistics (words, reading time, reading ease). "
     "Every call is one step the person can undo, so land a whole change in one call; action=edit makes several changes as ONE step. When the request says text is marked for it, read part=selection and write the answer with at=marked, which replaces the marked text. "
     "document is a file (~/... or /...) or an open document's name as its tab shows it (\"Untitled 2\", \"Report.docx\"); left out, the one in front. An open document changes in its window; a file that is not open is changed on disk, which asks the person first. "
     "Never save unless the person asks: saving over a file asks them, and the first time shows what Herald cannot keep. "
@@ -2018,7 +2018,7 @@ SHEETS_SCHEMA = _schema(
     "Herald Sheets, the spreadsheet built into Herald OS: Excel workbooks (.xlsx) and CSV files, in the Sheets window the person watches or on disk. "
     "Read before you change anything: action=list shows the workbooks open in Herald Sheets (list_all: everything open in Herald Docs, Sheets and Slides, with what is selected in each), read gives the sheets and a range's values, formulas and what the cells show (without range, the cells that hold something; range=selection, what is selected), find finds text; open shows a file, and new starts a workbook (blank, from a template, or with rows of values and formulas). "
     "write puts rows of values from a cell (text starting with = is a formula, English function names and commas between arguments; plain numbers become numbers), fill copies a formula down or across, format sets number formats, fonts, colours and borders; sort, filter, freeze, replace, clean (dedupe, trim, numbers, dates, split, case), add_sheet, rename_sheet and remove_sheet do what they say. "
-    "It also makes charts (recommend_charts first, then insert_chart; the others take the chart's id), pivot-style summaries in live formulas (summarize), named ranges, validation (dropdown lists, input messages, error alerts), and comments and notes on cells (yours are signed Hermes); its data tools remove duplicates, split, trim, recase and convert text, fill down, highlight duplicates and sort by several columns, and preview=true shows a big change before it lands. "
+    "It also makes charts (recommend_charts first, then insert_chart; the others take the chart's id), pivot-style summaries in live formulas (summarize), named ranges, validation (dropdown lists, input messages, error alerts), and comments and notes on cells (yours are signed NasTech); its data tools remove duplicates, split, trim, recase and convert text, fill down, highlight duplicates and sort by several columns, and preview=true shows a big change before it lands. "
     "Every call is one step the person can undo (comment threads aside), so land a whole change in one call; action=edit makes several changes as ONE step. "
     "workbook is a file (~/... or /...) or an open workbook's name as its tab shows it; left out, the one in front. An open workbook changes in its window; a file that is not open is changed on disk, which asks the person first. "
     "Never save unless the person asks: saving over a file asks them, and the first time shows what Herald cannot keep; a CSV file keeps only values. A range goes into a document with the docs tool's insert_range. "

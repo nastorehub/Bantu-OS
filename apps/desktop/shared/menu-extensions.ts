@@ -31,7 +31,7 @@ export const MENU_EXTENSION_ICONS = ['star', 'app', 'terminal', 'world', 'bolt',
 
 export type MenuExtensionIcon = (typeof MENU_EXTENSION_ICONS)[number]
 
-export const MENU_GROUPS = ['install', 'remove', 'update', 'style', 'trigger', 'capture', 'toggle', 'system', 'hermes'] as const
+export const MENU_GROUPS = ['install', 'remove', 'update', 'style', 'trigger', 'capture', 'toggle', 'system', 'nastech'] as const
 
 const MAX_ENTRIES = 50
 const MAX_ARGS = 64

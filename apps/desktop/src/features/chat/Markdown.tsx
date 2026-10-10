@@ -7,7 +7,7 @@ const plugins = [remarkGfm]
 /** Transcript markdown. Links open outside the shell; the renderer never navigates. */
 export const Markdown = memo(function Markdown({ text, className }: { text: string; className?: string }) {
   return (
-    <div className={className ? `prose-hermes ${className}` : 'prose-hermes'}>
+    <div className={className ? `prose-nastech ${className}` : 'prose-nastech'}>
       <ReactMarkdown
         remarkPlugins={plugins}
         components={{

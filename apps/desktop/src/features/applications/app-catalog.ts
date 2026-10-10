@@ -1,8 +1,8 @@
 import type { InstalledApp } from '../../../shared/ipc.ts'
-import { type AppCategory, type AppIconId, FEATURED_NATIVE, type HermesAppId, appById, distinctAppLabel } from '../../shell/apps.ts'
+import { type AppCategory, type AppIconId, FEATURED_NATIVE, type NasTechAppId, appById, distinctAppLabel } from '../../shell/apps.ts'
 
 /*
- * The launcher catalog: turns the Hermes registry plus the installed macOS apps into one ordered
+ * The launcher catalog: turns the NasTech registry plus the installed macOS apps into one ordered
  * list of tiles, then filters it by category tab and search query. Pure functions, no React.
  */
 
@@ -17,7 +17,7 @@ export const LAUNCHER_FILTERS: readonly { id: LauncherFilter; label: string }[] 
 ]
 
 interface TileBase {
-  /** Stable React key; unique even when one Hermes page appears under two labels. */
+  /** Stable React key; unique even when one NasTech page appears under two labels. */
   key: string
   label: string
   category: AppCategory
@@ -25,9 +25,9 @@ interface TileBase {
   keywords: string[]
 }
 
-export interface HermesTile extends TileBase {
-  kind: 'hermes'
-  appId: HermesAppId
+export interface NasTechTile extends TileBase {
+  kind: 'nastech'
+  appId: NasTechAppId
   icon: AppIconId
 }
 
@@ -36,39 +36,39 @@ export interface NativeTile extends TileBase {
   app: InstalledApp
 }
 
-export type LauncherTile = HermesTile | NativeTile
+export type LauncherTile = NasTechTile | NativeTile
 
 const STUDIO_NAMES = ['Pixelmator Pro', 'Figma', 'Sketch', 'Affinity Designer', 'Photoshop']
 
 /** The curated head of "All apps", in mockup order. Native slots are hidden when nothing matches. */
 type Slot =
-  | { kind: 'hermes'; appId: HermesAppId; label?: string; icon?: AppIconId; keywords?: string[] }
+  | { kind: 'nastech'; appId: NasTechAppId; label?: string; icon?: AppIconId; keywords?: string[] }
   | { kind: 'featured'; label: string }
   | { kind: 'native'; label: string; names: string[]; category: AppCategory }
 
 const ORDER: readonly Slot[] = [
-  { kind: 'hermes', appId: 'hermes' },
-  { kind: 'hermes', appId: 'files' },
+  { kind: 'nastech', appId: 'nastech' },
+  { kind: 'nastech', appId: 'files' },
   { kind: 'featured', label: 'Browser' },
   { kind: 'featured', label: 'Mail' },
   { kind: 'featured', label: 'Calendar' },
   { kind: 'featured', label: 'Notes' },
-  { kind: 'hermes', appId: 'missions' },
-  { kind: 'hermes', appId: 'memory' },
+  { kind: 'nastech', appId: 'missions' },
+  { kind: 'nastech', appId: 'memory' },
   { kind: 'native', label: 'Studio', names: STUDIO_NAMES, category: 'creative' },
-  { kind: 'hermes', appId: 'canvas' },
-  { kind: 'hermes', appId: 'docs', keywords: ['word', 'document', 'writer', 'markdown'] },
-  { kind: 'hermes', appId: 'sheets', keywords: ['excel', 'spreadsheet', 'numbers', 'csv'] },
-  { kind: 'hermes', appId: 'slides', keywords: ['powerpoint', 'presentation', 'keynote', 'deck'] },
-  { kind: 'hermes', appId: 'files', label: 'Documents', icon: 'documents' },
-  { kind: 'hermes', appId: 'automations' },
-  { kind: 'hermes', appId: 'connections' },
-  { kind: 'hermes', appId: 'terminal' },
+  { kind: 'nastech', appId: 'canvas' },
+  { kind: 'nastech', appId: 'docs', keywords: ['word', 'document', 'writer', 'markdown'] },
+  { kind: 'nastech', appId: 'sheets', keywords: ['excel', 'spreadsheet', 'numbers', 'csv'] },
+  { kind: 'nastech', appId: 'slides', keywords: ['powerpoint', 'presentation', 'keynote', 'deck'] },
+  { kind: 'nastech', appId: 'files', label: 'Documents', icon: 'documents' },
+  { kind: 'nastech', appId: 'automations' },
+  { kind: 'nastech', appId: 'connections' },
+  { kind: 'nastech', appId: 'terminal' },
   { kind: 'featured', label: 'Code' },
   { kind: 'featured', label: 'Photos' },
   { kind: 'featured', label: 'Music' },
   { kind: 'featured', label: 'App Store' },
-  { kind: 'hermes', appId: 'settings' }
+  { kind: 'nastech', appId: 'settings' }
 ]
 
 const PRODUCTIVITY_TYPES = new Set(['productivity', 'business', 'utilities', 'reference', 'finance'])
@@ -133,10 +133,10 @@ export function buildCatalog(apps: readonly InstalledApp[]): LauncherTile[] {
   }
 
   for (const slot of ORDER) {
-    if (slot.kind === 'hermes') {
+    if (slot.kind === 'nastech') {
       const def = appById(slot.appId)
       const label = slot.label ?? def.name
-      tiles.push({ kind: 'hermes', key: `hermes:${slot.appId}:${label}`, label, category: def.category, keywords: [...(label === def.name ? [] : [def.name]), ...(slot.keywords ?? [])], appId: slot.appId, icon: slot.icon ?? def.icon })
+      tiles.push({ kind: 'nastech', key: `nastech:${slot.appId}:${label}`, label, category: def.category, keywords: [...(label === def.name ? [] : [def.name]), ...(slot.keywords ?? [])], appId: slot.appId, icon: slot.icon ?? def.icon })
     } else if (slot.kind === 'featured') {
       const alias = FEATURED_NATIVE.find(entry => entry.label === slot.label)
 

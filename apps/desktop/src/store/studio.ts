@@ -6,7 +6,7 @@ import { onAnyGatewayEvent } from './gateway.ts'
 import { $windows, desktopArea, focusWindow, openApp } from './windows.ts'
 
 /*
- * The Studio's live model of each Hermes session: files written and edited, commands, background
+ * The Studio's live model of each NasTech session: files written and edited, commands, background
  * processes, the site to preview. Fed by the same gateway events the chat uses, for every session
  * the shell knows, so "show me the code" works for a build that is already under way.
  */
@@ -15,7 +15,7 @@ const STUDIO_EVENTS = new Set(['session.info', 'message.start', 'message.complet
 
 export const $studios = map<Record<string, StudioState>>({})
 
-/** Sessions started with "build …": their Studio opens by itself when Hermes starts working. */
+/** Sessions started with "build …": their Studio opens by itself when NasTech starts working. */
 export const $buildSessions = atom<ReadonlySet<string>>(new Set())
 
 const home = (): string => $env.get()?.homeDir ?? ''

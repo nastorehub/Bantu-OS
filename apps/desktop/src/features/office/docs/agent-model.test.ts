@@ -174,7 +174,7 @@ describe('one step to undo', () => {
     expect(documentText(view.state.doc)).toBe(documentText(stateFrom(REPORT).doc))
   })
 
-  it('keeps Hermes rewriting the marked text as one step, unless the person changed something meanwhile', () => {
+  it('keeps NasTech rewriting the marked text as one step, unless the person changed something meanwhile', () => {
     const view = viewOf(selecting(stateFrom(REPORT), 'Sales grew in March.'))
     view.dispatch(view.state.tr.setMeta(markedKey, { range: { from: view.state.selection.from, to: view.state.selection.to } }))
     const rewrite = (text: string) => writeMarked(view, (state) => insert(text, placeFor(state, { at: 'marked' }, markedRangeOf(state))))

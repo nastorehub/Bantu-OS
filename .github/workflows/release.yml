@@ -33,7 +33,7 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - name: Fetch the pinned Hermes Agent snapshot
+      - name: Fetch the pinned NasTech Agent snapshot
         run: npm run sync-upstream
       - run: npm ci
       - name: Check the signing secrets
@@ -99,7 +99,7 @@ jobs:
           cache: npm
       - name: Build tools for node-pty
         run: sudo apt-get update -qq && sudo apt-get install -y -qq build-essential python3
-      - name: Fetch the pinned Hermes Agent snapshot
+      - name: Fetch the pinned NasTech Agent snapshot
         run: npm run sync-upstream
       - run: npm ci
       - name: Build the tarball

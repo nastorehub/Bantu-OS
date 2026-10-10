@@ -6,13 +6,13 @@
 #
 # The same two halves build the bootc image (linux/image/Containerfile):
 #   1. image/packages.sh --dev   packages, the session and CLIs, the boot splash, services
-#   2. image/firstboot.sh        the session user's home folder, Hermes Agent, the omakase apps
+#   2. image/firstboot.sh        the session user's home folder, NasTech Agent, the omakase apps
 # and then, for development only: the helper scripts and building the shell from the repo.
 set -euo pipefail
 
 PAYLOAD="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-export HERMES_USER="${HERMES_USER:-hermes}"
-HERMES_UID_HOME="$(getent passwd "$HERMES_USER" | cut -d: -f6)"
+export NASTECH_USER="${NASTECH_USER:-nastech}"
+NASTECH_UID_HOME="$(getent passwd "$NASTECH_USER" | cut -d: -f6)"
 STATE_DIR=/var/lib/herald-os
 LOG=/var/log/herald-os-provision.log
 
@@ -28,26 +28,26 @@ bash "$PAYLOAD/image/packages.sh" --dev
 bash "$PAYLOAD/image/firstboot.sh" system
 # The development account is set up already (cloud-init made it); the shell's first-boot setup is
 # for the image's owners.
-sudo -u "$HERMES_USER" -H bash -c 'mkdir -p ~/.config/herald-os && date -Is > ~/.config/herald-os/setup-done'
+sudo -u "$NASTECH_USER" -H bash -c 'mkdir -p ~/.config/herald-os && date -Is > ~/.config/herald-os/setup-done'
 
 # ---------------------------------------------------------------------------------------------
-step "Developer helpers for $HERMES_USER"
+step "Developer helpers for $NASTECH_USER"
 # `install -d` would create ~/.local as root; keep every directory under the home owned by the
 # session user or uv/npm fail later.
-chown -R "$HERMES_USER:$HERMES_USER" "$HERMES_UID_HOME/.local" "$HERMES_UID_HOME/.config"
+chown -R "$NASTECH_USER:$NASTECH_USER" "$NASTECH_UID_HOME/.local" "$NASTECH_UID_HOME/.config"
 for f in build.sh sync.sh restart-shell.sh shot.sh; do
-  install -m 0755 -o "$HERMES_USER" -g "$HERMES_USER" "$PAYLOAD/dev/$f" "$HERMES_UID_HOME/.local/bin/herald-os-${f%.sh}"
+  install -m 0755 -o "$NASTECH_USER" -g "$NASTECH_USER" "$PAYLOAD/dev/$f" "$NASTECH_UID_HOME/.local/bin/herald-os-${f%.sh}"
 done
 
 # ---------------------------------------------------------------------------------------------
 step "Herald OS shell"
-REPO="$HERMES_UID_HOME/Herald-OS"
+REPO="$NASTECH_UID_HOME/Herald-OS"
 if mountpoint -q /mnt/herald-os 2>/dev/null; then
   echo "shared folder mounted at /mnt/herald-os; syncing and building"
-  sudo -u "$HERMES_USER" -H bash "$PAYLOAD/dev/sync.sh" || echo "WARNING: shell build failed; see above"
+  sudo -u "$NASTECH_USER" -H bash "$PAYLOAD/dev/sync.sh" || echo "WARNING: shell build failed; see above"
 elif [[ -d "$REPO/apps/desktop" ]]; then
   echo "repo present at $REPO; building"
-  sudo -u "$HERMES_USER" -H bash "$PAYLOAD/dev/build.sh" || echo "WARNING: shell build failed; see above"
+  sudo -u "$NASTECH_USER" -H bash "$PAYLOAD/dev/build.sh" || echo "WARNING: shell build failed; see above"
 else
   echo "repo not present yet. From the Mac run: bash linux/dev/push.sh"
 fi

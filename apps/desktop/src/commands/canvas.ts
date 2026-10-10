@@ -4,7 +4,7 @@ import { messageOf } from '../features/canvas/errors.ts'
 import { ok, type OsCommand } from '../store/os-commands.ts'
 
 /*
- * Herald Canvas for Hermes, voice, the command bar and `herald-os canvas`. A command works on the
+ * Herald Canvas for NasTech, voice, the command bar and `herald-os canvas`. A command works on the
  * `project` it names (a .comp folder) or on the image in front; edits are one undoable step each
  * and the person watches them land. The editor's code loads only when one of these runs.
  */
@@ -46,7 +46,7 @@ const done = async (work: Promise<{ summary: string; data?: Record<string, unkno
 
     return ok(outcome.summary, { data: outcome.data })
   } catch (error) {
-    // Errors from main come with Electron's prefix, which says nothing to Hermes or the person.
+    // Errors from main come with Electron's prefix, which says nothing to NasTech or the person.
     throw new Error(messageOf(error))
   }
 }
@@ -475,7 +475,7 @@ export const canvasCommands: readonly OsCommand[] = [
   {
     id: 'canvas.history',
     title: 'List the history of an image',
-    description: 'The steps in the open image’s history (the History panel), oldest first: their names, which ones Hermes or a command made, how many are applied and which are undone. Undo or redo with steps to move through them.',
+    description: 'The steps in the open image’s history (the History panel), oldest first: their names, which ones NasTech or a command made, how many are applied and which are undone. Undo or redo with steps to move through them.',
     tier: 'read',
     args: [project],
     run: async (args) => done((await canvas()).history(args))

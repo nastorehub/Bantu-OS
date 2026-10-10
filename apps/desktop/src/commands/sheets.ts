@@ -3,7 +3,7 @@ import { range, run, sheet, workbook } from './sheets-shared.ts'
 import { sheetsDepthCommands } from './sheets-depth.ts'
 
 /*
- * Herald Sheets for Hermes, voice, the command bar and `herald-os sheets`. A command works on the
+ * Herald Sheets for NasTech, voice, the command bar and `herald-os sheets`. A command works on the
  * `workbook` it names (a file, or an open workbook's name) or on the one in front; open in a
  * window, each change is one step to undo there, and the person watches it land. Univer loads only
  * when one of these runs. Charts, summaries, data tools, names, validation, comments and notes are
@@ -231,7 +231,7 @@ export const sheetsCommands: readonly OsCommand[] = [
   {
     id: 'sheets.undo',
     title: 'Undo in Herald Sheets',
-    description: 'Undo the last change to a workbook open in Herald Sheets, whoever made it (each Hermes change is one step); steps undoes several.',
+    description: 'Undo the last change to a workbook open in Herald Sheets, whoever made it (each NasTech change is one step); steps undoes several.',
     tier: 'act',
     args: [workbook, { name: 'steps', type: 'number', description: 'How many steps (1)' }],
     run: run('sheets.undo', async (args) => (await agent()).step('undo', args))

@@ -12,11 +12,11 @@ describe('describeScreen', () => {
 
   it('leaves Files out on other pages and names the document in front', () => {
     expect(describeScreen({ page: 'overview', files: { folder: '/Users/sam/Downloads', view: 'folder', selected: null }, viewerFile: null })).toBeNull()
-    expect(describeScreen({ page: 'hermes', files: null, viewerFile: '/Users/sam/Downloads/IMG_2231.pdf' })).toBe('Screen: the viewer in front shows the file /Users/sam/Downloads/IMG_2231.pdf.')
+    expect(describeScreen({ page: 'nastech', files: null, viewerFile: '/Users/sam/Downloads/IMG_2231.pdf' })).toBe('Screen: the viewer in front shows the file /Users/sam/Downloads/IMG_2231.pdf.')
   })
 
   it('goes after the spoken exchange, never into the words themselves', () => {
-    expect(withScreenContext('User: file these\nHermes: Which folder?', 'Screen: x.')).toBe('User: file these\nHermes: Which folder?\nScreen: x.')
+    expect(withScreenContext('User: file these\nNasTech: Which folder?', 'Screen: x.')).toBe('User: file these\nNasTech: Which folder?\nScreen: x.')
     expect(withScreenContext(undefined, 'Screen: x.')).toBe('Screen: x.')
     expect(withScreenContext(undefined, null)).toBeUndefined()
   })

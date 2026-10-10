@@ -144,8 +144,8 @@ async function macRun(id: string, action: 'install' | 'remove'): Promise<Catalog
   log('catalog', `${action} ${id}: ${argv[0]} ${argv[1].join(' ')}`)
   const result = await execWithPath(argv[0], argv[1], searchPath)
 
-  // Homebrew's Ollama is a server; start it so "Use with Hermes" finds it.
-  if (result.code === 0 && action === 'install' && method.kind === 'brew' && found.entry.hermes === 'ollama') {
+  // Homebrew's Ollama is a server; start it so "Use with NasTech" finds it.
+  if (result.code === 0 && action === 'install' && method.kind === 'brew' && found.entry.nastech === 'ollama') {
     await execWithPath(brew as string, ['services', 'start', method.ref], searchPath, 60_000)
   }
 

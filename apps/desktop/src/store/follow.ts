@@ -9,9 +9,9 @@ import { $buildSessions, openStudio, studioWindowFor } from './studio.ts'
 import { $voiceActive } from './voice.ts'
 
 /*
- * Follow Hermes: when Hermes's own tools change something that lives on a page (a memory entry, an
+ * Follow NasTech: when NasTech's own tools change something that lives on a page (a memory entry, an
  * automation, a file), show it. On during a voice conversation (the user is watching, not typing)
- * or when the `followHermes` preference is on. Never while the user is typing in a field.
+ * or when the `followNasTech` preference is on. Never while the user is typing in a field.
  *
  * Building is shown in the Studio: a session started with "build …" keeps its Studio up, and any
  * other session that starts writing code gets a one-time caption offering to show it.
@@ -37,8 +37,8 @@ function onBuildActivity(sessionId: string): void {
     return
   }
 
-  // A build session, or the conversation the user is watching (voice, or Follow Hermes).
-  const watching = sessionId === $activeChatId.get() && ($voiceActive.get() || $prefs.get().voice.followHermes)
+  // A build session, or the conversation the user is watching (voice, or Follow NasTech).
+  const watching = sessionId === $activeChatId.get() && ($voiceActive.get() || $prefs.get().voice.followNasTech)
 
   if ($buildSessions.get().has(sessionId) || watching) {
     // Opened once already and now gone: the user closed it.
@@ -80,7 +80,7 @@ export function bindFollow(): () => void {
       return
     }
 
-    const following = $voiceActive.get() || $prefs.get().voice.followHermes
+    const following = $voiceActive.get() || $prefs.get().voice.followNasTech
 
     if (!following || userIsTyping() || !$env.get()) {
       return

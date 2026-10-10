@@ -124,7 +124,7 @@ export function chunkForCommentary(text: string, maxChars = COMMENTARY_MAX_CHARS
 }
 
 /** Default phrases that end a conversation when they are the whole utterance. */
-export const DEFAULT_STOP_PHRASES = ['stop', 'stop listening', "that's all", 'that is all', 'thanks hermes', 'thank you hermes', 'goodbye', 'never mind', 'nevermind', 'cancel']
+export const DEFAULT_STOP_PHRASES = ['stop', 'stop listening', "that's all", 'that is all', 'thanks nastech', 'thank you nastech', 'goodbye', 'never mind', 'nevermind', 'cancel']
 
 /** True when the utterance is only a stop phrase (punctuation and case ignored). */
 export function isStopPhrase(text: string, phrases: readonly string[] = DEFAULT_STOP_PHRASES): boolean {
@@ -141,7 +141,7 @@ export function isStopPhrase(text: string, phrases: readonly string[] = DEFAULT_
   return phrases.some(phrase => {
     const p = phrase.toLowerCase().trim()
 
-    return normalized === p || normalized === `${p} hermes` || normalized === `hermes ${p}` || normalized === `okay ${p}` || normalized === `ok ${p}`
+    return normalized === p || normalized === `${p} nastech` || normalized === `nastech ${p}` || normalized === `okay ${p}` || normalized === `ok ${p}`
   })
 }
 

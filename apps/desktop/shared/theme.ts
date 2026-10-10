@@ -1,7 +1,7 @@
 /*
  * Themes as data. A theme is the `theme.json` the Linux theme engine already reads
  * (linux/themes/<name>/theme.json): one set of `colors` recolours the shell, the compositor, GTK,
- * the lock screen, the terminal and Hermes's own skin. Everything here is pure so the renderer,
+ * the lock screen, the terminal and NasTech's own skin. Everything here is pure so the renderer,
  * Electron main and the tests share one definition.
  */
 
@@ -442,12 +442,12 @@ export function validateTheme(value: unknown): string | null {
   return missing.length ? `theme.json colours must be #rrggbb; check ${missing.join(', ')}` : null
 }
 
-// ---- Hermes skins ------------------------------------------------------------------------------
+// ---- NasTech skins ------------------------------------------------------------------------------
 
 export const HERALD_SKIN = 'herald-os'
 
-/** The Hermes skin (`~/.hermes/skins/herald-os.yaml`) that dresses Hermes's own CLI and TUI in the theme. */
-export function hermesSkinColors(colors: ThemeColors): Record<string, string> {
+/** The NasTech skin (`~/.nastech/skins/herald-os.yaml`) that dresses NasTech's own CLI and TUI in the theme. */
+export function nastechSkinColors(colors: ThemeColors): Record<string, string> {
   return {
     banner_border: colors.accent,
     banner_title: colors.accent_strong,
@@ -480,17 +480,17 @@ export function hermesSkinColors(colors: ThemeColors): Record<string, string> {
   }
 }
 
-export function hermesSkinYaml(label: string, colors: ThemeColors): string {
+export function nastechSkinYaml(label: string, colors: ThemeColors): string {
   const lines = [`# Written by Herald OS from its "${label.replace(/"/g, "'")}" theme; Herald OS rewrites it when the theme changes.`, `name: ${HERALD_SKIN}`, `description: "Herald OS: ${label.replace(/"/g, "'")}"`, 'colors:']
 
-  for (const [key, value] of Object.entries(hermesSkinColors(colors))) {
+  for (const [key, value] of Object.entries(nastechSkinColors(colors))) {
     lines.push(`  ${key}: "${value}"`)
   }
 
   return `${lines.join('\n')}\n`
 }
 
-/** Herald colours from a Hermes skin the person picked with /skin; null when it lacks the basics. */
+/** Herald colours from a NasTech skin the person picked with /skin; null when it lacks the basics. */
 export function themeColorsFromSkin(skin: { colors?: Record<string, string> } | null | undefined): ThemeColors | null {
   const c = skin?.colors ?? {}
   const get = (...keys: string[]) => keys.map(key => c[key]).find(isHexColor)

@@ -1,5 +1,5 @@
 import { useStore } from '@nanostores/react'
-import { HermesMark } from '../../components/hermes-mark.tsx'
+import { NasTechMark } from '../../components/nastech-mark.tsx'
 import { Badge } from '../../components/ui/primitives.tsx'
 import { $activeChat, interruptChat, runSlash, sendPrompt } from '../../store/chat.ts'
 import { $connection } from '../../store/gateway.ts'
@@ -28,7 +28,7 @@ export function ChatSurface() {
       <SessionList />
       <div className="flex min-w-0 flex-1 flex-col">
         <div className="flex h-11 shrink-0 items-center gap-3 px-6">
-          <div className="min-w-0 flex-1 truncate text-[13px] text-fg-2">{chat?.title || (chat ? 'New session' : 'Hermes')}</div>
+          <div className="min-w-0 flex-1 truncate text-[13px] text-fg-2">{chat?.title || (chat ? 'New session' : 'NasTech')}</div>
           {chat?.info.cwd && <span className="truncate font-mono text-[11px] text-fg-4">{chat.info.cwd}</span>}
           {chat?.usage?.context_percent != null && <Badge tone="muted">{Math.round(chat.usage.context_percent)}% context</Badge>}
         </div>
@@ -37,9 +37,9 @@ export function ChatSurface() {
           <Transcript chat={chat} />
         ) : (
           <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-6 px-6">
-            <HermesMark size={36} />
+            <NasTechMark size={36} />
             <div className="text-center">
-              <div className="text-[18px] font-medium tracking-tight">Hermes</div>
+              <div className="text-[18px] font-medium tracking-tight">NasTech</div>
               <div className="mt-1 text-[13px] text-fg-3">Your computer, in conversation.</div>
             </div>
             <div className="grid w-full max-w-xl grid-cols-2 gap-2">
@@ -58,7 +58,7 @@ export function ChatSurface() {
               autoFocus
               disabled={!online}
               streaming={chat?.streaming}
-              placeholder={online ? 'Message Hermes' : 'Connecting to Hermes…'}
+              placeholder={online ? 'Message NasTech' : 'Connecting to NasTech…'}
               onSubmit={submit}
               onInterrupt={() => void interruptChat()}
             />

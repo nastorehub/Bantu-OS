@@ -6,12 +6,12 @@ describe('osEnv', () => {
     expect(osEnv('WINDOWED', { HERALD_OS_WINDOWED: '1' })).toBe('1')
   })
 
-  it('falls back to the pre-rename HERMES_OS_ name', () => {
-    expect(osEnv('ZOOM', { HERMES_OS_ZOOM: '1.5' })).toBe('1.5')
+  it('falls back to the pre-rename NASTECH_OS_ name', () => {
+    expect(osEnv('ZOOM', { NASTECH_OS_ZOOM: '1.5' })).toBe('1.5')
   })
 
   it('prefers the new name when both are set', () => {
-    expect(osEnv('SHELL_MODE', { HERALD_OS_SHELL_MODE: 'panels', HERMES_OS_SHELL_MODE: 'desktop' })).toBe('panels')
+    expect(osEnv('SHELL_MODE', { HERALD_OS_SHELL_MODE: 'panels', NASTECH_OS_SHELL_MODE: 'desktop' })).toBe('panels')
   })
 
   it('is undefined when neither is set', () => {

@@ -7,12 +7,12 @@ import type { BrowseItem, McpCatalogEntry } from './connections-model.ts'
 /*
  * The Browse tab: MCP catalog entries, messaging platforms, service toolsets and providers that
  * are not configured yet. Catalog entries that need credentials expand into a small inline form
- * so the secret goes straight to Hermes's .env through the install endpoint.
+ * so the secret goes straight to NasTech's .env through the install endpoint.
  */
 
 export function AddConnection({ items, query, onAdd, busyId }: { items: BrowseItem[]; query: string; onAdd: (item: BrowseItem, env?: Record<string, string>) => void; busyId: string | null }) {
   if (items.length === 0) {
-    return <EmptyGlass icon={<IconLayoutGrid />} title={query ? `Nothing matches “${query}”` : 'Everything available is already connected'} description={query ? 'Try a shorter name, or ask Hermes to set up something new.' : 'New MCP servers show up here as the catalog grows.'} className="flex-1" />
+    return <EmptyGlass icon={<IconLayoutGrid />} title={query ? `Nothing matches “${query}”` : 'Everything available is already connected'} description={query ? 'Try a shorter name, or ask NasTech to set up something new.' : 'New MCP servers show up here as the catalog grows.'} className="flex-1" />
   }
 
   return (
@@ -75,7 +75,7 @@ function BrowseCard({ item, onAdd, busy }: { item: BrowseItem; onAdd: (item: Bro
               />
             </label>
           ))}
-          <div className="text-[11.5px] text-fg-4">Stored in Hermes’s .env, never shown again.</div>
+          <div className="text-[11.5px] text-fg-4">Stored in NasTech’s .env, never shown again.</div>
         </div>
       )}
 

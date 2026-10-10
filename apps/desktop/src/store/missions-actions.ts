@@ -19,7 +19,7 @@ export async function startMission(goal: string): Promise<{ sessionId: string; t
   const title = trimmed.slice(0, TITLE_MAX)
   const chat = await createChat({ title })
   void sendPrompt(missionPrompt(trimmed), { sessionId: chat.sessionId })
-  showPage('hermes')
+  showPage('nastech')
 
   return { sessionId: chat.sessionId, title }
 }

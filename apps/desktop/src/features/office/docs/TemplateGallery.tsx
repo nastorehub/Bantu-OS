@@ -15,7 +15,7 @@ import { thumbnailOf } from './templates/thumbnail.ts'
  * The gallery a new document starts from: the blank document, first and selected so that New and
  * then Enter make one, Herald's templates and the person's own, each a live thumbnail of its first
  * page. The arrow keys move, Enter makes the document and Escape goes back. Only the person's own
- * New opens it: a document asked for by Hermes or another app is blank, with no dialog.
+ * New opens it: a document asked for by NasTech or another app is blank, with no dialog.
  */
 
 const THUMB = { width: 124, height: 175 }

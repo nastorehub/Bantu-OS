@@ -270,7 +270,7 @@ describe('a batch of edits', () => {
       ])
     )
     const step = runEdits(doc.history.present, edits, { front: doc.slideId })
-    doc.commit({ ...step, label: `Hermes: ${step.label}` })
+    doc.commit({ ...step, label: `NasTech: ${step.label}` })
     const risks = doc.history.present.slides[1]
 
     expect(doc.history.present.slides.map(titleOf)).toEqual(['', 'Risks', 'Agenda', 'Quarterly numbers', 'numbers summary'])
@@ -279,7 +279,7 @@ describe('a batch of edits', () => {
     expect(step.done).toBe('added slide 5 (“Risks”); added a star to slide 5 (“Risks”); added a text box to slide 5 (“Risks”); moved slide 5 to 2; replaced 2 matches of “results”; applied the Paper theme')
     // The editor goes where the last edit that moves it sends it: the first slide the replace changed.
     expect(doc.slideId).toBe(doc.history.present.slides[3].id)
-    expect(doc.undo()).toBe('Hermes: 6 edits')
+    expect(doc.undo()).toBe('NasTech: 6 edits')
     expect(doc.history.present).toBe(deck)
     expect(doc.history.canUndo).toBe(false)
   })
@@ -294,9 +294,9 @@ describe('a batch of edits', () => {
 
   it('composes changes into one, the editor going where the last one says', () => {
     const deck = model.newDeck('T')
-    const change = composeChanges(deck, [(current) => model.addSlide(current, { title: 'One' }), (current) => model.setNotes(current, current.slides[0].id, 'First notes')], 'Hermes: 2 edits')
+    const change = composeChanges(deck, [(current) => model.addSlide(current, { title: 'One' }), (current) => model.setNotes(current, current.slides[0].id, 'First notes')], 'NasTech: 2 edits')
 
-    expect(change.label).toBe('Hermes: 2 edits')
+    expect(change.label).toBe('NasTech: 2 edits')
     expect(change.deck.slides.map((slide) => [titleOf(slide), slide.notes])).toEqual([
       ['', 'First notes'],
       ['One', '']

@@ -9,7 +9,7 @@ import { $pendingRequests } from './requests.ts'
 import { $runtimeIds, $sessions } from './sessions.ts'
 
 /*
- * Missions are derived, never stored: a mission is a Hermes session viewed through its goal, its
+ * Missions are derived, never stored: a mission is a NasTech session viewed through its goal, its
  * todo plan, the artifacts it produced, the agents working on it and the requests it is waiting on.
  */
 
@@ -156,7 +156,7 @@ function recordArtifact(sessionId: string, tool: string, args: Record<string, un
   $artifacts.setKey(sessionId, next)
 
   for (const artifact of additions) {
-    pushActivity({ ts: now, sessionId, kind: 'artifact', title: `Hermes saved ${artifact.name}`, detail: artifact.path })
+    pushActivity({ ts: now, sessionId, kind: 'artifact', title: `NasTech saved ${artifact.name}`, detail: artifact.path })
   }
 }
 
@@ -205,7 +205,7 @@ function bindGatewayMissionEvents(): () => void {
             .filter((t): t is Record<string, unknown> => Boolean(t) && typeof t === 'object')
             .map(t => ({ id: String(t.id ?? ''), content: String(t.content ?? ''), status: (String(t.status ?? 'pending') as TodoItem['status']) }))
           $todos.setKey(sid, { todos, revision: payload.revision ?? 0 })
-          pushActivity({ ts: Date.now(), sessionId: sid, kind: 'plan', title: 'Hermes updated the mission plan', detail: `${todos.filter(t => t.status === 'completed').length} of ${todos.length} steps done` })
+          pushActivity({ ts: Date.now(), sessionId: sid, kind: 'plan', title: 'NasTech updated the mission plan', detail: `${todos.filter(t => t.status === 'completed').length} of ${todos.length} steps done` })
         }
 
         break
@@ -214,7 +214,7 @@ function bindGatewayMissionEvents(): () => void {
         const payload = event.payload as ToolStartPayload | undefined
 
         if (sid && payload?.name === 'delegate_task') {
-          pushActivity({ ts: Date.now(), sessionId: sid, kind: 'agent', title: 'Hermes delegated a task', detail: payload.context ?? undefined })
+          pushActivity({ ts: Date.now(), sessionId: sid, kind: 'agent', title: 'NasTech delegated a task', detail: payload.context ?? undefined })
         }
 
         break
@@ -229,7 +229,7 @@ function bindGatewayMissionEvents(): () => void {
         if (ARTIFACT_TOOLS.has(payload.name)) {
           recordArtifact(sid, payload.name, payload.args)
         } else if (payload.name !== 'todo_list') {
-          pushActivity({ ts: Date.now(), sessionId: sid, kind: 'tool', title: `Hermes ${FRIENDLY_TOOL[payload.name] ?? payload.name.replace(/_/g, ' ')}`, detail: payload.summary ?? undefined })
+          pushActivity({ ts: Date.now(), sessionId: sid, kind: 'tool', title: `NasTech ${FRIENDLY_TOOL[payload.name] ?? payload.name.replace(/_/g, ' ')}`, detail: payload.summary ?? undefined })
         }
 
         break
@@ -246,7 +246,7 @@ function bindGatewayMissionEvents(): () => void {
       }
       case 'message.complete': {
         if (sid) {
-          pushActivity({ ts: Date.now(), sessionId: sid, kind: 'turn', title: 'Hermes finished a turn' })
+          pushActivity({ ts: Date.now(), sessionId: sid, kind: 'turn', title: 'NasTech finished a turn' })
         }
 
         break

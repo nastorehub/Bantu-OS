@@ -2,14 +2,14 @@
 # One-shot developer bootstrap for Herald OS (macOS and Linux). Safe to re-run after every pull.
 #   1. Fetch the pinned upstream snapshot (types for the gateway wire).
 #   2. Install Node workspaces.
-#   3. Link the system-bridge plugin into the user's Hermes plugins directory.
-#   4. Find the Hermes runtime, migrate pre-rename settings, enable the plugin and its toolset.
+#   3. Link the system-bridge plugin into the user's NasTech plugins directory.
+#   4. Find the NasTech runtime, migrate pre-rename settings, enable the plugin and its toolset.
 #   5. Report voice support.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-HERMES_HOME="${HERMES_HOME:-$HOME/.hermes}"
-HERALD_OS_HERMES_ROOT="${HERALD_OS_HERMES_ROOT:-${HERMES_OS_HERMES_ROOT:-}}"
+NASTECH_HOME="${NASTECH_HOME:-$HOME/.nastech}"
+HERALD_OS_NASTECH_ROOT="${HERALD_OS_NASTECH_ROOT:-${NASTECH_OS_NASTECH_ROOT:-}}"
 OS="$(uname -s)"
 export PATH="$HOME/.local/bin:$PATH"
 
@@ -36,93 +36,93 @@ echo "==> Fetching the Electron binary"
 helper="$ROOT/node_modules/node-pty/prebuilds/$(node -p 'process.platform + "-" + process.arch')/spawn-helper"
 [[ -f "$helper" ]] && chmod 755 "$helper"
 
-echo "==> Linking herald-os-bridge plugin into $HERMES_HOME/plugins"
-mkdir -p "$HERMES_HOME/plugins"
+echo "==> Linking herald-os-bridge plugin into $NASTECH_HOME/plugins"
+mkdir -p "$NASTECH_HOME/plugins"
 # The pre-rename link points at a folder that no longer exists; remove it only when it is ours.
-legacy="$HERMES_HOME/plugins/hermes-os-bridge"
+legacy="$NASTECH_HOME/plugins/nastech-os-bridge"
 if [[ -L "$legacy" && "$(readlink "$legacy")" == "$ROOT/plugins/"* ]]; then
   rm -f "$legacy"
-  echo "    removed the pre-rename hermes-os-bridge link"
+  echo "    removed the pre-rename nastech-os-bridge link"
 fi
-link="$HERMES_HOME/plugins/herald-os-bridge"
+link="$NASTECH_HOME/plugins/herald-os-bridge"
 if [[ -L "$link" || -e "$link" ]]; then
   rm -rf "$link"
 fi
 ln -s "$ROOT/plugins/herald-os-bridge" "$link"
 
-echo "==> Verifying Hermes runtime"
-HERMES_CMD=()
-HERMES_PY=""
+echo "==> Verifying NasTech runtime"
+NASTECH_CMD=()
+NASTECH_PY=""
 # A checkout in either layout, as the shell looks (apps/desktop/electron/backend/resolve.ts): the
 # launcher today's installers publish, or the venv earlier ones made.
 checkout_runtime() {
-  if [[ -x "$1/.hermes/bin/hermes" ]]; then
-    HERMES_CMD=("$1/.hermes/bin/hermes")
+  if [[ -x "$1/.nastech/bin/nastech" ]]; then
+    NASTECH_CMD=("$1/.nastech/bin/nastech")
   elif [[ -x "$1/venv/bin/python" ]]; then
-    HERMES_PY="$1/venv/bin/python"
+    NASTECH_PY="$1/venv/bin/python"
   else
     return 1
   fi
 }
-if [[ -n "$HERALD_OS_HERMES_ROOT" ]] && checkout_runtime "$HERALD_OS_HERMES_ROOT"; then
-  echo "    HERALD_OS_HERMES_ROOT=$HERALD_OS_HERMES_ROOT"
-elif checkout_runtime "$HERMES_HOME/hermes-agent"; then
-  echo "    managed install: $HERMES_HOME/hermes-agent"
-elif command -v hermes >/dev/null 2>&1; then
-  echo "    hermes on PATH: $(command -v hermes)"
-  HERMES_CMD=(hermes)
+if [[ -n "$HERALD_OS_NASTECH_ROOT" ]] && checkout_runtime "$HERALD_OS_NASTECH_ROOT"; then
+  echo "    HERALD_OS_NASTECH_ROOT=$HERALD_OS_NASTECH_ROOT"
+elif checkout_runtime "$NASTECH_HOME/nastech-agent"; then
+  echo "    managed install: $NASTECH_HOME/nastech-agent"
+elif command -v nastech >/dev/null 2>&1; then
+  echo "    nastech on PATH: $(command -v nastech)"
+  NASTECH_CMD=(nastech)
   # A pip/uv install's entry point names its interpreter on the first line.
-  shebang="$(head -1 "$(command -v hermes)" 2>/dev/null | sed -n 's/^#!\(.*python[0-9.]*\)$/\1/p')"
-  [[ -n "$shebang" && -x "$shebang" ]] && HERMES_PY="$shebang"
+  shebang="$(head -1 "$(command -v nastech)" 2>/dev/null | sed -n 's/^#!\(.*python[0-9.]*\)$/\1/p')"
+  [[ -n "$shebang" && -x "$shebang" ]] && NASTECH_PY="$shebang"
 else
-  echo "    WARNING: no Hermes runtime found. Install it, then re-run this script:" >&2
-  echo "      curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash" >&2
+  echo "    WARNING: no NasTech runtime found. Install it, then re-run this script:" >&2
+  echo "      curl -fsSL https://raw.githubusercontent.com/nastechresearch/nastech-agent/main/scripts/install.sh | bash" >&2
 fi
-[[ -n "$HERMES_PY" && ${#HERMES_CMD[@]} -eq 0 ]] && HERMES_CMD=("$HERMES_PY" -m hermes_cli.main)
-runtime_root="${HERALD_OS_HERMES_ROOT:-$HERMES_HOME/hermes-agent}"
+[[ -n "$NASTECH_PY" && ${#NASTECH_CMD[@]} -eq 0 ]] && NASTECH_CMD=("$NASTECH_PY" -m nastech_cli.main)
+runtime_root="${HERALD_OS_NASTECH_ROOT:-$NASTECH_HOME/nastech-agent}"
 
-# From the runtime checkout, like the `hermes` entry point: an editable install does not map
+# From the runtime checkout, like the `nastech` entry point: an editable install does not map
 # top-level modules added after it was created.
-hermes_run() {
-  (cd "$runtime_root" 2>/dev/null || true; NO_COLOR=1 "${HERMES_CMD[@]}" "$@" </dev/null)
+nastech_run() {
+  (cd "$runtime_root" 2>/dev/null || true; NO_COLOR=1 "${NASTECH_CMD[@]}" "$@" </dev/null)
 }
 
-# One hermes command and what it changes; a failure stops the bootstrap with Hermes's output.
-# `hermes tools enable` reports an unknown toolset as a ✗ line and still exits 0.
-hermes_step() {
+# One nastech command and what it changes; a failure stops the bootstrap with NasTech's output.
+# `nastech tools enable` reports an unknown toolset as a ✗ line and still exits 0.
+nastech_step() {
   local change="$1" output status=0
   shift
-  echo "    hermes $*: $change"
-  output="$(hermes_run "$@" 2>&1)" || status=$?
+  echo "    nastech $*: $change"
+  output="$(nastech_run "$@" 2>&1)" || status=$?
   if [[ $status -ne 0 ]] || grep -q '^[[:space:]]*✗' <<<"$output"; then
-    echo "bootstrap: \`hermes $*\` failed (exit $status):" >&2
+    echo "bootstrap: \`nastech $*\` failed (exit $status):" >&2
     echo "$output" >&2
     echo "Fix it and run npm run bootstrap again; docs/SYSTEM-BRIDGE.md says how to take back what was already changed." >&2
     exit 1
   fi
 }
 
-if [[ ${#HERMES_CMD[@]} -gt 0 ]]; then
-  if [[ -n "$HERMES_PY" ]]; then
-    echo "==> Migrating settings from the pre-rename Hermes OS"
-    HERMES_HOME="$HERMES_HOME" PYTHONPATH="$runtime_root${PYTHONPATH:+:$PYTHONPATH}" "$HERMES_PY" "$ROOT/scripts/migrate-hermes-config.py" || true
+if [[ ${#NASTECH_CMD[@]} -gt 0 ]]; then
+  if [[ -n "$NASTECH_PY" ]]; then
+    echo "==> Migrating settings from the pre-rename NasTech OS"
+    NASTECH_HOME="$NASTECH_HOME" PYTHONPATH="$runtime_root${PYTHONPATH:+:$PYTHONPATH}" "$NASTECH_PY" "$ROOT/scripts/migrate-nastech-config.py" || true
   fi
 
   echo "==> Enabling the system bridge plugin and its toolset"
   # User plugins are opt-in (plugins.enabled) and a saved platform toolset list is authoritative, so
   # both must be recorded. The override prompt is answered "no" (stdin closed): the bridge never
   # replaces built-in tools.
-  hermes_step "adds it to plugins.enabled in $HERMES_HOME/config.yaml" plugins enable herald-os-bridge
-  hermes_step "saves platform_toolsets.cli with herald_os in it (the tools run only in Herald OS sessions)" tools enable herald_os
+  nastech_step "adds it to plugins.enabled in $NASTECH_HOME/config.yaml" plugins enable herald-os-bridge
+  nastech_step "saves platform_toolsets.cli with herald_os in it (the tools run only in Herald OS sessions)" tools enable herald_os
   # Upstream defers plugin tools behind its tool-search bridge; with the system tools hidden the
-  # agent falls back to shell commands. Keep them direct (Settings -> Hermes & agents -> Tool search
+  # agent falls back to shell commands. Keep them direct (Settings -> NasTech & agents -> Tool search
   # turns it back on), writing down the value it had the first time so it can be put back.
-  if ! before="$(hermes_run config get tools.tool_search.enabled 2>/dev/null)"; then
-    echo "bootstrap: \`hermes config get tools.tool_search.enabled\` failed" >&2
+  if ! before="$(nastech_run config get tools.tool_search.enabled 2>/dev/null)"; then
+    echo "bootstrap: \`nastech config get tools.tool_search.enabled\` failed" >&2
     exit 1
   fi
   before="$(tail -n 1 <<<"$before" | tr -d '[:space:]')"
-  record="$HERMES_HOME/herald-os/tool-search-before"
+  record="$NASTECH_HOME/herald-os/tool-search-before"
   if [[ "$before" == "off" ]]; then
     echo "    tools.tool_search.enabled is off already"
   else
@@ -130,30 +130,30 @@ if [[ ${#HERMES_CMD[@]} -gt 0 ]]; then
       mkdir -p "$(dirname "$record")"
       echo "$before" >"$record"
     fi
-    hermes_step "turns Tool Search off for every Hermes session (it was $before; saved in $record)" config set tools.tool_search.enabled off
+    nastech_step "turns Tool Search off for every NasTech session (it was $before; saved in $record)" config set tools.tool_search.enabled off
   fi
 
   echo "==> Checking voice support (docs/VOICE.md)"
-  # The Live engine and the spoken-reply turn note need the voice-live routes (Hermes 0.21.3 and
+  # The Live engine and the spoken-reply turn note need the voice-live routes (NasTech 0.21.3 and
   # later). Git installs report version 0.0.0, so look for the module rather than the version.
   if [[ -f "$runtime_root/tools/voice_live.py" ]]; then
     echo "    voice-live routes: available"
   elif [[ -d "$runtime_root" ]]; then
-    echo "    WARNING: this Hermes has no voice-live routes; run 'hermes update' for the Live voice engine." >&2
+    echo "    WARNING: this NasTech has no voice-live routes; run 'nastech update' for the Live voice engine." >&2
   fi
-  if [[ -n "$HERMES_PY" ]]; then
-    "$HERMES_PY" - <<'PY' || true
+  if [[ -n "$NASTECH_PY" ]]; then
+    "$NASTECH_PY" - <<'PY' || true
 import importlib
 for name, purpose in (("openwakeword", "wake word"), ("faster_whisper", "local STT"), ("edge_tts", "free TTS")):
     try:
         importlib.import_module(name)
         print(f"    {name}: ok ({purpose})")
     except Exception:
-        print(f"    {name}: missing ({purpose}); install with: pip install 'hermes-agent[voice]' inside the Hermes venv")
+        print(f"    {name}: missing ({purpose}); install with: pip install 'nastech-agent[voice]' inside the NasTech venv")
 PY
   else
     # Today's layout keeps its Python dependencies out of the checkout, so its modules are not looked at here.
-    echo "    voice extras: hermes pm install --extra voice --extra edge-tts --extra wake-openwakeword adds them (local STT, free TTS, wake word)"
+    echo "    voice extras: nastech pm install --extra voice --extra edge-tts --extra wake-openwakeword adds them (local STT, free TTS, wake word)"
   fi
 fi
 

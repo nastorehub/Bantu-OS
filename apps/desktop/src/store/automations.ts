@@ -47,7 +47,7 @@ async function writeRules(next: EventAutomation[]): Promise<void> {
   await updatePrefs({ eventAutomations: next })
 }
 
-/** An automation that runs when `event` happens: a paused cron job (Hermes keeps its runs) plus the rule. */
+/** An automation that runs when `event` happens: a paused cron job (NasTech keeps its runs) plus the rule. */
 export async function createEventAutomation(draft: Omit<CronJobDraft, 'schedule'>, event: HeraldEventName, match?: Record<string, string>, profile?: string | null): Promise<CronJob> {
   const created = await cronApi.create({ ...draft, schedule: EVENT_RULE_SCHEDULE }, profile)
   await cronApi.pause(created)

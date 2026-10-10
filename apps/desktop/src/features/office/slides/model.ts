@@ -63,7 +63,7 @@ export { addSlideFromSheet, addTableFromSheet, formatNumber, sheetRange } from '
 
 /*
  * What can be done to a deck, as pure functions: each takes a deck and gives the next one with the
- * name of the step, so the editor, the menus and Hermes's commands make the same change, the live
+ * name of the step, so the editor, the menus and NasTech's commands make the same change, the live
  * deck in a window records it as one step to undo, and a deck read from disk takes it the same way.
  * Slides and elements are named by id; nothing here touches the screen or the disk.
  */
@@ -793,7 +793,7 @@ export function slideTitle(slide: Slide): string {
   return title && (title.kind === 'text' || title.kind === 'shape') ? plainText(title.body).trim() : ''
 }
 
-/** The deck in a few lines of text: each slide's number, layout, title and how much is on it, for Hermes. */
+/** The deck in a few lines of text: each slide's number, layout, title and how much is on it, for NasTech. */
 export function outline(deck: Deck): string {
   return deck.slides
     .map((slide, index) => {

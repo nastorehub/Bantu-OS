@@ -21,7 +21,7 @@ export function osState(): Record<string, unknown> {
     .map(w => ({
       id: w.id,
       app: w.appId,
-      title: w.id === MAIN_WINDOW_ID ? `Hermes (${appById(page).name})` : w.title,
+      title: w.id === MAIN_WINDOW_ID ? `NasTech (${appById(page).name})` : w.title,
       minimized: w.phase === 'minimized',
       focused: w.id === focused
     }))

@@ -1,7 +1,7 @@
 import { IconClipboard, IconFileUnknown, IconSearch } from '@tabler/icons-react'
 import { type KeyboardEvent as ReactKeyboardEvent, useEffect, useRef, useState } from 'react'
 import type { ClipboardEntry } from '../../../shared/ipc.ts'
-import { HermesAvatar } from '../../components/app-icon.tsx'
+import { NasTechAvatar } from '../../components/app-icon.tsx'
 import { EmptyGlass } from '../../components/ui/glass.tsx'
 import { Kbd, Spinner } from '../../components/ui/primitives.tsx'
 import { cn } from '../../lib/cn.ts'
@@ -103,7 +103,7 @@ export function ClipboardPanel({ onClose }: { onClose: () => void }) {
   return (
     <div className="float flex flex-col overflow-hidden rounded-2xl animate-pop" onKeyDown={onKeyDown}>
       <div className="flex items-center gap-3 px-4 pt-4 pb-3">
-        <HermesAvatar size={22} rounded={6} />
+        <NasTechAvatar size={22} rounded={6} />
         <span className="text-[14px] font-semibold">Clipboard</span>
         {entries && entries.length > 0 && <span className="text-[11.5px] text-fg-4 tabular-nums">{entries.length} recent</span>}
         <span className="flex-1" />

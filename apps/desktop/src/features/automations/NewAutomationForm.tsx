@@ -59,7 +59,7 @@ export function NewAutomationForm({ targets, creating, onCreate, onCancel }: { t
         <GlyphTile icon={<IconSparkles />} size={44} />
         <div className="min-w-0 flex-1">
           <h2 className="text-[18px] leading-tight font-semibold text-fg">New automation</h2>
-          <p className="mt-1 text-[12.5px] text-fg-3">Tell Hermes what to do and when. It runs even while you are away.</p>
+          <p className="mt-1 text-[12.5px] text-fg-3">Tell NasTech what to do and when. It runs even while you are away.</p>
         </div>
         <GlassButton size="icon" variant="ghost" onClick={onCancel} aria-label="Close new automation form" className="-mt-1 -mr-2">
           <IconX />
@@ -104,13 +104,13 @@ export function NewAutomationForm({ targets, creating, onCreate, onCancel }: { t
                 ))}
               </SelectInput>
               {matcher && <TextInput aria-label={matcher.label} value={matchValue} onChange={e => setMatchValue(e.target.value)} placeholder={matcher.placeholder} />}
-              <Hint>Hermes runs it each time this happens on this computer while Herald OS is open.</Hint>
+              <Hint>NasTech runs it each time this happens on this computer while Herald OS is open.</Hint>
             </>
           )}
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <FieldLabel htmlFor="new-automation-prompt">What Hermes should do</FieldLabel>
+          <FieldLabel htmlFor="new-automation-prompt">What NasTech should do</FieldLabel>
           <TextArea id="new-automation-prompt" value={prompt} onChange={e => setPrompt(e.target.value)} rows={6} placeholder="Gather my calendar, priority mail and active missions, then write a short briefing for the day." required />
         </div>
 
@@ -124,7 +124,7 @@ export function NewAutomationForm({ targets, creating, onCreate, onCancel }: { t
               </option>
             ))}
           </SelectInput>
-          <Hint>{isLocalDelivery(deliver) ? 'Results are saved as a briefing you can open in Hermes.' : 'Hermes posts the result to the platform’s home channel when the run finishes.'}</Hint>
+          <Hint>{isLocalDelivery(deliver) ? 'Results are saved as a briefing you can open in NasTech.' : 'NasTech posts the result to the platform’s home channel when the run finishes.'}</Hint>
         </div>
       </form>
 
@@ -132,12 +132,12 @@ export function NewAutomationForm({ targets, creating, onCreate, onCancel }: { t
         <GlassButton
           variant="secondary"
           onClick={() => {
-            showPage('hermes')
+            showPage('nastech')
             void sendPrompt(DESCRIBE_PROMPT)
           }}
         >
           <IconMessageChatbot />
-          Describe it to Hermes
+          Describe it to NasTech
         </GlassButton>
         <GlassButton variant="primary" disabled={!canCreate} onClick={() => void submit()} aria-label="Create automation">
           <IconPlus />

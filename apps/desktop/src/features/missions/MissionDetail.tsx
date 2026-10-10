@@ -32,7 +32,7 @@ export function MissionDetail({ mission }: { mission: Mission }) {
     try {
       await openStoredSession(mission.id)
       markReviewed(mission.id)
-      showPage('hermes')
+      showPage('nastech')
     } catch (error) {
       notify({ title: 'Could not open mission', body: error instanceof Error ? error.message : String(error), level: 'error' })
     } finally {

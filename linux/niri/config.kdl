@@ -24,7 +24,7 @@ input {
     warp-mouse-to-focus
 }
 
-// Every window is a client of Herald OS: no client-side decorations, Hermes draws the frame.
+// Every window is a client of Herald OS: no client-side decorations, NasTech draws the frame.
 prefer-no-csd
 
 // The shell owns the wallpaper (swaybg with a rendered frame); this shows until it is up.
@@ -41,7 +41,7 @@ layout {
     }
     default-column-width { proportion 0.5; }
 
-    // Hermes glass: a thin accent border on the focused window, a faint one elsewhere.
+    // NasTech glass: a thin accent border on the focused window, a faint one elsewhere.
     focus-ring {
         off
     }
@@ -119,7 +119,7 @@ environment {
 spawn-at-startup "herald-os-session"
 
 // ---------------------------------------------------------------------------------------------
-// Window rules: shell surfaces are floating panels; everything else is a tile Hermes decorates.
+// Window rules: shell surfaces are floating panels; everything else is a tile NasTech decorates.
 
 // Menu bar: full width, top, never focused on open, no frame.
 window-rule {
@@ -219,13 +219,13 @@ window-rule {
     shadow { off; }
 }
 
-// The Hermes window and its floating apps: rounded glass tiles.
+// The NasTech window and its floating apps: rounded glass tiles.
 window-rule {
     match app-id=r#"^(herald-os|Herald OS)$"#
     geometry-corner-radius 14
     clip-to-geometry true
 }
-// The Hermes window shares the screen with one app by default (its pages adapt to a half column).
+// The NasTech window shares the screen with one app by default (its pages adapt to a half column).
 window-rule {
     match app-id=r#"^(herald-os|Herald OS)$"# title="^Herald OS$"
     default-column-width { proportion 0.5; }
@@ -234,7 +234,7 @@ window-rule {
     match app-id=r#"^(herald-os|Herald OS)$"# title="^Herald OS · System$"
     default-column-width { proportion 0.5; }
 }
-// The Studio and its site preview side by side fill the screen while Hermes builds.
+// The Studio and its site preview side by side fill the screen while NasTech builds.
 window-rule {
     match app-id=r#"^(herald-os|Herald OS)$"# title="^Herald OS · Studio$"
     default-column-width { proportion 0.6; }
@@ -243,7 +243,7 @@ window-rule {
     match app-id=r#"^(herald-os|Herald OS)$"# title="^Preview$"
     default-column-width { proportion 0.4; }
 }
-// Herald Canvas wants room for the image and its panels; Hermes's half stays beside it.
+// Herald Canvas wants room for the image and its panels; NasTech's half stays beside it.
 window-rule {
     match app-id=r#"^(herald-os|Herald OS)$"# title="^Herald OS · Canvas$"
     default-column-width { proportion 0.75; }
@@ -280,16 +280,16 @@ window-rule {
 }
 
 // ---------------------------------------------------------------------------------------------
-// Keyboard grammar. Super is the Hermes key: alone with Space it talks to Hermes about whatever is
+// Keyboard grammar. Super is the NasTech key: alone with Space it talks to NasTech about whatever is
 // focused; with a letter it does the thing. Mod+K lists everything.
 binds {
-    Mod+Space hotkey-overlay-title="Ask Hermes about this window" repeat=false { spawn "herald-os" "ask"; }
-    Mod+Shift+Space hotkey-overlay-title="Hermes command bar" repeat=false { spawn "herald-os" "command"; }
+    Mod+Space hotkey-overlay-title="Ask NasTech about this window" repeat=false { spawn "herald-os" "ask"; }
+    Mod+Shift+Space hotkey-overlay-title="NasTech command bar" repeat=false { spawn "herald-os" "command"; }
     Mod+A hotkey-overlay-title="Applications" repeat=false { spawn "herald-os" "applications"; }
     Mod+Alt+Space hotkey-overlay-title="Herald OS menu" repeat=false { spawn "herald-os" "menu"; }
     // Nested niri (a VM without GPU acceleration) uses Alt as Mod, where Mod+Alt+Space is just Mod+Space.
     Mod+M hotkey-overlay-title="Herald OS menu" repeat=false { spawn "herald-os" "menu"; }
-    Mod+V hotkey-overlay-title="Talk to Hermes" repeat=false { spawn "herald-os" "voice"; }
+    Mod+V hotkey-overlay-title="Talk to NasTech" repeat=false { spawn "herald-os" "voice"; }
     Mod+K hotkey-overlay-title="Show these hotkeys" { show-hotkey-overlay; }
 
     Mod+Return hotkey-overlay-title="Terminal" { spawn "herald-os" "open" "terminal"; }
@@ -298,7 +298,7 @@ binds {
     Mod+I hotkey-overlay-title="System monitor" { spawn "herald-os" "open" "system"; }
     Mod+Comma hotkey-overlay-title="Settings" { spawn "herald-os" "page" "settings"; }
     Mod+Shift+M hotkey-overlay-title="Missions" { spawn "herald-os" "page" "missions"; }
-    Mod+Grave hotkey-overlay-title="Hermes window" { spawn "herald-os" "page" "overview"; }
+    Mod+Grave hotkey-overlay-title="NasTech window" { spawn "herald-os" "page" "overview"; }
 
     Mod+Q repeat=false hotkey-overlay-title="Close window" { close-window; }
     Mod+F hotkey-overlay-title="Maximize column" { maximize-column; }
@@ -351,8 +351,8 @@ binds {
     Mod+Shift+Print hotkey-overlay-title="Screenshot screen" { spawn "herald-os" "capture" "screenshot" "screen"; }
     Mod+Alt+Print hotkey-overlay-title="Record the screen (again to stop)" { spawn "herald-os" "capture" "record"; }
     Mod+Ctrl+Print hotkey-overlay-title="Pick a colour" { spawn "herald-os" "capture" "color"; }
-    Mod+Shift+S hotkey-overlay-title="Ask Hermes about part of the screen" { spawn "herald-os" "capture" "region" "--ask"; }
-    Mod+Ctrl+Shift+S hotkey-overlay-title="Screenshot to Hermes" { spawn "herald-os" "screenshot"; }
+    Mod+Shift+S hotkey-overlay-title="Ask NasTech about part of the screen" { spawn "herald-os" "capture" "region" "--ask"; }
+    Mod+Ctrl+Shift+S hotkey-overlay-title="Screenshot to NasTech" { spawn "herald-os" "screenshot"; }
 
     Mod+Ctrl+V hotkey-overlay-title="Clipboard history" { spawn "herald-os" "clipboard"; }
     Mod+Ctrl+X hotkey-overlay-title="Dictate into the focused app (again to stop)" repeat=false { spawn "herald-os" "dictate"; }

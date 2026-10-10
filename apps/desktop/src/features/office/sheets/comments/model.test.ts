@@ -77,18 +77,18 @@ describe('comments', () => {
     expect($nameQuestion.get()).toBeNull()
   })
 
-  it('signs what Hermes writes as Hermes', async () => {
-    const hermes = authorNamed('Hermes')
+  it('signs what NasTech writes as NasTech', async () => {
+    const nastech = authorNamed('NasTech')
     const { result } = await run(async (target) => {
-      await addComment(target, { cell: 'A1', text: 'Check' }, hermes)
-      await replyToComment(target, { cell: 'A1', text: 'Checked' }, hermes)
-      await setNote(target, { cell: 'B1', text: 'Estimate' }, hermes)
+      await addComment(target, { cell: 'A1', text: 'Check' }, nastech)
+      await replyToComment(target, { cell: 'A1', text: 'Checked' }, nastech)
+      await setNote(target, { cell: 'B1', text: 'Estimate' }, nastech)
 
       return { comments: listComments(target), notes: listNotes(target) }
     })
 
-    expect(result.comments).toMatchObject([{ author: 'Hermes', replies: [{ author: 'Hermes' }] }])
-    expect(result.notes).toMatchObject([{ author: 'Hermes' }])
+    expect(result.comments).toMatchObject([{ author: 'NasTech', replies: [{ author: 'NasTech' }] }])
+    expect(result.notes).toMatchObject([{ author: 'NasTech' }])
   })
 
   it('resolves and opens threads again, and deletes a reply or a whole thread', async () => {

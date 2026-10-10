@@ -14,7 +14,7 @@ const ACTIVITY_SHORT = 6
 const ACTIVITY_LONG = 20
 
 const EMPTY_COPY: Record<TabId, { title: string; description: string }> = {
-  active: { title: 'No active missions', description: 'Start a mission and Hermes will plan the steps and work through them.' },
+  active: { title: 'No active missions', description: 'Start a mission and NasTech will plan the steps and work through them.' },
   review: { title: 'Nothing needs review', description: 'Finished missions wait here until you have looked at them.' },
   completed: { title: 'No completed missions yet', description: 'Missions you have reviewed end up here.' }
 }

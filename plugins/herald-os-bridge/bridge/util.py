@@ -51,25 +51,25 @@ def expand(path: str) -> Path:
     return Path(os.path.abspath(expanded))
 
 
-def hermes_home() -> Path:
+def nastech_home() -> Path:
     try:
-        from hermes_constants import get_hermes_home
+        from nastech_constants import get_nastech_home
 
-        return Path(get_hermes_home())
-    except Exception:  # noqa: BLE001 - outside a Hermes runtime (tests) fall back to the default.
-        return Path(os.environ.get("HERMES_HOME") or Path.home() / ".hermes")
+        return Path(get_nastech_home())
+    except Exception:  # noqa: BLE001 - outside a NasTech runtime (tests) fall back to the default.
+        return Path(os.environ.get("NASTECH_HOME") or Path.home() / ".nastech")
 
 
 def os_env(name: str) -> str:
-    """``HERALD_OS_<name>``, falling back to the pre-rename ``HERMES_OS_<name>``."""
-    return os.environ.get(f"HERALD_OS_{name}") or os.environ.get(f"HERMES_OS_{name}") or ""
+    """``HERALD_OS_<name>``, falling back to the pre-rename ``NASTECH_OS_<name>``."""
+    return os.environ.get(f"HERALD_OS_{name}") or os.environ.get(f"NASTECH_OS_{name}") or ""
 
 
 def data_dir() -> Path:
-    """``$HERMES_HOME/herald-os``. Files still in the pre-rename ``hermes-os`` folder are moved over
+    """``$NASTECH_HOME/herald-os``. Files still in the pre-rename ``nastech-os`` folder are moved over
     first (the shell does the same at launch; whichever runs first wins, neither overwrites)."""
-    path = hermes_home() / "herald-os"
-    legacy = hermes_home() / "hermes-os"
+    path = nastech_home() / "herald-os"
+    legacy = nastech_home() / "nastech-os"
     if legacy.is_dir() and not legacy.is_symlink():
         try:
             path.mkdir(parents=True, exist_ok=True)

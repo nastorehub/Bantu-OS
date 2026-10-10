@@ -11,16 +11,16 @@ import { IconTile, Shimmer } from './shared.tsx'
 
 /** One-line memory health: the entries the Memory page lists, and whether memory is paused. */
 export function MemoryCard() {
-  const hermesHome = useStore($env)?.hermesHome ?? null
+  const nastechHome = useStore($env)?.nastechHome ?? null
   const memory = useStore($memory)
   const toolset = useMemoryToolset()
   const summary = memorySummary(memory, toolset.paused)
 
   useEffect(() => {
-    if (hermesHome) {
-      void loadMemory(hermesHome)
+    if (nastechHome) {
+      void loadMemory(nastechHome)
     }
-  }, [hermesHome])
+  }, [nastechHome])
 
   return (
     <GlassCard as="button" interactive onClick={() => showPage('memory')} className="flex w-full items-center gap-3 p-3">

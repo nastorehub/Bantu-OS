@@ -40,7 +40,7 @@ function MissionGlyph({ mission }: { mission: Mission }) {
 }
 
 export function openMission(mission: Mission): void {
-  showPage('hermes')
+  showPage('nastech')
   void openStoredSession(mission.id)
 }
 

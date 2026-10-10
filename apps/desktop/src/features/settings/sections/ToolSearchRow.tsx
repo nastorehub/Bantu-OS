@@ -9,7 +9,7 @@ import { readToolSearch, setToolSearch } from '../../../store/tool-search.ts'
 import { errorText, InlineNote, markSaved, SettingsRow } from './shared.tsx'
 
 /*
- * Tool search: Hermes's `tools.tool_search.enabled` (/api/config), one setting for every Hermes
+ * Tool search: NasTech's `tools.tool_search.enabled` (/api/config), one setting for every NasTech
  * session. Herald OS turns it off at setup (ADR-010); this is where it goes back on.
  */
 
@@ -27,7 +27,7 @@ export function ToolSearchRow() {
     try {
       await setToolSearch(next)
       markSaved()
-      notify({ title: next ? 'Tool search on' : 'Tool search off', body: next ? 'Hermes looks plugin and MCP tools up when it needs them.' : "Herald OS's system tools stay directly callable.", level: 'success' })
+      notify({ title: next ? 'Tool search on' : 'Tool search off', body: next ? 'NasTech looks plugin and MCP tools up when it needs them.' : "Herald OS's system tools stay directly callable.", level: 'success' })
     } catch (error) {
       setOverride(null)
       notify({ title: 'Could not change tool search', body: errorText(error), level: 'error' })
@@ -41,9 +41,9 @@ export function ToolSearchRow() {
     <SettingsRow
       icon={<IconListSearch />}
       label="Tool search"
-      description="Hermes looks plugin and MCP tools up when it needs them, using fewer prompt tokens. Off, Herald OS's system tools stay at hand instead of behind a search. Applies to every Hermes session, from its next conversation."
+      description="NasTech looks plugin and MCP tools up when it needs them, using fewer prompt tokens. Off, Herald OS's system tools stay at hand instead of behind a search. Applies to every NasTech session, from its next conversation."
       keywords="tool search defer plugins mcp system tools bridge prompt tokens"
-      below={bridgeError ? <InlineNote tone="danger">Herald OS could not set its system tools up in Hermes: {bridgeError}. It tries again at its next start.</InlineNote> : undefined}
+      below={bridgeError ? <InlineNote tone="danger">Herald OS could not set its system tools up in NasTech: {bridgeError}. It tries again at its next start.</InlineNote> : undefined}
     >
       <Toggle checked={on ?? false} onChange={next => void toggle(next)} label="Tool search" disabled={busy || on === null || on === undefined} />
     </SettingsRow>

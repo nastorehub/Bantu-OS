@@ -1,6 +1,6 @@
 import type { UsageModel } from '@herald-os/client'
 
-/** The parts of `GET /api/analytics/usage` Herald OS shows (Hermes's own token accounting per session). */
+/** The parts of `GET /api/analytics/usage` Herald OS shows (NasTech's own token accounting per session). */
 export interface AnalyticsResponse {
   daily?: { day?: string; input_tokens?: number | null; output_tokens?: number | null; sessions?: number | null; estimated_cost?: number | null }[]
   by_model?: { model?: string | null; input_tokens?: number | null; output_tokens?: number | null; sessions?: number | null }[]
@@ -14,7 +14,7 @@ export interface UsageSummary {
   input: number
   output: number
   sessions: number
-  /** Dollars: the provider's actual figure when it reports one, else Hermes's estimate. */
+  /** Dollars: the provider's actual figure when it reports one, else NasTech's estimate. */
   cost: number
   topModel: string | null
   daily: { day: string; tokens: number }[]

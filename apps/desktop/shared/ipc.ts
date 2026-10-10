@@ -6,7 +6,7 @@ import type { MenuBarLayout } from './menu-bar.ts'
 import type { OfficeApp } from './office/files.ts'
 import type { ColorScheme, ThemeColors } from './theme.ts'
 
-/** `waiting`: there is no Hermes Agent to start yet; the shell starts one as soon as it is installed. */
+/** `waiting`: there is no NasTech Agent to start yet; the shell starts one as soon as it is installed. */
 export type BackendPhase = 'idle' | 'resolving' | 'waiting' | 'starting' | 'ready' | 'restarting' | 'failed' | 'stopped'
 
 export interface BackendRuntime {
@@ -27,11 +27,11 @@ export interface BackendState {
   port?: number
   error?: string
   logTail: string[]
-  /** Another app's messaging gateway on this Hermes home (Hermes Desktop, say): its pid. */
+  /** Another app's messaging gateway on this NasTech home (NasTech Desktop, say): its pid. */
   sharedGateway?: number
-  /** Why the system tools could not be set up in Hermes this start (a failed `hermes` step). */
+  /** Why the system tools could not be set up in NasTech this start (a failed `nastech` step). */
   bridgeError?: string
-  /** While waiting on the Herald OS image: how installing Hermes Agent goes (offline, installing, retrying). */
+  /** While waiting on the Herald OS image: how installing NasTech Agent goes (offline, installing, retrying). */
   install?: string
 }
 
@@ -291,7 +291,7 @@ export interface ContinuityItem {
   label: string
 }
 
-/** One piece of work Hermes thinks the user will want to resume. */
+/** One piece of work NasTech thinks the user will want to resume. */
 export interface ContinuityThread {
   id: string
   title: string
@@ -333,7 +333,7 @@ export interface CrashReport {
 }
 
 export interface CrashHelpPrefs {
-  /** Offer to have Hermes diagnose crashes (on by default). */
+  /** Offer to have NasTech diagnose crashes (on by default). */
   enabled: boolean
   /** Program names whose crashes stay quiet (compared case-insensitively). */
   muted: string[]
@@ -391,8 +391,8 @@ export interface CatalogEntryView {
   terminal?: boolean
   /** A terminal app Super+Return can open instead of Herald's terminal. */
   terminalApp?: string
-  /** A local model server Hermes can use. */
-  hermes?: 'ollama' | 'lmstudio'
+  /** A local model server NasTech can use. */
+  nastech?: 'ollama' | 'lmstudio'
   bin?: string
   /** For `link` installs: the download page. */
   url?: string
@@ -437,23 +437,23 @@ export interface SpaceDef {
   cwd?: string
 }
 
-/** Which pipeline turns speech into a Hermes turn and back. See docs/VOICE.md. */
+/** Which pipeline turns speech into a NasTech turn and back. See docs/VOICE.md. */
 export type VoiceEngine = 'chained' | 'live'
 
 export interface VoicePrefs {
   /** Master switch: when off, no microphone is ever opened and the orb stays hidden. */
   enabled: boolean
   engine: VoiceEngine
-  /** Arm the backend "hey hermes" detector with client-captured audio while the shell runs. */
+  /** Arm the backend "hey nastech" detector with client-captured audio while the shell runs. */
   wakeWord: boolean
   /** Electron accelerator toggling a conversation from anywhere (empty disables the hotkey). */
   hotkey: string
-  /** Seconds the mic keeps listening for a follow-up after Hermes finishes speaking. */
+  /** Seconds the mic keeps listening for a follow-up after NasTech finishes speaking. */
   followUpSeconds: number
   /** Speak `notification.show` bodies (missions, reminders) aloud while voice is enabled. */
   announceNotifications: boolean
-  /** Show Hermes's own tool results on screen (memory, automations, files) even outside a voice conversation. */
-  followHermes: boolean
+  /** Show NasTech's own tool results on screen (memory, automations, files) even outside a voice conversation. */
+  followNasTech: boolean
   /** Set once Herald OS has tuned local speech recognition (model + vocabulary), so a later user choice is never overwritten. */
   sttTuned: boolean
   /** Live engine: close the paid session after this many idle seconds. */
@@ -501,15 +501,15 @@ export interface HeraldOSPrefs {
   /** Colours of a theme without a hand-tuned preset; the shell derives its whole palette from them. */
   themeColors?: ThemeColors
   themeScheme?: ColorScheme
-  /** Restyle Herald OS when Hermes's skin changes (`/skin` in a chat). */
-  followHermesSkin?: boolean
+  /** Restyle Herald OS when NasTech's skin changes (`/skin` in a chat). */
+  followNasTechSkin?: boolean
   /** Font families for the interface and for code, tried before the built-in stacks. */
   fonts?: { ui?: string; mono?: string }
   /** Show the model plan's usage as a small meter in the menu bar. */
   usageInMenuBar?: boolean
   /** The menu bar's items (order, hidden ones) and clock; `normalizeMenuBar` fills the gaps. */
   menuBar?: MenuBarLayout
-  /** Hermes automations that run when something happens rather than on a schedule. */
+  /** NasTech automations that run when something happens rather than on a schedule. */
   eventAutomations?: EventAutomation[]
   /** Toasts, system notifications and spoken announcements stay quiet; the bell still collects them. */
   doNotDisturb?: boolean
@@ -607,7 +607,7 @@ export interface WindowState {
  */
 export type ShellMode = 'desktop' | 'panels'
 
-/** Which part of the shell a renderer window is. `window:<appId>` hosts one floating Hermes app. */
+/** Which part of the shell a renderer window is. `window:<appId>` hosts one floating NasTech app. */
 export type ShellSurface = 'desktop' | 'menubar' | 'dock' | 'main' | 'command' | 'panel' | 'screensaver' | 'wallpaper' | 'emoji' | `window:${string}`
 
 /** A window the compositor manages (any client, including the shell's own windows). */
@@ -620,7 +620,7 @@ export interface WmWindow {
   focused: boolean
   floating: boolean
   urgent: boolean
-  /** True for the shell's own windows (menu bar, dock, Hermes window, floating apps). */
+  /** True for the shell's own windows (menu bar, dock, NasTech window, floating apps). */
   ours: boolean
 }
 
@@ -705,7 +705,7 @@ export interface TreeChangedEvent {
 
 export interface EnvInfo {
   platform: NodeJS.Platform
-  hermesHome: string
+  nastechHome: string
   homeDir: string
   version: string
   isDev: boolean
@@ -768,7 +768,7 @@ export const IPC = {
 
   /** Installed themes (built in and the user's own). */
   themeList: 'herald-os:theme:list',
-  /** Apply a theme everywhere: the shell, Hermes's skin and, on Herald OS Linux, the whole session. */
+  /** Apply a theme everywhere: the shell, NasTech's skin and, on Herald OS Linux, the whole session. */
   themeApply: 'herald-os:theme:apply',
   /** Save a theme the shell made (from an image) into the user's theme folder. */
   themeSave: 'herald-os:theme:save',
@@ -805,7 +805,7 @@ export const IPC = {
   catalogList: 'herald-os:catalog:list',
   catalogInstall: 'herald-os:catalog:install',
   catalogRemove: 'herald-os:catalog:remove',
-  /** Models a local server (Ollama, LM Studio) has, for "Use with Hermes". */
+  /** Models a local server (Ollama, LM Studio) has, for "Use with NasTech". */
   catalogLocalModels: 'herald-os:catalog:local-models',
 
   /** Widget plugins (ADR-019): the installed ones, turning one on or off, git installs, and their messages. */
@@ -883,7 +883,7 @@ export const IPC = {
 
   envInfo: 'herald-os:env:info',
 
-  // OS control: main asks the Hermes window to run a registry command (from the control socket /
+  // OS control: main asks the NasTech window to run a registry command (from the control socket /
   // the agent's os_ui tool) and the window replies.
   osControlRequest: 'herald-os:os-control:request',
   osControlReply: 'herald-os:os-control:reply',
@@ -919,7 +919,7 @@ export const IPC = {
   /** Clipboard history (cliphist): list entries / paste one back to the clipboard. */
   clipboardHistory: 'herald-os:clipboard:history',
   clipboardPaste: 'herald-os:clipboard:paste',
-  /** Desktop notifications from other apps (org.freedesktop.Notifications), pushed to the Hermes window. */
+  /** Desktop notifications from other apps (org.freedesktop.Notifications), pushed to the NasTech window. */
   notificationsIncoming: 'herald-os:notifications:incoming',
   notificationsAction: 'herald-os:notifications:action',
 
@@ -949,7 +949,7 @@ export const IPC = {
   /** Copied pixels onto the system clipboard as a PNG, and an image off it for Paste. */
   canvasCopyImage: 'herald-os:canvas:copy-image',
   canvasPasteImage: 'herald-os:canvas:paste-image',
-  /** Main -> renderer: an open project changed on disk (Hermes, a script, Compositor). */
+  /** Main -> renderer: an open project changed on disk (NasTech, a script, Compositor). */
   canvasChanged: 'herald-os:canvas:changed',
   /** On-device models: what is downloaded, downloads (asked for by the person), and removal. */
   canvasModels: 'herald-os:canvas:models',
@@ -981,7 +981,7 @@ export const IPC = {
   officeTemplateSave: 'herald-os:office:template-save',
   officeTemplateRename: 'herald-os:office:template-rename',
   officeTemplateRemove: 'herald-os:office:template-remove',
-  /** Main -> renderer: an open file changed on disk (Hermes, another app); its new digest, or null once it is gone. */
+  /** Main -> renderer: an open file changed on disk (NasTech, another app); its new digest, or null once it is gone. */
   officeChanged: 'herald-os:office:changed',
   /** Panels mode: run a command in the Office window that has a document open, and wait for its result. */
   officeRun: 'herald-os:office:run',
@@ -1025,7 +1025,7 @@ export interface CanvasFilePart {
   bytes: Uint8Array
 }
 
-/** An open Herald Canvas document, as a window reports it (for Hermes's commands). */
+/** An open Herald Canvas document, as a window reports it (for NasTech's commands). */
 export interface CanvasDocSummary {
   key: string
   path: string | null
@@ -1087,7 +1087,7 @@ export interface OfficeSaveTarget {
   extension: string
 }
 
-/** An open Office document, as a window reports it (for Hermes's commands). */
+/** An open Office document, as a window reports it (for NasTech's commands). */
 export interface OfficeDocSummary {
   key: string
   path: string | null
@@ -1097,7 +1097,7 @@ export interface OfficeDocSummary {
   modified: boolean
   /** What is in front inside it: the sheet and selection, the slide. */
   detail?: string
-  /** What is selected in it, for Hermes: the text in a document, a range in a workbook, a slide. */
+  /** What is selected in it, for NasTech: the text in a document, a range in a workbook, a slide. */
   selection?: string
 }
 

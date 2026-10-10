@@ -3,7 +3,7 @@
 ## Themes
 
 A theme recolours everything at once: the shell, the in-shell terminal, the wallpaper's colours,
-Hermes's own command-line skin and, on Herald OS Linux, the window borders, GTK apps, the lock
+NasTech's own command-line skin and, on Herald OS Linux, the window borders, GTK apps, the lock
 screen and the rescue terminal. Settings > Appearance shows every theme as a card; click one. Or say
 "switch to the Paper theme".
 
@@ -13,12 +13,12 @@ black), Rose, Lagoon, and two light ones, Paper and Cloud.
 - **From an image.** "Make a theme from an image" in Settings, or "make a theme from my
   wallpaper", takes the colours of a photo or artwork, builds a complete theme from them and uses
   the image as the wallpaper. On Herald OS Linux, `herald-os theme new <image> [name]` does the same.
-- **From a description.** Ask Hermes: "make me a theme that feels like a foggy forest morning". It
+- **From a description.** Ask NasTech: "make me a theme that feels like a foggy forest morning". It
   writes the theme file and switches to it.
 - **From someone else.** Paste the https address of a theme repository into "Install themes from
   git" (or `herald-os theme install <url>`). Only colours and images are kept, so a theme can never
   run code on your machine.
-- **Follow Hermes.** With "Follow Hermes skins" on, changing Hermes's skin with `/skin` in a chat
+- **Follow NasTech.** With "Follow NasTech skins" on, changing NasTech's skin with `/skin` in a chat
   restyles Herald OS too.
 
 ### Writing a theme by hand
@@ -63,8 +63,8 @@ Widgets are small pages Herald OS shows in the menu bar, on the Overview or in a
 own: a CPU meter, the weather, a countdown to Friday. Each one is sealed off from the rest of the
 system and can do only what you allowed when you turned it on.
 
-- **Ask Hermes for one.** "Make me a widget that shows the weather in the menu bar". Settings >
-  Plugins > Make a widget starts the sentence for you. Hermes writes it into your plugins folder,
+- **Ask NasTech for one.** "Make me a widget that shows the weather in the menu bar". Settings >
+  Plugins > Make a widget starts the sentence for you. NasTech writes it into your plugins folder,
   and you turn it on.
 - **Install one.** Paste a git address into Settings > Plugins > From git (on Herald OS Linux,
   `herald-os plugin add <url>`). It arrives turned off.
@@ -159,13 +159,13 @@ command, a program to start, a web address, or a Herald OS command.
 - `exec` is the program and its arguments as a list; `~/` means your home folder. It does not go
   through a shell, so pipes and `&&` need a script of their own.
 - `group` puts the entry into one of the menu's groups (`install`, `remove`, `update`, `style`,
-  `trigger`, `capture`, `toggle`, `system`, `hermes`); without one it goes under Yours.
+  `trigger`, `capture`, `toggle`, `system`, `nastech`); without one it goes under Yours.
 - `icon` is one of star, app, terminal, world, bolt, folder, notes, music, camera, code, calendar,
   mail, chat, heart, home or rocket.
 
 The menu reads the file every time it opens, so there is nothing to restart. `herald-os menu check`
 shows what it understood, and a "menu.json has problems" entry appears under Yours when something
-is wrong. Hermes can write the file for you: "add my backup script to the menu".
+is wrong. NasTech can write the file for you: "add my backup script to the menu".
 
 ## Branding
 
@@ -216,13 +216,13 @@ changes, and Herald OS finishes an update (plus locking the screen and going to 
 ### Automations
 
 On the Automations page, a new automation can run "On a schedule" or "When something happens".
-For a crash you can name the program, for a network change the Wi-Fi network. Hermes runs it each
+For a crash you can name the program, for a network change the Wi-Fi network. NasTech runs it each
 time, with the same history and delivery as scheduled automations. Or just ask: "every time I log
 in, tell me what is on my calendar".
 
 ### Hooks
 
-For chores that need no Hermes (a script, a sound, syncing a folder), drop an executable script into
+For chores that need no NasTech (a script, a sound, syncing a folder), drop an executable script into
 `~/.config/herald-os/hooks/<event>.d/`, where `<event>` is `login`, `wake`, `unlock`, `returned`,
 `battery-low`, `network-change`, `crash`, `theme-set`, `after-update`, `lock` or `sleep`. It runs
 with the event name as its first argument and in `HERALD_EVENT`, each detail in its own variable

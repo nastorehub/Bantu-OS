@@ -9,7 +9,7 @@ import { $windows, type Bounds, closeWindow, focusWindow, openApp, retitleWindow
 
 /*
  * Web pages inside Herald OS. A web window is a native view main layers over the shell
- * (`window.heraldOS.web`), framed by a floating `web` Hermes window whose content rect it follows.
+ * (`window.heraldOS.web`), framed by a floating `web` NasTech window whose content rect it follows.
  * The shell never sends the user to the system browser for something it can host itself; the
  * provider sign-in is the first such page. Panels mode has no desktop window to layer over, so
  * there main opens a compositor window and no floating frame exists.
@@ -18,7 +18,7 @@ import { $windows, type Bounds, closeWindow, focusWindow, openApp, retitleWindow
 export interface WebWindow {
   /** Main's view id (also the key). */
   id: string
-  /** The floating Hermes window framing the view (desktop mode); null in panels mode. */
+  /** The floating NasTech window framing the view (desktop mode); null in panels mode. */
   windowId: string | null
   url: string
   title: string
@@ -37,7 +37,7 @@ export const $webWindows = atom<Record<string, WebWindow>>({})
 
 /**
  * Native views paint above every DOM layer, so while a shell overlay that must stay usable is up
- * (command bar, launcher, notifications panel, pending Hermes requests) the views hide and their
+ * (command bar, launcher, notifications panel, pending NasTech requests) the views hide and their
  * frames show a placeholder instead.
  */
 export const $webViewsCovered = computed([$commandBarOpen, $applicationsOpen, $notificationsOpen, $pendingRequests], (command, apps, notifications, pending) => command || apps || notifications || pending.length > 0)

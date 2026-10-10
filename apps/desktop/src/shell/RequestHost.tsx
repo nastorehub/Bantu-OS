@@ -80,7 +80,7 @@ function ApprovalCard({ id, params }: { id: string; params: ApprovalRequestParam
         </span>
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 text-[13px] font-medium">
-            {bridgeTool ? `Hermes wants to act on this ${deviceNoun()}` : 'Hermes is asking for permission'}
+            {bridgeTool ? `NasTech wants to act on this ${deviceNoun()}` : 'NasTech is asking for permission'}
             {toolName && <Badge tone={destructive ? 'danger' : 'accent'}>{toolName.replace(/^system_/, '').replace(/_/g, ' ')}</Badge>}
           </div>
           {params.description && <div className="mt-1 text-[12.5px] text-fg-2">{params.description}</div>}
@@ -113,13 +113,13 @@ function ApprovalCard({ id, params }: { id: string; params: ApprovalRequestParam
 }
 
 function ClarifyCard({ id, params }: { id: string; params: ClarifyRequestParams }) {
-  const questions = params.questions?.length ? params.questions : [{ qid: '_single', question: params.question ?? 'Hermes needs more information', choices: params.choices ?? null, multi_select: Boolean(params.multi_select) }]
+  const questions = params.questions
   const [answers, setAnswers] = useState<Record<string, string>>({})
-  const single = questions.length === 1 && questions[0].qid === '_single'
+  const single = questions.length === 1
   const set = (qid: string, value: string) => setAnswers(prev => ({ ...prev, [qid]: value }))
   const submit = () => {
     if (single) {
-      resolveRequest(id, { answer: answers._single ?? '' })
+      resolveRequest(id, { answer: answers[questions[0].qid] ?? '' })
     } else {
       resolveRequest(id, { answers })
     }
@@ -131,7 +131,7 @@ function ClarifyCard({ id, params }: { id: string; params: ClarifyRequestParams 
         <span className="mt-0.5 text-info">
           <IconQuestionMark size={16} />
         </span>
-        <div className="text-[13px] font-medium">Hermes has a question</div>
+        <div className="text-[13px] font-medium">NasTech has a question</div>
       </div>
       {questions.map(question => (
         <div key={question.qid} className="flex flex-col gap-2">

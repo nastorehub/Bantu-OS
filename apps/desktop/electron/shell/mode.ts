@@ -19,7 +19,7 @@ export const SURFACE_TITLE: Record<Exclude<ShellSurface, `window:${string}`>, st
   emoji: 'Herald OS · Emoji'
 }
 
-/** Floating Hermes apps that may open as their own window in panels mode. */
+/** Floating NasTech apps that may open as their own window in panels mode. */
 export const FLOATING_APPS: Record<string, { title: string; width: number; height: number }> = {
   terminal: { title: 'Herald OS · Terminal', width: 900, height: 560 },
   system: { title: 'Herald OS · System', width: 980, height: 640 },

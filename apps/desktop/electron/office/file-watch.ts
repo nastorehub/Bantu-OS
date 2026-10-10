@@ -4,7 +4,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 
 /*
- * Following one open Office file for changes made elsewhere (Hermes, another app, a sync client).
+ * Following one open Office file for changes made elsewhere (NasTech, another app, a sync client).
  * The folder is watched rather than the file: apps save by writing a new file and renaming it over
  * the old one, which ends a watch on the file itself. A poll of the file's size and time covers file
  * systems that report nothing. Only a change of content counts, compared by digest with the version

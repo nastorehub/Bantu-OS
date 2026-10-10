@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Try Herald OS on an Apple Silicon Mac in one command: fetch the ready-made VM disk from the latest
 # release (or use one you have), and boot it with Apple's Virtualization framework (run-vf.sh). The
-# first boot sets itself up (a few minutes, Hermes Agent included), then logs straight in.
+# first boot sets itself up (a few minutes, NasTech Agent included), then logs straight in.
 #
 #   bash linux/vm/try.sh                        # the latest release's disk
 #   bash linux/vm/try.sh herald-os-<v>-aarch64.qcow2[.zst]

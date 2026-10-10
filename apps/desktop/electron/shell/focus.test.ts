@@ -8,7 +8,7 @@ const win = (id: number, title: string, workspaceId = 1): WmWindow => ({ id, tit
 
 const MENUBAR = win(1, 'Herald OS · Menu Bar')
 const DOCK = win(2, 'Herald OS · Dock')
-const HERMES = win(3, 'Herald OS')
+const NASTECH = win(3, 'Herald OS')
 const DOCS = win(4, 'Herald OS · Docs')
 const DIALOG = win(5, 'Save as')
 
@@ -29,7 +29,7 @@ const history = () => new FocusHistory(w => PANELS.has(w.title))
 describe('FocusHistory', () => {
   it('gives the keys back to the app when its dialog closes and niri focuses the menu bar', () => {
     const focus = history()
-    const all = [MENUBAR, DOCK, HERMES, DOCS]
+    const all = [MENUBAR, DOCK, NASTECH, DOCS]
 
     expect(focus.follow(state(all, DOCS.id))).toBeNull()
     expect(focus.follow(state([...all, DIALOG], DIALOG.id))).toBeNull()
@@ -40,9 +40,9 @@ describe('FocusHistory', () => {
 
   it('does the same when niri reports the new focus before the closed window', () => {
     const focus = history()
-    const all = [MENUBAR, DOCK, HERMES, DOCS]
+    const all = [MENUBAR, DOCK, NASTECH, DOCS]
 
-    focus.follow(state(all, HERMES.id))
+    focus.follow(state(all, NASTECH.id))
     focus.follow(state(all, DOCS.id))
     focus.follow(state([...all, DIALOG], DIALOG.id))
 
@@ -52,38 +52,38 @@ describe('FocusHistory', () => {
 
   it('leaves the keys where the person put them', () => {
     const focus = history()
-    const all = [MENUBAR, DOCK, HERMES, DOCS]
+    const all = [MENUBAR, DOCK, NASTECH, DOCS]
 
     focus.follow(state(all, DOCS.id))
 
     expect(focus.follow(state(all, MENUBAR.id))).toBeNull()
     expect(focus.follow(state(all, DOCK.id))).toBeNull()
-    expect(focus.follow(state(all, HERMES.id))).toBeNull()
-    expect(focus.follow(state(all.filter(w => w !== DOCS), HERMES.id))).toBeNull()
+    expect(focus.follow(state(all, NASTECH.id))).toBeNull()
+    expect(focus.follow(state(all.filter(w => w !== DOCS), NASTECH.id))).toBeNull()
   })
 
   it('answers once per closed window', () => {
     const focus = history()
-    const all = [MENUBAR, DOCK, HERMES, DOCS]
+    const all = [MENUBAR, DOCK, NASTECH, DOCS]
 
-    focus.follow(state(all, HERMES.id))
+    focus.follow(state(all, NASTECH.id))
     focus.follow(state([...all, DIALOG], DIALOG.id))
 
-    expect(focus.follow(state(all, MENUBAR.id))).toBe(HERMES.id)
+    expect(focus.follow(state(all, MENUBAR.id))).toBe(NASTECH.id)
     expect(focus.follow(state(all, MENUBAR.id))).toBeNull()
   })
 
   it('skips windows that closed or sit on another workspace', () => {
     const focus = history()
     const away = win(6, 'Herald OS · Sheets', 2)
-    const all = [MENUBAR, DOCK, HERMES, DOCS, away]
+    const all = [MENUBAR, DOCK, NASTECH, DOCS, away]
 
-    focus.follow(state(all, HERMES.id))
+    focus.follow(state(all, NASTECH.id))
     focus.follow(state(all, DOCS.id))
     focus.follow(state(all, away.id, 2))
     focus.follow(state([...all, DIALOG], DIALOG.id))
 
-    expect(focus.follow(state(all.filter(w => w !== DOCS), MENUBAR.id))).toBe(HERMES.id)
+    expect(focus.follow(state(all.filter(w => w !== DOCS), MENUBAR.id))).toBe(NASTECH.id)
   })
 
   it('has nothing to give back to when no app window is left on the workspace', () => {
@@ -96,9 +96,9 @@ describe('FocusHistory', () => {
 
   it('names the last app window for an overlay that closed', () => {
     const focus = history()
-    const all = [MENUBAR, DOCK, HERMES, DOCS]
+    const all = [MENUBAR, DOCK, NASTECH, DOCS]
 
-    focus.follow(state(all, HERMES.id))
+    focus.follow(state(all, NASTECH.id))
     focus.follow(state(all, DOCS.id))
     focus.follow(state([...all, win(7, 'Herald OS · Command')], 7))
 

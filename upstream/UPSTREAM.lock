@@ -1,6 +1,5 @@
-# Pinned upstream Hermes Agent revision consumed by Herald OS.
-# Only apps/shared/src is compiled into Herald OS; the Python runtime comes from the user's
-# Hermes install ($HERMES_HOME/hermes-agent) and is updated with `hermes update`.
-# Bump: edit the sha, run `npm run sync-upstream`, then `npm run typecheck`.
-repo=NousResearch/hermes-agent
-sha=f97608f178d1ffeca59860195ab7da295f7c8e5f
+# Pinned upstream NasTech Agent revision consumed by NasTech OS.
+# Only apps/shared/src is compiled into NasTech OS; the Python runtime comes from the user's
+# NasTech install ($NASTECH_HOME/nastech-agent) and is updated with `nastech update`.
+repo=nastechresearch/nastech-agent
+sha=e60581db171a5c5caf7e475fc34685114d3772c4

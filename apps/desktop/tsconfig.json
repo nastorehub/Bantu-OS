@@ -18,8 +18,8 @@
     "types": ["vite/client"],
     "paths": {
       "@/*": ["./src/*"],
-      "@herald-os/client": ["../../packages/hermes-client/src/index.ts"],
-      "@herald-os/client/*": ["../../packages/hermes-client/src/*"]
+      "@herald-os/client": ["../../packages/nastech-client/src/index.ts"],
+      "@herald-os/client/*": ["../../packages/nastech-client/src/*"]
     }
   },
   "include": ["src", "shared"]

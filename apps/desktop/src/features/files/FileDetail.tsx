@@ -13,7 +13,7 @@ import { $allArtifacts, $missions } from '../../store/missions.ts'
 import { notify } from '../../store/notifications.ts'
 import { showPage } from '../../store/windows.ts'
 import { FolderGlyph, Thumbnail } from './FileCard.tsx'
-import { $home, type FileItem, askHermesAbout, describeType, expandHome, formatModified, isImage, itemCountLabel, messageOf, openItem, toggleFavorite, useDirCount, useThumbnail } from './files-store.ts'
+import { $home, type FileItem, askNasTechAbout, describeType, expandHome, formatModified, isImage, itemCountLabel, messageOf, openItem, toggleFavorite, useDirCount, useThumbnail } from './files-store.ts'
 
 function DetailRow({ icon, children }: { icon: React.ReactNode; children: React.ReactNode }) {
   return (
@@ -43,7 +43,7 @@ export function FileDetail({ item }: { item: FileItem }) {
     }
 
     openStoredSession(mission.id)
-      .then(() => showPage('hermes'))
+      .then(() => showPage('nastech'))
       .catch(error => notify({ title: 'Could not open the mission', body: messageOf(error), level: 'error' }))
   }
 
@@ -89,9 +89,9 @@ export function FileDetail({ item }: { item: FileItem }) {
           <IconExternalLink />
           Open
         </GlassButton>
-        <GlassButton className="w-full" onClick={() => askHermesAbout(item.path)}>
+        <GlassButton className="w-full" onClick={() => askNasTechAbout(item.path)}>
           <IconMessage />
-          Ask Hermes about this
+          Ask NasTech about this
         </GlassButton>
       </div>
     </GlassCard>
@@ -152,7 +152,7 @@ export function PreviewOverlay({ item, onClose }: { item: FileItem; onClose: () 
             ) : large.loading ? (
               <div className="shimmer h-64 w-64 rounded-xl" />
             ) : (
-              <div className="max-w-sm text-center text-[12.5px] text-fg-3">{preview.data.kind === 'too-large' ? 'Too large to preview here.' : 'No inline preview for this file.'} Open it in its app or ask Hermes about it.</div>
+              <div className="max-w-sm text-center text-[12.5px] text-fg-3">{preview.data.kind === 'too-large' ? 'Too large to preview here.' : 'No inline preview for this file.'} Open it in its app or ask NasTech about it.</div>
             ))}
           {preview.error && <div className="max-w-sm text-center text-[12.5px] text-fg-3">Preview unavailable.</div>}
         </div>

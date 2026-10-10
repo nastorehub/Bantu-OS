@@ -15,7 +15,7 @@ import { RequestHost } from './RequestHost.tsx'
 import { StatusPanelPopover } from './StatusPanelPopover.tsx'
 import { Toasts } from './Toasts.tsx'
 import { Wallpaper } from './Wallpaper.tsx'
-import { HermesLoginCard } from '../features/auth/HermesLoginCard.tsx'
+import { NasTechLoginCard } from '../features/auth/NasTechLoginCard.tsx'
 import { Screensaver } from '../features/screensaver/Screensaver.tsx'
 import { $screensaverUp } from '../store/switches.ts'
 import { ActionHud, OsHighlighter } from '../features/voice/ActionHud.tsx'
@@ -25,7 +25,7 @@ import { WidgetWindow } from '../features/plugins/PluginSlots.tsx'
 
 const TerminalSurface = lazy(() => import('../features/terminal/TerminalSurface.tsx').then(m => ({ default: m.TerminalSurface })))
 const SystemSurface = lazy(() => import('../features/system/SystemSurface.tsx').then(m => ({ default: m.SystemSurface })))
-const ChatPopout = lazy(() => import('../features/hermes/ChatPopout.tsx').then(m => ({ default: m.ChatPopout })))
+const ChatPopout = lazy(() => import('../features/nastech/ChatPopout.tsx').then(m => ({ default: m.ChatPopout })))
 const ApplicationsOverlay = lazy(() => import('../features/applications/ApplicationsOverlay.tsx').then(m => ({ default: m.ApplicationsOverlay })))
 const WebWindow = lazy(() => import('../features/web/WebWindow.tsx').then(m => ({ default: m.WebWindow })))
 const StudioWindow = lazy(() => import('../features/studio/StudioWindow.tsx').then(m => ({ default: m.StudioWindow })))
@@ -118,7 +118,7 @@ export function Desktop() {
       <VoiceOrb offsetClass="bottom-24" />
       <ActionHud offsetClass="top-12" />
       <OsHighlighter />
-      <HermesLoginCard />
+      <NasTechLoginCard />
       <FirstRunSetup />
       <RequestHost />
       <Toasts />

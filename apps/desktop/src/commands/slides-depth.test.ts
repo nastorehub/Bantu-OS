@@ -78,7 +78,7 @@ describe('Herald Slides’ depth commands', () => {
     expect(ids.filter((id) => !COMMAND_ID.test(id))).toEqual([])
   })
 
-  it('describe every argument for Hermes, give no optional one a fixed list of choices, and take each once', () => {
+  it('describe every argument for NasTech, give no optional one a fixed list of choices, and take each once', () => {
     for (const entry of slidesCommands) {
       expect(entry.description.length, entry.id).toBeGreaterThan(40)
       expect(new Set(entry.args.map((arg) => arg.name)).size, entry.id).toBe(entry.args.length)

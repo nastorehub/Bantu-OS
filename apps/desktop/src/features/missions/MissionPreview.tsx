@@ -56,7 +56,7 @@ export function MissionPreview({ artifact }: { artifact: Artifact | undefined })
         {artifact && <span className="text-[11.5px] text-fg-4">Updated {formatRelative(artifact.ts)}</span>}
       </div>
       {!artifact ? (
-        <EmptyGlass icon={<IconPhoto />} title="No preview yet" description="Files Hermes writes for this mission will appear here." className="min-h-32" />
+        <EmptyGlass icon={<IconPhoto />} title="No preview yet" description="Files NasTech writes for this mission will appear here." className="min-h-32" />
       ) : (
         <>
           <PreviewCard artifact={artifact} data={preview.data} loading={preview.loading} error={preview.error} />

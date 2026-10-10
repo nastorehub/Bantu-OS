@@ -11,14 +11,14 @@ import { $systemInfo } from '../../store/system.ts'
  * the same in every Office window: theirs once they confirmed it (it is kept in the prefs), asked
  * for the first time they add one, in a question that proposes the account's name. Nothing uses
  * the account's name before they confirm it, and a cancelled question adds nothing: each app
- * leaves the comment unposted where it was written. Hermes signs its own comments; a command (the
+ * leaves the comment unposted where it was written. NasTech signs its own comments; a command (the
  * command bar, voice) signs with the confirmed name or a neutral one, and never asks.
  */
 
 /** The name on comments a command adds before the person confirmed theirs. */
 export const NEUTRAL_NAME = 'Herald user'
 
-export const HERMES_NAME = 'Hermes'
+export const NASTECH_NAME = 'NasTech'
 
 /** Where Herald Docs kept the name before the Office apps shared one. */
 const DOCS_NAME_KEY = 'herald.docs.author'
@@ -89,8 +89,8 @@ export async function setCommentName(name: string): Promise<void> {
   }
 }
 
-/** The name on a comment a command adds: Hermes's for Hermes, else the confirmed name or the neutral one. It never asks. */
-export const commentNameFor = (source?: CommandSource): string => (source === 'agent' ? HERMES_NAME : $commentName.get() || NEUTRAL_NAME)
+/** The name on a comment a command adds: NasTech's for NasTech, else the confirmed name or the neutral one. It never asks. */
+export const commentNameFor = (source?: CommandSource): string => (source === 'agent' ? NASTECH_NAME : $commentName.get() || NEUTRAL_NAME)
 
 /**
  * The confirmed name as the prefs file has it (a window's copy may not have arrived yet), after

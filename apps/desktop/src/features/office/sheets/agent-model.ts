@@ -3,7 +3,7 @@ import { parseJsonArg } from '../agent-model.ts'
 import type { CellInput } from './model.ts'
 
 /*
- * Herald Sheets for Hermes, without a window: values as callers send them, a formula filled across
+ * Herald Sheets for NasTech, without a window: values as callers send them, a formula filled across
  * a range, finding and replacing in cells, which cleaning sheets.clean is asked for and which way
  * round day and month go in dates (the cleaning itself is the data tools', in tools/), batches of
  * edits, and the templates a new workbook starts from. Tested directly.

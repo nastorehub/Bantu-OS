@@ -2,7 +2,7 @@
 name: herald-sheets
 description: Work in Herald Sheets, the spreadsheet in Herald OS - read workbooks, write values and formulas (a formula from a description, explaining one, filling it down), fill a column from examples, clean data (duplicates, spaces, numbers and dates kept as text, splitting a column, letter case, filling down), make and change charts, summarize a table as a pivot table does, name ranges, set dropdown lists and other validation, comment on cells and leave notes, say what stands out, build a workbook such as a trip budget, format numbers and cells, sort, filter, freeze, manage sheets, put a range in a Herald Docs report, save Excel and CSV files and export PDFs, all through the sheets tool
 metadata:
-  hermes:
+  nastech:
     tags: [herald-os, sheets, spreadsheet, excel, xlsx, csv, formulas, functions, budget, data cleaning, dedupe, dates, sort, filter, charts, pivot table, summary, named ranges, validation, dropdown, comments, notes, analysis, pdf]
 ---
 
@@ -124,7 +124,7 @@ read:
   several columns in turn, the header row on top.
 
 `clean` does the same jobs in one action (`clean=dedupe`, `trim`, `numbers`, `dates`, `split` or
-`case`, with `header=true` when row 1 holds names), as Ask Hermes' Clean data menu asks for. Read
+`case`, with `header=true` when row 1 holds names), as Ask NasTech' Clean data menu asks for. Read
 first to pick the range and to see whether row 1 is a header, make every cleaning in one `edit`
 (`{"op": "convertToDates", "range": "C2:C400", "order": "dmy"}`, or `{"op": "clean", "range":
 "C2:C400", "action": "dates"}`, where the clean op's own word is `action`), and read back to
@@ -193,7 +193,7 @@ A comment starts a thread the person can answer; a note is a few words left on a
 `reply_to_comment cell="B4" text="..."`, `resolve_comment cell="B4"` (`resolved=false` opens it
 again) and `delete_comment` (a thread by its cell, or one reply by `commentId`) work on threads,
 and `list_comments` shows them with their replies, authors and ids. What you write is signed
-Hermes, so the person sees who asked. A cell holds a comment or a note, not both. Comment threads
+NasTech, so the person sees who asked. A cell holds a comment or a note, not both. Comment threads
 stay out of the undo history: say what you added, and delete it when the person wants it gone.
 `set_note cell="C2" text="Estimate"`, `list_notes` and `remove_note` work like the rest, each one
 step to undo.

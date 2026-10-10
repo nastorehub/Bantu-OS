@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { Button } from '../components/ui/button.tsx'
 import { Dot, EmptyState } from '../components/ui/primitives.tsx'
 import { formatRelative } from '../lib/format.ts'
-import { $notifications, $notificationsOpen, activateDesktopNotification, clearNotifications, dismissNotification, type HermesNotification, markAllRead, type NotificationLevel } from '../store/notifications.ts'
+import { $notifications, $notificationsOpen, activateDesktopNotification, clearNotifications, dismissNotification, type NasTechNotification, markAllRead, type NotificationLevel } from '../store/notifications.ts'
 import { showSurface } from '../store/surface.ts'
 import { CommandActions, DesktopActions } from './Toasts.tsx'
 
@@ -34,7 +34,7 @@ export function NotificationsPanel() {
     return null
   }
 
-  const activate = (item: HermesNotification) => {
+  const activate = (item: NasTechNotification) => {
     if (item.desktop) {
       activateDesktopNotification(item, 'default')
 

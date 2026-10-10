@@ -1,7 +1,7 @@
 /*
  * Guides: lines over the canvas that layers, crops and selections snap to, kept in the project's
  * `guides` (the format Compositor reads too). Adding, moving and removing them, and the layouts
- * Hermes asks for: margins, equal columns with gutters, and centre lines.
+ * NasTech asks for: margins, equal columns with gutters, and centre lines.
  */
 
 import { type Guide, LIMITS, newId, RANGES } from '../../../../shared/canvas/comp-format.ts'

@@ -7,7 +7,7 @@ import { notify } from './notifications.ts'
 import { isMainSurface } from './shell.ts'
 
 export interface UsageSnapshot {
-  /** The model provider's plan and top-up bars (Nous Portal); unavailable for other providers. */
+  /** The model provider's plan and top-up bars (NasTech Portal); unavailable for other providers. */
   plan: UsageModel | null
   billing: BillingStateResult | null
   week: UsageSummary | null

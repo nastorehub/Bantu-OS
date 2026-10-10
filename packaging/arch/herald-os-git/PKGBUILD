@@ -5,7 +5,7 @@
 pkgname=herald-os-git
 pkgver=0.1.0alpha.3.r0.g0000000
 pkgrel=1
-pkgdesc='An AI-native desktop built around Hermes Agent (development build from git)'
+pkgdesc='An AI-native desktop built around NasTech Agent (development build from git)'
 arch=('x86_64' 'aarch64')
 url='https://github.com/iamlukethedev/Herald-OS'
 license=('MIT')
@@ -52,7 +52,7 @@ pkgver() {
 
 build() {
   cd herald-os
-  # The pinned Hermes Agent snapshot supplies the gateway's types.
+  # The pinned NasTech Agent snapshot supplies the gateway's types.
   npm run sync-upstream
   npm ci
   npm run build --workspace apps/desktop

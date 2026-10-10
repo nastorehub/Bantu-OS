@@ -48,12 +48,12 @@ export function MissionComposer({ onClose }: { onClose: () => void }) {
             onClose()
           }
         }}
-        placeholder="What should Hermes accomplish?"
+        placeholder="What should NasTech accomplish?"
         aria-label="Mission goal"
         className="glass-input w-full resize-none rounded-lg px-3 py-2.5 text-[13px] text-fg outline-none placeholder:text-fg-4"
       />
       <div className="flex items-center justify-between gap-2">
-        <span className="text-[11.5px] text-fg-4">Hermes plans the steps, works through them and reports back.</span>
+        <span className="text-[11.5px] text-fg-4">NasTech plans the steps, works through them and reports back.</span>
         <div className="flex items-center gap-2">
           <GlassButton size="sm" variant="ghost" onClick={onClose} disabled={starting}>
             Cancel

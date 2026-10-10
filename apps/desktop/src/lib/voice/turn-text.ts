@@ -1,4 +1,4 @@
-// Pure projection of a chat's messages onto "what Hermes has said since the user's utterance".
+// Pure projection of a chat's messages onto "what NasTech has said since the user's utterance".
 // Narration between tool calls counts too, so the voice reads "Let me check." before the result.
 import type { ChatMessage } from '../chat-model.ts'
 

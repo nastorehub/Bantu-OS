@@ -6,7 +6,7 @@ Working copy of the plan that drives Alpha 0.1. `DECISIONS.md` holds the rationa
 
 1. M0 Scaffold and docs: repository, npm workspaces, upstream sync and lock, client package,
    bootstrap script, architecture and decision records.
-2. M1 Hermes end-to-end: backend spawn, WebSocket connect, session create/list/resume, streaming
+2. M1 NasTech end-to-end: backend spawn, WebSocket connect, session create/list/resume, streaming
    transcript, server-request cards, interrupt. Verified against the installed runtime.
 3. M2 Shell surfaces: status bar, rail, Home, command bar, Files, Apps, Terminal, System,
    Notifications, Tasks, Skills, Agents, Settings; design system.

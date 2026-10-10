@@ -69,7 +69,7 @@ webapps() {
     name="$(echo "$name" | xargs)"; url="$(echo "$url" | xargs)"; icon="$(echo "${icon:-}" | xargs)"
     [[ -n "$name" && -n "$url" ]] || continue
     slug="$(echo "$name" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-|-$//g')"
-    if [[ -f "$HOME/.local/share/applications/hermes-webapp-$slug.desktop" ]]; then
+    if [[ -f "$HOME/.local/share/applications/nastech-webapp-$slug.desktop" ]]; then
       continue
     fi
     herald-os install webapp "$name" "$url" ${icon:+"$icon"} >/dev/null || echo "WARNING: web app $name failed"

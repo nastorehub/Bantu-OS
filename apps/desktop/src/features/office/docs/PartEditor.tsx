@@ -282,7 +282,7 @@ function HeaderFooterEditor({ main, docKey, part, page, kind, headers, frame, de
       committed = JSON.stringify(partBlocks(main, part, kind))
     }
 
-    // The document changed otherwise (an undo, Hermes, a version from disk): show what it has now.
+    // The document changed otherwise (an undo, NasTech, a version from disk): show what it has now.
     const onMain = () => {
       const now = JSON.stringify(partBlocks(main, part, kind))
 

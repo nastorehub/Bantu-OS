@@ -33,7 +33,7 @@ export function MemoryDetail({ entry, related, editable, busy, onSave, onForget,
             className="h-full min-h-60"
             icon={<IconBrain />}
             title={hasAny ? 'Select a memory' : 'Nothing remembered yet'}
-            description={hasAny ? 'Pick an entry on the left to see where it came from and what it is used for.' : 'Hermes writes memories as you work together. You can also add one yourself.'}
+            description={hasAny ? 'Pick an entry on the left to see where it came from and what it is used for.' : 'NasTech writes memories as you work together. You can also add one yourself.'}
             action={
               hasAny ? undefined : (
                 <GlassButton size="sm" variant="primary" onClick={onAdd}>
@@ -47,7 +47,7 @@ export function MemoryDetail({ entry, related, editable, busy, onSave, onForget,
       <div className="flex items-center justify-between gap-3 border-t border-line px-5 py-3">
         <div className="flex min-w-0 items-center gap-2 text-[12px] text-fg-3">
           <IconShieldCheck size={15} className="shrink-0" aria-hidden="true" />
-          <span className="truncate">You control what Hermes remembers.</span>
+          <span className="truncate">You control what NasTech remembers.</span>
         </div>
         <div className="flex shrink-0 items-center gap-2.5">
           <span className="text-[12px] text-fg-2">Pause memory</span>

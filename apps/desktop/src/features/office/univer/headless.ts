@@ -10,7 +10,7 @@ import { CalculationMode, UniverSheetsFormulaPlugin } from '@univerjs/sheets-for
 
 /*
  * Univer without a window: no chrome and no drawing, only the models, the commands and the
- * formula engine. Hermes's commands use it to change a file that is not open, the same way an open
+ * formula engine. NasTech's commands use it to change a file that is not open, the same way an open
  * window would change it.
  */
 

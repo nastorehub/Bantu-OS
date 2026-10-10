@@ -149,7 +149,7 @@ describe('filter settings', () => {
     expect(scaledFilter(checkFilter('unsharpMask', { amount: 200 }), 0.5)).toMatchObject({ amount: 200, radius: 0.5 })
   })
 
-  it('reads the filter Hermes names', () => {
+  it('reads the filter NasTech names', () => {
     expect(filterKindFrom('Sharpen')).toBe('unsharpMask')
     expect(filterKindFrom('gaussian blur')).toBe('gaussianBlur')
     expect(filterKindFrom('denoise')).toBe('reduceNoise')

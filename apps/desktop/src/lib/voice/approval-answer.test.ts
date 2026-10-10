@@ -3,7 +3,7 @@ import { decideVoiceApproval, matchApprovalAnswer, type PendingCard, voiceApprov
 
 describe('matchApprovalAnswer', () => {
   it('approves on a short yes', () => {
-    for (const text of ['yes', 'Yes, go ahead.', 'do it', 'Approve', 'okay', 'OK', 'Yeah, do it please.', 'Hey Hermes, go ahead!', 'sure', 'Allow it', 'Yes yes']) {
+    for (const text of ['yes', 'Yes, go ahead.', 'do it', 'Approve', 'okay', 'OK', 'Yeah, do it please.', 'Hey NasTech, go ahead!', 'sure', 'Allow it', 'Yes yes']) {
       expect(matchApprovalAnswer(text), text).toBe('approve')
     }
   })

@@ -120,9 +120,9 @@ export function ConnectionsPage() {
     }
   }
 
-  const openHermesFor = (name: string) => {
-    showPage('hermes')
-    void sendPrompt(`Help me set up the ${name} integration in Hermes.`)
+  const openNasTechFor = (name: string) => {
+    showPage('nastech')
+    void sendPrompt(`Help me set up the ${name} integration in NasTech.`)
   }
 
   const setEnabled = (connection: Connection, enabled: boolean) => {
@@ -168,7 +168,7 @@ export function ConnectionsPage() {
         }
         case 'messaging':
           if (!source.platform.configured) {
-            openHermesFor(connection.name)
+            openNasTechFor(connection.name)
           } else {
             await api.setPlatformEnabled(source.platform.id, true)
             notify({ title: `${connection.name} enabled`, body: 'Restart the gateway to reconnect the channel.', level: 'success' })
@@ -177,7 +177,7 @@ export function ConnectionsPage() {
           break
         case 'toolset':
           if (!source.toolset.configured) {
-            openHermesFor(connection.name)
+            openNasTechFor(connection.name)
           } else {
             await api.setToolsetEnabled(source.toolset.name, true)
             notify({ title: `${connection.name} enabled`, level: 'success' })
@@ -193,7 +193,7 @@ export function ConnectionsPage() {
 
   const startProviderSignIn = async (id: string, name: string, flow: string, cliCommand?: string | null) => {
     if (flow !== 'device_code') {
-      showPage('hermes')
+      showPage('nastech')
       void sendPrompt(`Help me sign in to ${name}${cliCommand ? ` by running \`${cliCommand}\`` : ''}.`)
 
       return
@@ -223,7 +223,7 @@ export function ConnectionsPage() {
         case 'mcp':
           await api.removeMcp(source.server.name)
           probeCache.delete(source.server.name)
-          notify({ title: `${connection.name} disconnected`, body: 'The MCP server was removed from Hermes.', level: 'success' })
+          notify({ title: `${connection.name} disconnected`, body: 'The MCP server was removed from NasTech.', level: 'success' })
           break
         case 'messaging':
           await api.setPlatformEnabled(source.platform.id, false)
@@ -280,14 +280,14 @@ export function ConnectionsPage() {
       switch (install.kind) {
         case 'mcp-catalog': {
           const result = await api.installCatalog(install.entry.name, env)
-          notify({ title: `${item.name} added`, body: result.background ? 'Hermes is installing it in the background; it appears once ready.' : 'Available to Hermes on its next session.', level: 'success' })
+          notify({ title: `${item.name} added`, body: result.background ? 'NasTech is installing it in the background; it appears once ready.' : 'Available to NasTech on its next session.', level: 'success' })
           setTab('connected')
           setSelectedId(`mcp:${install.entry.name}`)
           break
         }
         case 'toolset':
         case 'messaging':
-          openHermesFor(item.name)
+          openNasTechFor(item.name)
           break
         case 'provider':
           await startProviderSignIn(install.provider.id, install.provider.name, install.provider.flow, install.provider.cli_command)
@@ -333,7 +333,7 @@ export function ConnectionsPage() {
         {failed ? (
           <EmptyGlass
             icon={<IconPlugConnected />}
-            title="Hermes did not answer"
+            title="NasTech did not answer"
             description={error ?? undefined}
             className="flex-1"
             action={
@@ -368,7 +368,7 @@ export function ConnectionsPage() {
                 <EmptyGlass
                   icon={<IconPlugConnected />}
                   title={needle ? `Nothing matches “${query}”` : 'No connections yet'}
-                  description={needle ? 'Try another name, or browse what you can add.' : 'Connect the tools you use and Hermes can work inside them.'}
+                  description={needle ? 'Try another name, or browse what you can add.' : 'Connect the tools you use and NasTech can work inside them.'}
                   className="h-full"
                   action={
                     <GlassButton size="sm" variant="primary" onClick={openBrowse}>
@@ -403,7 +403,7 @@ export function ConnectionsPage() {
                   busy={busyId === selected.id}
                 />
               ) : (
-                <div className="flex flex-1 items-center justify-center text-center text-[12.5px] text-fg-4">Select a connection to manage what Hermes may do with it.</div>
+                <div className="flex flex-1 items-center justify-center text-center text-[12.5px] text-fg-4">Select a connection to manage what NasTech may do with it.</div>
               )}
             </GlassCard>
           </div>

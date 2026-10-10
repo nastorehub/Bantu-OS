@@ -86,8 +86,8 @@ export async function runCatalog(id: string, action: 'install' | 'remove'): Prom
   }
 }
 
-/** Point Hermes at a model on Ollama or LM Studio: the default for new conversations, and the current one. */
-export async function useWithHermes(kind: 'ollama' | 'lmstudio', model: string): Promise<void> {
+/** Point NasTech at a model on Ollama or LM Studio: the default for new conversations, and the current one. */
+export async function useWithNasTech(kind: 'ollama' | 'lmstudio', model: string): Promise<void> {
   await rest.put('/api/config', { config: { model: localModelConfig(kind, model) } })
   const chat = $activeChat.get()
 

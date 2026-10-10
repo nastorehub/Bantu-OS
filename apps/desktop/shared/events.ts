@@ -1,7 +1,7 @@
 /*
- * Things that happen on this computer that people's own hook scripts and Hermes automations can
+ * Things that happen on this computer that people's own hook scripts and NasTech automations can
  * react to. Main emits them (electron/events/), hooks run from ~/.config/herald-os/hooks/<name>.d/,
- * and an automation is a paused Hermes cron job Herald OS fires when its event happens.
+ * and an automation is a paused NasTech cron job Herald OS fires when its event happens.
  */
 
 export type HeraldEventName = 'login' | 'wake' | 'sleep' | 'lock' | 'unlock' | 'returned' | 'battery-low' | 'network-change' | 'theme-set' | 'crash' | 'after-update'
@@ -55,7 +55,7 @@ export function isEventName(value: unknown): value is HeraldEventName {
 
 /**
  * The schedule an event automation's cron job carries. It never fires on it (the job stays
- * paused); Hermes's cron needs some schedule, and a yearly one is harmless if it is ever resumed.
+ * paused); NasTech's cron needs some schedule, and a yearly one is harmless if it is ever resumed.
  */
 export const EVENT_RULE_SCHEDULE = '0 0 1 1 *'
 

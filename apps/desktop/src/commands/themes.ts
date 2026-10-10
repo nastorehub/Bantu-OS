@@ -2,7 +2,7 @@ import { $env, $prefs, updatePrefs } from '../store/backend.ts'
 import { fail, ok, type OsCommand } from '../store/os-commands.ts'
 import { $themes, applyTheme, findTheme, generateTheme, installThemes, loadThemes } from '../store/themes.ts'
 
-/* Themes and fonts: the whole environment's look, which Hermes can also make for you. */
+/* Themes and fonts: the whole environment's look, which NasTech can also make for you. */
 
 async function themes() {
   return $themes.get().length > 0 ? $themes.get() : loadThemes()
@@ -30,7 +30,7 @@ export const themeCommands: readonly OsCommand[] = [
   {
     id: 'theme.set',
     title: 'Set the theme',
-    description: 'Switch to an installed theme by name; it restyles the shell, Hermes and, on Herald OS Linux, the whole session.',
+    description: 'Switch to an installed theme by name; it restyles the shell, NasTech and, on Herald OS Linux, the whole session.',
     tier: 'mutate',
     args: [{ name: 'theme', type: 'string', description: 'Theme name (see theme.list)', required: true }],
     phrases: ['set the theme to {theme}', 'switch to the {theme} theme', 'use the {theme} theme', 'change the theme to {theme}'],
@@ -83,19 +83,19 @@ export const themeCommands: readonly OsCommand[] = [
     }
   },
   {
-    id: 'theme.followHermes',
-    title: 'Follow Hermes skins',
-    description: "Restyle Herald OS whenever Hermes's skin changes (/skin in a chat).",
+    id: 'theme.followNasTech',
+    title: 'Follow NasTech skins',
+    description: "Restyle Herald OS whenever NasTech's skin changes (/skin in a chat).",
     tier: 'mutate',
     args: [{ name: 'enabled', type: 'boolean', description: 'true to follow the skin', required: true }],
     phrases: [
-      { phrase: 'follow the hermes skin', args: { enabled: true } },
-      { phrase: 'stop following the hermes skin', args: { enabled: false } }
+      { phrase: 'follow the nastech skin', args: { enabled: true } },
+      { phrase: 'stop following the nastech skin', args: { enabled: false } }
     ],
     run: async ({ enabled }) => {
-      await updatePrefs({ followHermesSkin: Boolean(enabled) })
+      await updatePrefs({ followNasTechSkin: Boolean(enabled) })
 
-      return ok(`Following Hermes skins ${enabled ? 'on' : 'off'}`, { highlight: { kind: 'setting', id: 'appearance' } })
+      return ok(`Following NasTech skins ${enabled ? 'on' : 'off'}`, { highlight: { kind: 'setting', id: 'appearance' } })
     }
   },
   {

@@ -43,9 +43,9 @@ export class ControlSocket {
     private readonly shell: ShellHost,
     /** Called after the CLI changes preferences so windows and the wallpaper follow. */
     private readonly onPrefsChanged?: (prefs: HeraldOSPrefs) => void,
-    /** Runs registry commands in the Hermes window (`ui`, `ui-list`, `ui-state`; token-protected). */
+    /** Runs registry commands in the NasTech window (`ui`, `ui-list`, `ui-state`; token-protected). */
     private readonly osBridge?: OsCommandBridge,
-    /** A theme was applied: Hermes's skin follows it. */
+    /** A theme was applied: NasTech's skin follows it. */
     private readonly onTheme?: (spec: ThemeSpec) => void,
     /** The CLI changed a switch (night light, staying awake): the menu bar follows. */
     private readonly onSwitches?: () => void,
@@ -178,7 +178,7 @@ export class ControlSocket {
         args,
         text: args.join(' ') || undefined,
         attachments: request.attachments,
-        // Our own windows are not interesting context ("ask about this window" over the Hermes window).
+        // Our own windows are not interesting context ("ask about this window" over the NasTech window).
         context: focused && !focused.ours ? focused : null
       }
       this.shell.open('command', command)
@@ -243,7 +243,7 @@ export class ControlSocket {
 
         return { ok: true }
       case 'voice': {
-        // toggle | start | stop | mute: the Hermes window owns the conversation (see store/voice.ts).
+        // toggle | start | stop | mute: the NasTech window owns the conversation (see store/voice.ts).
         const action = args[0] ?? 'toggle'
 
         if (!['toggle', 'start', 'stop', 'mute'].includes(action)) {

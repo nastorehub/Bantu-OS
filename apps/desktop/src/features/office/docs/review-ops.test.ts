@@ -154,19 +154,19 @@ describe('adding comments', () => {
       { target: { text: 'fell', all: true }, text: 'How much?' }
     ]
 
-    expect(applyLive(view, addComments(list, 'Hermes'))).toBe(true)
+    expect(applyLive(view, addComments(list, 'NasTech'))).toBe(true)
     expect(comments(view.state.doc).map((thread) => [thread.id, thread.quote, thread.author, thread.initials])).toEqual([
       ['0', 'Revenue rose by a third\nin May', 'Ann Example', 'AE'],
       ['2', 'by a third\nin May and June', 'Bo Example', null],
-      ['9', 'June', 'Hermes', 'H'],
-      ['8', 'Costs', 'Hermes', 'H'],
-      ['10', 'fell', 'Hermes', 'H'],
+      ['9', 'June', 'NasTech', 'N'],
+      ['8', 'Costs', 'NasTech', 'N'],
+      ['10', 'fell', 'NasTech', 'N'],
       ['7', '', 'Ann Example', null]
     ])
     expect(undoDepth(view.state)).toBe(1)
     undo(view.state, view.dispatch)
     expect(view.state.doc.eq(before)).toBe(true)
-    expect(applyToJSON(reviewed(), addComments([{ target: { text: 'nowhere' }, text: 'x' }], 'Hermes'))).toBeNull()
+    expect(applyToJSON(reviewed(), addComments([{ target: { text: 'nowhere' }, text: 'x' }], 'NasTech'))).toBeNull()
   })
 
   it('signs what commands add with the name the person confirmed, the neutral one before, never the account’s, and asks nothing', () => {
@@ -176,13 +176,13 @@ describe('adding comments', () => {
     const replyBefore = applyToJSON(reviewed(), replyToComment('2', 'Agreed'))
     $commentName.set('Cy Example')
     const after = applyToJSON(reviewed(), addComment({ text: 'Costs' }, 'Which costs?'))
-    const byHermes = applyToJSON(reviewed(), addComments(costs, 'Hermes'))
+    const byNasTech = applyToJSON(reviewed(), addComments(costs, 'NasTech'))
 
     expect(threadsOf(before)[3]).toMatchObject({ author: NEUTRAL_NAME, initials: 'HU' })
     expect(threadsOf(replyBefore)[1].replies?.[0]).toMatchObject({ author: NEUTRAL_NAME })
     expect(threadsOf(after)[3]).toMatchObject({ author: 'Cy Example', initials: 'CE' })
     expect(threadsOf(applyToJSON(reviewed(), replyToComment('2', 'Agreed')))[1].replies?.[0]).toMatchObject({ author: 'Cy Example', initials: 'CE' })
-    expect(threadsOf(byHermes)[3]).toMatchObject({ author: 'Hermes', initials: 'H' })
+    expect(threadsOf(byNasTech)[3]).toMatchObject({ author: 'NasTech', initials: 'N' })
     expect($nameQuestion.get()).toBeNull()
   })
 })

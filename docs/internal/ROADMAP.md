@@ -2,7 +2,7 @@
 
 ## Alpha 0.1 (macOS, Apple Silicon)
 
-- Fullscreen Hermes-powered environment running on the user's Hermes install.
+- Fullscreen NasTech-powered environment running on the user's NasTech install.
 - Surfaces: Home, Chat, Agents, Tasks, Skills, Files, Apps, Terminal, System, Settings,
   Notifications, global command bar.
 - System bridge plugin with permission tiers and audit log.
@@ -11,11 +11,11 @@
 
 Borrowed from the field (see `LANDSCAPE.md` for the source of each):
 
-- Crash and error capture handed to Hermes with a `diagnose-crash` skill (Omarchy).
-- Whole-environment themes driven by Hermes skins; agent-authored themes (Omarchy).
+- Crash and error capture handed to NasTech with a `diagnose-crash` skill (Omarchy).
+- Whole-environment themes driven by NasTech skins; agent-authored themes (Omarchy).
 - Agent Task Manager: per-session resources, tokens, approvals, stop (OpenNeo).
-- Live "Hermes is acting" banner with Interrupt during GUI automation (SomaOS).
-- `herald-os-tailor` skill so Hermes can reconfigure Herald OS itself (Omarchy).
+- Live "NasTech is acting" banner with Interrupt during GUI automation (SomaOS).
+- `herald-os-tailor` skill so NasTech can reconfigure Herald OS itself (Omarchy).
 - `system_shortcut` tool over macOS Shortcuts / App Intents (Apple).
 
 Also planned:
@@ -42,14 +42,14 @@ compositor, Electron shell in kiosk mode, Linux `HostPlatform` and `HostAdapter`
 (`ps`, `ss`, `nmcli`, `wpctl`, `gio`, `journalctl`, `plocate`, `.desktop` entries). Runs in a VM
 on the Mac (QEMU or UTM).
 
-**Stage 2: Hermes owns the capability layer.**
+**Stage 2: NasTech owns the capability layer.**
 - Capability broker: a small privileged D-Bus service holding the permission tiers, issuing
   mission-scoped grants, implementing the `xdg-desktop-portal` interfaces, and owning the audit
   journal. Shell and bridge route every privileged call through it (no enforcement at first).
 - Confine the shell and the runtime (bubblewrap/Flatpak-style sandbox, Landlock, seccomp).
-- Own wlroots compositor: foreign app windows inside Hermes windows, secure approval prompts drawn
+- Own wlroots compositor: foreign app windows inside NasTech windows, secure approval prompts drawn
   outside the shell, output power management.
-- `hermes serve` as a systemd user unit on a Unix socket with peer credentials.
+- `nastech serve` as a systemd user unit on a Unix socket with peer credentials.
 - SELinux policy for the session.
 
 **Stage 3 (under way, ADR-018): a distribution.** Fedora bootc images: an x86_64 installer ISO

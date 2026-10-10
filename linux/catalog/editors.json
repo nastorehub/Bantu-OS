@@ -2,7 +2,7 @@
   "id": "editors",
   "label": "Editors",
   "order": 3,
-  "description": "Code editors; Hermes opens projects in whichever you use.",
+  "description": "Code editors; NasTech opens projects in whichever you use.",
   "entries": [
     { "id": "vscode", "label": "Visual Studio Code", "description": "Microsoft's editor, with its extension marketplace.", "install": [{ "kind": "flatpak", "ref": "com.visualstudio.code" }] },
     { "id": "zed", "label": "Zed", "description": "A fast, collaborative editor.", "install": [{ "kind": "flatpak", "ref": "dev.zed.Zed" }] },

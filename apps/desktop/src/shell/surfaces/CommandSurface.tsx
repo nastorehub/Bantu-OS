@@ -1,7 +1,7 @@
 import { IconAppWindow, IconPaperclip } from '@tabler/icons-react'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { ShellCommand, WmWindow } from '../../../shared/ipc.ts'
-import { HermesAvatar } from '../../components/app-icon.tsx'
+import { NasTechAvatar } from '../../components/app-icon.tsx'
 import { GlassButton, Pill } from '../../components/ui/glass.tsx'
 import { Kbd } from '../../components/ui/primitives.tsx'
 import { closeThisSurface, openSurface, relayToMain } from '../../store/shell.ts'
@@ -120,7 +120,7 @@ export function CommandSurface() {
   )
 }
 
-/** "Ask Hermes about this window": a prompt with the focused window as context, relayed to the Hermes window. */
+/** "Ask NasTech about this window": a prompt with the focused window as context, relayed to the NasTech window. */
 export function AskPanel({ state, onClose }: { state: AskState; onClose: () => void }) {
   const [text, setText] = useState(state.text)
   const textarea = useRef<HTMLTextAreaElement>(null)
@@ -153,8 +153,8 @@ export function AskPanel({ state, onClose }: { state: AskState; onClose: () => v
   return (
     <div className="float flex flex-col overflow-hidden rounded-2xl animate-pop">
       <div className="flex items-center gap-3 px-4 pt-4 pb-2">
-        <HermesAvatar size={22} rounded={6} />
-        <span className="text-[14px] font-semibold">Ask Hermes</span>
+        <NasTechAvatar size={22} rounded={6} />
+        <span className="text-[14px] font-semibold">Ask NasTech</span>
         <span className="flex-1" />
         <Kbd>esc</Kbd>
       </div>
@@ -189,8 +189,8 @@ export function AskPanel({ state, onClose }: { state: AskState; onClose: () => v
               submit()
             }
           }}
-          placeholder={state.context ? `Ask about ${windowLabel(state.context)}` : state.attachments.length > 0 ? 'What would you like to know about it?' : 'Ask Hermes anything'}
-          aria-label="Ask Hermes"
+          placeholder={state.context ? `Ask about ${windowLabel(state.context)}` : state.attachments.length > 0 ? 'What would you like to know about it?' : 'Ask NasTech anything'}
+          aria-label="Ask NasTech"
           className="glass-input w-full resize-none rounded-lg px-3 py-2.5 text-[14px] leading-relaxed outline-none placeholder:text-fg-4"
         />
       </div>
@@ -200,7 +200,7 @@ export function AskPanel({ state, onClose }: { state: AskState; onClose: () => v
           <Kbd>↵</Kbd> send · <Kbd>⇧↵</Kbd> new line
         </span>
         <GlassButton variant="primary" size="sm" onClick={submit} disabled={!canSend}>
-          Send to Hermes
+          Send to NasTech
         </GlassButton>
       </div>
     </div>

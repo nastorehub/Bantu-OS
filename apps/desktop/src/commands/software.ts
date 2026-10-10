@@ -1,4 +1,4 @@
-import { $catalog, catalogEntries, findCatalogEntry, loadCatalog, runCatalog, useWithHermes } from '../store/catalog.ts'
+import { $catalog, catalogEntries, findCatalogEntry, loadCatalog, runCatalog, useWithNasTech } from '../store/catalog.ts'
 import { fail, ok, type OsCommand } from '../store/os-commands.ts'
 import { openTerminalProgram } from '../store/terminal.ts'
 
@@ -102,7 +102,7 @@ export const softwareCommands: readonly OsCommand[] = [
   {
     id: 'software.localModel',
     title: 'Use a local model',
-    description: 'Point Hermes at a model running on this computer through Ollama or LM Studio. Without a model, lists the ones the server has.',
+    description: 'Point NasTech at a model running on this computer through Ollama or LM Studio. Without a model, lists the ones the server has.',
     tier: 'mutate',
     args: [
       { name: 'server', type: 'string', description: 'ollama or lmstudio', required: true, enum: ['ollama', 'lmstudio'] },
@@ -122,9 +122,9 @@ export const softwareCommands: readonly OsCommand[] = [
         return fail(`No model "${String(model)}" there. It has: ${models.join(', ')}.`)
       }
 
-      await useWithHermes(kind, chosen)
+      await useWithNasTech(kind, chosen)
 
-      return ok(`Hermes now uses ${chosen} on this computer`)
+      return ok(`NasTech now uses ${chosen} on this computer`)
     }
   }
 ]

@@ -188,8 +188,8 @@ async function dirSize(target: string, budgetMs = 4000): Promise<{ bytes: number
 /** Folders a project listing and watcher skip: dependencies, VCS data, caches and build output. */
 const SKIPPED_DIRS = new Set(['node_modules', '.git', '.hg', '.svn', 'dist', 'build', '.next', '.nuxt', '.vite', '.turbo', '.cache', '.parcel-cache', '__pycache__', '.venv', 'venv', '.pytest_cache', '.DS_Store', 'coverage', '.idea'])
 
-/** Scratch files: Hermes's atomic-save temporaries, editor swap and backup files. */
-const SCRATCH_FILE = /^\.hermes-tmp\.|^\.#|\.sw[op]$|~$|^\.DS_Store$/
+/** Scratch files: NasTech's atomic-save temporaries, editor swap and backup files. */
+const SCRATCH_FILE = /^\.nastech-tmp\.|^\.#|\.sw[op]$|~$|^\.DS_Store$/
 
 const skipped = (relative: string): boolean => relative.split(path.sep).some(part => SKIPPED_DIRS.has(part)) || SCRATCH_FILE.test(path.basename(relative))
 

@@ -1,4 +1,4 @@
-/** Hermes's `model` config for a local server; both speak the OpenAI API on localhost. */
+/** NasTech's `model` config for a local server; both speak the OpenAI API on localhost. */
 export function localModelConfig(kind: 'ollama' | 'lmstudio', model: string): Record<string, string> {
   // A stale key or API mode from a previous custom endpoint would be sent to the local server.
   return kind === 'ollama'

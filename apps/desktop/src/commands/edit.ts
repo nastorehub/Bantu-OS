@@ -4,7 +4,7 @@ import { charBeforeCaret, NoEditTargetError, performEdit, scrollFront } from '..
 import { fail, ok, type OsCommand } from '../store/os-commands.ts'
 
 /*
- * Typing and editing: what the keyboard does, by voice or by Hermes. Everything lands on the focused
+ * Typing and editing: what the keyboard does, by voice or by NasTech. Everything lands on the focused
  * text field, the terminal, or the web page in front (see store/edit-target.ts).
  */
 

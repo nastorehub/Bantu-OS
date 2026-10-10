@@ -116,7 +116,7 @@ describe('fillBox', () => {
   })
 })
 
-describe("Herald's own adjustments for Hermes", () => {
+describe("Herald's own adjustments for NasTech", () => {
   const read = () => ({ red: 1, green: 0.5, blue: 0 })
 
   it('merges settings, nested ones too, and checks them as a project would', () => {
@@ -255,7 +255,7 @@ describe('resize and crop arguments', () => {
   })
 })
 
-describe('adjustments, effects and masks for Hermes', () => {
+describe('adjustments, effects and masks for NasTech', () => {
   const black = () => ({ red: 0, green: 0, blue: 0 })
   const read = (value: unknown) => (value === '#ff0000' ? { red: 1, green: 0, blue: 0 } : value === 'navy' ? { red: 0, green: 0, blue: 0.5 } : black())
 
@@ -277,7 +277,7 @@ describe('adjustments, effects and masks for Hermes', () => {
     expect(map.gradientMapSettings).toMatchObject({ shadows: { red: 0, green: 0, blue: 0.5 }, highlights: { red: 1, green: 1, blue: 1 } })
   })
 
-  it('shows Hermes the settings each kind uses', () => {
+  it('shows NasTech the settings each kind uses', () => {
     expect(adjustmentSettings(defaultAdjustment('Hue/Saturation'))).toEqual({ hue: 0, saturation: 0, lightness: 0, colorize: false })
     expect(adjustmentSettings(defaultAdjustment('Motion Blur'))).toEqual({ motionAngle: 0, motionDistance: 20 })
     expect(adjustmentSettings(defaultAdjustment('Invert'))).toEqual({})
@@ -388,7 +388,7 @@ describe('restyling shapes', () => {
     expect(() => shapeWith(rectangle, {}, box, colour)).toThrow(/Nothing to change/)
   })
 
-  it('describes a shape’s style for Hermes', () => {
+  it('describes a shape’s style for NasTech', () => {
     const layer = { ...pixelLayer('Panel', new Raster(40, 20), defaultTransform(40, 20)), shape: { kind: 'Rectangle' as const, cornerRadius: 6, red: 1, green: 0.5, blue: 0 } }
     const state: DocState = { width: 100, height: 100, resolution: 72, layers: [layer], activeLayerId: null, guides: [], selection: null }
     expect(describeLayer(state, layer)).toMatchObject({ kind: 'shape', shape: 'rounded rectangle', color: '#ff8000', radius: 6 })

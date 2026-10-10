@@ -7,7 +7,7 @@ import { bodyOf, nameOfPersonId, plainTextOf, timeOfComment, type UNote } from '
 import { oneStep, rangeOf, type SheetsTarget, sheetOf } from '../model.ts'
 import { commentAuthor } from './author.ts'
 
-/* What Hermes's commands and the menus do with comments and notes on cells, on a workbook (see ../model.ts). */
+/* What NasTech's commands and the menus do with comments and notes on cells, on a workbook (see ../model.ts). */
 
 export interface CommentReply {
   id: string
@@ -33,7 +33,7 @@ export interface CellNote {
   shown: boolean
 }
 
-/** Who signs a comment, a reply or a new note: the one a command gives (Hermes, for Hermes), else commentAuthor. */
+/** Who signs a comment, a reply or a new note: the one a command gives (NasTech, for NasTech), else commentAuthor. */
 type Author = ReturnType<typeof commentAuthor>
 
 /** A new note's box, in pixels, as Univer draws one. */

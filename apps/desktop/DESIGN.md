@@ -2,7 +2,7 @@
 
 Read this before adding or changing a page. It is the contract between pages, the shell, the
 stores and the Electron bridge. The target look is "deep-blue glass on a living wallpaper": one
-main Hermes window with a persistent left sidebar and swappable pages, floating glass windows for
+main NasTech window with a persistent left sidebar and swappable pages, floating glass windows for
 secondary apps, a dock, a menu bar. For where files live, see [README.md](README.md).
 
 ## Layout model
@@ -19,11 +19,11 @@ secondary apps, a dock, a menu bar. For where files live, see [README.md](README
   `shell.openExternal` for links that genuinely belong to another app. Any component that hosts a
   native view (web windows, the Studio preview) places it with `useNativeView` in
   `src/features/web/native-view.ts`, which also trims it around the voice pill and action captions.
-- `src/shell/apps.ts` is the registry: `PAGES` (sidebar), `FLOATING_APPS`, `HERMES_APPS`,
+- `src/shell/apps.ts` is the registry: `PAGES` (sidebar), `FLOATING_APPS`, `NASTECH_APPS`,
   `FEATURED_NATIVE` (macOS apps by name). Icons are ids rendered by `AppGlyph` / `AppTile`
   (`src/components/app-icon.tsx`). Two marks, never swapped: `HeraldLogo`
-  (`src/components/herald-logo.tsx`) is the product (menu bar, boot screen), `HermesAvatar` and
-  `HermesMark` are the agent (chat, dock tile, sign-in card).
+  (`src/components/herald-logo.tsx`) is the product (menu bar, boot screen), `NasTechAvatar` and
+  `NasTechMark` are the agent (chat, dock tile, sign-in card).
 - A page is a component exported from `src/features/<page>/<Name>Page.tsx` and registered in
   `src/shell/MainWindow.tsx`. It fills its container (`h-full`), owns its scrolling, and is kept
   mounted when hidden (visibility is not lifecycle).
@@ -57,7 +57,7 @@ one level, no literal colours. Every interactive element has an `aria-label` or 
 
 ## Data and actions
 
-Gateway (Hermes runtime) via `src/store/gateway.ts`:
+Gateway (NasTech runtime) via `src/store/gateway.ts`:
 `gatewayRequest(method, params)` typed by the upstream contract (`RpcMethods`), `onGatewayEvent`.
 REST via `src/lib/rest.ts` (`rest.get/post/put/del`, paths under `/api/`). Loaders:
 `useBackendData(loader, deps)` (refetches on reconnect) and `useLocalData(loader, deps)` in
@@ -75,8 +75,8 @@ Stores (nanostores; subscribe with `useStore`):
 - `store/backend.ts`: `$backend`, `$prefs`, `updatePrefs`, `$env`.
 - `store/system.ts`: `useSystemStats()`, `useSystemInfo()`, `useNetworkStatus()`.
 - `store/native-apps.ts`: `useNativeApps()` -> `{ apps, iconFor(path) }`, `findNativeApp(names)`.
-- `store/os-commands.ts`: the OS command registry (`defineCommands`, `runCommand`, `listCommands`, `$commandLog`); catalogue in `src/commands/`; `store/os-control.ts` answers main's control-socket requests; `store/follow.ts` shows Hermes's own tool results; `lib/voice/intents.ts` is the voice fast path.
-- `store/hermes-auth.ts`: `$hermesAuth` (active model provider, sign-in state), `requestHermesLogin`, `refreshHermesAuth`, device-code helpers; the OS sign-in card is `src/features/auth/HermesLoginCard.tsx` and opens on boot or on any turn that fails for lack of credentials. The provider's portal opens in a web window beside the card and closes itself on approval.
+- `store/os-commands.ts`: the OS command registry (`defineCommands`, `runCommand`, `listCommands`, `$commandLog`); catalogue in `src/commands/`; `store/os-control.ts` answers main's control-socket requests; `store/follow.ts` shows NasTech's own tool results; `lib/voice/intents.ts` is the voice fast path.
+- `store/nastech-auth.ts`: `$nastechAuth` (active model provider, sign-in state), `requestNasTechLogin`, `refreshNasTechAuth`, device-code helpers; the OS sign-in card is `src/features/auth/NasTechLoginCard.tsx` and opens on boot or on any turn that fails for lack of credentials. The provider's portal opens in a web window beside the card and closes itself on approval.
 - `store/web-windows.ts`: `$webWindows`, `openWebWindow(url, { title, bounds })`, `closeWebWindow`, `focusWebWindow`, `$webViewsCovered` (overlays that hide the native views).
 - `store/continuity.ts`: `$threads`, `$catchUp`, `refreshThreads`, `continueThread`, `startNextStep`, `dismissThread`, `setExclusions` (Pick up where you left off; pure evidence and parsing in `lib/continuity.ts`, see `docs/ARCHITECTURE.md`).
 - `store/voice.ts`: `$voice` (state, engine, captions, live meter), `$voiceActive`, `startVoice`, `endConversation`, `toggleVoice`, `toggleMute`; `store/wake.ts`: `$wake`, `setWakeWordEnabled`. Voice UI lives in `src/features/voice/` (`VoiceOrb`, `MicButton`, `VoiceIndicator`); see `docs/VOICE.md`.
@@ -88,20 +88,20 @@ Electron bridge `window.heraldOS` (typed in `preload/index.ts`):
 `web.{open,setBounds,close,onEvent}` (embedded http(s) views: sandboxed, isolated, own partition, no preload),
 `prefs.{get,set}`, `bridge.{readPolicy,writePolicy,readAudit}`, `voice.{microphoneStatus,requestMicrophone,audioWsUrl,onHotkey}`, `env()`.
 
-Hermes data on disk (read through `fs.readFile`, write through `fs.writeText`):
-memories in `$HERMES_HOME/memories/MEMORY.md` and `USER.md`, entries separated by a line `§`.
-`$HERMES_HOME` comes from `$env.get().hermesHome`.
+NasTech data on disk (read through `fs.readFile`, write through `fs.writeText`):
+memories in `$NASTECH_HOME/memories/MEMORY.md` and `USER.md`, entries separated by a line `§`.
+`$NASTECH_HOME` comes from `$env.get().nastechHome`.
 
 ## Rules
 
 - Backend truth is cached, not owned: merge refreshes, be optimistic then honest, guard stale responses.
 - No background event may steal focus or navigate. Offer; don't hijack.
 - Every user-facing mutation of the machine goes through either a user-initiated `fs.*` call
-  (inside the home folder) or Hermes's audited bridge tools; never spawn shell commands from the renderer.
+  (inside the home folder) or NasTech's audited bridge tools; never spawn shell commands from the renderer.
 - Reduced motion (`prefers-reduced-motion` or the pref) must collapse all animation.
 - Keep pages self-contained under their directory; call out shared changes (stores, IPC,
   primitives) in the pull request description rather than slipping them in.
 - Every new user-visible action registers an `OsCommand` (`src/commands/<area>.ts`, see
   `store/os-commands.ts`) with a tier and a spoken-friendly `summary`; list items it can point at
-  carry `data-os-target="<kind>:<id>"`. That is what makes it reachable by voice, by Hermes (`os_ui`)
+  carry `data-os-target="<kind>:<id>"`. That is what makes it reachable by voice, by NasTech (`os_ui`)
   and from the command bar. Page-local selection/filter state exposes a `focus*()` atom for commands.

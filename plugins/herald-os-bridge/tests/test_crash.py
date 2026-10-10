@@ -102,7 +102,7 @@ def test_register_adds_every_skill(plugin):
 
 def test_tool_descriptions_point_to_the_skills(plugin):
     # Plugin skills are not in the system prompt's skill index; the always-visible tool
-    # descriptions are how Hermes finds them.
+    # descriptions are how NasTech finds them.
     tools = importlib.import_module(plugin.__name__ + ".bridge.tools")
     os_ui = tools.OS_UI_SCHEMA["description"]
     assert 'skill_view name="herald-os-bridge:herald-os-tailor"' in os_ui and "widget" in os_ui

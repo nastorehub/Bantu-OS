@@ -2,23 +2,23 @@ Herald OS
 Copyright (c) 2026 Luke The Dev (@iamlukethedev)
 Licensed under the MIT License; see LICENSE.
 
-Herald OS runs on Hermes Agent (https://github.com/NousResearch/hermes-agent),
-Copyright (c) 2025 Nous Research, released under the MIT License. It uses
-Hermes Agent without modifying it, and includes the following material from it:
+Herald OS runs on NasTech Agent (https://github.com/nastechresearch/nastech-agent),
+Copyright (c) 2025 NasTech Research, released under the MIT License. It uses
+NasTech Agent without modifying it, and includes the following material from it:
 
-- apps/desktop/src/assets/brand/hermes-avatar.jpg, the Hermes agent avatar
-  (apps/desktop/public/nous-girl.jpg upstream).
+- apps/desktop/src/assets/brand/nastech-avatar.png, the NasTech agent avatar
+  (apps/desktop/public/brand/herald-icon.png as the NasTech agent avatar).
 - The TypeScript gateway client and generated wire contract
   (apps/shared/src upstream). They are downloaded at build time into
-  upstream/hermes-agent/ (pinned by upstream/UPSTREAM.lock), re-exported by
-  packages/hermes-client and compiled into the Herald OS shell.
+  upstream/nastech-agent/ (pinned by upstream/UPSTREAM.lock), re-exported by
+  packages/nastech-client and compiled into the Herald OS shell.
 
-The Hermes Agent runtime itself is not distributed with Herald OS; users
+The NasTech Agent runtime itself is not distributed with Herald OS; users
 install it separately.
 
-Herald OS is an independent project. It is not an official Hermes Agent or
-Nous Research product, and it is not affiliated with, sponsored by or endorsed
-by Nous Research.
+Herald OS is an independent project. It is not an official NasTech Agent or
+NasTech Research product, and it is not affiliated with, sponsored by or endorsed
+by NasTech Research.
 
 Third-party npm and Python packages keep their own licenses. A packaged build
 includes Electron (MIT, https://github.com/electron/electron/blob/main/LICENSE),

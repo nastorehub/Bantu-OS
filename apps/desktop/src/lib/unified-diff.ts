@@ -1,5 +1,5 @@
-// Parse the diffs Hermes attaches to file edits (`tool.complete.inline_diff`) into the lines the
-// Studio highlights. Hermes sends its transcript rendering: ANSI colours, a "review diff" banner and
+// Parse the diffs NasTech attaches to file edits (`tool.complete.inline_diff`) into the lines the
+// Studio highlights. NasTech sends its transcript rendering: ANSI colours, a "review diff" banner and
 // `a/<path> → b/<path>` file headers before ordinary `@@` hunks. Plain unified diffs
 // (`--- a/x` / `+++ b/x`, `/dev/null` for a new file) are accepted too.
 

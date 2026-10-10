@@ -305,7 +305,7 @@ describe('comments', () => {
     { text: 'Nowhere', heading: 'Appendix' }
   ]
 
-  it('adds a review as one step to undo by Hermes, and lists the items whose text it did not find', () => {
+  it('adds a review as one step to undo by NasTech, and lists the items whose text it did not find', () => {
     const view = live(report())
     const before = view.state.doc
     const answer = onLive(addCommentsChange(commentItemsOf(JSON.stringify(REVIEW)), commentAuthor({ source: 'agent' })), view)
@@ -319,7 +319,7 @@ describe('comments', () => {
       ['Next steps', 'Shorter?'],
       ['Hire two people', 'Which people?']
     ])
-    expect(new Set(added.map((thread) => `${thread.author} ${thread.initials}`))).toEqual(new Set(['Hermes H']))
+    expect(new Set(added.map((thread) => `${thread.author} ${thread.initials}`))).toEqual(new Set(['NasTech N']))
     expect(answer.summary).toBe(
       'Added 5 comments to Report.docx as one step; not added: “Sales fel in May” (not found), heading “Appendix” (no such heading); quote the document’s words exactly, within one paragraph (docs.find finds them)'
     )
@@ -335,17 +335,17 @@ describe('comments', () => {
     expect(view.state.doc.eq(before)).toBe(true)
   })
 
-  it('adds the same to a file, by the name the person gave Herald for anyone but Hermes', () => {
+  it('adds the same to a file, by the name the person gave Herald for anyone but NasTech', () => {
     $commentName.set('Ann Example')
     const items = commentItemsOf(REVIEW)
-    const byHermes = onFile(addCommentsChange(items, commentAuthor({ source: 'agent' })), report())
+    const byNasTech = onFile(addCommentsChange(items, commentAuthor({ source: 'agent' })), report())
     const byVoice = onFile(addCommentsChange(items, commentAuthor({ source: 'voice' })), report())
 
     expect(commentAuthor({ source: 'palette' })).toBeUndefined()
-    expect(byHermes.data).toMatchObject({ added: 5, changed: true })
-    expect(new Set(commentsOf(byHermes.json).map((thread) => thread.author))).toEqual(new Set(['Hermes']))
+    expect(byNasTech.data).toMatchObject({ added: 5, changed: true })
+    expect(new Set(commentsOf(byNasTech.json).map((thread) => thread.author))).toEqual(new Set(['NasTech']))
     expect(new Set(commentsOf(byVoice.json).map((thread) => `${thread.author} ${thread.initials}`))).toEqual(new Set(['Ann Example AE']))
-    expect(onFile(addCommentsChange(commentItemsOf('[{"text": "Typo?", "quote": "Sales fel in May"}]'), 'Hermes'), report()).summary).toBe(
+    expect(onFile(addCommentsChange(commentItemsOf('[{"text": "Typo?", "quote": "Sales fel in May"}]'), 'NasTech'), report()).summary).toBe(
       'Added no comments to Report.docx: “Sales fel in May” (not found); quote the document’s words exactly, within one paragraph (docs.find finds them)'
     )
   })
@@ -362,24 +362,24 @@ describe('comments', () => {
   })
 
   it('puts one comment on a quote, a heading line or the selection of an open document', () => {
-    const one = onFile(addCommentsChange([commentItemOf({ text: 'Why?', quote: 'grew' })], 'Hermes', true), report())
-    const every = onFile(addCommentsChange([commentItemOf({ text: 'Why?', quote: 'Sales', all: true })], 'Hermes', true), report())
-    const heading = onFile(addCommentsChange([commentItemOf({ text: 'Rename?', heading: '2' })], 'Hermes', true), report())
+    const one = onFile(addCommentsChange([commentItemOf({ text: 'Why?', quote: 'grew' })], 'NasTech', true), report())
+    const every = onFile(addCommentsChange([commentItemOf({ text: 'Why?', quote: 'Sales', all: true })], 'NasTech', true), report())
+    const heading = onFile(addCommentsChange([commentItemOf({ text: 'Rename?', heading: '2' })], 'NasTech', true), report())
     const view = live(report(), 'two people')
-    const selected = onLive(addCommentsChange([commentItemOf({ text: 'Who?' })], 'Hermes', true), view)
+    const selected = onLive(addCommentsChange([commentItemOf({ text: 'Who?' })], 'NasTech', true), view)
 
     expect(one.summary).toBe('Put a comment on “grew” in Report.docx')
     expect(one.data).toMatchObject({ added: 1, ids: ['0'], missing: [] })
     expect(every.summary).toBe('Put a comment on “Sales” at each of its 2 places in Report.docx')
     expect(heading.summary).toBe('Put a comment on “Results” in Report.docx')
     expect(selected.summary).toBe('Put a comment on “two people” in Report.docx')
-    expect(onFile(addCommentsChange([commentItemOf({ text: 'Here?' })], 'Hermes', true), report()).summary).toBe('Added no comment to Report.docx: at=selection (only an open document has a selection: give a quote)')
+    expect(onFile(addCommentsChange([commentItemOf({ text: 'Here?' })], 'NasTech', true), report()).summary).toBe('Added no comment to Report.docx: at=selection (only an open document has a selection: give a quote)')
   })
 
   it('replies, changes, resolves and deletes comments and replies by their ids', () => {
     $commentName.set('Ann Example')
     const reviewed = onFile(addCommentsChange(commentItemsOf('[{"text": "Source?", "quote": "Sales grew in March"}]')), report()).json
-    const replied = onFile(replyChange({ comment: '0', text: 'The annual report.' }, 'Hermes'), reviewed)
+    const replied = onFile(replyChange({ comment: '0', text: 'The annual report.' }, 'NasTech'), reviewed)
     const again = onFile(replyChange({ comment: '1', text: 'Thanks.' }), replied.json)
     const edited = onFile(editCommentChange({ comment: '1', text: 'The 2025 annual report.' }), replied.json)
     const resolved = onFile(resolveChange({ comment: '0' }), edited.json)
@@ -387,15 +387,15 @@ describe('comments', () => {
     expect(replied.summary).toBe('Replied to Ann Example’s comment on “Sales grew in March” in Report.docx')
     expect(replied.data).toMatchObject({ comment: '0', reply: '1' })
     expect(comments(stateOf(again.json).doc)[0].replies.map((reply) => [reply.id, reply.author, reply.text])).toEqual([
-      ['1', 'Hermes', 'The annual report.'],
+      ['1', 'NasTech', 'The annual report.'],
       ['2', 'Ann Example', 'Thanks.']
     ])
-    expect(edited.summary).toBe('Changed what Hermes’s reply to Ann Example’s comment on “Sales grew in March” says in Report.docx')
-    expect(commentsList(stateOf(edited.json).doc)).toMatchObject([{ id: '0', author: 'Ann Example', text: 'Source?', quote: 'Sales grew in March', heading: 'Results', resolved: false, replies: [{ id: '1', author: 'Hermes', text: 'The 2025 annual report.' }] }])
+    expect(edited.summary).toBe('Changed what NasTech’s reply to Ann Example’s comment on “Sales grew in March” says in Report.docx')
+    expect(commentsList(stateOf(edited.json).doc)).toMatchObject([{ id: '0', author: 'Ann Example', text: 'Source?', quote: 'Sales grew in March', heading: 'Results', resolved: false, replies: [{ id: '1', author: 'NasTech', text: 'The 2025 annual report.' }] }])
     expect(resolved.summary).toBe('Resolved Ann Example’s comment on “Sales grew in March” in Report.docx')
     expect(onFile(resolveChange({ comment: '1' }), resolved.json).summary).toBe('Ann Example’s comment on “Sales grew in March” is resolved already')
     expect(onFile(resolveChange({ comment: '0', resolved: false }), resolved.json).summary).toBe('Opened again Ann Example’s comment on “Sales grew in March” in Report.docx')
-    expect(onFile(deleteCommentChange({ comment: '1' }), edited.json).summary).toBe('Deleted Hermes’s reply to Ann Example’s comment on “Sales grew in March” in Report.docx')
+    expect(onFile(deleteCommentChange({ comment: '1' }), edited.json).summary).toBe('Deleted NasTech’s reply to Ann Example’s comment on “Sales grew in March” in Report.docx')
 
     const deleted = onFile(deleteCommentChange({ comment: '0' }), edited.json)
 
@@ -447,7 +447,7 @@ describe('tables of contents', () => {
 describe('under the marked text', () => {
   const marked = quoteMatches(stateOf(report()).doc, 'Sales grew')[0]
 
-  /** A change made at=after in the open report, with "Sales grew" marked for Hermes (or nothing) and "two people" clicked since: the document it leaves, and its answer. */
+  /** A change made at=after in the open report, with "Sales grew" marked for NasTech (or nothing) and "two people" clicked since: the document it leaves, and its answer. */
   function after(made: Change, mark: typeof marked | null = marked) {
     const view = live(report(), 'two people')
     const changed = applyLive(view, made.build(view.state, mark, true))
@@ -546,7 +546,7 @@ describe('reading a document’s other parts', () => {
     json = onFile(insertSectionBreakChange({ heading: 'Next steps', mode: 'before', orientation: 'landscape' }), json).json
     json = onFile(insertTocChange({}), json).json
 
-    return onFile(addCommentsChange(commentItemsOf('[{"text": "Up?", "quote": "Sales grew"}, {"text": "Who?", "quote": "Hire two people"}]'), 'Hermes'), json).json
+    return onFile(addCommentsChange(commentItemsOf('[{"text": "Up?", "quote": "Sales grew"}, {"text": "Who?", "quote": "Hire two people"}]'), 'NasTech'), json).json
   }
 
   it('reads comments, notes, headers and footers, sections and tables of contents as parts', () => {
@@ -557,7 +557,7 @@ describe('reading a document’s other parts', () => {
     expect(readDocument(doc, readOptions({ part: 'comments' })).content).toBeUndefined()
     expect(isDepthPart('comments') && !isDepthPart('markdown')).toBe(true)
     expect(partReading(doc, 'comments').summary('Report.docx')).toBe('Report.docx: 2 comments')
-    expect(partReading(doc, 'comments', 'Results').data.comments).toMatchObject([{ text: 'Up?', quote: 'Sales grew', heading: 'Results', author: 'Hermes' }])
+    expect(partReading(doc, 'comments', 'Results').data.comments).toMatchObject([{ text: 'Up?', quote: 'Sales grew', heading: 'Results', author: 'NasTech' }])
     expect(partReading(doc, 'comments', 'Results').summary('Report.docx')).toBe('Report.docx: 1 comment under “Results”')
     expect(partReading(doc, 'notes').summary('Report.docx')).toBe('Report.docx: 1 footnote and 0 endnotes')
     expect(partReading(doc, 'headers').summary('Report.docx')).toBe('Report.docx: the footer on every page: “Page {page} of {pages}”')
@@ -590,7 +590,7 @@ describe('a batch of edits', () => {
     )
     const view = live(report())
     const before = view.state.doc
-    const depth = edits.map((entry) => depthEdit(entry, { content: CONTENT_OPS.has(entry.op) ? { blocks: blocks(String(entry.content)) } : null, author: 'Hermes' }))
+    const depth = edits.map((entry) => depthEdit(entry, { content: CONTENT_OPS.has(entry.op) ? { blocks: blocks(String(entry.content)) } : null, author: 'NasTech' }))
     const op = chainBuilt(edits.map((entry, index) => (state: EditorState) => depth[index]?.build(state, null, true) ?? replaceText(String(entry.find), String(entry.replacement), { all: true })))
     const changed = applyLive(view, op)
     const doc = view.state.doc
@@ -605,7 +605,7 @@ describe('a batch of edits', () => {
       [56.7, false],
       [72, true]
     ])
-    expect(comments(doc).map((thread) => [thread.quote, thread.author])).toEqual([['Revenue grew', 'Hermes']])
+    expect(comments(doc).map((thread) => [thread.quote, thread.author])).toEqual([['Revenue grew', 'NasTech']])
     expect(doc.firstChild?.type.name).toBe('tableOfContents')
     expect(answer.summary).toBe('Made 7 edits to Report.docx as one step; comments not added: “Sales grew” (not found); quote the document’s words exactly, within one paragraph (docs.find finds them)')
     expect(answer.data).toMatchObject({ edits: 7, changed: true, missing: [{ edit: 5, item: 2, text: 'Gone', quote: 'Sales grew', reason: 'not found' }] })

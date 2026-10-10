@@ -11,7 +11,7 @@ export const VOICE_DEFAULTS: VoicePrefs = {
   hotkey: DEFAULT_VOICE_HOTKEY,
   followUpSeconds: 8,
   announceNotifications: false,
-  followHermes: false,
+  followNasTech: false,
   sttTuned: false,
   liveIdleSeconds: 45,
   liveDailyCapMinutes: 60,

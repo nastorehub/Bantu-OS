@@ -82,7 +82,7 @@ describe('reduceStudioEvent', () => {
     expect(state.running).toBe(false)
   })
 
-  it('shows that Hermes is composing a file until the write starts', () => {
+  it('shows that NasTech is composing a file until the write starts', () => {
     const composing = run([{ type: 'tool.generating', payload: { name: 'write_file' } }])
     expect(composing).toMatchObject({ status: 'Writing a file…', running: true, generating: { tool: 'write_file' } })
     const started = run([{ type: 'tool.start', payload: { tool_id: 't', name: 'write_file', args: { path: 'a.css', content: 'x' } } }], composing)

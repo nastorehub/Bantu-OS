@@ -22,7 +22,7 @@ export function SessionList() {
         </Button>
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto px-1.5 pb-2">
-        {visible.length === 0 && <div className="px-2 py-4 text-[12px] text-fg-4">No sessions yet. Say something to Hermes.</div>}
+        {visible.length === 0 && <div className="px-2 py-4 text-[12px] text-fg-4">No sessions yet. Say something to NasTech.</div>}
         {visible.map(row => {
           const runtimeId = runtimeIds[row.id]
           const live = runtimeId ? chats[runtimeId] : undefined

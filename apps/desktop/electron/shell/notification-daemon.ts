@@ -304,7 +304,7 @@ export class NotificationDaemon {
     }
 
     // The renderer turns the structured event into a toast (with app name and actions); make sure
-    // the Hermes window exists so nothing is lost while it is closed.
+    // the NasTech window exists so nothing is lost while it is closed.
     if (!this.shell.mainWindow()) {
       this.shell.open('main')
     }

@@ -13,17 +13,17 @@ import { SectionTitle, SettingsGroup, SettingsRow } from './shared.tsx'
 export function StorageSection() {
   const stats = useSystemStats()
   const env = useStore($env)
-  const hermesHome = env?.hermesHome ?? null
-  const homeSize = useLocalData(() => (hermesHome ? window.heraldOS.fs.dirSize(hermesHome) : Promise.resolve(null)), [hermesHome])
+  const nastechHome = env?.nastechHome ?? null
+  const homeSize = useLocalData(() => (nastechHome ? window.heraldOS.fs.dirSize(nastechHome) : Promise.resolve(null)), [nastechHome])
 
-  const askHermes = () => {
-    showPage('hermes')
+  const askNasTech = () => {
+    showPage('nastech')
     void sendPrompt("What's using all my disk space? Start from my home folder.")
   }
 
   return (
     <>
-      <SectionTitle title="Storage" subtitle={`Disks on this ${deviceNoun()} and the space Hermes keeps for itself.`} />
+      <SectionTitle title="Storage" subtitle={`Disks on this ${deviceNoun()} and the space NasTech keeps for itself.`} />
 
       <SettingsGroup title="Disks">
         {(stats?.disks ?? []).length === 0 && <SettingsRow icon={<IconDeviceFloppy />} label="Disks" description="Reading disk usage…" keywords="volume mount" />}
@@ -45,20 +45,20 @@ export function StorageSection() {
         })}
       </SettingsGroup>
 
-      <SettingsGroup title="Hermes">
+      <SettingsGroup title="NasTech">
         <SettingsRow
           icon={<IconHome />}
-          label="Hermes home"
+          label="NasTech home"
           description={
             <span className="selectable font-mono text-[11.5px]">
-              {hermesHome ?? '—'}
+              {nastechHome ?? '—'}
               {homeSize.data ? ` · ${formatBytes(homeSize.data.bytes)}${homeSize.data.complete ? '' : '+'} in ${homeSize.data.files.toLocaleString()} files` : homeSize.loading ? ' · measuring…' : ''}
             </span>
           }
-          keywords="hermes home folder size sessions memories"
+          keywords="nastech home folder size sessions memories"
         >
-          <GlassButton size="sm" onClick={askHermes} aria-label="Ask Hermes what is using space">
-            Ask Hermes what is using space
+          <GlassButton size="sm" onClick={askNasTech} aria-label="Ask NasTech what is using space">
+            Ask NasTech what is using space
           </GlassButton>
         </SettingsRow>
       </SettingsGroup>

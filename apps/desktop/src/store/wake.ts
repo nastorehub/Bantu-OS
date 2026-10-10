@@ -20,7 +20,7 @@ export interface WakeSnapshot {
   error: string | null
 }
 
-export const $wake = atom<WakeSnapshot>({ listening: false, paused: false, phrase: 'hey hermes', capture: 'client', error: null })
+export const $wake = atom<WakeSnapshot>({ listening: false, paused: false, phrase: 'hey nastech', capture: 'client', error: null })
 
 const DEFAULT_FRAME_LENGTH = 1280
 
@@ -84,7 +84,7 @@ async function arm(): Promise<void> {
       const hint = result.hint || ''
       const message =
         reason === 'owned'
-          ? `Another Hermes client (${result.owner_surface ?? 'unknown'}) owns the wake word.`
+          ? `Another NasTech client (${result.owner_surface ?? 'unknown'}) owns the wake word.`
           : reason === 'disabled_for_surface'
             ? 'wake_word.surface in config.yaml excludes GUI clients.'
             : `Wake word unavailable${hint ? `: ${hint}` : ''}`
@@ -95,7 +95,7 @@ async function arm(): Promise<void> {
 
     armed = true
     paused = false
-    patch({ listening: true, paused: false, phrase: result.phrase ?? 'hey hermes', error: null, capture: result.capture ?? 'client' })
+    patch({ listening: true, paused: false, phrase: result.phrase ?? 'hey nastech', error: null, capture: result.capture ?? 'client' })
 
     // `local`: the backend opened the host microphone itself (older runtimes, or wake_word.capture
     // pinned in config); feeding our frames would be ignored, so only stream when asked to.

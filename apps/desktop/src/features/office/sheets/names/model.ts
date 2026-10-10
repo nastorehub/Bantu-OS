@@ -6,7 +6,7 @@ import { type CellRange, columnName, MAX_COLUMNS, MAX_ROWS, parseRange, quoteShe
 import { nameProblem, WORKBOOK_SCOPE } from '../../../../../shared/office/xlsx/rules.ts'
 import { oneStep, type SheetsTarget, sheetOf } from '../model.ts'
 
-/* What Hermes's commands and the menus do with named ranges: creating, changing, removing and going to them, on a workbook (see ../model.ts). */
+/* What NasTech's commands and the menus do with named ranges: creating, changing, removing and going to them, on a workbook (see ../model.ts). */
 
 export interface NamedRange {
   name: string

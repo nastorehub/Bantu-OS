@@ -1,7 +1,7 @@
 """Herald OS system bridge.
 
 Registers the ``herald_os`` toolset: a narrow set of explicit, permission-tiered tools that let
-Hermes act on the computer it is running on. Execution goes through a per-platform
+NasTech act on the computer it is running on. Execution goes through a per-platform
 ``HostAdapter`` (macOS and Linux implemented; Windows is a typed stub), permissions through
 ``bridge.permissions`` (tiers, protected paths, the upstream approval gate), and every call is
 recorded by ``bridge.audit``. ``system_os`` (registered from the same ``TOOL_SPECS`` table) drives
@@ -10,8 +10,8 @@ are offered and run only in Herald OS's own sessions (``bridge.scope``).
 
 Out-of-tree by design: the plugin uses only public plugin APIs (``register``,
 ``ctx.register_tool``, ``ctx.register_skill``, ``tools.approval.request_tool_approval``) and the
-session variables Hermes binds for tools (``gateway.session_context.get_session_env``) so Herald
-OS never patches the Hermes core.
+session variables NasTech binds for tools (``gateway.session_context.get_session_env``) so Herald
+OS never patches the NasTech core.
 """
 
 from __future__ import annotations
@@ -25,7 +25,7 @@ from .bridge.host import host_available
 _SKILLS_DIR = Path(__file__).parent / "skills"
 # Skill name -> one-line description for the skills index.
 SKILLS: dict[str, str] = {
-    "herald-os": "How Hermes acts as the operating environment on this computer.",
+    "herald-os": "How NasTech acts as the operating environment on this computer.",
     "diagnose-crash": "Explain why a program crashed from its crash report or core dump, and whether it is worth reporting.",
     "file-documents": "Find documents such as invoices and receipts among badly named files, read them (OCR for scans), name them clearly and file them where the person keeps them, with a plan they approve and an undo.",
     "herald-os-tailor": "Change Herald OS itself: Herald OS widgets (menu bar, Overview, their own window), themes, fonts, the wallpaper, the menu bar, control-menu entries, branding, keybindings, settings and routines.",

@@ -1,11 +1,11 @@
 import type { AppIconId } from '../shell/apps.ts'
 // Imported (not a `/brand/...` public URL) so Vite rewrites it relative to `base`; absolute public
 // paths resolve to the filesystem root under the packaged `file://` renderer.
-import hermesAvatarUrl from '../assets/brand/hermes-avatar.jpg'
+import nastechAvatarUrl from '../assets/brand/nastech-avatar.png'
 import { cn } from '../lib/cn.ts'
 
 const PATHS: Record<AppIconId, React.ReactNode> = {
-  hermes: null,
+  nastech: null,
   overview: <path d="M4 11.5 12 5l8 6.5V19a1 1 0 0 1-1 1h-4v-5h-6v5H5a1 1 0 0 1-1-1z" />,
   missions: (
     <>
@@ -124,12 +124,12 @@ const PATHS: Record<AppIconId, React.ReactNode> = {
   )
 }
 
-/** The Hermes avatar: the same mark the mockups use, on a white tile. */
-export function HermesAvatar({ size = 40, className, rounded = 10 }: { size?: number; className?: string; rounded?: number }) {
+/** The NasTech avatar: the same mark the mockups use, on a white tile. */
+export function NasTechAvatar({ size = 40, className, rounded = 10 }: { size?: number; className?: string; rounded?: number }) {
   return (
     <img
-      src={hermesAvatarUrl}
-      alt="Hermes"
+      src={nastechAvatarUrl}
+      alt="NasTech"
       width={size}
       height={size}
       draggable={false}
@@ -140,8 +140,8 @@ export function HermesAvatar({ size = 40, className, rounded = 10 }: { size?: nu
 }
 
 export function AppGlyph({ id, size = 22, className, stroke = 1.7 }: { id: AppIconId; size?: number; className?: string; stroke?: number }) {
-  if (id === 'hermes') {
-    return <HermesAvatar size={size} rounded={Math.round(size * 0.22)} className={className} />
+  if (id === 'nastech') {
+    return <NasTechAvatar size={size} rounded={Math.round(size * 0.22)} className={className} />
   }
 
   return (
@@ -153,8 +153,8 @@ export function AppGlyph({ id, size = 22, className, stroke = 1.7 }: { id: AppIc
 
 /** Rounded blue-glass tile with a glyph (the launcher / header icon treatment). */
 export function AppTile({ id, size = 44, className, glyph }: { id: AppIconId; size?: number; className?: string; glyph?: number }) {
-  if (id === 'hermes') {
-    return <HermesAvatar size={size} rounded={Math.round(size * 0.24)} className={className} />
+  if (id === 'nastech') {
+    return <NasTechAvatar size={size} rounded={Math.round(size * 0.24)} className={className} />
   }
 
   return (

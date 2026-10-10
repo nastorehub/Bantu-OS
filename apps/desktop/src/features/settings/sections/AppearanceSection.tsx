@@ -70,10 +70,10 @@ export function AppearanceSection() {
             })}
           </div>
         </SettingsRow>
-        <SettingsRow icon={<IconPhoto />} label="Wallpaper" description={wallpaperName ? <span className="selectable">{wallpaperName}</span> : 'The living Hermes wallpaper.'} keywords="background image desktop">
+        <SettingsRow icon={<IconPhoto />} label="Wallpaper" description={wallpaperName ? <span className="selectable">{wallpaperName}</span> : 'The living NasTech wallpaper.'} keywords="background image desktop">
           {prefs.wallpaper && (
-            <GlassButton size="sm" variant="ghost" onClick={() => void save({ wallpaper: '' })} aria-label="Use Hermes wallpaper">
-              Use Hermes wallpaper
+            <GlassButton size="sm" variant="ghost" onClick={() => void save({ wallpaper: '' })} aria-label="Use NasTech wallpaper">
+              Use NasTech wallpaper
             </GlassButton>
           )}
           <GlassButton size="sm" onClick={() => void chooseWallpaper()} aria-label="Choose wallpaper image">
@@ -220,7 +220,7 @@ function ThemeTools() {
       <SettingsRow
         icon={<IconWand />}
         label="Make a theme from an image"
-        description="Herald OS takes the colours of a photo or artwork, makes a complete theme from them, and uses the image as the wallpaper. You can also ask Hermes for one: “make me a calm green theme”."
+        description="Herald OS takes the colours of a photo or artwork, makes a complete theme from them, and uses the image as the wallpaper. You can also ask NasTech for one: “make me a calm green theme”."
         keywords="generate create custom wallpaper colours"
         below={error ? <InlineNote tone="danger">{error}</InlineNote> : undefined}
       >
@@ -246,13 +246,13 @@ function ThemeTools() {
           {working === 'install' ? 'Installing…' : 'Install'}
         </GlassButton>
       </SettingsRow>
-      <SettingsRow icon={<IconSparkles />} label="Follow Hermes skins" description="When you change Hermes's skin with /skin, Herald OS takes on its colours too. Herald's own themes always restyle Hermes." keywords="skin hermes cli tui sync">
+      <SettingsRow icon={<IconSparkles />} label="Follow NasTech skins" description="When you change NasTech's skin with /skin, Herald OS takes on its colours too. Herald's own themes always restyle NasTech." keywords="skin nastech cli tui sync">
         <Toggle
-          checked={Boolean(prefs.followHermesSkin)}
+          checked={Boolean(prefs.followNasTechSkin)}
           onChange={next => {
-            void updatePrefs({ followHermesSkin: next }).then(markSaved)
+            void updatePrefs({ followNasTechSkin: next }).then(markSaved)
           }}
-          label="Follow Hermes skins"
+          label="Follow NasTech skins"
         />
       </SettingsRow>
     </SettingsGroup>

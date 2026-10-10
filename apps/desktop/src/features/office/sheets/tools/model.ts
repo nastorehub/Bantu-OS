@@ -6,7 +6,7 @@ import { type Area, areaOf, type CellChange, columnIn, fieldNames, flag, isFormu
 import { changeCaseOf, cleanText, DATE_FORMATS, DATE_ORDERS, type DateOrder, type Delimiter, DELIMITERS, parseDateText, parseNumberText, splitParts, TEXT_CASES, type TextCase, typedPart } from './text.ts'
 
 /*
- * What Hermes's commands and the menus do with data tools (removing duplicates, splitting text,
+ * What NasTech's commands and the menus do with data tools (removing duplicates, splitting text,
  * cleaning, converting, filling, sorting by several columns) and summaries in the style of pivot
  * tables, on a workbook (see ../model.ts). A range is A1 text on the sheet in front unless it
  * names another; one cell stands for the table around it. Each change is one step to undo; with

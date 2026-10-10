@@ -5,7 +5,7 @@ export function crashTitle(report: CrashReport): string {
   return `${report.app} quit unexpectedly`
 }
 
-/** Where Hermes finds the details: the report file on macOS, the core dump's pid on Linux. */
+/** Where NasTech finds the details: the report file on macOS, the core dump's pid on Linux. */
 export function crashReference(report: CrashReport): string | null {
   return report.reportPath ?? (report.pid !== undefined ? String(report.pid) : null)
 }

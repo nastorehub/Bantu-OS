@@ -68,12 +68,12 @@ export function WorkingWithYou() {
 
     workers.push({
       id: `chat-${chat.sessionId}`,
-      name: chat.title ? oneLine(chat.title, 32) : 'Hermes',
+      name: chat.title ? oneLine(chat.title, 32) : 'NasTech',
       state: oneLine(state),
-      avatar: chat.title || 'Hermes',
+      avatar: chat.title || 'NasTech',
       open: () => {
         $activeChatId.set(chat.sessionId)
-        showPage('hermes')
+        showPage('nastech')
       }
     })
   }
@@ -83,7 +83,7 @@ export function WorkingWithYou() {
   return (
     <Section title="Working with you">
       {workers.length === 0 ? (
-        <Quiet>Hermes is idle.</Quiet>
+        <Quiet>NasTech is idle.</Quiet>
       ) : (
         <GlassCard className="stagger flex flex-col divide-y divide-line p-1">
           {workers.map(worker => (

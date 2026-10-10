@@ -169,7 +169,7 @@ export function AutomationDetail({ job, targets, lastRun, saving, onSave, onActi
             editing={editing === 'gather'}
             onEdit={() => setEditing(editing === 'gather' ? null : 'gather')}
           >
-            <FieldLabel htmlFor="automation-prompt">What Hermes should do</FieldLabel>
+            <FieldLabel htmlFor="automation-prompt">What NasTech should do</FieldLabel>
             <TextArea id="automation-prompt" value={currentPrompt} autoFocus rows={5} placeholder="Describe what to gather and produce each run…" onChange={e => setField('prompt', e.target.value)} />
             <StepActions disabled={saving || edits.prompt === undefined} onSave={() => void saveStep('prompt')} onCancel={() => cancelStep('prompt')} />
           </Step>
@@ -191,7 +191,7 @@ export function AutomationDetail({ job, targets, lastRun, saving, onSave, onActi
                 </option>
               ))}
             </SelectInput>
-            <Hint>{isLocalDelivery(currentDeliver) ? 'Results are saved as a briefing you can open in Hermes.' : 'Hermes posts the result to the platform’s home channel when the run finishes.'}</Hint>
+            <Hint>{isLocalDelivery(currentDeliver) ? 'Results are saved as a briefing you can open in NasTech.' : 'NasTech posts the result to the platform’s home channel when the run finishes.'}</Hint>
             <StepActions disabled={saving || edits.deliver === undefined} onSave={() => void saveStep('deliver')} onCancel={() => cancelStep('deliver')} />
           </Step>
         </ol>

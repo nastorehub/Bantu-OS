@@ -2,12 +2,12 @@ import { rest } from '../../lib/rest.ts'
 import type { ActivityEntry } from '../../store/missions.ts'
 
 /*
- * A Connection is a uniform view over three upstream things the Hermes runtime exposes over REST:
+ * A Connection is a uniform view over three upstream things the NasTech runtime exposes over REST:
  * MCP servers (config.yaml `mcp_servers`), messaging platforms + service toolsets, and OAuth
  * providers. Everything below is derived; nothing is stored except the "allowed folders" chips.
  */
 
-/* ---- Upstream REST shapes (verified against hermes_cli/web_routers/*.py) ------------------ */
+/* ---- Upstream REST shapes (verified against nastech_cli/web_routers/*.py) ------------------ */
 
 /** Row of `GET /api/mcp/servers` (`_mcp_server_summary` in web_server.py). */
 export interface McpServerRow {
@@ -214,7 +214,7 @@ export async function loadConnections(): Promise<ConnectionsSnapshot> {
 
 /* ---- Normalisation ------------------------------------------------------------------------ */
 
-/** Built-in capability toolsets that are Hermes itself, not an external service. */
+/** Built-in capability toolsets that are NasTech itself, not an external service. */
 const CORE_TOOLSETS = new Set([
   'web', 'browser', 'terminal', 'file', 'code_execution', 'vision', 'video', 'image_gen', 'video_gen', 'tts', 'stt',
   'skills', 'todo', 'memory', 'context_engine', 'session_search', 'clarify', 'delegation', 'cronjob', 'computer_use', 'a2a'
@@ -301,7 +301,7 @@ export function normalise(input: { servers: McpServerRow[]; catalog: McpCatalogE
       browse.push({
         id: `provider:${provider.id}`,
         name: provider.name,
-        description: provider.flow === 'external' ? `Sign in with \`${provider.cli_command ?? 'hermes auth'}\`.` : 'Sign in to use this model provider with Hermes.',
+        description: provider.flow === 'external' ? `Sign in with \`${provider.cli_command ?? 'nastech auth'}\`.` : 'Sign in to use this model provider with NasTech.',
         scope: 'Model provider',
         logoKey: provider.id,
         category: 'Provider',
@@ -329,11 +329,11 @@ function mcpConnection(server: McpServerRow, catalog?: McpCatalogEntry): Connect
     id: `mcp:${server.name}`,
     kind: 'mcp',
     name,
-    description: `Access ${name} through Hermes. ${description}`.trim(),
+    description: `Access ${name} through NasTech. ${description}`.trim(),
     status,
     scope: scopeFor(server.name, catalog?.description ?? '', knownTools),
     tools: [
-      { id: 'server', label: `Let Hermes use ${name}`, enabled: server.enabled, toggle: { kind: 'mcp-server', name: server.name }, tools: [] },
+      { id: 'server', label: `Let NasTech use ${name}`, enabled: server.enabled, toggle: { kind: 'mcp-server', name: server.name }, tools: [] },
       ...groupTools(knownTools, server.name).map(group => ({ ...group, enabled: server.enabled }))
     ],
     logoKey: server.name,
@@ -355,7 +355,7 @@ function messagingConnection(platform: MessagingPlatformRow, toolsets: ToolsetRo
   }
 
   const rows: ConnectionTool[] = [
-    { id: 'gateway', label: `Chat with Hermes on ${platform.name}`, enabled: platform.enabled, toggle: { kind: 'messaging-platform', id: platform.id }, tools: [] },
+    { id: 'gateway', label: `Chat with NasTech on ${platform.name}`, enabled: platform.enabled, toggle: { kind: 'messaging-platform', id: platform.id }, tools: [] },
     ...toolsets.map(ts => ({ id: `toolset:${ts.name}`, label: toolsetRowLabel(ts, platform.name), enabled: ts.enabled, toggle: { kind: 'toolset' as const, name: ts.name }, tools: ts.tools }))
   ]
 
@@ -363,7 +363,7 @@ function messagingConnection(platform: MessagingPlatformRow, toolsets: ToolsetRo
     id: `platform:${platform.id}`,
     kind: 'platform',
     name: platform.name,
-    description: platform.description || `Talk to Hermes from ${platform.name} and let it act on your behalf there.`,
+    description: platform.description || `Talk to NasTech from ${platform.name} and let it act on your behalf there.`,
     status,
     scope: scopeFor(platform.id, platform.description, toolsets.flatMap(ts => ts.tools)),
     tools: rows,
@@ -379,11 +379,11 @@ function toolsetConnection(toolset: ToolsetRow): Connection {
     id: `toolset:${toolset.name}`,
     kind: 'platform',
     name: toolset.label,
-    description: toolset.description ? `${capitalise(toolset.description)}.`.replace(/\.\.$/, '.') : `Hermes tools for ${toolset.label}.`,
+    description: toolset.description ? `${capitalise(toolset.description)}.`.replace(/\.\.$/, '.') : `NasTech tools for ${toolset.label}.`,
     status,
     scope: scopeFor(toolset.name, toolset.description, toolset.tools),
     tools: [
-      { id: 'toolset', label: `Let Hermes use ${toolset.label}`, enabled: toolset.enabled, toggle: { kind: 'toolset', name: toolset.name }, tools: [] },
+      { id: 'toolset', label: `Let NasTech use ${toolset.label}`, enabled: toolset.enabled, toggle: { kind: 'toolset', name: toolset.name }, tools: [] },
       ...groupTools(toolset.tools, toolset.name).map(group => ({ ...group, enabled: toolset.enabled }))
     ],
     logoKey: toolset.name,
@@ -396,7 +396,7 @@ function providerConnection(provider: OAuthProviderRow): Connection {
     id: `provider:${provider.id}`,
     kind: 'provider',
     name: provider.name,
-    description: `Signed in${provider.status.source_label ? ` via ${provider.status.source_label}` : ''}. Hermes can use ${provider.name} models on your account.`,
+    description: `Signed in${provider.status.source_label ? ` via ${provider.status.source_label}` : ''}. NasTech can use ${provider.name} models on your account.`,
     status: 'connected',
     scope: 'Model provider',
     tools: [],
@@ -540,7 +540,7 @@ export function groupTools(names: string[], contextKey = ''): Omit<ConnectionToo
     .map(verb => ({ id: `group:${verb}`, label: label(verb), tools: buckets.get(verb) ?? [] }))
 }
 
-/* ---- Allowed folders (local only; Hermes has no per-connection folder scope yet) ----------- */
+/* ---- Allowed folders (local only; NasTech has no per-connection folder scope yet) ----------- */
 
 const FOLDER_KEY = (id: string) => `herald-os.connections.folders.${id}`
 

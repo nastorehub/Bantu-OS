@@ -3,9 +3,9 @@ import os from 'node:os'
 import path from 'node:path'
 import { app } from 'electron'
 import type { HeraldOSPrefs } from '../../shared/ipc.ts'
-import { HERALD_SKIN, hermesSkinYaml, schemeOf, type ThemeSpec, type ThemeSummary, validateTheme } from '../../shared/theme.ts'
+import { HERALD_SKIN, nastechSkinYaml, schemeOf, type ThemeSpec, type ThemeSummary, validateTheme } from '../../shared/theme.ts'
 import { log } from '../log.ts'
-import { hermesHome } from '../paths.ts'
+import { nastechHome } from '../paths.ts'
 import { run } from '../platform/exec.ts'
 
 /** Where people's own themes live, on every platform (the Linux theme engine reads it too). */
@@ -215,14 +215,14 @@ export async function installTheme(url: string): Promise<string[]> {
   }
 }
 
-/** Dress Hermes's own CLI and TUI in the theme: `~/.hermes/skins/herald-os.yaml`. */
-export function writeHermesSkin(spec: ThemeSpec): void {
+/** Dress NasTech's own CLI and TUI in the theme: `~/.nastech/skins/herald-os.yaml`. */
+export function writeNasTechSkin(spec: ThemeSpec): void {
   try {
-    const dir = path.join(hermesHome(), 'skins')
+    const dir = path.join(nastechHome(), 'skins')
     fs.mkdirSync(dir, { recursive: true })
-    fs.writeFileSync(path.join(dir, `${HERALD_SKIN}.yaml`), hermesSkinYaml(spec.label || spec.name, spec.colors))
+    fs.writeFileSync(path.join(dir, `${HERALD_SKIN}.yaml`), nastechSkinYaml(spec.label || spec.name, spec.colors))
   } catch (error) {
-    log('theme', `could not write the Hermes skin: ${(error as Error).message}`)
+    log('theme', `could not write the NasTech skin: ${(error as Error).message}`)
   }
 }
 

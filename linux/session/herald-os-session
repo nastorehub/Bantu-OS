@@ -10,7 +10,7 @@ export QT_QPA_PLATFORM=wayland
 export GDK_BACKEND=wayland,x11
 export HERALD_OS_LINUX_SESSION=1
 # desktop (cage): the shell is one fullscreen kiosk window. panels (niri): menu bar, dock and the
-# Hermes window are separate windows the compositor places; HERALD_OS_KIOSK stays off.
+# NasTech window are separate windows the compositor places; HERALD_OS_KIOSK stays off.
 export HERALD_OS_SHELL_MODE="${HERALD_OS_SHELL_MODE:-desktop}"
 if [[ "$HERALD_OS_SHELL_MODE" == "desktop" ]]; then
   export HERALD_OS_KIOSK=1

@@ -2,12 +2,12 @@
 
 Herald Canvas is the image editor built into Herald OS: layers, folders, masks, blend modes,
 adjustment layers, layer effects, editable text and shapes, drawn on the GPU. It has the tools you
-know from photo editors, a few that run AI models on your computer, and Hermes can work in it with
+know from photo editors, a few that run AI models on your computer, and NasTech can work in it with
 you: ask for a poster, a thumbnail or "make this photo warmer", and watch each change land as a
 step you can undo.
 
 Open it from the Dock, from Applications (`Cmd+Shift+A`, `Super+A` on Linux), from Files ("Edit in
-Herald Canvas" on an image), or by asking Hermes. On Herald OS Linux it opens in its own window,
+Herald Canvas" on an image), or by asking NasTech. On Herald OS Linux it opens in its own window,
 three quarters of the screen wide.
 
 ## Opening and saving
@@ -24,7 +24,7 @@ three quarters of the screen wide.
   [Photoshop documents](#photoshop-documents) for what carries over.
 - **Exporting.** File > Export as PNG, JPEG, WebP or PSD. PNGs are written a band at a time, so
   even the largest image never sits whole in memory; WebP is limited to 16,383 pixels a side.
-- **Changes from elsewhere.** An open project follows its files on disk. A change Hermes, a script
+- **Changes from elsewhere.** An open project follows its files on disk. A change NasTech, a script
   or Compositor makes comes in as one step you can undo; if you have unsaved changes too, a bar asks
   whether to keep yours or load theirs.
 - **Limits.** A canvas is up to 30,000 pixels a side and 100 million pixels in all. Large images
@@ -84,8 +84,8 @@ arrow keys nudge the picked layers with the Move tool (`Shift` for 10 pixels).
 The History tab, beside Properties (or Edit > History), lists every step from the top down. The
 first row is the document as it opened (or, once old steps were let go to save memory, the earliest
 state kept), and the current step is highlighted. Click a step to go back to it: the steps after it
-dim and stay until you make a new change, which drops them. Steps Hermes made are marked with a
-sparkle, and changes from outside the window (Hermes on a closed project, a script, Compositor)
+dim and stay until you make a new change, which drops them. Steps NasTech made are marked with a
+sparkle, and changes from outside the window (NasTech on a closed project, a script, Compositor)
 with a circling arrow. Edit > Toggle Last State flips between the last change and the state before
 it, to compare.
 
@@ -218,7 +218,7 @@ Click the gradient in the Gradient tool's options to open the editor:
 These tools run on your computer; nothing is uploaded. None of the models ships with Herald OS: the
 first time you use a tool that needs one, Herald Canvas asks before downloading it, shows its size
 and licence, and checks every file against its published SHA-256 before it runs. Models are stored
-in `~/.hermes/herald-os/models`, and Edit > AI Models lists them, with Resume for a stopped download
+in `~/.nastech/herald-os/models`, and Edit > AI Models lists them, with Resume for a stopped download
 and Remove. They run on the GPU through WebGPU where there is one, and on the processor otherwise
 (slower, but they work).
 
@@ -233,13 +233,13 @@ for research use. The file Herald downloads is the rembg project's ONNX conversi
 weights, as the authors publish only PyTorch ones.
 
 **Generative fill.** Edit > Generative Fill (on a selection) and Layer > New Generated Layer ask
-Hermes to make a picture with the image generation tool of your model provider, and place it where
+NasTech to make a picture with the image generation tool of your model provider, and place it where
 you asked, masked to the selection. This one does use your provider, and may cost what your plan
 charges for images.
 
-## Working with Hermes
+## Working with NasTech
 
-Ask in the Hermes window, with your voice, or in the Ask Hermes field at the bottom of the Canvas
+Ask in the NasTech window, with your voice, or in the Ask NasTech field at the bottom of the Canvas
 window, which sends the image's layers and a preview along. Things that work well:
 
 - "Make an Instagram post for Saturday's market: 1080 by 1350, the photo from my Downloads, the
@@ -252,15 +252,15 @@ window, which sends the image's layers and a preview along. Things that work wel
 - "Remove the background of the product shot", "take the wire out of the sky" (content-aware fill).
 - "Export it as a PSD for the printer" or "as a JPEG at half size".
 
-Hermes works through its `canvas` tool, the same commands the command bar and voice reach: new and
+NasTech works through its `canvas` tool, the same commands the command bar and voice reach: new and
 open, layers, text, shapes, adjustments (Auto Tone, Contrast and Color too), effects (and copying
 them between layers), masks, aligning and distributing, guides, filters, resizing, cropping and
 straightening, previews, exports, the history, and the on-device tools. Each change lands in the
-open window as you watch, as one step: `Cmd+Z` undoes it, or ask Hermes to undo (several steps at
+open window as you watch, as one step: `Cmd+Z` undoes it, or ask NasTech to undo (several steps at
 once if you like). On Herald OS Linux, `herald-os canvas` does the same from a terminal
 (`herald-os canvas new Poster 1080x1350`, `herald-os canvas text "Night market"`,
 `herald-os canvas align bottom --layers Logo,Badge`, `herald-os canvas filter unsharp mask --amount
-120`, `herald-os canvas export ~/Desktop/poster.png`, `herald-os canvas undo --steps 2`). Hermes
+120`, `herald-os canvas export ~/Desktop/poster.png`, `herald-os canvas undo --steps 2`). NasTech
 never downloads a model: when one is missing it asks you to allow it in the window.
 
 ## Compositor compatibility
@@ -349,5 +349,5 @@ background), and lists anything it approximated once the file is open or written
 - **A project changed on disk while I had unsaved edits.** Choose Keep mine (saved over theirs) or
   Load theirs (your edits stay a step behind it, so `Cmd+Z` brings them back).
 - **A model download stopped.** Edit > AI Models resumes it, or removes what was downloaded.
-- **Hermes cannot find my project.** Save it first: commands work on saved projects, or on the image
+- **NasTech cannot find my project.** Save it first: commands work on saved projects, or on the image
   in front.

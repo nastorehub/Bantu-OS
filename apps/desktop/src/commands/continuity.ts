@@ -71,7 +71,7 @@ export const continuityCommands: readonly OsCommand[] = [
   {
     id: 'continuity.nextStep',
     title: 'Do the suggested next step',
-    description: 'Start the next step Hermes suggested for a thread, in its own conversation when it has one.',
+    description: 'Start the next step NasTech suggested for a thread, in its own conversation when it has one.',
     tier: 'act',
     args: [threadArg],
     phrases: ['do the next step', 'start the next step', 'next step for {thread}'],
@@ -83,12 +83,12 @@ export const continuityCommands: readonly OsCommand[] = [
       }
 
       if (!thread.next) {
-        return fail(`Hermes did not suggest a next step for ${thread.title}.`)
+        return fail(`NasTech did not suggest a next step for ${thread.title}.`)
       }
 
       await startNextStep(thread)
 
-      return ok(`Started: ${thread.next.label}.`, { page: 'hermes' })
+      return ok(`Started: ${thread.next.label}.`, { page: 'nastech' })
     }
   }
 ]

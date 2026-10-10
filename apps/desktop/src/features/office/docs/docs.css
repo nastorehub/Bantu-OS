@@ -160,22 +160,22 @@
   box-shadow: 0 0 0 1px rgb(255 120 0);
 }
 
-/* The text Hermes is working on, until its answer lands. */
-.docs-sheet .docs-hermes-marked {
+/* The text NasTech is working on, until its answer lands. */
+.docs-sheet .docs-nastech-marked {
   border-radius: 2px;
   background: rgb(124 92 255 / 0.18);
   box-shadow: 0 1px 0 rgb(124 92 255 / 0.7);
-  animation: docs-hermes-pulse 1.6s ease-in-out infinite;
+  animation: docs-nastech-pulse 1.6s ease-in-out infinite;
 }
 
-@keyframes docs-hermes-pulse {
+@keyframes docs-nastech-pulse {
   50% {
     background: rgb(124 92 255 / 0.3);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .docs-sheet .docs-hermes-marked {
+  .docs-sheet .docs-nastech-marked {
     animation: none;
   }
 }

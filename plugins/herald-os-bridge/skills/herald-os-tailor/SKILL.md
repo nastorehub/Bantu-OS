@@ -2,7 +2,7 @@
 name: herald-os-tailor
 description: Change Herald OS itself - make and switch themes, fonts and the wallpaper, widgets, the menu bar, control-menu entries, branding, keybindings, settings, routines and hooks
 metadata:
-  hermes:
+  nastech:
     tags: [herald-os, customise, themes, settings, linux, macos]
 ---
 
@@ -14,7 +14,7 @@ font", "add a shortcut for Obsidian", "do this every time I log in".
 
 Ground rules:
 
-- Change settings through `os_ui` commands, never by editing `~/.hermes/herald-os/prefs.json`
+- Change settings through `os_ui` commands, never by editing `~/.nastech/herald-os/prefs.json`
   while the shell runs (it rewrites that file).
 - Say what you changed and how to undo it in one sentence ("Switched to Dusk; say 'use the
   ocean theme' to go back").
@@ -161,7 +161,7 @@ Write it with `write_file`, keeping any entries already there:
   words), `exec` (a program and its arguments, as a list; `~/` is the home folder; no shell, so no
   pipes), `url` (http or https) or `command` (a Herald OS command id and its `args`).
 - `group` puts it in an existing group (`install`, `remove`, `update`, `style`, `trigger`,
-  `capture`, `toggle`, `system`, `hermes`); otherwise it sits under "Yours". `icon` is one of star,
+  `capture`, `toggle`, `system`, `nastech`); otherwise it sits under "Yours". `icon` is one of star,
   app, terminal, world, bolt, folder, notes, music, camera, code, calendar, mail, chat, heart,
   home, rocket.
 - The menu reads the file each time it opens. `herald-os menu check` shows what it understood and
@@ -180,7 +180,7 @@ Write it with `write_file`, keeping any entries already there:
 ## Settings
 
 The shell's settings are commands: `accent.set`, `dock.autoHide`, `motion.reduce`,
-`voice.engine.set`, `voice.wake.set`, `crash.help`, `theme.followHermes` and more. Run
+`voice.engine.set`, `voice.wake.set`, `crash.help`, `theme.followNasTech` and more. Run
 `os_ui action=list` for the full list with arguments, and `settings.open section=<id>` to show the
 person the result.
 
@@ -223,5 +223,5 @@ own `bind = …` line. Check the result with `hyprctl configerrors` after `hyprc
 - Something on a schedule: `automation.create args={"name": …, "schedule": "every weekday at 9am", "prompt": …}`.
 - Something each time an event happens ("every time I log in", "when the battery is low",
   "when Safari crashes"): `automation.create` with `"event"` (and `"match"`) instead of a schedule,
-  or a hook script for chores that need no Hermes. The `herald-os` skill lists the events and how
+  or a hook script for chores that need no NasTech. The `herald-os` skill lists the events and how
   hooks run.

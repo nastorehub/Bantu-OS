@@ -10,7 +10,7 @@ import { type Recommendation, recommend } from './recommend.ts'
 import { blockOf, checkKeys, isBlank, newChart, rangeText, SETTINGS, withSettings } from './spec.ts'
 
 /*
- * What Hermes's commands and the menus do with charts: inserting one from a selection, its spec and the
+ * What NasTech's commands and the menus do with charts: inserting one from a selection, its spec and the
  * data it shows, on a workbook (see ../model.ts). Ranges are A1 text, on the sheet in front unless they
  * name theirs ("'Q1 sales'!B2:B9"); a chart keeps them by sheet id, so renaming a sheet keeps the chart.
  * Each change is one step to undo, live in a window or on a workbook loaded with nothing drawn.

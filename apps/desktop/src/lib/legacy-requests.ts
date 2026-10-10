@@ -1,7 +1,7 @@
 import type { ServerRequest } from '@herald-os/client'
 
 /**
- * Compatibility with Hermes runtimes before the server->client request contract (<= 0.21.0):
+ * Compatibility with NasTech runtimes before the server->client request contract (<= 0.21.0):
  * those backends emit `approval.request` / `clarify.request` / `sudo.request` / `secret.request`
  * EVENTS and expect the answer through `<kind>.respond` RPCs. This module folds that shape into the
  * same `ServerRequest` the newer wire delivers, so the cards do not know which backend they face.

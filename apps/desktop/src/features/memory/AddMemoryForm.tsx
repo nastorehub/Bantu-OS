@@ -35,7 +35,7 @@ export function AddMemoryForm({ onSave, onCancel, busy }: { onSave: (file: Memor
             onCancel()
           }
         }}
-        placeholder="Something Hermes should remember…"
+        placeholder="Something NasTech should remember…"
         rows={3}
         className="glass-input selectable w-full resize-y rounded-lg px-3 py-2.5 text-[13px] leading-relaxed text-fg outline-none placeholder:text-fg-4"
       />

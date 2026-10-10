@@ -4,7 +4,7 @@ import { setSidebarCollapsed, toggleSidebar } from '../store/sidebar.ts'
 import { $spaces, setActiveSpace } from '../store/spaces.ts'
 import { $applicationsOpen, toggleCommandBar } from '../store/surface.ts'
 import { $focusedWindowId, $page, $windows, closeWindow, focusWindow, goBackPage, MAIN_WINDOW_ID, minimizeWindow, openApp, showPage, toggleMaximize } from '../store/windows.ts'
-import { FLOATING_APPS, type HermesAppId, PAGES, type PageId } from '../shell/apps.ts'
+import { FLOATING_APPS, type NasTechAppId, PAGES, type PageId } from '../shell/apps.ts'
 import { focusSettings } from '../features/settings/sections/shared.tsx'
 
 /*
@@ -16,10 +16,10 @@ const PAGE_ALIASES: Record<string, PageId> = {
   home: 'overview',
   today: 'overview',
   dashboard: 'overview',
-  chat: 'hermes',
-  conversation: 'hermes',
-  conversations: 'hermes',
-  sessions: 'hermes',
+  chat: 'nastech',
+  conversation: 'nastech',
+  conversations: 'nastech',
+  sessions: 'nastech',
   mission: 'missions',
   tasks: 'automations',
   automation: 'automations',
@@ -41,7 +41,7 @@ const PAGE_ALIASES: Record<string, PageId> = {
   config: 'settings'
 }
 
-const APP_ALIASES: Record<string, HermesAppId> = {
+const APP_ALIASES: Record<string, NasTechAppId> = {
   shell: 'terminal',
   console: 'terminal',
   command: 'terminal',
@@ -56,8 +56,8 @@ const APP_ALIASES: Record<string, HermesAppId> = {
 
 const normalise = (value: string) => value.toLowerCase().replace(/^(the|my)\s+/, '').replace(/\s+(page|tab|window|app|screen|section)$/, '').trim()
 
-/** Resolve a spoken/typed name to a Hermes page or app id. */
-export function resolveAppId(name: string): HermesAppId | null {
+/** Resolve a spoken/typed name to a NasTech page or app id. */
+export function resolveAppId(name: string): NasTechAppId | null {
   const key = normalise(name)
 
   if (!key) {
@@ -81,7 +81,7 @@ export function resolveAppId(name: string): HermesAppId | null {
 
 export const APP_NAMES: readonly string[] = [...PAGES.map(p => p.name.toLowerCase()), ...FLOATING_APPS.filter(a => a.id !== 'web' && a.id !== 'chat-popout').map(a => a.name.toLowerCase()), ...Object.keys(PAGE_ALIASES), ...Object.keys(APP_ALIASES)]
 
-function appLabel(id: HermesAppId): string {
+function appLabel(id: NasTechAppId): string {
   return [...PAGES, ...FLOATING_APPS].find(a => a.id === id)?.name ?? id
 }
 
@@ -94,26 +94,26 @@ function resolveWindow(name: string | undefined): { id: string; label: string } 
     const focused = $focusedWindowId.get()
     const win = focused ? windows.find(w => w.id === focused) : undefined
 
-    return win ? { id: win.id, label: win.id === MAIN_WINDOW_ID ? 'Hermes' : win.title } : null
+    return win ? { id: win.id, label: win.id === MAIN_WINDOW_ID ? 'NasTech' : win.title } : null
   }
 
   const listed = windows.find(w => w.id === name?.trim())
 
   if (listed) {
-    return { id: listed.id, label: listed.id === MAIN_WINDOW_ID ? 'Hermes' : listed.title }
+    return { id: listed.id, label: listed.id === MAIN_WINDOW_ID ? 'NasTech' : listed.title }
   }
 
   const appId = resolveAppId(key)
   const win = windows.find(w => (appId && w.appId === appId) || w.title.toLowerCase() === key || w.title.toLowerCase().includes(key))
 
-  return win ? { id: win.id, label: win.id === MAIN_WINDOW_ID ? 'Hermes' : win.title } : null
+  return win ? { id: win.id, label: win.id === MAIN_WINDOW_ID ? 'NasTech' : win.title } : null
 }
 
 export const navigationCommands: readonly OsCommand[] = [
   {
     id: 'page.open',
     title: 'Open a page or app',
-    description: 'Show a Herald OS page (overview, hermes, missions, memory, files, automations, connections, settings) or open an app (terminal, system).',
+    description: 'Show a Herald OS page (overview, nastech, missions, memory, files, automations, connections, settings) or open an app (terminal, system).',
     tier: 'read',
     args: [{ name: 'name', type: 'string', description: 'Page or app name', required: true }],
     phrases: ['open the {name} page', 'switch to {name}', 'go to the {name} page'],
@@ -285,7 +285,7 @@ export const navigationCommands: readonly OsCommand[] = [
   {
     id: 'window.close',
     title: 'Close a window',
-    description: 'Close a floating window (the Hermes window minimizes instead).',
+    description: 'Close a floating window (the NasTech window minimizes instead).',
     tier: 'act',
     args: [{ name: 'name', type: 'string', description: 'Window or app name, or an id from window.list; omit for the focused window' }],
     phrases: ['close', 'close it', 'close that', 'close this window', 'close window', 'close the window', 'close {name}', 'close the {name} window', 'quit {name}'],
@@ -361,7 +361,7 @@ export const navigationCommands: readonly OsCommand[] = [
         return fail(key ? `No window matches "${key}".` : 'No window to restore.')
       }
 
-      const label = target.id === MAIN_WINDOW_ID ? 'Hermes' : target.title
+      const label = target.id === MAIN_WINDOW_ID ? 'NasTech' : target.title
 
       if (target.phase === 'minimized' || target.phase === 'minimizing') {
         focusWindow(target.id)
@@ -418,23 +418,23 @@ export const navigationCommands: readonly OsCommand[] = [
     run: () => {
       const windows = Object.values($windows.get())
         .filter(w => w.phase !== 'closing')
-        .map(w => ({ id: w.id, app: w.appId, title: w.id === MAIN_WINDOW_ID ? `Hermes (${appLabel($page.get())})` : w.title, minimized: w.phase === 'minimized', focused: w.id === $focusedWindowId.get() }))
+        .map(w => ({ id: w.id, app: w.appId, title: w.id === MAIN_WINDOW_ID ? `NasTech (${appLabel($page.get())})` : w.title, minimized: w.phase === 'minimized', focused: w.id === $focusedWindowId.get() }))
 
       return ok(windows.map(w => w.title).join(', ') || 'No windows', { items: windows })
     }
   },
   {
-    id: 'page.showHermes',
-    title: 'Show Hermes',
-    description: 'Bring the Hermes window to the front on the Hermes page.',
+    id: 'page.showNasTech',
+    title: 'Show NasTech',
+    description: 'Bring the NasTech window to the front on the NasTech page.',
     tier: 'read',
     args: [],
-    phrases: ['show hermes', 'open hermes', 'talk to hermes', 'open the chat'],
+    phrases: ['show nastech', 'open nastech', 'talk to nastech', 'open the chat'],
     hidden: true,
     run: () => {
-      showPage('hermes')
+      showPage('nastech')
 
-      return ok('Opened Hermes', { page: 'hermes' })
+      return ok('Opened NasTech', { page: 'nastech' })
     }
   }
 ]

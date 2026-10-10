@@ -21,7 +21,7 @@ export { officeAbilities }
 
 export type OfficeSession<Model> = ReturnType<typeof createSession<Model>>
 
-/** The Office sessions loaded in this window, as Hermes's commands read them: what is open, what is in front, and a way to give a document its editor. */
+/** The Office sessions loaded in this window, as NasTech's commands read them: what is open, what is in front, and a way to give a document its editor. */
 export const loadedSessions = new Map<OfficeApp, { active: () => string | null; summaries: () => OfficeDocSummary[]; wake: (key: string) => void }>()
 
 export function createSession<Model>(adapter: OfficeAdapter<Model>) {
@@ -49,7 +49,7 @@ export function createSession<Model>(adapter: OfficeAdapter<Model>) {
     $documents.set([...$documents.get()])
   }
 
-  /** Each document as Hermes reads it, its detail and selection read from its editor now. */
+  /** Each document as NasTech reads it, its detail and selection read from its editor now. */
   function summaries() {
     return $documents.get().map((doc) => summaryOf(doc, doc.editor?.detail?.(), doc.editor?.selection?.()))
   }
@@ -91,14 +91,14 @@ export function createSession<Model>(adapter: OfficeAdapter<Model>) {
     return { key: `${adapter.app}-${++nextKey}`, name, path, format, digest: null, modified: false, notes: [], layout: undefined, accepted: null, autosave: false, initial: model, editor: null, revision: 0 }
   }
 
-  /** A new document: blank and untitled, or named and holding what Hermes started it with. */
+  /** A new document: blank and untitled, or named and holding what NasTech started it with. */
   function create(options: { name?: string; model?: Model } = {}): OfficeDocument<Model> {
     const name = options.name?.trim() || `Untitled${++untitled > 1 ? ` ${untitled}` : ''}`
 
     return add(blankDocument(name, options.model ?? adapter.blank(name), null, adapter.defaultFormat))
   }
 
-  /** Files being read, so a second request for one (a double click, Files and Hermes at once) gets the same tab. */
+  /** Files being read, so a second request for one (a double click, Files and NasTech at once) gets the same tab. */
   const opening = new Map<string, Promise<OfficeDocument<Model>>>()
 
   function open(file: string): Promise<OfficeDocument<Model>> {
@@ -183,7 +183,7 @@ export function createSession<Model>(adapter: OfficeAdapter<Model>) {
     }, AUTOSAVE_DELAY)
   }
 
-  /** The document's content changed (an edit here, or Hermes's). */
+  /** The document's content changed (an edit here, or NasTech's). */
   function changed(doc: OfficeDocument<Model>): void {
     const entry = tracked.get(doc.key)
 

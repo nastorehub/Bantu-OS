@@ -9,7 +9,7 @@ import { loadedSessions, type OfficeSession } from './session.ts'
 import type { OfficeDocument } from './types.ts'
 
 /*
- * Where Hermes's Office commands find their document, for Herald Docs, Sheets and Slides alike:
+ * Where NasTech's Office commands find their document, for Herald Docs, Sheets and Slides alike:
  * open in this window (the change goes into it as one step to undo, and saves as the person's own
  * edits do), open in another Office window (panels mode, where each app is its own window: the
  * command runs there), or a file on disk that is not open.
@@ -27,7 +27,7 @@ export type Located<Model> = Local<Model> | { kind: 'remote'; entry: OfficeEntry
 
 export const homeDir = (): string => $env.get()?.homeDir ?? ''
 
-/** A full path from what Hermes or the person typed (`~/…` works). */
+/** A full path from what NasTech or the person typed (`~/…` works). */
 export const resolve = (input: string): string => resolvePath(input, homeDir())
 
 export async function exists(file: string): Promise<boolean> {
@@ -42,7 +42,7 @@ export async function openEntries(): Promise<OfficeEntry[]> {
   return officeEntries(presence, local)
 }
 
-/** One line for Hermes about what is open in Herald Office and what is in front, or null. */
+/** One line for NasTech about what is open in Herald Office and what is in front, or null. */
 export async function officeContextLine(): Promise<string | null> {
   return describeOffice(await openEntries(), homeDir())
 }
@@ -116,7 +116,7 @@ export async function withEditor<Model>(app: OfficeApp, doc: OfficeDocument<Mode
   return waitForEditor(doc)
 }
 
-/** An outcome as a command result; errors from main lose Electron's prefix, which says nothing to Hermes. */
+/** An outcome as a command result; errors from main lose Electron's prefix, which says nothing to NasTech. */
 export async function done(work: Promise<Outcome>): Promise<CommandResult> {
   try {
     const outcome = await work
@@ -129,7 +129,7 @@ export async function done(work: Promise<Outcome>): Promise<CommandResult> {
 
 /**
  * Run a command where its document lives. In panels mode the Office apps are windows of their own:
- * from the Hermes window, a command on a document open in one runs in that window, so the change
+ * from the NasTech window, a command on a document open in one runs in that window, so the change
  * lands live there as one step to undo. Everywhere else it runs here.
  */
 export async function inOwnWindow(app: OfficeApp, command: string, args: Record<string, unknown>, ref: string, context: CommandContext, here: () => Promise<Outcome>): Promise<CommandResult> {

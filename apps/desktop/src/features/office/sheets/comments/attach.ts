@@ -50,7 +50,7 @@ export function setupComments(univer: Univer, _api: FUniver): void {
     const source = injector.get(IThreadCommentDataSourceService)
     const add = source.addComment.bind(source)
 
-    // Univer's editors leave the author's name out; Herald's own comments (Hermes's, a command's) come signed.
+    // Univer's editors leave the author's name out; Herald's own comments (NasTech's, a command's) come signed.
     source.addComment = async (comment) => add(comment.authorName ? comment : await signed(comment))
   }
 

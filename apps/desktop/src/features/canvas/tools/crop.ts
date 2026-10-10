@@ -125,7 +125,7 @@ export function applyCrop(doc: CanvasDocument): void {
   if (crop?.start) {
     doc.interacting = false
 
-    // Something else changed the layers meanwhile (Hermes, an undo): the turn is not applied over it.
+    // Something else changed the layers meanwhile (NasTech, an undo): the turn is not applied over it.
     if (doc.state.layers !== crop.shown?.layers) {
       notify('The image changed while it was being straightened, so it was not cropped', 'error')
 

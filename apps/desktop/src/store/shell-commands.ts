@@ -1,5 +1,5 @@
 import type { CrashReport, ShellCommand } from '../../shared/ipc.ts'
-import { HERMES_APPS, type HermesAppId, PAGES, type PageId } from '../shell/apps.ts'
+import { NASTECH_APPS, type NasTechAppId, PAGES, type PageId } from '../shell/apps.ts'
 import { composePrompt } from '../shell/surfaces/shell-utils.ts'
 import { runHeraldOsWithToast } from '../lib/herald-os-cli.ts'
 import { updatePrefs } from './backend.ts'
@@ -16,7 +16,7 @@ import { openWebWindow } from './web-windows.ts'
 import { openApp, showPage } from './windows.ts'
 
 /*
- * `ShellCommand`s addressed to the Hermes window: from the `herald-os` CLI (compositor hotkeys), the
+ * `ShellCommand`s addressed to the NasTech window: from the `herald-os` CLI (compositor hotkeys), the
  * command overlay (panels mode) and the Electron control server. One handler serves the macOS
  * desktop window and the panels-mode main surface alike, so every hotkey the Linux session has works
  * on the Mac too. Voice commands are handled by store/voice.ts on the same bus.
@@ -24,7 +24,7 @@ import { openApp, showPage } from './windows.ts'
 
 const isPageId = (value: string | undefined): value is PageId => PAGES.some(page => page.id === value)
 
-/** Style > Wallpaper: the Hermes window owns the file dialog because the overlay closes when it loses focus. */
+/** Style > Wallpaper: the NasTech window owns the file dialog because the overlay closes when it loses focus. */
 async function pickWallpaper(): Promise<void> {
   try {
     const [wallpaper] = await window.heraldOS.fs.pickFiles({ multiple: false })
@@ -58,7 +58,7 @@ export function handleShellCommand(command: ShellCommand): void {
         return
       }
 
-      showPage('hermes')
+      showPage('nastech')
       openSurface('main')
 
       // A bare slash command from the palette runs as one; anything with context or files is a prompt.
@@ -74,7 +74,7 @@ export function handleShellCommand(command: ShellCommand): void {
       const id = command.args?.[0]
 
       if (id) {
-        showPage('hermes')
+        showPage('nastech')
         void openStoredSession(id)
       }
 
@@ -127,8 +127,8 @@ export function handleShellCommand(command: ShellCommand): void {
     case 'open-app': {
       const app = command.args?.[0]
 
-      if (app && HERMES_APPS.some(item => item.id === app)) {
-        openApp(app as HermesAppId)
+      if (app && NASTECH_APPS.some(item => item.id === app)) {
+        openApp(app as NasTechAppId)
       }
 
       return
@@ -188,7 +188,7 @@ export function handleShellCommand(command: ShellCommand): void {
 
 let bound = false
 
-/** Subscribe the Hermes window to the command bus once (desktop and panels main surface). */
+/** Subscribe the NasTech window to the command bus once (desktop and panels main surface). */
 export function bindShellCommands(): () => void {
   if (bound || !isMainSurface) {
     return () => undefined

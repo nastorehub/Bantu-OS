@@ -2,7 +2,7 @@
   "id": "ai",
   "label": "AI",
   "order": 1,
-  "description": "Coding agents for the terminal, and local models Hermes can run on.",
+  "description": "Coding agents for the terminal, and local models NasTech can run on.",
   "entries": [
     {
       "id": "claude-code",
@@ -47,9 +47,9 @@
     {
       "id": "ollama",
       "label": "Ollama",
-      "description": "Run open models on this machine. \"Use with Hermes\" points Hermes at it.",
+      "description": "Run open models on this machine. \"Use with NasTech\" points NasTech at it.",
       "bin": ["ollama"],
-      "hermes": "ollama",
+      "nastech": "ollama",
       "install": [
         { "kind": "script", "ref": "ollama" },
         { "kind": "brew", "ref": "ollama" },
@@ -59,9 +59,9 @@
     {
       "id": "lm-studio",
       "label": "LM Studio",
-      "description": "Download and chat with local models; its server is OpenAI-compatible, so Hermes can use it.",
+      "description": "Download and chat with local models; its server is OpenAI-compatible, so NasTech can use it.",
       "detect": ["~/.lmstudio", "/Applications/LM Studio.app"],
-      "hermes": "lmstudio",
+      "nastech": "lmstudio",
       "install": [
         { "kind": "brew-cask", "ref": "lm-studio" },
         { "kind": "link", "ref": "https://lmstudio.ai/download" }

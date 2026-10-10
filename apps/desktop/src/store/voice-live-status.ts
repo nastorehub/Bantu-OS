@@ -22,8 +22,8 @@ export async function fetchLiveStatus(): Promise<LiveStatus> {
     }
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error)
-    // A 404 means the runtime predates the voice-live routes (hermes < 0.21.3).
-    const reason = /404/.test(message) ? 'Hermes is older than 0.21.3; run `hermes update` for the Live engine.' : message
+    // A 404 means the runtime predates the voice-live routes (nastech < 0.21.3).
+    const reason = /404/.test(message) ? 'NasTech is older than 0.21.3; run `nastech update` for the Live engine.' : message
 
     return { mode: 'chained', available: false, reason, model: 'gpt-live-1', voice: 'marin' }
   }

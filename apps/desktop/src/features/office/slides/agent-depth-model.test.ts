@@ -695,7 +695,7 @@ describe('a batch with the depth’s changes', () => {
     )
     const source: SheetSource = { name: 'Sales.xlsx', workbook: salesBook(2), selection: null }
     const step = runBatch(doc.presentation, edits, { front: doc.slideId, pictures, sheets: new Map([['Sales.xlsx', source]]), themes: [brand] })
-    doc.commit({ ...step, label: `Hermes: ${step.label}` })
+    doc.commit({ ...step, label: `NasTech: ${step.label}` })
     const after = doc.presentation
 
     expect(after.headerFooter).toMatchObject({ number: true, skipTitle: true })
@@ -708,7 +708,7 @@ describe('a batch with the depth’s changes', () => {
     expect(titles(after).at(-1)).toBe('Units')
     expect(batchPictures(edits)).toEqual(['~/logo.png'])
     expect(batchWorkbooks(edits)).toEqual(['Sales.xlsx'])
-    expect(doc.undo()).toBe('Hermes: 9 edits')
+    expect(doc.undo()).toBe('NasTech: 9 edits')
     expect(doc.presentation).toBe(deck)
   })
 

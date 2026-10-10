@@ -122,7 +122,7 @@ export function parseCoredumpEntry(line: string, uid: number | null): CrashRepor
 
 export interface CrashFilter {
   muted: readonly string[]
-  /** Processes Herald OS runs itself (the Hermes backend), which it restarts on its own. */
+  /** Processes Herald OS runs itself (the NasTech backend), which it restarts on its own. */
   ownPids: readonly number[]
   /** When each program last raised a notification, epoch ms. */
   lastNotified: ReadonlyMap<string, number>

@@ -8,7 +8,7 @@ import { Menu, type MenuItemDef } from '../files/Menu.tsx'
 import { nudge, placeImage, setLayer } from './actions.ts'
 import { stepThrough } from './agent-model.ts'
 import { ContentFillDialog } from './ai/ContentFillDialog.tsx'
-import { AskHermesField, GenerateDialog } from './ai/HermesPrompts.tsx'
+import { AskNasTechField, GenerateDialog } from './ai/NasTechPrompts.tsx'
 import { ModelPrompt, ModelsDialog } from './ai/ModelDialogs.tsx'
 import { RemoveBackgroundDialog } from './ai/RemoveBackgroundDialog.tsx'
 import { CloseDialog, NewDocumentDialog, NotesDialog } from './dialogs.tsx'
@@ -209,7 +209,7 @@ function StatusBar({ doc }: { doc: CanvasDocument | null }) {
       <span className={cn('ml-auto truncate', fresh && notice.tone === 'error' && 'text-danger')}>
         {fresh ? notice.message : doc ? (doc.path ? (doc.modified ? 'Edited' : 'Saved') : 'Not saved yet') : ''}
       </span>
-      {doc && <AskHermesField doc={doc} />}
+      {doc && <AskNasTechField doc={doc} />}
     </div>
   )
 }
@@ -306,7 +306,7 @@ function StartScreen() {
     <div className="flex min-w-0 flex-1 flex-col items-center justify-center gap-5 p-8 text-center">
       <div>
         <div className="text-[18px] font-medium text-fg">Herald Canvas</div>
-        <div className="mt-1 text-[12.5px] text-fg-3">Layers, masks and blend modes, on the GPU. Hermes can edit along with you.</div>
+        <div className="mt-1 text-[12.5px] text-fg-3">Layers, masks and blend modes, on the GPU. NasTech can edit along with you.</div>
       </div>
       <div className="flex gap-2">
         <GlassButton variant="primary" onClick={() => $dialog.set({ kind: 'new' })}>
@@ -331,7 +331,7 @@ export function CanvasWindow({ payload }: { payload?: Record<string, unknown> })
   const requested = typeof payload?.path === 'string' ? payload.path : null
   const requestedAt = payload?.at
 
-  // A file handed over by Herald (Edit in Canvas, Hermes, the launcher), or Hermes's undo and redo.
+  // A file handed over by Herald (Edit in Canvas, NasTech, the launcher), or NasTech's undo and redo.
   const command = typeof payload?.command === 'string' ? payload.command : null
   const steps = typeof payload?.steps === 'number' ? payload.steps : 1
   useEffect(() => {
@@ -362,7 +362,7 @@ export function CanvasWindow({ payload }: { payload?: Record<string, unknown> })
     return () => window.removeEventListener('blur', release)
   }, [])
 
-  // Main keeps track of what each Canvas window has open (Hermes's commands work on the image in front).
+  // Main keeps track of what each Canvas window has open (NasTech's commands work on the image in front).
   const revision = doc?.revision
   useEffect(() => {
     const timer = setTimeout(() => reportPresence(), 300)

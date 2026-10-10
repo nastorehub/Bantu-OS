@@ -5,7 +5,7 @@ import { $studios, focusStudioFile, openStudio, setPreview, studioWindowFor } fr
 import { startBuild } from '../store/studio-actions.ts'
 import { $focusedWindowId, $windows, closeWindow } from '../store/windows.ts'
 
-/* The Studio: build something and watch Hermes do it. */
+/* The Studio: build something and watch NasTech do it. */
 
 /** The session a Studio command means: the Studio in front, else the newest Studio, else the active chat. */
 function studioSession(): string | null {
@@ -42,7 +42,7 @@ export const studioCommands: readonly OsCommand[] = [
   {
     id: 'build.start',
     title: 'Build something',
-    description: 'Create a project folder, have Hermes build it there, and watch in the Studio (files, code, terminal, live preview).',
+    description: 'Create a project folder, have NasTech build it there, and watch in the Studio (files, code, terminal, live preview).',
     tier: 'mutate',
     args: [
       { name: 'goal', type: 'string', description: 'What to build, e.g. "a website for a hair salon"', required: true },
@@ -58,7 +58,7 @@ export const studioCommands: readonly OsCommand[] = [
   {
     id: 'studio.open',
     title: 'Show the Studio',
-    description: 'Watch Hermes work: its files, code, commands and the live preview.',
+    description: 'Watch NasTech work: its files, code, commands and the live preview.',
     tier: 'read',
     args: [],
     phrases: ['show me the code', 'show me what you are doing', 'show me what youre doing', 'show me what you did', 'open the studio', 'show the studio', 'show me the build', 'show me', 'let me watch', 'show me the site', 'show me the website', 'show me the preview'],
@@ -66,7 +66,7 @@ export const studioCommands: readonly OsCommand[] = [
       const sessionId = studioSession()
 
       if (!sessionId) {
-        return fail('Hermes is not working on anything yet. Say "build …" to start.')
+        return fail('NasTech is not working on anything yet. Say "build …" to start.')
       }
 
       const id = openStudio(sessionId, titleOf(sessionId))
@@ -125,7 +125,7 @@ export const studioCommands: readonly OsCommand[] = [
   {
     id: 'studio.close',
     title: 'Close the Studio',
-    description: 'Close the Studio window (Hermes keeps working).',
+    description: 'Close the Studio window (NasTech keeps working).',
     tier: 'act',
     args: [],
     phrases: ['close the studio', 'hide the studio'],
@@ -152,10 +152,10 @@ export const studioCommands: readonly OsCommand[] = [
   {
     id: 'studio.hint',
     title: 'Studio hint',
-    description: 'Caption telling the user they can watch Hermes build.',
+    description: 'Caption telling the user they can watch NasTech build.',
     tier: 'read',
     args: [],
     hidden: true,
-    run: () => ok('Hermes is building. Say "show me" to watch.', { spoken: '' })
+    run: () => ok('NasTech is building. Say "show me" to watch.', { spoken: '' })
   }
 ]

@@ -20,7 +20,7 @@ describe('attachTarget', () => {
 
 describe('parseGatewayPid', () => {
   it('reads both formats', () => {
-    expect(parseGatewayPid('{"pid": 50714, "kind": "hermes-gateway", "hermes_home": "/home/a/.hermes"}')).toEqual({ pid: 50714, home: '/home/a/.hermes' })
+    expect(parseGatewayPid('{"pid": 50714, "kind": "nastech-gateway", "nastech_home": "/home/a/.nastech"}')).toEqual({ pid: 50714, home: '/home/a/.nastech' })
     expect(parseGatewayPid('1234\n')).toEqual({ pid: 1234 })
     expect(parseGatewayPid('')).toBeNull()
     expect(parseGatewayPid('{"kind": "x"}')).toBeNull()
@@ -28,8 +28,8 @@ describe('parseGatewayPid', () => {
 })
 
 describe('foreignGateway', () => {
-  const home = '/home/a/.hermes'
-  const record = JSON.stringify({ pid: 50, hermes_home: home })
+  const home = '/home/a/.nastech'
+  const record = JSON.stringify({ pid: 50, nastech_home: home })
   const probe = (parent: number | null, alive = true) => ({ alive: () => alive, parentOf: () => parent, read: () => record })
 
   it('ignores our own gateway', () => {
@@ -43,6 +43,6 @@ describe('foreignGateway', () => {
 
   it('ignores dead or other-home records', () => {
     expect(foreignGateway(home, { appPid: 10, backendPid: 20 }, probe(1, false))).toBeNull()
-    expect(foreignGateway('/home/b/.hermes', { appPid: 10, backendPid: 20 }, probe(1))).toBeNull()
+    expect(foreignGateway('/home/b/.nastech', { appPid: 10, backendPid: 20 }, probe(1))).toBeNull()
   })
 })

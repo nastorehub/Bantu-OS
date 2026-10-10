@@ -11,7 +11,7 @@ bar, dock, windows, launcher and Herald's own apps. Setup is in the
 ```
 electron/              Electron main: owns the machine
   main.ts              entry: data migration, single-instance lock, windows, IPC, backend
-  backend/             finds the Hermes install, spawns `hermes serve`, restarts it, forwards REST
+  backend/             finds the NasTech install, spawns `nastech serve`, restarts it, forwards REST
   ipc/                 IPC handlers: files, apps, system stats, terminals, voice, web views, editing
   platform/            HostPlatform per OS: darwin.ts, linux.ts, generic.ts (placeholder elsewhere)
   shell/               shell modes, panels-mode windows, control socket, notification daemon
@@ -23,8 +23,8 @@ src/                   React renderer
   shell/               the desktop: ShellRoot, app registry, menu bar, dock, command bar, boot screen
     wm/                window frame for floating apps
     surfaces/          panels-mode surfaces (one Electron window each under niri)
-  features/<app>/      one folder per page or app: hermes (chat), missions, memory, files, studio...
-  commands/            the OS command catalogue (what the command bar, voice and Hermes can run)
+  features/<app>/      one folder per page or app: nastech (chat), missions, memory, files, studio...
+  commands/            the OS command catalogue (what the command bar, voice and NasTech can run)
   store/               nanostores state and actions (gateway, chat, windows, voice...)
   lib/                 pure helpers, unit-tested next to the code (`*.test.ts`)
   components/          shared UI primitives and the two brand marks
@@ -51,7 +51,7 @@ Run them here, or from the repository root (`npm run dev`, `npm run build`, `npm
 
 - **A page or app.** Follow [DESIGN.md](DESIGN.md): register it in `src/shell/apps.ts`, put it in
   `src/features/<name>/`, mount pages in `src/shell/MainWindow.tsx`.
-- **An action users or Hermes can trigger.** Register an `OsCommand` in `src/commands/<area>.ts`.
+- **An action users or NasTech can trigger.** Register an `OsCommand` in `src/commands/<area>.ts`.
   The command bar, the voice fast path and the agent's `os_ui` tool all pick it up.
 - **A native capability.** Add it to `HostPlatform` (`electron/platform/types.ts`), implement it in
   each platform file, handle it in `electron/ipc/`, expose it in `preload/index.ts` and type it in

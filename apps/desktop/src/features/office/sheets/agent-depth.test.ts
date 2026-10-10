@@ -8,7 +8,7 @@ import { COMMAND_ID, type CommandSource } from '../../../store/os-commands.ts'
 import { $systemInfo } from '../../../store/system.ts'
 import { $commentName, NEUTRAL_NAME } from '../comment-name.ts'
 import { sheetsAdapter } from './adapter.ts'
-import { cleanOn, DEPTH, type DepthCommand, type DepthWork, editOn, HERMES_AUTHOR, sortOn } from './agent-depth.ts'
+import { cleanOn, DEPTH, type DepthCommand, type DepthWork, editOn, NASTECH_AUTHOR, sortOn } from './agent-depth.ts'
 import { isDepthEdit, sheetEditsOf } from './agent-model.ts'
 import { withHeadlessSheets } from './headless.ts'
 import { changeFile, type FileAccess } from './live.ts'
@@ -18,7 +18,7 @@ import { changeAndUndo, matrixOf, salesBook, type Value } from './tools/fixtures
 /** A workbook whose first sheet holds `rows` from A1, and an empty "Notes" sheet. */
 const book = (rows: Value[][], name = 'Data'): WorkbookSnapshot => newWorkbook('book', 'Book', [newSheet('s1', name, matrixOf(rows)), newSheet('s2', 'Notes')])
 
-/** A command's work on a workbook, as Hermes runs it unless another source is given. */
+/** A command's work on a workbook, as NasTech runs it unless another source is given. */
 const run = async (on: SheetsTarget, command: DepthCommand, args: Record<string, unknown>, source: CommandSource = 'agent') => (DEPTH[command] as DepthWork).run(on, args, source)
 
 const headless = <T>(snapshot: WorkbookSnapshot, work: (on: SheetsTarget) => Promise<T>) => withHeadlessSheets(snapshot, ({ univer, workbook }) => work({ univer, workbook })).then(({ result }) => result)
@@ -245,7 +245,7 @@ describe('comments and notes', () => {
     $commentName.set('')
   })
 
-  it('signs what Hermes writes Hermes, and what comes from anywhere else with the name the person confirmed', async () => {
+  it('signs what NasTech writes NasTech, and what comes from anywhere else with the name the person confirmed', async () => {
     const result = await headless(book(MONTHLY, 'Sales'), async (on) => {
       const added = await run(on, 'addComment', { cell: 'B2', text: 'Is January right?' })
       const reply = await run(on, 'replyToComment', { commentId: String(added.data.id), text: 'Yes, from the bank.' }, 'palette')
@@ -265,22 +265,22 @@ describe('comments and notes', () => {
       return { added, resolved, listed, reopened, unreplied, deleted, note, edited, notes, removed, comments: listComments(on), notesLeft: listNotes(on) }
     })
 
-    expect(result.added).toMatchObject({ said: 'added a comment to Sales!B2 as Hermes', data: { sheet: 'Sales', cell: 'B2', author: HERMES_AUTHOR.name } })
+    expect(result.added).toMatchObject({ said: 'added a comment to Sales!B2 as NasTech', data: { sheet: 'Sales', cell: 'B2', author: NASTECH_AUTHOR.name } })
     expect(result.resolved.said).toBe('resolved the comment on Sales!B2')
     expect(result.listed).toMatchObject({
       said: '2 comment threads (1 resolved)',
       data: {
         comments: [
-          { cell: 'B2', author: 'Hermes', text: 'Is January right?', resolved: true, replies: [{ author: 'Sam Rivera', text: 'Yes, from the bank.' }] },
-          { cell: 'C3', author: 'Sam Rivera', resolved: false, replies: [{ author: 'Hermes', text: 'Noted' }] }
+          { cell: 'B2', author: 'NasTech', text: 'Is January right?', resolved: true, replies: [{ author: 'Sam Rivera', text: 'Yes, from the bank.' }] },
+          { cell: 'C3', author: 'Sam Rivera', resolved: false, replies: [{ author: 'NasTech', text: 'Noted' }] }
         ]
       }
     })
     expect(result.reopened.said).toBe('opened again the comment on Sales!B2')
     expect(result.unreplied.said).toBe('deleted a reply to the comment on Sales!B2')
     expect(result.deleted.said).toBe('deleted the comment on Sales!C3 with its replies')
-    expect(result.comments).toMatchObject([{ cell: 'B2', author: 'Hermes', resolved: false, replies: [] }])
-    expect(result.note).toMatchObject({ said: 'wrote the note on Sales!A5', data: { author: 'Hermes', text: 'Estimate' } })
+    expect(result.comments).toMatchObject([{ cell: 'B2', author: 'NasTech', resolved: false, replies: [] }])
+    expect(result.note).toMatchObject({ said: 'wrote the note on Sales!A5', data: { author: 'NasTech', text: 'Estimate' } })
     expect(result.edited.data).toMatchObject({ cell: 'A4', author: 'Sam Rivera', text: 'From the bank statement' })
     expect(result.notes.said).toBe('2 notes')
     expect(result.removed.said).toBe('removed the note on Sales!A5')
@@ -331,14 +331,14 @@ describe('a batch of edits', () => {
     })
 
     expect(result.said[0]).toMatch(/^inserted a column chart/)
-    expect(result.said.slice(1)).toEqual(['created the name Revenue for =Sales!$B$2:$B$5', 'set a dropdown list on Sales!D2:D5', 'added a comment to Sales!B3 as Hermes', 'wrote the note on Sales!C2', 'put 4 cells of Sales!A2:A5 in upper case'])
-    expect(result.made).toEqual({ charts: 1, names: 1, rules: 1, comments: ['Hermes'], notes: ['Hermes'], months: [['JAN'], ['FEB']] })
-    expect(result.undone).toEqual({ charts: 0, names: 0, rules: 0, comments: ['Hermes'], notes: [], months: [['Jan'], ['Feb']] })
+    expect(result.said.slice(1)).toEqual(['created the name Revenue for =Sales!$B$2:$B$5', 'set a dropdown list on Sales!D2:D5', 'added a comment to Sales!B3 as NasTech', 'wrote the note on Sales!C2', 'put 4 cells of Sales!A2:A5 in upper case'])
+    expect(result.made).toEqual({ charts: 1, names: 1, rules: 1, comments: ['NasTech'], notes: ['NasTech'], months: [['JAN'], ['FEB']] })
+    expect(result.undone).toEqual({ charts: 0, names: 0, rules: 0, comments: ['NasTech'], notes: [], months: [['Jan'], ['Feb']] })
   })
 })
 
 describe('a file that is not open', () => {
-  it('gets a chart and a comment signed Hermes, written back to it', async () => {
+  it('gets a chart and a comment signed NasTech, written back to it', async () => {
     const files: Record<string, Uint8Array> = { '/tmp/sales.xlsx': (await xlsxFromWorkbook(book(MONTHLY, 'Sales'))).bytes }
     const io: FileAccess = {
       read: async (path) => ({ bytes: files[path] }),
@@ -354,7 +354,7 @@ describe('a file that is not open', () => {
     const result = await headless(workbook, async (on) => ({ charts: listCharts(on), comments: listComments(on) }))
 
     expect(result.charts).toMatchObject([{ kind: 'line', sheet: 'Sales', series: 2 }])
-    expect(result.comments).toMatchObject([{ cell: 'B2', author: 'Hermes', text: 'Check' }])
+    expect(result.comments).toMatchObject([{ cell: 'B2', author: 'NasTech', text: 'Check' }])
   })
 })
 

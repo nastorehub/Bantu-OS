@@ -3,7 +3,7 @@ import { docsDepthCommands } from './docs-depth.ts'
 import { document, office, placement, run, search } from './docs-shared.ts'
 
 /*
- * Herald Docs for Hermes, voice, the command bar and `herald-os docs`. A command works on the
+ * Herald Docs for NasTech, voice, the command bar and `herald-os docs`. A command works on the
  * `document` it names (a file, or an open document's name) or on the one in front; open in a
  * window, each change is one step to undo there, and the person watches it land. The editor's code
  * loads only when one of these runs.
@@ -201,7 +201,7 @@ export const docsCommands: readonly OsCommand[] = [
   {
     id: 'docs.undo',
     title: 'Undo in Herald Docs',
-    description: 'Undo the last change to a document open in Herald Docs, whoever made it (each Hermes change is one step); steps undoes several.',
+    description: 'Undo the last change to a document open in Herald Docs, whoever made it (each NasTech change is one step); steps undoes several.',
     tier: 'act',
     args: [document, { name: 'steps', type: 'number', description: 'How many steps (1)' }],
     run: run('docs.undo', async (args) => (await agent()).step('undo', args))

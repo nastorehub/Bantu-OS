@@ -24,13 +24,13 @@ export interface ThemesFile {
 /** The custom themes as last read or written. */
 export const $customThemes = atom<readonly Theme[]>([])
 
-export const customThemesPath = (hermesHome: string): string => `${hermesHome.replace(/\/+$/, '')}/herald-os/office/slide-themes.json`
+export const customThemesPath = (nastechHome: string): string => `${nastechHome.replace(/\/+$/, '')}/herald-os/office/slide-themes.json`
 
-function hermesHome(): string {
-  const home = $env.get()?.hermesHome
+function nastechHome(): string {
+  const home = $env.get()?.nastechHome
 
   if (!home) {
-    throw new Error('Hermes home is not known yet.')
+    throw new Error('NasTech home is not known yet.')
   }
 
   return home
@@ -135,7 +135,7 @@ function inTurn<T>(task: () => Promise<T>): Promise<T> {
 }
 
 /** The custom themes from disk (none when there is no file yet). */
-export const loadCustomThemes = (): Promise<Theme[]> => inTurn(async () => publish(await readThemes(hermesHome())))
+export const loadCustomThemes = (): Promise<Theme[]> => inTurn(async () => publish(await readThemes(nastechHome())))
 
 /**
  * A theme saved among the custom themes, and the theme as saved: under its own id when it is a
@@ -143,7 +143,7 @@ export const loadCustomThemes = (): Promise<Theme[]> => inTurn(async () => publi
  */
 export const saveCustomTheme = (theme: Theme): Promise<Theme> =>
   inTurn(async () => {
-    const home = hermesHome()
+    const home = nastechHome()
     const themes = await readThemes(home)
     const clean = normalizeTheme(theme)
     const at = themes.findIndex((entry) => entry.id === theme.id)
@@ -159,7 +159,7 @@ export const saveCustomTheme = (theme: Theme): Promise<Theme> =>
 /** A custom theme taken out of the file (nothing happens when there is no such theme). */
 export const deleteCustomTheme = (id: string): Promise<void> =>
   inTurn(async () => {
-    const home = hermesHome()
+    const home = nastechHome()
     const themes = await readThemes(home)
     const next = themes.filter((entry) => entry.id !== id)
 

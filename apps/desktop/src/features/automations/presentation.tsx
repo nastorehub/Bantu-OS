@@ -98,7 +98,7 @@ export const isLocalDelivery = (deliver: string | null | undefined): boolean => 
 
 export function describeDeliver(deliver: string | null | undefined, targets: readonly DeliveryTarget[] = []): string {
   if (isLocalDelivery(deliver)) {
-    return 'Create a briefing in Hermes'
+    return 'Create a briefing in NasTech'
   }
 
   const target = targets.find(t => t.id === deliver)

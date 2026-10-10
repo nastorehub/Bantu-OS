@@ -4,7 +4,7 @@ Status: Phases 1-3 implemented and verified in the VM (see `docs/LINUX.md` for h
 result). Remaining from the original list: nothing; follow-ups are noted at the end.
 
 Six changes, in three phases, each verified in the Linux VM and committed before the next. The
-thread through all of them: Hermes owns every window, every hotkey and every system chore, so a
+thread through all of them: NasTech owns every window, every hotkey and every system chore, so a
 user never leaves Herald OS to do something.
 
 Compositor: **niri** (Fedora official repos; Hyprland has no Fedora aarch64 packages). Scrollable
@@ -28,8 +28,8 @@ including foreign apps.
 | --- | --- | --- |
 | `menubar` | floating, top, full width, no focus on open, strut 30 | brand, focused window title, workspaces (= Spaces), status |
 | `dock` | floating, bottom centre, auto-hide handled by the shell | pinned apps + every running niri window with icon, click = focus |
-| `main` | tiled (the Hermes window) | sidebar + pages, approvals, toasts |
-| `command` | floating, centred, on demand | ⌘K / launcher / "ask Hermes" with the focused window as context |
+| `main` | tiled (the NasTech window) | sidebar + pages, approvals, toasts |
+| `command` | floating, centred, on demand | ⌘K / launcher / "ask NasTech" with the focused window as context |
 | `window:terminal`, `window:system`, `window:chat-popout` | tiled or floating | existing surfaces, one Electron window each |
 | wallpaper | `swaybg` (layer-shell, backdrop) | PNG rendered from the procedural wallpaper by an offscreen window |
 
@@ -39,11 +39,11 @@ selector; stores that act across windows go through a small relay (`shell.relay(
 
 ## Phase 1: own every window, one keyboard grammar (ideas 1, 2)
 
-- `linux/niri/config.kdl`: outputs (fractional scale), layout (gaps, struts, Hermes border/focus
+- `linux/niri/config.kdl`: outputs (fractional scale), layout (gaps, struts, NasTech border/focus
   colours, rounding), `prefer-no-csd`, named workspaces (personal/work/ideas), window rules for
   shell surfaces and common apps, binds (below), `spawn-at-startup` (session, swaybg, portals),
   screenshot path, hotkey overlay.
-- Keyboard grammar (Super = Mod): `Mod+Space` ask Hermes (command bar, focused-window context),
+- Keyboard grammar (Super = Mod): `Mod+Space` ask NasTech (command bar, focused-window context),
   `Mod+A` applications, `Mod+Return` terminal, `Mod+E` files, `Mod+Q` close, `Mod+F` fullscreen,
   `Mod+T` toggle floating, `Mod+H/L` focus columns, `Mod+Shift+H/L` move, `Mod+1..3` Spaces,
   `Mod+O` overview, `Mod+K` hotkey overlay, `Mod+Escape` power menu, `Mod+Ctrl+L` lock,
@@ -55,8 +55,8 @@ selector; stores that act across windows go through a small relay (`shell.relay(
   (`ask`, `launcher`, `applications`, `page`, `open`, `screenshot`, `lock`, `wm …`).
 - Renderer: surface selector; MenuBar with niri workspaces + focused title; Dock with running
   windows + icons from `.desktop` app-id match; command surface with window context.
-- Verify: boot to niri; Firefox tiles beside Hermes with Hermes borders; Dock shows it; `Mod+Space`
-  over Firefox asks Hermes about the page title; `Mod+Q`, `Mod+1..3`, `Mod+K`, `Print` work.
+- Verify: boot to niri; Firefox tiles beside NasTech with NasTech borders; Dock shows it; `Mod+Space`
+  over Firefox asks NasTech about the page title; `Mod+Q`, `Mod+1..3`, `Mod+K`, `Print` work.
 
 ## Phase 2: one control surface, system services (ideas 3, 4)
 
@@ -67,19 +67,19 @@ selector; stores that act across windows go through a small relay (`shell.relay(
 - Services: clipboard history (`cliphist` + picker surface), reminders (`systemd-run --user
   --on-active` → notification), notices, screenshots (niri) and OCR (`slurp` + `tesseract`),
   notification daemon (org.freedesktop.Notifications in Electron main so foreign apps' notifications
-  land in Hermes), lock screen (`swaylock` themed) + idle (`swayidle`), power menu, web apps as
+  land in NasTech), lock screen (`swaylock` themed) + idle (`swayidle`), power menu, web apps as
   frameless Electron windows (`herald-os install webapp <name> <url>`), boot splash (Plymouth).
 
 ## Phase 3: whole-system themes, omakase, updates (ideas 5, 6)
 
 - Theme engine: `linux/themes/<name>/theme.json` → shell tokens, niri colours, GTK (`gsettings`,
   `gtk.css`), swaylock, terminal palette, swaybg wallpaper set; `herald-os theme set` applies
-  atomically; Hermes tool to switch.
-- Omakase: `linux/omakase/{packages,flatpaks,webapps}.txt` installed by provisioning; Hermes knows
+  atomically; NasTech tool to switch.
+- Omakase: `linux/omakase/{packages,flatpaks,webapps}.txt` installed by provisioning; NasTech knows
   the set (SKILL.md). Curated: Firefox, Nautilus, Text Editor, LibreOffice, Obsidian (Flatpak),
   Spotify (Flatpak), VS Code, LocalSend, web apps (HEY, Google Calendar, WhatsApp, X).
 - Updates: `herald-os update` (git pull to a release channel, `linux/migrations/*.sh` tracked in
-  `/var/lib/herald-os/migrations`, `dnf upgrade`, `flatpak update`, `hermes update`, shell rebuild
+  `/var/lib/herald-os/migrations`, `dnf upgrade`, `flatpak update`, `nastech update`, shell rebuild
   + restart); menu-bar indicator via a daily timer; channels `stable|edge`.
 
 ## Out of scope (still Stage 2 security work)
@@ -89,7 +89,7 @@ Capability broker, sandboxing, our own compositor, SELinux policy.
 ## Follow-ups noted while building
 
 - Release channels are placeholders (both track `main`); cut tagged releases and point `stable` at them.
-- Dictation (Omarchy's Voxtype) has no Fedora package; Hermes's own voice path is the candidate.
+- Dictation (Omarchy's Voxtype) has no Fedora package; NasTech's own voice path is the candidate.
 - The in-shell Terminal palette does not yet follow the theme (foot does).
 - Web-app windows are titled by name but share the shell's app id; the Dock shows them by title.
 - GPU-less VMs run niri nested in cage (software rendering); UTM with virgl or real hardware runs niri directly.

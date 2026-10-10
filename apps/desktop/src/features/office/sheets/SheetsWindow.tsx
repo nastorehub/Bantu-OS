@@ -3,8 +3,8 @@ import './fonts.css'
 import { useEffect, useMemo, useState } from 'react'
 import { officeAppFor, openFormats } from '../../../../shared/office/files.ts'
 import { messageOf } from '../../canvas/errors.ts'
-import { sheetsHermesMenu } from '../hermes/actions.ts'
-import { activeCell } from '../hermes/sheets-live.ts'
+import { sheetsNasTechMenu } from '../nastech/actions.ts'
+import { activeCell } from '../nastech/sheets-live.ts'
 import { officeAbilities } from '../session.ts'
 import { type OfficeCommand, type OfficeMenu, officeMenus } from '../shell/commands.ts'
 import { OfficeWindow } from '../shell/OfficeWindow.tsx'
@@ -123,7 +123,7 @@ function sheetMenus(): { edit: OfficeCommand[]; menus: OfficeMenu[] } {
     edit: [univerCommand('find', 'Find…', 'ui.operation.open-find-dialog', { dividerBefore: true, shortcut: 'mod+f' }), univerCommand('replace', 'Find and Replace…', 'ui.operation.open-replace-dialog')],
     menus: [
       ...menus,
-      sheetsHermesMenu({
+      sheetsNasTechMenu({
         docKey: activeKey,
         cell: () => {
           const key = activeKey()

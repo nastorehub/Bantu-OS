@@ -75,7 +75,7 @@ export function WebWindow({ win }: { win: OSWindow }) {
         {!visible && (
           <div className={cn('absolute inset-0 flex flex-col items-center justify-center gap-2 px-6 text-center text-[12.5px] text-fg-3', win.phase === 'open' && !entry && 'text-fg-2')}>
             <IconWorld size={26} className="text-fg-4" />
-            <span>{!entry ? 'This page is no longer open.' : covered ? 'The page is hidden while a Hermes panel is open.' : occluded ? 'Bring this window forward to see the page.' : 'Opening…'}</span>
+            <span>{!entry ? 'This page is no longer open.' : covered ? 'The page is hidden while a NasTech panel is open.' : occluded ? 'Bring this window forward to see the page.' : 'Opening…'}</span>
           </div>
         )}
       </div>

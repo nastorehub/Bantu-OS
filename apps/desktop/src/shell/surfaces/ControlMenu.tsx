@@ -55,7 +55,7 @@ import { useStore } from '@nanostores/react'
 import { type KeyboardEvent as ReactKeyboardEvent, useEffect, useMemo, useRef, useState } from 'react'
 import type { CatalogEntryView, PowerAction } from '../../../shared/ipc.ts'
 import type { MenuExtension, MenuExtensionIcon, MenuExtensions } from '../../../shared/menu-extensions.ts'
-import { HermesAvatar } from '../../components/app-icon.tsx'
+import { NasTechAvatar } from '../../components/app-icon.tsx'
 import { GlassButton } from '../../components/ui/glass.tsx'
 import { Kbd, Spinner } from '../../components/ui/primitives.tsx'
 import { cn } from '../../lib/cn.ts'
@@ -87,7 +87,7 @@ interface FormLeaf {
 }
 
 type Leaf =
-  /** Run the CLI here, showing a spinner and the result. `detached` relays to the Hermes window and closes first (screenshots must not capture the overlay). */
+  /** Run the CLI here, showing a spinner and the result. `detached` relays to the NasTech window and closes first (screenshots must not capture the overlay). */
   | { kind: 'cli'; argv: string[]; detached?: boolean }
   | FormLeaf
   | { kind: 'power'; action: PowerAction; confirm: boolean }
@@ -220,7 +220,7 @@ function buildMenu(actions: { applications: () => void; close: () => void }): Me
       hint: 'Herald OS',
       icon: IconRefresh,
       children: [
-        { id: 'update-herald-os', label: 'Herald OS', hint: 'The shell, system packages, apps and Hermes', icon: IconRefresh, leaf: { kind: 'cli', argv: ['update'] } },
+        { id: 'update-herald-os', label: 'Herald OS', hint: 'The shell, system packages, apps and NasTech', icon: IconRefresh, leaf: { kind: 'cli', argv: ['update'] } },
         { id: 'update-firmware-check', label: 'Firmware', hint: 'Check the BIOS, docks and drives (fwupd)', icon: IconCpu, leaf: { kind: 'cli', argv: ['firmware', 'check'] } },
         { id: 'update-firmware', label: 'Install firmware updates', hint: 'Some finish on the next restart', icon: IconCpu, leaf: { kind: 'cli', argv: ['firmware', 'update'] } },
         { id: 'update-rollback', label: 'Go back to the previous version', hint: 'The Herald OS image or a release tarball; it applies when Herald OS restarts', icon: IconHistory, leaf: { kind: 'cli', argv: ['rollback'] } }
@@ -254,7 +254,7 @@ function buildMenu(actions: { applications: () => void; close: () => void }): Me
             argv: values => ['reminder', values.duration, values.message]
           }
         },
-        { id: 'trigger-ask-region', label: 'Ask about part of the screen', hint: 'Select a region, then ask Hermes', icon: IconCamera, leaf: { kind: 'cli', argv: ['capture', 'region', '--ask'], detached: true } },
+        { id: 'trigger-ask-region', label: 'Ask about part of the screen', hint: 'Select a region, then ask NasTech', icon: IconCamera, leaf: { kind: 'cli', argv: ['capture', 'region', '--ask'], detached: true } },
         { id: 'trigger-notice-time', label: 'Notice: Time', icon: IconClock, leaf: { kind: 'cli', argv: ['notice', 'time'] } },
         { id: 'trigger-notice-battery', label: 'Notice: Battery', icon: IconBattery, leaf: { kind: 'cli', argv: ['notice', 'battery'] } },
         { id: 'trigger-notice-weather', label: 'Notice: Weather', icon: IconCloud, leaf: { kind: 'cli', argv: ['notice', 'weather'] } }
@@ -305,14 +305,14 @@ function buildMenu(actions: { applications: () => void; close: () => void }): Me
       }))
     },
     {
-      id: 'hermes',
-      label: 'Hermes',
+      id: 'nastech',
+      label: 'NasTech',
       hint: 'Shell windows',
       icon: IconApps,
       children: [
-        { id: 'hermes-applications', label: 'Applications', hint: 'Launcher', icon: IconApps, leaf: { kind: 'local', run: actions.applications } },
+        { id: 'nastech-applications', label: 'Applications', hint: 'Launcher', icon: IconApps, leaf: { kind: 'local', run: actions.applications } },
         {
-          id: 'hermes-terminal',
+          id: 'nastech-terminal',
           label: 'Terminal',
           hint: 'Open a shell',
           icon: IconTerminal2,
@@ -325,9 +325,9 @@ function buildMenu(actions: { applications: () => void; close: () => void }): Me
           }
         },
         {
-          id: 'hermes-files',
+          id: 'nastech-files',
           label: 'Files',
-          hint: 'Hermes window',
+          hint: 'NasTech window',
           icon: IconFolder,
           leaf: {
             kind: 'local',
@@ -338,9 +338,9 @@ function buildMenu(actions: { applications: () => void; close: () => void }): Me
           }
         },
         {
-          id: 'hermes-settings',
+          id: 'nastech-settings',
           label: 'Settings',
-          hint: 'Hermes window',
+          hint: 'NasTech window',
           icon: IconSettings,
           leaf: {
             kind: 'local',
@@ -350,7 +350,7 @@ function buildMenu(actions: { applications: () => void; close: () => void }): Me
             }
           }
         },
-        { id: 'hermes-hotkeys', label: 'Hotkeys', hint: 'Show the overlay', icon: IconKeyboard, leaf: { kind: 'cli', argv: ['wm', 'show-hotkey-overlay'], detached: true } }
+        { id: 'nastech-hotkeys', label: 'Hotkeys', hint: 'Show the overlay', icon: IconKeyboard, leaf: { kind: 'cli', argv: ['wm', 'show-hotkey-overlay'], detached: true } }
       ]
     }
   ]
@@ -580,7 +580,7 @@ export function ControlMenu({ onClose, onApplications, initialItem }: ControlMen
 
         return
       case 'wallpaper':
-        // The file dialog would blur (and so close) this overlay, so the Hermes window owns the picker.
+        // The file dialog would blur (and so close) this overlay, so the NasTech window owns the picker.
         relayToMain({ type: 'pick-wallpaper' })
         openSurface('main')
         onClose()
@@ -689,7 +689,7 @@ export function ControlMenu({ onClose, onApplications, initialItem }: ControlMen
             <IconChevronLeft size={16} />
           </button>
         ) : (
-          <HermesAvatar size={22} rounded={6} />
+          <NasTechAvatar size={22} rounded={6} />
         )}
         <span className="flex min-w-0 items-center gap-1.5 text-[14px] font-semibold">
           <span className={cn(title.length > 0 && 'text-fg-3')}>Herald OS</span>
@@ -1250,7 +1250,7 @@ export function PowerCard({ onClose }: { onClose: () => void }) {
   return (
     <div className="float flex flex-col overflow-hidden rounded-2xl animate-pop" onKeyDown={onKeyDown}>
       <div className="flex items-center gap-3 px-4 pt-4 pb-3">
-        <HermesAvatar size={22} rounded={6} />
+        <NasTechAvatar size={22} rounded={6} />
         <span className="text-[14px] font-semibold">Power</span>
         <span className="flex-1" />
         <Kbd>esc</Kbd>

@@ -1,6 +1,6 @@
 /*
  * A Herald Docs document as plain data: the JSON of its TipTap (ProseMirror) document. The editor,
- * the converters (Word, Markdown, plain text, the print view) and Hermes's commands all read and
+ * the converters (Word, Markdown, plain text, the print view) and NasTech's commands all read and
  * write this one shape. The document node carries the page (its size and margins, in points) and
  * the looks of its styles, the way a Word file keeps them in its section and its styles part.
  */

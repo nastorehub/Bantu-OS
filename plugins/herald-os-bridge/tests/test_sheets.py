@@ -392,7 +392,7 @@ def test_the_schema_describes_the_new_arguments_with_one_type_each(plugin):
 def test_the_description_names_the_new_capabilities(plugin):
     tools = _mod(plugin, "tools")
     description = tools.SHEETS_SCHEMA["description"]
-    for words in ("recommend_charts first", "insert_chart", "summarize", "named ranges", "dropdown lists", "signed Hermes", "remove duplicates", "preview=true", "comment threads aside"):
+    for words in ("recommend_charts first", "insert_chart", "summarize", "named ranges", "dropdown lists", "signed NasTech", "remove duplicates", "preview=true", "comment threads aside"):
         assert words in description
 
 

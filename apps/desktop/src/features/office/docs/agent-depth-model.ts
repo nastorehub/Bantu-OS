@@ -59,7 +59,7 @@ import { documentFromTemplate, TEMPLATES, type TemplateInfo } from './templates/
 import type { SavedTemplate } from './templates/saved.ts'
 
 /*
- * Herald Docs' page and review for Hermes, without a window: headers and footers, fields, notes,
+ * Herald Docs' page and review for NasTech, without a window: headers and footers, fields, notes,
  * sections and the page, comments, tables of contents, templates and statistics. Each command's
  * change is read from its arguments and built on the document as it is when it lands, with the
  * answer it gives after; agent-depth.ts runs them where the document lives. Tested directly.
@@ -104,7 +104,7 @@ const isBlank = (blocks: readonly DocNode[]): boolean => blocks.every((block) =>
 
 // A command's change.
 
-/** What a change came to in a document: whether it changed anything, the document's name and path, and whether text was marked for Hermes in it. */
+/** What a change came to in a document: whether it changed anything, the document's name and path, and whether text was marked for NasTech in it. */
 export interface Changed {
   changed: boolean
   name: string
@@ -114,7 +114,7 @@ export interface Changed {
 
 /**
  * A command's change: its operation, built on the document as it is when the change lands (with
- * the text Herald marked for Hermes, and whether it is open, where it has a selection), and the
+ * the text Herald marked for NasTech, and whether it is open, where it has a selection), and the
  * answer it gives once it has landed.
  */
 export interface Change {
@@ -142,8 +142,8 @@ function andThen(state: EditorState, tr: Transaction, then: (next: EditorState) 
   return tr
 }
 
-/** Who comments and replies are by: Hermes when Hermes adds them, else the name the person gave Herald (the model's own choice). */
-export const commentAuthor = (context?: Pick<CommandContext, 'source'>): string | undefined => (context?.source === 'agent' ? 'Hermes' : undefined)
+/** Who comments and replies are by: NasTech when NasTech adds them, else the name the person gave Herald (the model's own choice). */
+export const commentAuthor = (context?: Pick<CommandContext, 'source'>): string | undefined => (context?.source === 'agent' ? 'NasTech' : undefined)
 
 // Places.
 
@@ -223,7 +223,7 @@ export function depthPlace(state: EditorState, args: Args, marked: Marked | null
 
 const AT_WORDS: Record<string, string> = { start: 'at the start', top: 'at the start', end: 'at the end', bottom: 'at the end', selection: 'at the selection', cursor: 'at the selection', caret: 'at the selection', marked: 'in place of the marked text', after: 'under the selection’s paragraph' }
 
-/** Where a command put something, in words; `marked` says text was marked for Hermes, which `after` went under. */
+/** Where a command put something, in words; `marked` says text was marked for NasTech, which `after` went under. */
 function placeWords(args: Args, options: { block?: boolean; fallback?: string; marked?: boolean } = {}): string {
   if (given(args.quote)) {
     return `${options.block ? 'after the paragraph with' : 'after'} ${quoted(text(args.quote), 40)}`
@@ -514,7 +514,7 @@ function wordsBefore(doc: PMNode, pos: number): string {
   return $pos.parentOffset > 80 ? `…${before}` : before
 }
 
-/** A document's notes (those in a section, `within`), as Hermes names and reads them. */
+/** A document's notes (those in a section, `within`), as NasTech names and reads them. */
 export function notesList(doc: PMNode, within: Range | null = null) {
   return notes(doc)
     .filter((note) => !within || (note.pos >= within.from && note.pos < within.to))
@@ -615,7 +615,7 @@ export interface PageInfo {
   margins: { top: number; right: number; bottom: number; left: number; header: number; footer: number }
 }
 
-/** A page as Hermes reads it, in points. */
+/** A page as NasTech reads it, in points. */
 export function pageInfo(page: PageSettings): PageInfo {
   const { margins } = page
 
@@ -643,7 +643,7 @@ function firstWords(doc: PMNode, from: number, to: number): string {
   return words.length > 80 ? `${words.slice(0, 79)}…` : words
 }
 
-/** A document's sections as Hermes reads them: how each starts, its page and its first words. */
+/** A document's sections as NasTech reads them: how each starts, its page and its first words. */
 export function sectionsList(doc: PMNode) {
   return documentSections(doc).map((section) => ({
     section: section.index + 1,
@@ -914,7 +914,7 @@ function commentRanges(state: EditorState, item: CommentItem, marked: Marked | n
 
   const range = item.at === 'marked' ? marked : commentRange(state)
 
-  return range && range.to > range.from ? [range] : item.at === 'marked' ? 'nothing is marked for Hermes' : 'nothing is selected'
+  return range && range.to > range.from ? [range] : item.at === 'marked' ? 'nothing is marked for NasTech' : 'nothing is selected'
 }
 
 /** The comments not added, in words. */
@@ -1118,7 +1118,7 @@ export function deleteCommentChange(args: Args): Change {
   }
 }
 
-/** A document's comments (those in a section, `within`) as Hermes reads them, in the order of their text. */
+/** A document's comments (those in a section, `within`) as NasTech reads them, in the order of their text. */
 export function commentsList(doc: PMNode, within: Range | null = null) {
   const headings = outline(doc)
 
@@ -1167,7 +1167,7 @@ export interface TocInfo {
   entries: number
 }
 
-/** A document's tables of contents as Hermes reads them: the levels each lists, its title and how many entries it has. */
+/** A document's tables of contents as NasTech reads them: the levels each lists, its title and how many entries it has. */
 export function tocsList(doc: PMNode): TocInfo[] {
   const headings = headingsOf(doc)
 
@@ -1401,7 +1401,7 @@ export function withBody(model: DocJSON, blocks: readonly DocNode[]): DocJSON {
   return blocks.length ? { ...model, attrs: { ...model.attrs, comments: null }, content: [...blocks] } : model
 }
 
-/** Herald Docs' templates and the person's, as Hermes reads them. */
+/** Herald Docs' templates and the person's, as NasTech reads them. */
 export function templatesOutcome(saved: readonly SavedTemplate[]): Outcome {
   return {
     summary: `Herald Docs has ${many(TEMPLATES.length, 'template')} (${TEMPLATES.map((entry) => entry.id).join(', ')})${saved.length ? `, and the person saved ${many(saved.length, 'more', 'more')}: ${saved.map((entry) => `“${entry.name}”`).join(', ')}` : ''}`,
@@ -1411,7 +1411,7 @@ export function templatesOutcome(saved: readonly SavedTemplate[]): Outcome {
 
 // Statistics.
 
-/** A document's statistics as Hermes reads them: the whole of it (with its pages where it is laid out), a heading's section or the selection. */
+/** A document's statistics as NasTech reads them: the whole of it (with its pages where it is laid out), a heading's section or the selection. */
 export function statisticsOutcome(state: EditorState, args: Args, live: boolean, about: { name: string; path: string | null; pages?: number }): Outcome {
   let stats: DocumentStatistics
   let scope: Record<string, unknown> = { scope: 'document' }

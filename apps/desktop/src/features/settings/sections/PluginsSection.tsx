@@ -41,7 +41,7 @@ export function PluginsSection() {
       <SectionTitle title="Plugins" subtitle="Widgets for the menu bar, the Overview and their own windows. Each runs in a sandbox and gets only what you allow." />
 
       <SettingsGroup title="Installed">
-        {plugins.length === 0 && <SettingsRow icon={<IconPuzzle />} label="No plugins yet" description="Add one from git below, or ask Hermes to make one." />}
+        {plugins.length === 0 && <SettingsRow icon={<IconPuzzle />} label="No plugins yet" description="Add one from git below, or ask NasTech to make one." />}
         {plugins.map(plugin => (
           <PluginRow key={plugin.manifest.id} plugin={plugin} />
         ))}
@@ -62,7 +62,7 @@ export function PluginsSection() {
             </GlassButton>
           </form>
         </SettingsRow>
-        <SettingsRow icon={<IconSparkles />} label="Make one with Hermes" description='Describe it ("a strip with the weather", "my next meeting") and Hermes writes it into your plugins folder.' keywords="create widget hermes">
+        <SettingsRow icon={<IconSparkles />} label="Make one with NasTech" description='Describe it ("a strip with the weather", "my next meeting") and NasTech writes it into your plugins folder.' keywords="create widget nastech">
           <GlassButton size="sm" onClick={() => openAsk({ text: MAKE_A_WIDGET })}>
             Make a widget
           </GlassButton>

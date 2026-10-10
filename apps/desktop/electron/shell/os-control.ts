@@ -10,7 +10,7 @@ import { log } from '../log.ts'
  * OS control: how anything outside the renderer (the agent's `os_ui` tool through the bridge
  * plugin, the `herald-os` CLI) runs a command from the renderer's registry and gets the result.
  *
- * - `OsCommandBridge` is the main <-> renderer half: it posts an `OsControlRequest` to the Hermes
+ * - `OsCommandBridge` is the main <-> renderer half: it posts an `OsControlRequest` to the NasTech
  *   window and resolves when the window replies (or times out).
  * - `OsControlServer` is a JSON-lines Unix socket shared by both shell modes. In panels mode the
  *   existing `ControlSocket` hands `ui*` requests to `handleUiRequest`; in desktop mode the server
@@ -45,7 +45,7 @@ export class OsCommandBridge {
     const win = this.getWindow()
 
     if (!win || win.isDestroyed()) {
-      return Promise.resolve({ requestId: '', error: 'The Hermes window is not open.' })
+      return Promise.resolve({ requestId: '', error: 'The NasTech window is not open.' })
     }
 
     const requestId = `oc${++this.counter}`
@@ -56,7 +56,7 @@ export class OsCommandBridge {
     return new Promise(resolve => {
       const timer = setTimeout(() => {
         this.pending.delete(requestId)
-        resolve({ requestId, error: 'The Hermes window did not answer in time.' })
+        resolve({ requestId, error: 'The NasTech window did not answer in time.' })
       }, timeout)
       this.pending.set(requestId, { resolve, timer })
       win.webContents.send(IPC.osControlRequest, full)

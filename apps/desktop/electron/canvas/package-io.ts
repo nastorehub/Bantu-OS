@@ -166,7 +166,7 @@ export async function writePackage(dir: string, request: WriteRequest): Promise<
 }
 
 /**
- * Watches an open project for changes made elsewhere (Hermes, a script, Compositor). Fires about a
+ * Watches an open project for changes made elsewhere (NasTech, a script, Compositor). Fires about a
  * third of a second after writes stop, only when the project's digest moved, and ignores a state
  * that does not load, so a half-written project shows once it is complete.
  */

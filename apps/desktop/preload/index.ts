@@ -89,8 +89,8 @@ type Unsubscribe = () => void
 
 // Main passes the surface identity as extra Chromium switches so it is known before any IPC.
 const argValue = (name: string): string | undefined => process.argv.find(arg => arg.startsWith(`--${name}=`))?.slice(name.length + 3)
-const SURFACE = (argValue('hermes-surface') ?? 'desktop') as ShellSurface
-const SHELL_MODE = (argValue('hermes-shell-mode') === 'panels' ? 'panels' : 'desktop') as ShellMode
+const SURFACE = (argValue('nastech-surface') ?? 'desktop') as ShellSurface
+const SHELL_MODE = (argValue('nastech-shell-mode') === 'panels' ? 'panels' : 'desktop') as ShellMode
 
 const subscribe = <T,>(channel: string, listener: (payload: T) => void): Unsubscribe => {
   const wrapped = (_event: unknown, payload: T) => listener(payload)
@@ -234,7 +234,7 @@ const api = {
     exists: (target: string): Promise<'file' | 'directory' | null> => ipcRenderer.invoke(IPC.canvasExists, target),
     /** An image from an http(s) address, downloaded by main. */
     fetchImage: (url: string): Promise<CanvasFetched> => ipcRenderer.invoke(IPC.canvasFetch, url),
-    /** Tell main what this window has open, for Hermes's commands. */
+    /** Tell main what this window has open, for NasTech's commands. */
     report: (presence: Omit<CanvasPresence, 'at'> & { focused?: boolean }): void => ipcRenderer.send(IPC.canvasReport, presence),
     /** Every Canvas window's open documents, the most recently used window first. */
     presence: (): Promise<CanvasPresence[]> => ipcRenderer.invoke(IPC.canvasPresence),
@@ -266,7 +266,7 @@ const api = {
     watch: (file: string, loaded?: string | null): Promise<string> => ipcRenderer.invoke(IPC.officeWatch, file, loaded ?? null),
     unwatch: (watchId: string): Promise<void> => ipcRenderer.invoke(IPC.officeUnwatch, watchId),
     onChanged: (listener: (event: OfficeChangedEvent) => void): Unsubscribe => subscribe(IPC.officeChanged, listener),
-    /** Tell main what this app's window has open, for Hermes's commands. */
+    /** Tell main what this app's window has open, for NasTech's commands. */
     report: (presence: Omit<OfficePresence, 'at'> & { focused?: boolean }): void => ipcRenderer.send(IPC.officeReport, presence),
     /** Every Office window's open documents, the most recently used first. */
     presence: (): Promise<OfficePresence[]> => ipcRenderer.invoke(IPC.officePresence),
@@ -293,7 +293,7 @@ const api = {
     list: (): Promise<CatalogGroupView[]> => ipcRenderer.invoke(IPC.catalogList),
     install: (id: string): Promise<CatalogResult> => ipcRenderer.invoke(IPC.catalogInstall, id),
     remove: (id: string): Promise<CatalogResult> => ipcRenderer.invoke(IPC.catalogRemove, id),
-    /** The models a local server has (for "Use with Hermes"); rejects with what to do when it is not running. */
+    /** The models a local server has (for "Use with NasTech"); rejects with what to do when it is not running. */
     localModels: (kind: 'ollama' | 'lmstudio'): Promise<string[]> => ipcRenderer.invoke(IPC.catalogLocalModels, kind)
   },
   plugins: {

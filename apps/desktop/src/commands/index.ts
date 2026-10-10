@@ -9,7 +9,7 @@ import { crashCommands } from './crash.ts'
 import { docsCommands } from './docs.ts'
 import { editCommands } from './edit.ts'
 import { filesCommands } from './files.ts'
-import { hermesCommands } from './hermes.ts'
+import { nastechCommands } from './nastech.ts'
 import { memoryCommands } from './memory.ts'
 import { navigationCommands } from './navigation.ts'
 import { officeCommands } from './office.ts'
@@ -31,7 +31,7 @@ import { typingCommands } from './typing.ts'
 export const commandGroups: Record<string, readonly OsCommand[]> = {
   navigation: navigationCommands,
   edit: editCommands,
-  hermes: hermesCommands,
+  nastech: nastechCommands,
   memory: memoryCommands,
   files: filesCommands,
   automations: automationCommands,

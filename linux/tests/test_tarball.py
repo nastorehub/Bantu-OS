@@ -301,7 +301,7 @@ def test_the_updater_reports_and_installs_a_newer_release(tmp_path):
     checked = subprocess.run(["bash", str(BIN / "herald-os-update"), "--check", "--no-system"], env=env, capture_output=True, text=True, timeout=60)
     assert checked.stdout.strip() == "Herald OS 0.2.0"
     assert json.loads((tmp_path / "home" / ".local" / "state" / "herald-os" / "update-available.json").read_text())["pending"] == 1
-    subprocess.run(["bash", str(BIN / "herald-os-update"), "--no-system", "--no-hermes"], env=env, capture_output=True, text=True, timeout=60, stdin=subprocess.DEVNULL)
+    subprocess.run(["bash", str(BIN / "herald-os-update"), "--no-system", "--no-nastech"], env=env, capture_output=True, text=True, timeout=60, stdin=subprocess.DEVNULL)
     assert (tmp_path / "home" / "tarball.log").read_text().splitlines()[-1] == "update 0.2.0"
 
 
@@ -309,7 +309,7 @@ def test_the_updater_leaves_an_up_to_date_tarball_alone(tmp_path):
     env = updater_env(tmp_path, check_exit=1)
     checked = subprocess.run(["bash", str(BIN / "herald-os-update"), "--check", "--no-system"], env=env, capture_output=True, text=True, timeout=60)
     assert checked.stdout.strip() == "up to date"
-    subprocess.run(["bash", str(BIN / "herald-os-update"), "--no-system", "--no-hermes"], env=env, capture_output=True, text=True, timeout=60, stdin=subprocess.DEVNULL)
+    subprocess.run(["bash", str(BIN / "herald-os-update"), "--no-system", "--no-nastech"], env=env, capture_output=True, text=True, timeout=60, stdin=subprocess.DEVNULL)
     assert "update" not in (tmp_path / "home" / "tarball.log").read_text().split()
 
 

@@ -3,23 +3,23 @@ import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { osEnv } from './env.ts'
 
-/** Profile-aware Hermes home; mirrors upstream `get_hermes_home()` for the default profile. */
-export function hermesHome(): string {
-  const override = process.env.HERMES_HOME?.trim()
+/** Profile-aware NasTech home; mirrors upstream `get_nastech_home()` for the default profile. */
+export function nastechHome(): string {
+  const override = process.env.NASTECH_HOME?.trim()
 
   if (override) {
     return override
   }
 
   if (process.platform === 'win32') {
-    return path.join(process.env.LOCALAPPDATA ?? path.join(os.homedir(), 'AppData', 'Local'), 'hermes')
+    return path.join(process.env.LOCALAPPDATA ?? path.join(os.homedir(), 'AppData', 'Local'), 'nastech')
   }
 
-  return path.join(os.homedir(), '.hermes')
+  return path.join(os.homedir(), '.nastech')
 }
 
 export function heraldOsDataDir(): string {
-  return path.join(hermesHome(), 'herald-os')
+  return path.join(nastechHome(), 'herald-os')
 }
 
 export const isDev = process.env.HERALD_OS_BUILD_MODE === 'development' || Boolean(osEnv('DEV_SERVER'))

@@ -171,7 +171,7 @@ export async function applyFilterToDocument(doc: CanvasDocument, spec: FilterSpe
   try {
     const filtered = await filterArea(target.raster, area, spec, onTask)
 
-    // Something else changed the document while the filter ran (an undo, Hermes): it does not land on top.
+    // Something else changed the document while the filter ran (an undo, NasTech): it does not land on top.
     if (doc.state !== before) {
       throw new Error('The image changed while the filter ran, so it was not applied')
     }

@@ -4,7 +4,7 @@ import type { Editor } from '@tiptap/core'
 import { useEditorState } from '@tiptap/react'
 import { type KeyboardEvent, type MouseEvent, type ReactNode, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { CommentReply } from '../../../../shared/office/document.ts'
-import { HermesAvatar } from '../../../components/app-icon.tsx'
+import { NasTechAvatar } from '../../../components/app-icon.tsx'
 import { cn } from '../../../lib/cn.ts'
 import { keysLabel } from '../../../lib/shortcuts.ts'
 import { Menu } from '../../files/Menu.tsx'
@@ -102,8 +102,8 @@ function relativeDate(date: string | null, now: number): string {
 const TONES = ['bg-accent/25 text-accent-strong', 'bg-ok/20 text-ok', 'bg-progress/20 text-progress', 'bg-warn/20 text-warn', 'bg-info/20 text-info', 'bg-danger/20 text-danger']
 
 function Avatar({ name, initials, small = false }: { name: string; initials: string | null; small?: boolean }) {
-  if (name === 'Hermes') {
-    return <HermesAvatar size={small ? 20 : 24} rounded={999} />
+  if (name === 'NasTech') {
+    return <NasTechAvatar size={small ? 20 : 24} rounded={999} />
   }
 
   const tone = TONES[[...name].reduce((sum, letter) => sum + (letter.codePointAt(0) ?? 0), 0) % TONES.length]

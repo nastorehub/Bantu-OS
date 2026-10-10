@@ -33,10 +33,10 @@ describe('slides targets', () => {
 
     // The person adds a slide after the command looked and before it lands.
     doc.commit(model.addSlide(doc.history.present, { layout: 'blank' }))
-    await targets.apply(on, (current) => model.setTitle(current, current.slides[0].id, 'From Hermes'))
+    await targets.apply(on, (current) => model.setTitle(current, current.slides[0].id, 'From NasTech'))
 
     expect(doc.history.present.slides).toHaveLength(2)
-    expect(model.slideTitle(doc.history.present.slides[0])).toBe('From Hermes')
+    expect(model.slideTitle(doc.history.present.slides[0])).toBe('From NasTech')
     expect(doc.undo()).toBe('Title')
     expect(doc.history.present.slides).toHaveLength(2)
     expect(flush).toHaveBeenCalled()

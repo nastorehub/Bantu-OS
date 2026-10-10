@@ -3,8 +3,8 @@ import os from 'node:os'
 import path from 'node:path'
 
 /*
- * Sharing a Hermes home with another app (Hermes Desktop on Omarchy, a gateway the person runs).
- * Hermes itself keeps scheduled jobs to one run (each tick takes cron/.tick.lock) and messaging to one
+ * Sharing a NasTech home with another app (NasTech Desktop on Omarchy, a gateway the person runs).
+ * NasTech itself keeps scheduled jobs to one run (each tick takes cron/.tick.lock) and messaging to one
  * gateway (gateway.pid), so a second backend is safe. To not run one at all, point Herald at the
  * backend already running: HERALD_OS_BACKEND_URL plus its token.
  */
@@ -51,7 +51,7 @@ export function attachTarget(env: NodeJS.ProcessEnv = process.env, readFile: (fi
   return { baseUrl: url.origin, token }
 }
 
-/** `gateway.pid`: JSON (`{"pid": …, "hermes_home": …}`) in current Hermes, a bare number in older ones. */
+/** `gateway.pid`: JSON (`{"pid": …, "nastech_home": …}`) in current NasTech, a bare number in older ones. */
 export function parseGatewayPid(text: string): { pid: number; home?: string } | null {
   const raw = text.trim()
 
@@ -64,27 +64,27 @@ export function parseGatewayPid(text: string): { pid: number; home?: string } | 
   }
 
   try {
-    const data = JSON.parse(raw) as { pid?: unknown; hermes_home?: unknown }
+    const data = JSON.parse(raw) as { pid?: unknown; nastech_home?: unknown }
 
-    return typeof data.pid === 'number' && data.pid > 0 ? { pid: data.pid, ...(typeof data.hermes_home === 'string' ? { home: data.hermes_home } : {}) } : null
+    return typeof data.pid === 'number' && data.pid > 0 ? { pid: data.pid, ...(typeof data.nastech_home === 'string' ? { home: data.nastech_home } : {}) } : null
   } catch {
     return null
   }
 }
 
 /**
- * A messaging gateway on this Hermes home that is not ours (its parent is neither this app nor the
+ * A messaging gateway on this NasTech home that is not ours (its parent is neither this app nor the
  * backend it started), or null.
  */
 export function foreignGateway(
-  hermesHome: string,
+  nastechHome: string,
   own: { appPid: number; backendPid: number | null },
   probe: { alive: (pid: number) => boolean; parentOf: (pid: number) => number | null; read?: (file: string) => string }
 ): { pid: number } | null {
   let record: { pid: number; home?: string } | null
 
   try {
-    record = parseGatewayPid((probe.read ?? (file => fs.readFileSync(file, 'utf8')))(path.join(hermesHome, 'gateway.pid')))
+    record = parseGatewayPid((probe.read ?? (file => fs.readFileSync(file, 'utf8')))(path.join(nastechHome, 'gateway.pid')))
   } catch {
     return null
   }
@@ -93,7 +93,7 @@ export function foreignGateway(
     return null
   }
 
-  if (record.home && path.resolve(record.home) !== path.resolve(hermesHome)) {
+  if (record.home && path.resolve(record.home) !== path.resolve(nastechHome)) {
     return null
   }
 

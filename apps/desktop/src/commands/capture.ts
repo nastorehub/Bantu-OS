@@ -46,7 +46,7 @@ export const captureCommands: readonly OsCommand[] = [
   {
     id: 'capture.screenshot',
     title: 'Take a screenshot',
-    description: 'Screenshot a region you select, the focused window or the whole screen; then offer to mark it up, copy it, ask Hermes about it or show it.',
+    description: 'Screenshot a region you select, the focused window or the whole screen; then offer to mark it up, copy it, ask NasTech about it or show it.',
     tier: 'act',
     args: [
       { name: 'mode', type: 'string', description: 'region, window or screen', enum: ['region', 'window', 'screen'] },
@@ -114,8 +114,8 @@ export const captureCommands: readonly OsCommand[] = [
   },
   {
     id: 'capture.ask',
-    title: 'Ask Hermes about a picture',
-    description: 'Open "Ask Hermes" with a picture attached.',
+    title: 'Ask NasTech about a picture',
+    description: 'Open "Ask NasTech" with a picture attached.',
     tier: 'act',
     args: [
       { name: 'file', type: 'string', description: 'The picture', required: true },

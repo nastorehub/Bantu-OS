@@ -95,7 +95,7 @@ async function open(): Promise<void> {
       throw new MicrophoneUnavailableError('failed', `Audio worklet failed to load: ${error instanceof Error ? error.message : String(error)}`)
     }
 
-    const node = new AudioWorkletNode(ctx, 'hermes-capture', { numberOfInputs: 1, numberOfOutputs: 0, channelCount: 1 })
+    const node = new AudioWorkletNode(ctx, 'nastech-capture', { numberOfInputs: 1, numberOfOutputs: 0, channelCount: 1 })
     const src = ctx.createMediaStreamSource(media)
     src.connect(node)
     const inputRate = ctx.sampleRate

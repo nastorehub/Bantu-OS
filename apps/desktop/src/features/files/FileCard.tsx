@@ -37,7 +37,7 @@ function buildMenu(item: FileItem, onAction: (action: CardAction) => void): Menu
     { id: 'reveal', label: revealLabel(), icon: <IconFolderOpen />, onSelect: () => onAction('reveal') },
     { id: 'rename', label: 'Rename', icon: <IconPencil />, onSelect: () => onAction('rename') },
     { id: 'copy', label: 'Copy path', icon: <IconCopy />, onSelect: () => onAction('copy-path') },
-    { id: 'ask', label: 'Ask Hermes about this', icon: <IconMessage />, onSelect: () => onAction('ask'), dividerBefore: true },
+    { id: 'ask', label: 'Ask NasTech about this', icon: <IconMessage />, onSelect: () => onAction('ask'), dividerBefore: true },
     { id: 'trash', label: item.kind === 'directory' ? 'Move folder to Trash' : 'Move to Trash', icon: <IconTrash />, onSelect: () => onAction('trash'), danger: true, dividerBefore: true }
   ]
 }

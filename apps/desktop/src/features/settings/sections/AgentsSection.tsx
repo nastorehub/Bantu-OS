@@ -2,7 +2,7 @@ import { useStore } from '@nanostores/react'
 import { IconBolt, IconCloud, IconCpu, IconFileText, IconHistory, IconKey, IconLock, IconMessage, IconRefresh, IconScale, IconSearch, IconUsers } from '@tabler/icons-react'
 import { useMemo, useState } from 'react'
 import type { AuditEntry } from '../../../../shared/ipc.ts'
-import { HermesAvatar } from '../../../components/app-icon.tsx'
+import { NasTechAvatar } from '../../../components/app-icon.tsx'
 import { Dropdown, GlassButton, GlassCard, LinkAction, Pill, type PillTone, StatusDot, Toggle } from '../../../components/ui/glass.tsx'
 import { cn } from '../../../lib/cn.ts'
 import { formatRelative } from '../../../lib/format.ts'
@@ -10,14 +10,14 @@ import { rest } from '../../../lib/rest.ts'
 import { useBackendData, useLocalData } from '../../../lib/use-async.ts'
 import { $activeChat } from '../../../store/chat.ts'
 import { $connection, gatewayRequest } from '../../../store/gateway.ts'
-import { $hermesAuth, loginTarget, refreshHermesAuth, requestHermesLogin } from '../../../store/hermes-auth.ts'
+import { $nastechAuth, loginTarget, refreshNasTechAuth, requestNasTechLogin } from '../../../store/nastech-auth.ts'
 import { notify } from '../../../store/notifications.ts'
 import { readTier, withTier } from './policy.ts'
 import { errorText, InlineNote, markSaved, MenuDropdown, RadioCard, SectionTitle, SettingsBlock, SettingsGroup, SettingsRow, Stepper, useDismiss } from './shared.tsx'
 import { ToolSearchRow } from './ToolSearchRow.tsx'
 
 /*
- * Hermes & agents: the default Settings section. Every control here binds to real Hermes state:
+ * NasTech & agents: the default Settings section. Every control here binds to real NasTech state:
  *   approvals.mode (gateway config.get/set)            -> Autonomy cards
  *   model.options + slash /model                       -> Preferred model
  *   /api/tools/terminal/backend(s)                     -> Run on
@@ -33,17 +33,17 @@ export function AgentsSection() {
 
   return (
     <>
-      <SectionTitle title="Hermes & agents" subtitle="Choose how Hermes works with you." />
+      <SectionTitle title="NasTech & agents" subtitle="Choose how NasTech works with you." />
 
-      <SettingsBlock label="Hermes" description="Personal agent" keywords="status identity ready connecting">
+      <SettingsBlock label="NasTech" description="Personal agent" keywords="status identity ready connecting">
         <GlassCard className="flex items-center gap-3.5 px-4 py-3">
-          <HermesAvatar size={44} rounded={11} />
+          <NasTechAvatar size={44} rounded={11} />
           <div className="min-w-0 flex-1">
-            <div className="text-[13.5px] font-semibold text-fg">Hermes</div>
+            <div className="text-[13.5px] font-semibold text-fg">NasTech</div>
             <div className="text-[12px] text-fg-3">Personal agent</div>
             <div className="mt-1 flex items-center gap-1.5 text-[12px] text-fg-2">
               <StatusDot tone={ready ? 'ok' : connection === 'error' || connection === 'closed' ? 'danger' : 'warn'} pulse={!ready} />
-              {ready ? 'Ready' : connection === 'connecting' ? 'Connecting' : connection === 'error' ? 'Connection error' : connection === 'closed' ? 'Disconnected' : 'Waiting for Hermes'}
+              {ready ? 'Ready' : connection === 'connecting' ? 'Connecting' : connection === 'error' ? 'Connection error' : connection === 'closed' ? 'Disconnected' : 'Waiting for NasTech'}
             </div>
           </div>
         </GlassCard>
@@ -75,7 +75,7 @@ export function AgentsSection() {
 
 /** The model provider's sign-in state; "Sign in" opens the OS sign-in card (device-code flow). */
 function ProviderAccountRow() {
-  const auth = useStore($hermesAuth)
+  const auth = useStore($nastechAuth)
   const target = loginTarget(auth)
   const signedIn = Boolean(target?.loggedIn)
   const others = auth.providers.filter(p => p.loggedIn && p.id !== target?.id)
@@ -91,17 +91,17 @@ function ProviderAccountRow() {
             ? 'No OAuth provider is configured; the model uses an API key.'
             : signedIn
               ? `Signed in${target.source ? ` (${target.source.replace(/_/g, ' ')})` : ''}.${others.length ? ` Also signed in: ${others.map(p => p.name).join(', ')}.` : ''}`
-              : 'Signed out. Hermes cannot answer until you sign in.'
+              : 'Signed out. NasTech cannot answer until you sign in.'
       }
-      keywords="login sign in account oauth nous portal credentials"
+      keywords="login sign in account oauth nastech portal credentials"
     >
       {target && (signedIn ? <Pill tone="ok" dot>Signed in</Pill> : <Pill tone="warn" dot>Signed out</Pill>)}
       {target && !signedIn && (
-        <GlassButton size="sm" variant="primary" onClick={() => requestHermesLogin(`${target.name} is signed out.`)} aria-label={`Sign in with ${target.name}`}>
+        <GlassButton size="sm" variant="primary" onClick={() => requestNasTechLogin(`${target.name} is signed out.`)} aria-label={`Sign in with ${target.name}`}>
           Sign in
         </GlassButton>
       )}
-      <GlassButton size="sm" variant="ghost" onClick={() => void refreshHermesAuth()} aria-label="Refresh sign-in status">
+      <GlassButton size="sm" variant="ghost" onClick={() => void refreshNasTechAuth()} aria-label="Refresh sign-in status">
         <IconRefresh />
       </GlassButton>
     </SettingsRow>
@@ -166,7 +166,7 @@ function AutonomyBlock({ ready }: { ready: boolean }) {
   }
 
   return (
-    <SettingsBlock title="Autonomy" label="Autonomy" description="Ask first. Balanced. Independent. How much Hermes checks in before acting." keywords="approvals mode manual smart off yolo confirm">
+    <SettingsBlock title="Autonomy" label="Autonomy" description="Ask first. Balanced. Independent. How much NasTech checks in before acting." keywords="approvals mode manual smart off yolo confirm">
       <div className="flex gap-3" aria-label="Autonomy">
         {AUTONOMY.map(item => (
           <RadioCard key={item.mode} icon={item.icon} label={item.label} description={item.description} selected={pendingOff ? item.mode === 'off' : current === item.mode} onSelect={() => choose(item.mode)} disabled={!ready || busy} />
@@ -175,7 +175,7 @@ function AutonomyBlock({ ready }: { ready: boolean }) {
       {pendingOff && (
         <GlassCard className="flex items-center gap-3 px-3.5 py-2.5">
           <InlineNote tone="warn" className="flex-1">
-            Hermes will run gated actions without asking.
+            NasTech will run gated actions without asking.
           </InlineNote>
           <GlassButton size="sm" variant="ghost" onClick={() => setPendingOff(false)}>
             Cancel
@@ -242,9 +242,9 @@ function PreferredModelRow({ ready }: { ready: boolean }) {
   }
 
   return (
-    <SettingsRow icon={<IconCpu />} label="Preferred model" description="Choose the model Hermes uses for most tasks." keywords="llm provider">
+    <SettingsRow icon={<IconCpu />} label="Preferred model" description="Choose the model NasTech uses for most tasks." keywords="llm provider">
       <div ref={ref} className="relative">
-        <Dropdown label={<span className="max-w-[240px] truncate">{provider ? `${provider} · ${shortModel(current)}` : `Hermes · ${shortModel(current)}`}</span>} onClick={() => ready && setOpen(o => !o)} className={cn(!ready && 'opacity-50')} />
+        <Dropdown label={<span className="max-w-[240px] truncate">{provider ? `${provider} · ${shortModel(current)}` : `NasTech · ${shortModel(current)}`}</span>} onClick={() => ready && setOpen(o => !o)} className={cn(!ready && 'opacity-50')} />
         {open && (
           <div className="float animate-pop absolute top-[calc(100%+6px)] right-0 z-30 flex w-[380px] flex-col rounded-lg" role="dialog" aria-label="Choose model">
             <label className="glass-input m-2 flex h-8 items-center gap-2 rounded-lg px-2.5">
@@ -357,13 +357,13 @@ function RunOnRow() {
 
 // ---- Background agents ---------------------------------------------------------------------
 
-interface HermesConfigPayload {
+interface NasTechConfigPayload {
   delegation?: { max_concurrent_children?: number | string | null; [key: string]: unknown }
   [key: string]: unknown
 }
 
 function BackgroundAgentsRow() {
-  const config = useBackendData(() => rest.get<HermesConfigPayload>('/api/config'))
+  const config = useBackendData(() => rest.get<NasTechConfigPayload>('/api/config'))
   const [override, setOverride] = useState<{ base: unknown; value: number } | null>(null)
   const [busy, setBusy] = useState(false)
   const raw = Number(config.data?.delegation?.max_concurrent_children)
@@ -415,7 +415,7 @@ function RememberPreferencesRow() {
     try {
       await rest.put('/api/tools/toolsets/memory', { enabled: next })
       markSaved()
-      notify({ title: next ? 'Memory on' : 'Memory paused', body: next ? 'Hermes can save memories again.' : 'Hermes stops saving to its own memory, in its CLI too, but still uses it.', level: 'success' })
+      notify({ title: next ? 'Memory on' : 'Memory paused', body: next ? 'NasTech can save memories again.' : 'NasTech stops saving to its own memory, in its CLI too, but still uses it.', level: 'success' })
     } catch (error) {
       setOverride(null)
       notify({ title: 'Could not change memory', body: errorText(error), level: 'error' })
@@ -426,7 +426,7 @@ function RememberPreferencesRow() {
   }
 
   return (
-    <SettingsRow icon={<IconFileText />} label="Remember preferences" description="Let Hermes remember your settings and learn from your choices." keywords="memory toolset learn">
+    <SettingsRow icon={<IconFileText />} label="Remember preferences" description="Let NasTech remember your settings and learn from your choices." keywords="memory toolset learn">
       <Toggle checked={enabled} onChange={next => void toggle(next)} label="Remember preferences" disabled={busy || !row} />
     </SettingsRow>
   )
@@ -462,7 +462,7 @@ function AskBeforeSendingRow() {
   }
 
   return (
-    <SettingsRow icon={<IconLock />} label="Ask before sending messages" description="Get a confirmation before Hermes sends messages on your behalf. Sets the system bridge's “act” tier to confirm." keywords="permissions policy act tier bridge">
+    <SettingsRow icon={<IconLock />} label="Ask before sending messages" description="Get a confirmation before NasTech sends messages on your behalf. Sets the system bridge's “act” tier to confirm." keywords="permissions policy act tier bridge">
       <Toggle checked={confirm} onChange={next => void toggle(next)} label="Ask before sending messages" disabled={busy || !policy.data} />
     </SettingsRow>
   )

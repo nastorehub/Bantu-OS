@@ -10,7 +10,7 @@ import { bindBranding } from './branding.ts'
 import { bindPlugins } from './plugins.ts'
 import { $connectionEpoch, bindGatewayToBackend } from './gateway.ts'
 import { bindFollow } from './follow.ts'
-import { bindHermesAuth } from './hermes-auth.ts'
+import { bindNasTechAuth } from './nastech-auth.ts'
 import { bindMissionEvents } from './missions.ts'
 import { bindSidebarPrefs } from './sidebar.ts'
 import { bindNotificationEvents, bindNotificationHistory } from './notifications.ts'
@@ -52,7 +52,7 @@ export function bootRenderer(): void {
   bindSidebarPrefs()
   bindVoice()
   bindWake()
-  bindHermesAuth()
+  bindNasTechAuth()
   bindShellCommands()
   bindOsControl()
   bindFollow()
@@ -66,7 +66,7 @@ export function bootRenderer(): void {
   bindPlugins()
   bindBranding()
 
-  // The Hermes window owns the notification list; the history follows it.
+  // The NasTech window owns the notification list; the history follows it.
   if (isMainSurface) {
     bindNotificationHistory()
     bindBridgeSetupNotice()

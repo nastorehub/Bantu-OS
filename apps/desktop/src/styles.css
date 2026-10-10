@@ -331,64 +331,64 @@ textarea {
 
 /* ---- Transcript markdown ----------------------------------------------------------------- */
 
-.prose-hermes {
+.prose-nastech {
   user-select: text;
   overflow-wrap: anywhere;
 }
-.prose-hermes > * + * {
+.prose-nastech > * + * {
   margin-top: 0.6em;
 }
-.prose-hermes p {
+.prose-nastech p {
   margin: 0;
 }
-.prose-hermes h1,
-.prose-hermes h2,
-.prose-hermes h3,
-.prose-hermes h4 {
+.prose-nastech h1,
+.prose-nastech h2,
+.prose-nastech h3,
+.prose-nastech h4 {
   font-weight: 600;
   color: var(--color-fg);
   margin-top: 1em;
   line-height: 1.3;
 }
-.prose-hermes h1 {
+.prose-nastech h1 {
   font-size: 1.35em;
 }
-.prose-hermes h2 {
+.prose-nastech h2 {
   font-size: 1.15em;
 }
-.prose-hermes h3 {
+.prose-nastech h3 {
   font-size: 1.05em;
 }
-.prose-hermes ul,
-.prose-hermes ol {
+.prose-nastech ul,
+.prose-nastech ol {
   padding-left: 1.4em;
   margin: 0;
 }
-.prose-hermes ul {
+.prose-nastech ul {
   list-style: disc;
 }
-.prose-hermes ol {
+.prose-nastech ol {
   list-style: decimal;
 }
-.prose-hermes li + li {
+.prose-nastech li + li {
   margin-top: 0.2em;
 }
-.prose-hermes li::marker {
+.prose-nastech li::marker {
   color: var(--color-accent-strong);
 }
-.prose-hermes a {
+.prose-nastech a {
   color: var(--color-accent-strong);
   text-decoration: underline;
   text-decoration-color: color-mix(in srgb, var(--color-accent-strong) 40%, transparent);
 }
-.prose-hermes code {
+.prose-nastech code {
   font-family: var(--font-mono);
   font-size: 0.92em;
   background: rgba(6, 18, 60, 0.6);
   padding: 0.1em 0.35em;
   border-radius: var(--radius-xs);
 }
-.prose-hermes pre {
+.prose-nastech pre {
   background: rgba(4, 14, 50, 0.7);
   border: 1px solid var(--color-line);
   border-radius: var(--radius-md);
@@ -397,36 +397,36 @@ textarea {
   font-size: 12px;
   line-height: 1.5;
 }
-.prose-hermes pre code {
+.prose-nastech pre code {
   background: transparent;
   padding: 0;
   font-size: inherit;
 }
-.prose-hermes blockquote {
+.prose-nastech blockquote {
   border-left: 2px solid var(--color-line-strong);
   padding-left: 0.8em;
   color: var(--color-fg-2);
 }
-.prose-hermes table {
+.prose-nastech table {
   border-collapse: collapse;
   font-size: 12px;
 }
-.prose-hermes th,
-.prose-hermes td {
+.prose-nastech th,
+.prose-nastech td {
   padding: 0.35em 0.7em;
   box-shadow: 0 0 0 1px var(--color-line);
   text-align: left;
 }
-.prose-hermes th {
+.prose-nastech th {
   color: var(--color-fg-2);
   font-weight: 500;
 }
-.prose-hermes hr {
+.prose-nastech hr {
   border: 0;
   height: 1px;
   background: var(--color-line);
 }
-.prose-hermes input[type='checkbox'] {
+.prose-nastech input[type='checkbox'] {
   accent-color: var(--color-accent);
   margin-right: 0.4em;
 }

@@ -1,7 +1,7 @@
 import { useStore } from '@nanostores/react'
 import { IconLayoutSidebarLeftCollapse, IconLayoutSidebarLeftExpand, IconPlus } from '@tabler/icons-react'
 import { useRef, useState } from 'react'
-import { AppGlyph, HermesAvatar } from '../components/app-icon.tsx'
+import { AppGlyph, NasTechAvatar } from '../components/app-icon.tsx'
 import { cn } from '../lib/cn.ts'
 import { shortcutLabel } from '../lib/platform-labels.ts'
 import { $sidebar, SIDEBAR_COLLAPSED, SIDEBAR_MAX, SIDEBAR_MIN, SIDEBAR_SNAP, setSidebarCollapsed, setSidebarWidth, toggleSidebar } from '../store/sidebar.ts'
@@ -9,7 +9,7 @@ import { $activeSpace, $spaces, addSpace, setActiveSpace } from '../store/spaces
 import { $page, showPage } from '../store/windows.ts'
 import { PAGES } from './apps.ts'
 
-/** The persistent left rail of the main Hermes window: identity, pages, spaces. Resizable; collapses to icons. */
+/** The persistent left rail of the main NasTech window: identity, pages, spaces. Resizable; collapses to icons. */
 export function Sidebar() {
   const page = useStore($page)
   const spaces = useStore($spaces)
@@ -73,10 +73,10 @@ export function Sidebar() {
       data-collapsed={collapsed || undefined}
     >
       <div className={cn(collapsed ? 'flex justify-center' : 'px-1')}>
-        <HermesAvatar size={collapsed ? 36 : 44} rounded={collapsed ? 9 : 11} />
+        <NasTechAvatar size={collapsed ? 36 : 44} rounded={collapsed ? 9 : 11} />
         {!collapsed && (
           <>
-            <div className="mt-2.5 text-[15px] font-semibold leading-tight text-fg">Hermes</div>
+            <div className="mt-2.5 text-[15px] font-semibold leading-tight text-fg">NasTech</div>
             <div className="mt-0.5 text-[11px] leading-snug text-fg-3 italic">A more capable you. Always.</div>
           </>
         )}

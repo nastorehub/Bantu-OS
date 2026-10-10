@@ -46,7 +46,7 @@ import { areaOf, valuesIn } from './tools/table.ts'
 import { DATE_FORMATS, DATE_ORDERS, type DateOrder, DELIMITERS, TEXT_CASES, type TextCase } from './tools/text.ts'
 
 /*
- * What Hermes's commands for charts, summaries, data tools, named ranges, validation, comments and
+ * What NasTech's commands for charts, summaries, data tools, named ranges, validation, comments and
  * notes do in a workbook (agent.ts finds the workbook): each takes a command's arguments as they
  * come, lists and objects as JSON text (or as they are in a batch of edits), and says what it did.
  * sheets.clean and sheets.sort work through the same data tools.
@@ -68,10 +68,10 @@ export interface DepthWork {
   run: (on: SheetsTarget, args: Args, source?: CommandSource) => Promise<Done> | Done
 }
 
-/** Who signs the comments, replies and notes Hermes starts. */
-export const HERMES_AUTHOR = { id: personIdOf('Hermes'), name: 'Hermes' }
+/** Who signs the comments, replies and notes NasTech starts. */
+export const NASTECH_AUTHOR = { id: personIdOf('NasTech'), name: 'NasTech' }
 
-const authorFor = (source?: CommandSource) => (source === 'agent' ? HERMES_AUTHOR : undefined)
+const authorFor = (source?: CommandSource) => (source === 'agent' ? NASTECH_AUTHOR : undefined)
 
 const text = (value: unknown): string => (typeof value === 'string' ? value.trim() : typeof value === 'number' ? String(value) : '')
 

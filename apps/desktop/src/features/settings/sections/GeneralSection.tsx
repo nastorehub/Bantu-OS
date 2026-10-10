@@ -91,13 +91,13 @@ export function GeneralSection() {
 
       <SettingsGroup title="Session">
         {hostPlatform() === 'linux' ? (
-          <SettingsRow icon={<IconPower />} label="Restart Herald OS" description="Stops the Hermes backend this shell started and starts a fresh session." keywords="exit close quit">
+          <SettingsRow icon={<IconPower />} label="Restart Herald OS" description="Stops the NasTech backend this shell started and starts a fresh session." keywords="exit close quit">
             <GlassButton size="sm" variant="danger" onClick={() => void window.heraldOS.window.quit()} aria-label="Restart Herald OS">
               Restart
             </GlassButton>
           </SettingsRow>
         ) : (
-          <SettingsRow icon={<IconPower />} label="Quit Herald OS" description="Stops the Hermes backend this shell started and returns to macOS." keywords="exit close">
+          <SettingsRow icon={<IconPower />} label="Quit Herald OS" description="Stops the NasTech backend this shell started and returns to macOS." keywords="exit close">
             <GlassButton size="sm" variant="danger" onClick={() => void window.heraldOS.window.quit()} aria-label="Quit Herald OS">
               Quit
             </GlassButton>

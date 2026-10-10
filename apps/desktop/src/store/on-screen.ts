@@ -3,7 +3,7 @@ import { describeScreen, type ScreenFacts } from '../lib/screen-context.ts'
 import { $webWindows } from './web-windows.ts'
 import { $focusedWindowId, $page } from './windows.ts'
 
-/* The screen as Hermes needs it: what the Files page lists and selects, and the document in front. */
+/* The screen as NasTech needs it: what the Files page lists and selects, and the document in front. */
 
 export function screenFacts(): ScreenFacts {
   const location = $location.get()

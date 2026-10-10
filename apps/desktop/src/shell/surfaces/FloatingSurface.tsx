@@ -9,7 +9,7 @@ import { WidgetWindow } from '../../features/plugins/PluginSlots.tsx'
 
 const TerminalSurface = lazy(() => import('../../features/terminal/TerminalSurface.tsx').then(m => ({ default: m.TerminalSurface })))
 const SystemSurface = lazy(() => import('../../features/system/SystemSurface.tsx').then(m => ({ default: m.SystemSurface })))
-const ChatPopout = lazy(() => import('../../features/hermes/ChatPopout.tsx').then(m => ({ default: m.ChatPopout })))
+const ChatPopout = lazy(() => import('../../features/nastech/ChatPopout.tsx').then(m => ({ default: m.ChatPopout })))
 const StudioWindow = lazy(() => import('../../features/studio/StudioWindow.tsx').then(m => ({ default: m.StudioWindow })))
 const CaptureEditor = lazy(() => import('../../features/capture/CaptureEditor.tsx').then(m => ({ default: m.CaptureEditor })))
 const CameraBubble = lazy(() => import('../../features/capture/CameraBubble.tsx').then(m => ({ default: m.CameraBubble })))
@@ -51,7 +51,7 @@ function FloatingContent({ appId, payload }: { appId: FloatingAppId; payload: Re
 }
 
 /**
- * Panels mode: one floating Hermes app (terminal, system, popped-out chat) in its own compositor
+ * Panels mode: one floating NasTech app (terminal, system, popped-out chat) in its own compositor
  * window. niri draws the border and handles move/resize, so there is no chrome here: just an opaque
  * glass background and the app. The app payload (e.g. a session id) arrives as a `payload` command.
  */
@@ -67,7 +67,7 @@ export function FloatingSurface({ appId }: { appId: string }) {
   if (!isFloatingAppId(appId)) {
     return (
       <div className="flex h-full w-full items-center justify-center bg-bg text-[13px] text-fg-3">
-        Unknown Hermes app: {appId}
+        Unknown NasTech app: {appId}
       </div>
     )
   }

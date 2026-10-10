@@ -91,7 +91,7 @@ export class EmojiPanel {
         sandbox: true,
         nodeIntegration: false,
         spellcheck: false,
-        additionalArguments: ['--hermes-surface=emoji', '--hermes-shell-mode=desktop']
+        additionalArguments: ['--nastech-surface=emoji', '--nastech-shell-mode=desktop']
       }
     })
     win.setAlwaysOnTop(true, 'pop-up-menu')

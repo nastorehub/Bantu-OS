@@ -2,17 +2,17 @@
 
 Herald Office is three apps built into Herald OS: Herald Docs for documents, Herald Sheets for
 spreadsheets and Herald Slides for presentations. They open and save Word, Excel and PowerPoint
-files, and Hermes can work in them with you: ask for a cover letter, "remove the duplicate rows" or
+files, and NasTech can work in them with you: ask for a cover letter, "remove the duplicate rows" or
 "turn my report into slides", and watch each change land in the open window as a step you can undo.
 
 Open them from the Dock's Herald Office tile, from Applications (`Cmd+Shift+A`, `Super+A` on Linux),
 from Files ("Edit in Herald Docs" on a Word file, and likewise for workbooks and presentations), by
-dropping a file on an app's window, or by asking Hermes. On a Mac the Dock tile offers the three
+dropping a file on an app's window, or by asking NasTech. On a Mac the Dock tile offers the three
 apps. On Herald OS Linux it brings back the ones that are open (or opens Applications), and each app
 opens in its own window, three quarters of the screen wide.
 
 Each app keeps its open documents in tabs beside its menus. The status bar at the bottom says
-whether the document is saved and holds the Ask Hermes field. In the shortcuts below, `Cmd` on a
+whether the document is saved and holds the Ask NasTech field. In the shortcuts below, `Cmd` on a
 Mac is `Ctrl` on Herald OS Linux, and `Alt` is `Option` on a Mac.
 
 ## Herald Docs
@@ -65,20 +65,20 @@ footers included.
 - **Templates.** File > New (`Cmd+N`) opens the gallery: a blank document, Letter, Cover letter, CV,
   Report, Memo, Meeting notes, Essay, Project proposal, Newsletter, Invoice, Thank-you note and
   Recipe, then the templates you saved with File > Save as Template…. The arrow keys move, `Enter`
-  makes the document and `Esc` goes back. Only your own New opens the gallery: ask Hermes for a
+  makes the document and `Esc` goes back. Only your own New opens the gallery: ask NasTech for a
   letter or a CV and it picks the template itself.
 - **Find, spelling and statistics.** Edit > Find… (`Cmd+F`) and Replace… (`Cmd+Shift+H`).
   Misspelled words are underlined: right-click one for suggestions or Add to Dictionary (on a Mac,
   the system's own dictionary). Tools > Word Count and Statistics… (`Cmd+Shift+C`) counts words,
   characters, paragraphs and sentences, and gives the reading and speaking time and how easy the
   text is to read (worked out for English).
-- **The writing assistant.** Select text and click Ask Hermes in the bar over it, or open the Hermes
+- **The writing assistant.** Select text and click Ask NasTech in the bar over it, or open the NasTech
   menu: Rewrite, Shorten, Expand, Change Tone (Professional, Friendly, Confident or Casual),
   Translate (Spanish, French, German, Portuguese, Italian, Japanese, Chinese, or Other Language…),
   Fix Spelling and Grammar, and Summarise. Summarise puts a short summary under the paragraph and
   the others replace the selection with the new text, each as one step to undo, even if you click
-  elsewhere while Hermes works.
-- **Review with Hermes.** Review > Review with Hermes reads the whole document and leaves comments
+  elsewhere while NasTech works.
+- **Review with NasTech.** Review > Review with NasTech reads the whole document and leaves comments
   on exact passages, each starting Clarity, Grammar or Tone and suggesting a fix. It never changes
   the text, and the whole review is one step to undo.
 
@@ -117,7 +117,7 @@ and merging, and the tabs along the bottom are the workbook's sheets.
 - **Comments and notes.** Insert > Comment starts a thread on the active cell, with replies and
   Resolve; Insert > Note writes a note. A cell holds one or the other, as in Excel. Insert > Show
   comments opens the panel with every thread. Both are saved as Excel's comments and notes.
-- **The Hermes menu.** Formula from a description…, Explain this formula, Fill from examples (the
+- **The NasTech menu.** Formula from a description…, Explain this formula, Fill from examples (the
   empty cells of a column, following the filled ones), Clean data (remove duplicate rows, fix dates,
   split a column, trim spaces, numbers stored as text) and What stands out in this sheet?.
 
@@ -183,7 +183,7 @@ notes under it, and a toolbar for text, shapes, pictures, tables, the background
   further slides. Insert > Slides from Document… adds such slides to the deck. Insert > Table from
   Spreadsheet… puts a range of an Excel or CSV file on the slide in front, or on slides of its own
   after it (a long table goes on over several, its header row on each).
-- **The Hermes menu.** Speaker Notes for This Slide or for Every Slide, Tighten This Slide, Choose
+- **The NasTech menu.** Speaker Notes for This Slide or for Every Slide, Tighten This Slide, Choose
   Layouts for the Content, A Deck from a Topic…, and slides from documents and workbooks open in
   Herald Docs and Sheets: Add Slides from a Document, New Deck from a Document, and Add Slides from
   a Sheet (a table, and a slide after it that sums it up).
@@ -209,11 +209,11 @@ notes under it, and a toolbar for text, shapes, pictures, tables, the background
   whole saves without the question, and later saves ask again only about something new. Saving to
   another format (a workbook as CSV, say) lists what that format did not keep once it is saved.
 - **Backups.** The first time Herald writes over a file after Herald OS starts, your save or
-  Hermes's, the file as it was is copied into `~/.hermes/herald-os/office-backups`, in a folder for
+  NasTech's, the file as it was is copied into `~/.nastech/herald-os/office-backups`, in a folder for
   the day (`2026-10-09/Report.docx`). Backups are kept for 30 days and up to 2 GB in all, the oldest
   going first; files over 256 MB are not copied.
 - **Saving by itself.** Once you have saved a document, it saves itself about a second and a half
-  after each change, Hermes's included; a new or just-opened document waits for your first save.
+  after each change, NasTech's included; a new or just-opened document waits for your first save.
   The status bar says Not saved yet, Edited, Saving soon or Saved. When a save would lose something
   you have not agreed to, Herald stops saving by itself and says why: save it yourself to go on.
 - **Changes from elsewhere.** An open document follows its file. When another app or a sync client
@@ -247,14 +247,14 @@ The pages are laid out at the document's own size and scaled to the paper the pr
 Herald OS Linux, which comes without a print server, the system has no print dialog to show, so
 Print asks where to save a PDF of the same pages instead (Print to File).
 
-## Working with Hermes
+## Working with NasTech
 
-Ask in the Hermes window, with your voice, or in the Ask Hermes field in the status bar ("Ask Hermes
-about this document…"; Hermes > Ask Hermes… takes you there): type and press `Enter`. The
-request goes with the document and what is selected in it, and Hermes works in the open window as
+Ask in the NasTech window, with your voice, or in the Ask NasTech field in the status bar ("Ask NasTech
+about this document…"; NasTech > Ask NasTech… takes you there): type and press `Enter`. The
+request goes with the document and what is selected in it, and NasTech works in the open window as
 you watch, each change a step you can undo. While it works, the field says what it is doing, with
-Cancel; when it needs your approval, Open Hermes shows the card. Its reply opens above the field,
-with Undo (while you have not changed the document since), Open in Hermes for the conversation, and
+Cancel; when it needs your approval, Open NasTech shows the card. Its reply opens above the field,
+with Undo (while you have not changed the document since), Open in NasTech for the conversation, and
 Dismiss. The next request about the same document carries on the same conversation. Things that work
 well:
 
@@ -269,14 +269,14 @@ well:
 - Across apps: "turn my report into slides", "put the totals from Budget.xlsx in my report as a
   table", "add a slide with the March figures from the open sheet", "export the report as a PDF".
 
-Hermes can also change a file you do not have open, named by its path ("add page numbers to the
+NasTech can also change a file you do not have open, named by its path ("add page numbers to the
 footer of ~/Documents/Report.docx"): it reads the file, changes it and writes it back, asking you
 first every time, and the original is backed up as above. When the file holds something Herald
-would not keep, Hermes has to open it in the app instead, so you see what Herald changed before
-anything is saved. Hermes saves only when you ask (a document you have saved before still saves
-itself), and saving over a file asks first. Its comments are signed Hermes.
+would not keep, NasTech has to open it in the app instead, so you see what Herald changed before
+anything is saved. NasTech saves only when you ask (a document you have saved before still saves
+itself), and saving over a file asks first. Its comments are signed NasTech.
 
-Hermes works through its `docs`, `sheets` and `slides` tools, the same commands the command bar and
+NasTech works through its `docs`, `sheets` and `slides` tools, the same commands the command bar and
 voice reach. On Herald OS Linux, `herald-os docs`, `herald-os sheets` and `herald-os slides` do the
 same from a terminal (`herald-os docs write "## Next steps" --at end`, `herald-os sheets read
 A1:D20`, `herald-os sheets write B7 "=SUM(B2:B6)"`, `herald-os slides from-doc
@@ -284,10 +284,10 @@ A1:D20`, `herald-os sheets write B7 "=SUM(B2:B6)"`, `herald-os slides from-doc
 
 ## Voice
 
-- **Talking to Hermes.** Press the voice key (`Alt+Space` on a Mac, `Super+V` on Linux), or say
-  "hey Hermes" when the wake word is on, and ask: "add a column for tax", "translate this paragraph
+- **Talking to NasTech.** Press the voice key (`Alt+Space` on a Mac, `Super+V` on Linux), or say
+  "hey NasTech" when the wake word is on, and ask: "add a column for tax", "translate this paragraph
   into Spanish", "make the heading bold", "fill in the rest of this column". Requests like these go
-  to Hermes as you said them, with what Herald Office has open, so "this paragraph", "these cells"
+  to NasTech as you said them, with what Herald Office has open, so "this paragraph", "these cells"
   and "this slide" mean what you are looking at. Short commands run at once: "new document", "new
   spreadsheet", "new presentation", "new slide", "open Herald Docs", "save the document", "save the
   presentation".
@@ -310,7 +310,7 @@ The first time you add a comment or a note in Herald Docs or Herald Sheets, Hera
 to put on it, starting from your account's name. The same name goes on your comments in every
 Office app and is saved in the files you comment on; cancelling the question leaves the comment
 unposted. Change it in Settings > General > Herald Office > Name on comments (clear it to be asked
-again), or with Change under Herald Docs' comments. Comments Hermes adds are signed Hermes; one
+again), or with Change under Herald Docs' comments. Comments NasTech adds are signed NasTech; one
 added from the command bar or by voice carries your name, or "Herald user" until you have chosen
 one.
 
@@ -344,7 +344,7 @@ For a file you open, File > What Herald changed… lists most of these that appl
   edited; Arrange's Convert to Shapes turns SmartArt that has a drawing into shapes. Shadows and
   other effects are left out, and WordArt and vertical text are shown as plain, upright text.
 - **Printing.** Herald Sheets prints the cells of the sheet in front, without its charts.
-- **Hermes.** Its commands do not reach the master view, transitions or presenting yet, and it
+- **NasTech.** Its commands do not reach the master view, transitions or presenting yet, and it
   exports PDFs rather than printing.
 
 ## Linux notes
@@ -367,8 +367,8 @@ For a file you open, File > What Herald changed… lists most of these that appl
 - **A file changed on disk while I had unsaved edits.** Choose Keep mine (saved over theirs) or Load
   theirs (your unsaved edits go).
 - **I want the file as it was before Herald saved it.** Look in
-  `~/.hermes/herald-os/office-backups`, in the folder of the day it was first saved over.
-- **Hermes says a file has things Herald shows differently.** It will not rewrite that file unseen.
+  `~/.nastech/herald-os/office-backups`, in the folder of the day it was first saved over.
+- **NasTech says a file has things Herald shows differently.** It will not rewrite that file unseen.
   Open it, check File > What Herald changed…, and ask again with the document open.
-- **The Ask Hermes field says Hermes is offline or starting.** It takes requests once Hermes is
-  running; if Hermes does not come back, see [Troubleshooting](troubleshooting.md).
+- **The Ask NasTech field says NasTech is offline or starting.** It takes requests once NasTech is
+  running; if NasTech does not come back, see [Troubleshooting](troubleshooting.md).

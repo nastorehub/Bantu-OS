@@ -3,7 +3,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite
 
 // A spoken request with Herald Slides in front, through the voice store, the chained engine, the
 // matcher with the whole command registry, the chat store and the Office context line, all real.
-// Fake: Hermes's socket (below, a session that queues a prompt sent while a turn runs, as Hermes's
+// Fake: NasTech's socket (below, a session that queues a prompt sent while a turn runs, as NasTech's
 // default busy mode does once that turn is told to stop), the microphone and the speakers.
 const edges = vi.hoisted(() => {
   const presence: unknown[] = []
@@ -26,7 +26,7 @@ const edges = vi.hoisted(() => {
     microphone: null as null | ((frame: { pcm: Int16Array; level: number; ms: number }) => void),
     /** The speech socket closes before it says anything. */
     speechCloses: false,
-    hermes: null as null | ((method: string, params: Record<string, unknown>) => unknown)
+    nastech: null as null | ((method: string, params: Record<string, unknown>) => unknown)
   }
 })
 
@@ -55,7 +55,7 @@ vi.mock('./gateway.ts', async () => {
         return { session_id: `runtime-${sessions}`, stored_session_id: `stored-${sessions}`, info: {}, messages: [] }
       }
 
-      return edges.hermes?.(method, params) ?? {}
+      return edges.nastech?.(method, params) ?? {}
     }
   }
 })
@@ -153,12 +153,12 @@ const REQUEST = 'Add speaker notes to every slide.'
 const REPLY = 'I added speaker notes to all six slides.'
 const DECK = { app: 'slides', at: 1, active: 'deck-1', documents: [{ key: 'deck-1', path: '/Users/demo/Pitch.pptx', name: 'Pitch.pptx', format: 'pptx', modified: false, detail: 'slide 1 of 6' }] }
 
-/** One Hermes session: a prompt sent while a turn runs waits behind it ("queue") or joins it and goes down with it ("fold"). */
-const hermes = {
+/** One NasTech session: a prompt sent while a turn runs waits behind it ("queue") or joins it and goes down with it ("fold"). */
+const nastech = {
   running: new Set<string>(),
   waiting: new Map<string, string>(),
   busy: 'queue' as 'queue' | 'fold',
-  /** How long a running Office call takes to stop once Hermes is told to stop. */
+  /** How long a running Office call takes to stop once NasTech is told to stop. */
   stopMs: 40,
   refuse: '',
   /** Answer before the submit's own answer arrives. */
@@ -169,38 +169,38 @@ const hermes = {
 
 function emit(sessionId: string, type: string, payload?: Record<string, unknown>): void {
   if (type === 'message.complete') {
-    hermes.running.delete(sessionId)
+    nastech.running.delete(sessionId)
   }
 
   hub.dispatch({ type, session_id: sessionId, payload } as GatewayEvent)
 
-  const next = type === 'message.complete' ? hermes.waiting.get(sessionId) : undefined
+  const next = type === 'message.complete' ? nastech.waiting.get(sessionId) : undefined
 
   if (next !== undefined) {
-    hermes.waiting.delete(sessionId)
+    nastech.waiting.delete(sessionId)
     run(sessionId, next)
   }
 }
 
 function run(sessionId: string, text: string): void {
-  hermes.running.add(sessionId)
+  nastech.running.add(sessionId)
 
-  if (hermes.early) {
-    hermes.turn(sessionId, text)
+  if (nastech.early) {
+    nastech.turn(sessionId, text)
   } else {
-    setTimeout(() => hermes.turn(sessionId, text), 5)
+    setTimeout(() => nastech.turn(sessionId, text), 5)
   }
 }
 
 function stopTurn(sessionId: string): void {
   setTimeout(() => {
-    if (hermes.running.has(sessionId)) {
+    if (nastech.running.has(sessionId)) {
       emit(sessionId, 'message.complete', { text: '', status: 'interrupted' })
     }
-  }, hermes.stopMs)
+  }, nastech.stopMs)
 }
 
-edges.hermes = (method, params) => {
+edges.nastech = (method, params) => {
   const sessionId = String(params.session_id)
 
   if (method === 'session.interrupt') {
@@ -213,18 +213,18 @@ edges.hermes = (method, params) => {
     return {}
   }
 
-  if (hermes.refuse) {
-    throw new Error(hermes.refuse)
+  if (nastech.refuse) {
+    throw new Error(nastech.refuse)
   }
 
-  if (hermes.running.has(sessionId)) {
-    if (hermes.busy === 'queue') {
-      hermes.waiting.set(sessionId, String(params.text))
+  if (nastech.running.has(sessionId)) {
+    if (nastech.busy === 'queue') {
+      nastech.waiting.set(sessionId, String(params.text))
     }
 
     stopTurn(sessionId)
 
-    return { status: hermes.busy === 'queue' ? 'queued' : 'redirected' }
+    return { status: nastech.busy === 'queue' ? 'queued' : 'redirected' }
   }
 
   run(sessionId, String(params.text))
@@ -232,7 +232,7 @@ edges.hermes = (method, params) => {
   return { status: 'streaming' }
 }
 
-/** Hermes reads the deck, writes the notes and says so. */
+/** NasTech reads the deck, writes the notes and says so. */
 function notesTurn(sessionId: string, reply = REPLY): void {
   emit(sessionId, 'message.start')
   emit(sessionId, 'tool.start', { tool_id: 'read', name: 'slides', args: { action: 'read' } })
@@ -268,9 +268,9 @@ beforeEach(() => {
   edges.spoken.length = 0
   edges.requests.length = 0
   edges.speechCloses = false
-  Object.assign(hermes, { busy: 'queue', stopMs: 40, refuse: '', early: false, turn: (sessionId: string) => notesTurn(sessionId) })
-  hermes.running.clear()
-  hermes.waiting.clear()
+  Object.assign(nastech, { busy: 'queue', stopMs: 40, refuse: '', early: false, turn: (sessionId: string) => notesTurn(sessionId) })
+  nastech.running.clear()
+  nastech.waiting.clear()
   resetChats()
   $notifications.set([])
   $prefs.set({ ...$prefs.get(), doNotDisturb: false, voice: { ...$prefs.get().voice, enabled: true, engine: 'chained', wakeWord: false, followUpSeconds: 8 } })
@@ -282,7 +282,7 @@ afterEach(async () => {
 })
 
 describe('a spoken request with Herald Slides in front', () => {
-  it('reaches Hermes with the deck in its context and speaks the reply', async () => {
+  it('reaches NasTech with the deck in its context and speaks the reply', async () => {
     await startVoice('button')
     await submitVoiceTranscript(REQUEST)
     await vi.waitFor(() => expect(edges.spoken).toEqual([REPLY]))
@@ -293,8 +293,8 @@ describe('a spoken request with Herald Slides in front', () => {
     await vi.waitFor(() => expect($voice.get().state).toBe('listening'))
   })
 
-  it('says it is done when Hermes edits the deck without a word', async () => {
-    hermes.turn = sessionId => notesTurn(sessionId, '')
+  it('says it is done when NasTech edits the deck without a word', async () => {
+    nastech.turn = sessionId => notesTurn(sessionId, '')
 
     await startVoice('button')
     await submitVoiceTranscript(REQUEST)
@@ -304,7 +304,7 @@ describe('a spoken request with Herald Slides in front', () => {
   })
 
   it('stops the Office call it is spoken over and answers once that call has ended', async () => {
-    hermes.turn = (sessionId, text) => (text === REQUEST ? notesTurn(sessionId) : officeCall(sessionId))
+    nastech.turn = (sessionId, text) => (text === REQUEST ? notesTurn(sessionId) : officeCall(sessionId))
 
     await startVoice('button')
     await submitVoiceTranscript('Turn my report into slides.')
@@ -314,11 +314,11 @@ describe('a spoken request with Herald Slides in front', () => {
 
     const methods = edges.requests.map(request => request.method).filter(method => method !== 'session.create')
     expect(methods).toEqual(['prompt.submit', 'session.interrupt', 'prompt.submit'])
-    expect(hermes.waiting.size).toBe(0)
+    expect(nastech.waiting.size).toBe(0)
   })
 
   it('follows a request queued behind a turn still running in the chat', async () => {
-    hermes.turn = (sessionId, text) => (text === REQUEST ? notesTurn(sessionId) : officeCall(sessionId))
+    nastech.turn = (sessionId, text) => (text === REQUEST ? notesTurn(sessionId) : officeCall(sessionId))
     await createChat()
     await sendPrompt('Turn my report into slides.')
     await vi.waitFor(() => expect(Object.values($chats.get())[0]?.streaming).toBe(true))
@@ -329,13 +329,13 @@ describe('a spoken request with Herald Slides in front', () => {
     expect(prompts()).toEqual(['Turn my report into slides.', REQUEST])
   })
 
-  it('says Hermes stopped when the request goes down with the turn it joined', async () => {
-    hermes.busy = 'fold'
-    hermes.turn = (sessionId, text) => (text === REQUEST ? notesTurn(sessionId) : officeCall(sessionId))
+  it('says NasTech stopped when the request goes down with the turn it joined', async () => {
+    nastech.busy = 'fold'
+    nastech.turn = (sessionId, text) => (text === REQUEST ? notesTurn(sessionId) : officeCall(sessionId))
     await createChat()
     await sendPrompt('Turn my report into slides.')
     // The chat shows busy as soon as the prompt is sent, but the Office call starts on the real clock: it
-    // must be running before the fake clock takes over, or it can begin after Hermes has stopped it.
+    // must be running before the fake clock takes over, or it can begin after NasTech has stopped it.
     await vi.waitFor(() => expect(officeCallRunning()).toBe(true))
 
     await startVoice('button')
@@ -345,22 +345,22 @@ describe('a spoken request with Herald Slides in front', () => {
     expect(edges.spoken).toEqual([])
     await vi.advanceTimersByTimeAsync(3000)
 
-    expect(edges.spoken).toEqual(['Hermes stopped before it finished. Please ask again.'])
-    expect(toasts()).toEqual(['Hermes: Hermes stopped before it finished. Please ask again.'])
+    expect(edges.spoken).toEqual(['NasTech stopped before it finished. Please ask again.'])
+    expect(toasts()).toEqual(['NasTech: NasTech stopped before it finished. Please ask again.'])
   })
 
-  it('says what went wrong when Hermes refuses the request', async () => {
-    hermes.refuse = 'session busy'
+  it('says what went wrong when NasTech refuses the request', async () => {
+    nastech.refuse = 'session busy'
 
     await startVoice('button')
     await submitVoiceTranscript(REQUEST)
     await vi.waitFor(() => expect(edges.spoken).toEqual(['Sorry, that request failed.']))
-    expect(toasts()).toEqual(['Hermes turn failed: session busy'])
+    expect(toasts()).toEqual(['NasTech turn failed: session busy'])
     await vi.waitFor(() => expect($voice.get().state).toBe('listening'))
   })
 
   it('speaks a reply whose turn ended before the submit was answered', async () => {
-    hermes.early = true
+    nastech.early = true
 
     await startVoice('button')
     await submitVoiceTranscript(REQUEST)

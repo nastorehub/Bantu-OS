@@ -91,7 +91,7 @@ export class History {
     }
   }
 
-  /** Say who made the newest step (Hermes's commands, a change from outside the window). */
+  /** Say who made the newest step (NasTech's commands, a change from outside the window). */
   tagLast(origin: StepOrigin): void {
     const last = this.past.at(-1)
 

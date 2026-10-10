@@ -7,7 +7,7 @@ import { events } from '../events/bus.ts'
 import { log } from '../log.ts'
 import { run } from '../platform/exec.ts'
 import { writePrefs } from '../prefs.ts'
-import { findTheme, installTheme, listFonts, listThemes, prefsForTheme, saveTheme, writeHermesSkin } from '../theme/themes.ts'
+import { findTheme, installTheme, listFonts, listThemes, prefsForTheme, saveTheme, writeNasTechSkin } from '../theme/themes.ts'
 
 export interface ThemeIpcDeps {
   panels: boolean
@@ -17,10 +17,10 @@ export interface ThemeIpcDeps {
 }
 
 /**
- * Point Hermes at the Herald skin, unless the person picked another skin themselves (Hermes's
+ * Point NasTech at the Herald skin, unless the person picked another skin themselves (NasTech's
  * `display.skin`); then their choice stands, and the skin file still follows the theme.
  */
-export async function selectHermesSkin(backend: BackendManager): Promise<void> {
+export async function selectNasTechSkin(backend: BackendManager): Promise<void> {
   if (backend.getState().phase !== 'ready') {
     return
   }
@@ -33,10 +33,10 @@ export async function selectHermesSkin(backend: BackendManager): Promise<void> {
   }
 }
 
-/** Dress Hermes in a theme that was just applied (best effort: the theme stands either way). */
-export function syncHermesSkin(spec: ThemeSpec, backend: BackendManager): void {
-  writeHermesSkin(spec)
-  selectHermesSkin(backend).catch(error => log('theme', `could not select the Herald skin: ${(error as Error).message}`))
+/** Dress NasTech in a theme that was just applied (best effort: the theme stands either way). */
+export function syncNasTechSkin(spec: ThemeSpec, backend: BackendManager): void {
+  writeNasTechSkin(spec)
+  selectNasTechSkin(backend).catch(error => log('theme', `could not select the Herald skin: ${(error as Error).message}`))
 }
 
 /** Apply an installed theme everywhere it reaches. */
@@ -58,7 +58,7 @@ export async function applyTheme(name: string, deps: ThemeIpcDeps): Promise<Hera
 
   const next = writePrefs(prefsForTheme(found.spec, found.dir))
   deps.broadcast(next)
-  syncHermesSkin(found.spec, deps.backend)
+  syncNasTechSkin(found.spec, deps.backend)
   events.emit('theme-set', { theme: found.spec.name })
 
   return next

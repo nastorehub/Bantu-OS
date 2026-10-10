@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Build the cloud-init NoCloud seed (cidata.iso) that turns a stock Fedora Cloud image into a
-# Herald OS Linux machine on first boot: creates the `hermes` user, installs an SSH key, embeds
+# Herald OS Linux machine on first boot: creates the `nastech` user, installs an SSH key, embeds
 # the `linux/` payload (provisioner, session files, dev scripts) and runs the provisioner.
 #
 #   bash linux/vm/make-seed.sh            # writes linux/vm/build/cidata.iso
@@ -13,7 +13,7 @@ LINUX_DIR="$(cd "$HERE/.." && pwd)"
 ROOT="$(cd "$LINUX_DIR/.." && pwd)"
 BUILD="$HERE/build"
 SEED="$BUILD/seed"
-KEY="$BUILD/id_hermes"
+KEY="$BUILD/id_nastech"
 
 mkdir -p "$SEED"
 rm -f "$SEED/user-data" "$SEED/meta-data"
@@ -25,9 +25,9 @@ if [[ ! -f "$KEY" ]]; then
 fi
 PUBKEY="$(cat "$KEY.pub")"
 
-# Upstream Hermes Agent revision the provisioner checks out (kept in lockstep with the Mac build).
-HERMES_REF="$(sed -n 's/^sha=//p' "$ROOT/upstream/UPSTREAM.lock" | tr -d '[:space:]')"
-[[ -n "$HERMES_REF" ]] || { echo "upstream/UPSTREAM.lock has no sha=" >&2; exit 1; }
+# Upstream NasTech Agent revision the provisioner checks out (kept in lockstep with the Mac build).
+NASTECH_REF="$(sed -n 's/^sha=//p' "$ROOT/upstream/UPSTREAM.lock" | tr -d '[:space:]')"
+[[ -n "$NASTECH_REF" ]] || { echo "upstream/UPSTREAM.lock has no sha=" >&2; exit 1; }
 
 # The whole linux/ directory travels inside user-data so the first boot does not depend on a
 # shared folder or network access to this repo.
@@ -49,8 +49,8 @@ groups:
   - render
 
 users:
-  - name: hermes
-    gecos: Hermes
+  - name: nastech
+    gecos: NasTech
     shell: /bin/bash
     groups: [wheel, video, input, render, audio, seat]
     sudo: ALL=(ALL) NOPASSWD:ALL
@@ -69,7 +69,7 @@ write_files:
   - path: /etc/herald-os/ref
     permissions: '0644'
     content: |
-      HERMES_REF=${HERMES_REF}
+      NASTECH_REF=${NASTECH_REF}
   - path: /usr/local/share/herald-os-linux.tar.gz
     permissions: '0644'
     encoding: b64
@@ -87,4 +87,4 @@ EOF
 rm -f "$BUILD/cidata.iso"
 echo "==> Building $BUILD/cidata.iso"
 hdiutil makehybrid -quiet -o "$BUILD/cidata.iso" "$SEED" -iso -joliet -default-volume-name cidata
-echo "==> Seed ready. Hermes ref $HERMES_REF, key $KEY"
+echo "==> Seed ready. NasTech ref $NASTECH_REF, key $KEY"

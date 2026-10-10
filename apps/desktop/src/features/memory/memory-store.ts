@@ -3,7 +3,7 @@ import { atom } from 'nanostores'
 import type { DirEntry } from '../../../shared/ipc.ts'
 
 /*
- * Hermes memory lives in two plain-text files under `$HERMES_HOME/memories/`: MEMORY.md (what the
+ * NasTech memory lives in two plain-text files under `$NASTECH_HOME/memories/`: MEMORY.md (what the
  * agent remembers) and USER.md (facts about the user). Entries are separated by a line that is only
  * `§`. This module parses, classifies and caches them, and writes edits back optimistically before
  * re-reading the truth from disk.
@@ -13,7 +13,7 @@ export type MemoryKind = 'preference' | 'project' | 'person' | 'knowledge'
 export type MemoryFile = 'MEMORY.md' | 'USER.md'
 
 export const MEMORY_FILES: readonly MemoryFile[] = ['MEMORY.md', 'USER.md']
-/** Same delimiter Hermes's memory tool writes (`ENTRY_DELIMITER` in tools/memory_tool.py). */
+/** Same delimiter NasTech's memory tool writes (`ENTRY_DELIMITER` in tools/memory_tool.py). */
 export const ENTRY_DELIMITER = '\n§\n'
 
 export const KIND_LABEL: Record<MemoryKind, string> = {
@@ -24,7 +24,7 @@ export const KIND_LABEL: Record<MemoryKind, string> = {
 }
 
 export const FILE_LABEL: Record<MemoryFile, string> = {
-  'MEMORY.md': 'Hermes memory',
+  'MEMORY.md': 'NasTech memory',
   'USER.md': 'About you'
 }
 
@@ -102,7 +102,7 @@ export function parse(text: string): string[] {
   return entries.map(entry => entry.trim()).filter(Boolean)
 }
 
-/** Inverse of `parse`, byte-compatible with what Hermes writes (no trailing newline). */
+/** Inverse of `parse`, byte-compatible with what NasTech writes (no trailing newline). */
 export function serialize(entries: readonly string[]): string {
   return entries.map(entry => entry.trim()).filter(Boolean).join(ENTRY_DELIMITER)
 }
@@ -183,7 +183,7 @@ export function parseEntryDate(text: string, fallback: number): number {
   return Number.isNaN(date.getTime()) ? fallback : date.getTime()
 }
 
-const STOPWORDS = new Set(['this', 'that', 'with', 'from', 'about', 'user', 'users', 'when', 'then', 'they', 'them', 'their', 'have', 'been', 'will', 'into', 'over', 'also', 'more', 'than', 'your', 'hermes', 'memory', 'prefers', 'prefer', 'likes', 'wants', 'style'])
+const STOPWORDS = new Set(['this', 'that', 'with', 'from', 'about', 'user', 'users', 'when', 'then', 'they', 'them', 'their', 'have', 'been', 'will', 'into', 'over', 'also', 'more', 'than', 'your', 'nastech', 'memory', 'prefers', 'prefer', 'likes', 'wants', 'style'])
 
 /** Words worth matching against session titles: 4+ letters, not boilerplate. */
 export function keywordsOf(title: string): string[] {
@@ -240,15 +240,15 @@ export function buildEntries(file: MemoryFileState): MemoryEntry[] {
 // Disk IO through the Electron bridge.
 // ---------------------------------------------------------------------------------------------
 
-export const memoriesDir = (hermesHome: string) => `${hermesHome.replace(/\/$/, '')}/memories`
-export const memoryPath = (hermesHome: string, file: MemoryFile) => `${memoriesDir(hermesHome)}/${file}`
+export const memoriesDir = (nastechHome: string) => `${nastechHome.replace(/\/$/, '')}/memories`
+export const memoryPath = (nastechHome: string, file: MemoryFile) => `${memoriesDir(nastechHome)}/${file}`
 
 const errorMessage = (err: unknown) => (err instanceof Error ? err.message : String(err))
 
 let generation = 0
 
-async function readMemoryFile(hermesHome: string, file: MemoryFile, listing: readonly DirEntry[]): Promise<MemoryFileState> {
-  const path = memoryPath(hermesHome, file)
+async function readMemoryFile(nastechHome: string, file: MemoryFile, listing: readonly DirEntry[]): Promise<MemoryFileState> {
+  const path = memoryPath(nastechHome, file)
   const dirEntry = listing.find(entry => entry.name === file)
 
   if (!dirEntry) {
@@ -273,7 +273,7 @@ async function readMemoryFile(hermesHome: string, file: MemoryFile, listing: rea
 }
 
 /** Re-read both files from disk. Stale loads never overwrite newer ones. */
-export async function loadMemory(hermesHome: string): Promise<void> {
+export async function loadMemory(nastechHome: string): Promise<void> {
   const mine = ++generation
   $memory.set({ ...$memory.get(), loading: true })
 
@@ -281,12 +281,12 @@ export async function loadMemory(hermesHome: string): Promise<void> {
     let listing: DirEntry[] = []
 
     try {
-      listing = await window.heraldOS.fs.readDir(memoriesDir(hermesHome))
+      listing = await window.heraldOS.fs.readDir(memoriesDir(nastechHome))
     } catch {
       // No memories folder yet: both files are simply absent.
     }
 
-    const states = await Promise.all(MEMORY_FILES.map(file => readMemoryFile(hermesHome, file, listing)))
+    const states = await Promise.all(MEMORY_FILES.map(file => readMemoryFile(nastechHome, file, listing)))
 
     if (mine !== generation) {
       return
@@ -304,7 +304,7 @@ export async function loadMemory(hermesHome: string): Promise<void> {
 }
 
 /** Replace one file's entries: optimistic cache update, write, then re-read from disk (honest). */
-async function commitFile(hermesHome: string, file: MemoryFile, texts: string[]): Promise<void> {
+async function commitFile(nastechHome: string, file: MemoryFile, texts: string[]): Promise<void> {
   const state = $memory.get()
   const current = state.files?.[file]
 
@@ -321,40 +321,40 @@ async function commitFile(hermesHome: string, file: MemoryFile, texts: string[])
   try {
     if (!current?.exists) {
       try {
-        await window.heraldOS.fs.mkdir(memoriesDir(hermesHome))
+        await window.heraldOS.fs.mkdir(memoriesDir(nastechHome))
       } catch {
         // Folder probably exists already; the write below reports real failures.
       }
     }
 
-    await window.heraldOS.fs.writeText(memoryPath(hermesHome, file), serialize(texts))
+    await window.heraldOS.fs.writeText(memoryPath(nastechHome, file), serialize(texts))
   } finally {
-    await loadMemory(hermesHome)
+    await loadMemory(nastechHome)
   }
 }
 
 const textsOf = (file: MemoryFile) => [...($memory.get().files?.[file]?.texts ?? [])]
 
-export function updateEntry(hermesHome: string, entry: MemoryEntry, text: string): Promise<void> {
+export function updateEntry(nastechHome: string, entry: MemoryEntry, text: string): Promise<void> {
   const texts = textsOf(entry.file)
   texts[entry.index] = text.trim()
 
-  return commitFile(hermesHome, entry.file, texts)
+  return commitFile(nastechHome, entry.file, texts)
 }
 
-export function forgetEntry(hermesHome: string, entry: MemoryEntry): Promise<void> {
+export function forgetEntry(nastechHome: string, entry: MemoryEntry): Promise<void> {
   return commitFile(
-    hermesHome,
+    nastechHome,
     entry.file,
     textsOf(entry.file).filter((_, index) => index !== entry.index)
   )
 }
 
 /** Append an entry and return the id it will have once written. */
-export async function addEntry(hermesHome: string, file: MemoryFile, text: string): Promise<string> {
+export async function addEntry(nastechHome: string, file: MemoryFile, text: string): Promise<string> {
   const texts = textsOf(file)
   const id = `${file}:${texts.length}`
-  await commitFile(hermesHome, file, [...texts, text.trim()])
+  await commitFile(nastechHome, file, [...texts, text.trim()])
 
   return id
 }

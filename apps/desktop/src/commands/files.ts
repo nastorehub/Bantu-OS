@@ -2,9 +2,9 @@ import { isViewable } from '../../shared/viewer.ts'
 import { fail, ok, type OsCommand } from '../store/os-commands.ts'
 import { openFileWindow } from '../store/web-windows.ts'
 import { showPage } from '../store/windows.ts'
-import { $home, $location, $query, $selectedPath, askHermesToFind, basename, createFolder, currentDir, ensureHome, expandHome, navigate, refresh, revealItem } from '../features/files/files-store.ts'
+import { $home, $location, $query, $selectedPath, askNasTechToFind, basename, createFolder, currentDir, ensureHome, expandHome, navigate, refresh, revealItem } from '../features/files/files-store.ts'
 
-/* The Files page: places, folders, search, a few mutations. Destructive file actions stay with Hermes's audited tools. */
+/* The Files page: places, folders, search, a few mutations. Destructive file actions stay with NasTech's audited tools. */
 
 const PLACES: Record<string, string> = {
   home: '~',
@@ -199,7 +199,7 @@ export const filesCommands: readonly OsCommand[] = [
   {
     id: 'files.search',
     title: 'Search files',
-    description: 'Filter the current folder by name, or ask Hermes to find files described in words.',
+    description: 'Filter the current folder by name, or ask NasTech to find files described in words.',
     tier: 'read',
     args: [{ name: 'query', type: 'string', description: 'File name fragment or a description', required: true }],
     phrases: ['find files named {query}', 'search files for {query}', 'find {query} in my files', 'look for {query} in files'],
@@ -209,10 +209,10 @@ export const filesCommands: readonly OsCommand[] = [
       const text = String(query)
 
       if (/\s/.test(text.trim()) && text.trim().split(/\s+/).length > 3) {
-        // A sentence is a job for Hermes's Spotlight tool, not a filename filter.
-        askHermesToFind(text)
+        // A sentence is a job for NasTech's Spotlight tool, not a filename filter.
+        askNasTechToFind(text)
 
-        return ok(`Asked Hermes to find: ${text}`, { spoken: 'Asking Hermes to find that.' })
+        return ok(`Asked NasTech to find: ${text}`, { spoken: 'Asking NasTech to find that.' })
       }
 
       $query.set(text)

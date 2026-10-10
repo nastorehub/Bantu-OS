@@ -1,5 +1,5 @@
 import { atom, computed } from 'nanostores'
-import { appById, type FloatingAppId, type HermesAppId, type PageId } from '../shell/apps.ts'
+import { appById, type FloatingAppId, type NasTechAppId, type PageId } from '../shell/apps.ts'
 import { afterExit, motion } from '../lib/motion.ts'
 import { $prefs, updatePrefs } from './backend.ts'
 import { isMainSurface, isPanels, relayToMain } from './shell.ts'
@@ -15,7 +15,7 @@ export type WindowPhase = 'opening' | 'open' | 'minimizing' | 'minimized' | 'clo
 
 export interface OSWindow {
   id: string
-  appId: HermesAppId
+  appId: NasTechAppId
   title: string
   bounds: Bounds
   z: number
@@ -69,7 +69,7 @@ function clamp(bounds: Bounds): Bounds {
   return { x, y, width, height }
 }
 
-function nextBounds(appId: HermesAppId, preferred?: Bounds): Bounds {
+function nextBounds(appId: NasTechAppId, preferred?: Bounds): Bounds {
   const saved = $prefs.get().windowBounds?.[appId]
 
   if (preferred) {
@@ -114,7 +114,7 @@ export function focusWindow(id: string): void {
   $focusedWindowId.set(id)
 }
 
-/** The main Hermes window is always present; opening it just focuses and optionally navigates. */
+/** The main NasTech window is always present; opening it just focuses and optionally navigates. */
 export function ensureMainWindow(): void {
   if ($windows.get()[MAIN_WINDOW_ID]) {
     return
@@ -123,14 +123,14 @@ export function ensureMainWindow(): void {
   const area = desktopArea()
   $windows.set({
     ...$windows.get(),
-    [MAIN_WINDOW_ID]: { id: MAIN_WINDOW_ID, appId: 'overview', title: 'Hermes', bounds: area, z: ++zCounter, phase: 'opening', maximized: true, restoreBounds: area }
+    [MAIN_WINDOW_ID]: { id: MAIN_WINDOW_ID, appId: 'overview', title: 'NasTech', bounds: area, z: ++zCounter, phase: 'opening', maximized: true, restoreBounds: area }
   })
   afterExit(() => update(MAIN_WINDOW_ID, { phase: 'open' }), motion.base)
   $focusedWindowId.set(MAIN_WINDOW_ID)
 }
 
 export function showPage(page: PageId): void {
-  // Panels mode: only the Hermes window renders pages; other surfaces ask it (and the compositor focuses it).
+  // Panels mode: only the NasTech window renders pages; other surfaces ask it (and the compositor focuses it).
   if (isPanels && !isMainSurface) {
     relayToMain({ type: 'show-page', args: [page] })
     window.heraldOS.shell.open('main').catch(() => undefined)
@@ -172,7 +172,7 @@ export function goBackPage(): PageId | null {
   return previous
 }
 
-export function openApp(appId: HermesAppId, options: { payload?: Record<string, unknown>; title?: string; bounds?: Bounds; singleton?: boolean } = {}): string {
+export function openApp(appId: NasTechAppId, options: { payload?: Record<string, unknown>; title?: string; bounds?: Bounds; singleton?: boolean } = {}): string {
   const def = appById(appId)
 
   if (def.kind === 'page') {
@@ -181,7 +181,7 @@ export function openApp(appId: HermesAppId, options: { payload?: Record<string, 
     return MAIN_WINDOW_ID
   }
 
-  // Panels mode: floating Hermes apps are real compositor windows, one Electron window each.
+  // Panels mode: floating NasTech apps are real compositor windows, one Electron window each.
   if (isPanels) {
     window.heraldOS.shell.open(`window:${appId}`, options.payload ? { type: 'payload', payload: options.payload } : undefined).catch(() => undefined)
 
@@ -229,7 +229,7 @@ export function closeWindow(id: string): void {
   const win = $windows.get()[id]
 
   if (!win || id === MAIN_WINDOW_ID) {
-    // The main window minimizes instead of closing: Hermes is always there.
+    // The main window minimizes instead of closing: NasTech is always there.
     if (win) {
       minimizeWindow(id)
     }

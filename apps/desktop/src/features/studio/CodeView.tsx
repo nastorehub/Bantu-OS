@@ -8,21 +8,21 @@ import type { StudioFile, StudioState } from '../../lib/studio-model.ts'
 import { openInEditor } from './open-in-editor.ts'
 
 const MAX_LINES = 5000
-/** How long a file Hermes is writing takes to "type" onto the screen. */
+/** How long a file NasTech is writing takes to "type" onto the screen. */
 const REVEAL_MS = 1400
 
 const relative = (path: string, root: string | null): string => (root && path.startsWith(`${root}/`) ? path.slice(root.length + 1) : path)
 
 const STATUS_LABEL: Partial<Record<StudioFile['status'], string>> = {
-  writing: 'Hermes is writing this file',
-  editing: 'Hermes is editing this file',
+  writing: 'NasTech is writing this file',
+  editing: 'NasTech is editing this file',
   written: 'Created',
   edited: 'Edited',
   failed: 'The last change failed',
   changed: 'Changed on disk'
 }
 
-/** Reveal `text` progressively while Hermes writes it, so the file visibly appears line by line. */
+/** Reveal `text` progressively while NasTech writes it, so the file visibly appears line by line. */
 function useReveal(text: string | undefined): string | undefined {
   const [shown, setShown] = useState(text)
 
@@ -69,9 +69,9 @@ function useElapsed(since: number | null): number {
 }
 
 const COMPOSING: Record<string, string> = {
-  write_file: 'Hermes is writing a file',
-  patch: 'Hermes is preparing an edit',
-  terminal: 'Hermes is preparing a command'
+  write_file: 'NasTech is writing a file',
+  patch: 'NasTech is preparing an edit',
+  terminal: 'NasTech is preparing a command'
 }
 
 /** A model composes a whole file before the write runs; say so instead of looking stuck. */
@@ -92,7 +92,7 @@ function ComposingBanner({ generating }: { generating: StudioState['generating']
   )
 }
 
-/** The file Hermes is working on: syntax coloured, changed lines marked, following along as it writes. */
+/** The file NasTech is working on: syntax coloured, changed lines marked, following along as it writes. */
 export function CodeView({ path, file, root, pinned, onTogglePin, running = false, generating = null }: { path: string | null; file: StudioFile | undefined; root: string | null; pinned: boolean; onTogglePin: () => void; running?: boolean; generating?: StudioState['generating'] }) {
   const [disk, setDisk] = useState<{ path: string; text: string | null; note?: string } | null>(null)
   const [tokens, setTokens] = useState<ThemedToken[][] | null>(null)
@@ -119,7 +119,7 @@ export function CodeView({ path, file, root, pinned, onTogglePin, running = fals
           setDisk({ path, text: null, note: preview.kind === 'image' ? 'An image; see it in the preview.' : preview.kind === 'directory' ? 'A folder.' : 'Not a text file.' })
         }
       })
-      .catch(() => !cancelled && setDisk({ path, text: null, note: 'Hermes has not saved this file yet.' }))
+      .catch(() => !cancelled && setDisk({ path, text: null, note: 'NasTech has not saved this file yet.' }))
 
     return () => {
       cancelled = true
@@ -176,9 +176,9 @@ export function CodeView({ path, file, root, pinned, onTogglePin, running = fals
       <div className="flex h-full min-h-0 flex-col">
         <ComposingBanner generating={generating} />
         {running ? (
-          <EmptyState icon={<Spinner />} title={generating?.tool === 'write_file' ? 'Hermes is writing the first file' : 'Hermes is planning the build'} description="Each file appears here the moment Hermes saves it." className="min-h-0 flex-1" />
+          <EmptyState icon={<Spinner />} title={generating?.tool === 'write_file' ? 'NasTech is writing the first file' : 'NasTech is planning the build'} description="Each file appears here the moment NasTech saves it." className="min-h-0 flex-1" />
         ) : (
-          <EmptyState icon={<IconCode size={28} />} title="Nothing written yet" description="The file Hermes is writing shows here as it types." className="min-h-0 flex-1" />
+          <EmptyState icon={<IconCode size={28} />} title="Nothing written yet" description="The file NasTech is writing shows here as it types." className="min-h-0 flex-1" />
         )}
       </div>
     )
@@ -192,7 +192,7 @@ export function CodeView({ path, file, root, pinned, onTogglePin, running = fals
         {file && <span className={cn('shrink-0 text-fg-3', writing && 'text-accent-strong')}>{STATUS_LABEL[file.status]}</span>}
         {writing && <Spinner className="shrink-0" />}
         <span className="ml-auto flex shrink-0 items-center gap-1">
-          <button type="button" onClick={onTogglePin} className="flex size-6 items-center justify-center rounded-md text-fg-3 hover:bg-white/8 hover:text-fg" title={pinned ? 'Follow Hermes from file to file' : 'Stay on this file'} aria-label={pinned ? 'Follow Hermes' : 'Stay on this file'}>
+          <button type="button" onClick={onTogglePin} className="flex size-6 items-center justify-center rounded-md text-fg-3 hover:bg-white/8 hover:text-fg" title={pinned ? 'Follow NasTech from file to file' : 'Stay on this file'} aria-label={pinned ? 'Follow NasTech' : 'Stay on this file'}>
             {pinned ? <IconPinnedOff size={14} /> : <IconPin size={14} />}
           </button>
           <button type="button" onClick={() => openInEditor(path)} className="flex size-6 items-center justify-center rounded-md text-fg-3 hover:bg-white/8 hover:text-fg" title="Open in editor" aria-label="Open in editor">

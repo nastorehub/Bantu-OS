@@ -5,9 +5,9 @@ import { Decoration, DecorationSet, type EditorView } from '@tiptap/pm/view'
 import { applyLive, type LiveView, type Op } from './model.ts'
 
 /*
- * The text a request to Hermes is about: what was selected when the person asked, kept through
- * every edit made meanwhile (theirs or Hermes's) and tinted in the page while Hermes works on it.
- * Hermes's commands write to it with `at: "marked"`, so the answer lands where it was asked for even
+ * The text a request to NasTech is about: what was selected when the person asked, kept through
+ * every edit made meanwhile (theirs or NasTech's) and tinted in the page while NasTech works on it.
+ * NasTech's commands write to it with `at: "marked"`, so the answer lands where it was asked for even
  * after the person has clicked elsewhere.
  */
 
@@ -18,12 +18,12 @@ export interface MarkedRange {
 
 interface MarkedState {
   range: MarkedRange | null
-  /** The undo depth right after Hermes last wrote into the range: a rewrite then replaces that write instead of adding a step. */
+  /** The undo depth right after NasTech last wrote into the range: a rewrite then replaces that write instead of adding a step. */
   landed: number | null
   decorations: DecorationSet
 }
 
-export const markedKey = new PluginKey<MarkedState>('docsHermesMarked')
+export const markedKey = new PluginKey<MarkedState>('docsNasTechMarked')
 
 const EMPTY: MarkedState = { range: null, landed: null, decorations: DecorationSet.empty }
 
@@ -32,7 +32,7 @@ function stateFor(state: { doc: EditorState['doc'] }, range: MarkedRange | null,
     return EMPTY
   }
 
-  const decorations = range.to > range.from ? DecorationSet.create(state.doc, [Decoration.inline(range.from, range.to, { class: 'docs-hermes-marked' })]) : DecorationSet.empty
+  const decorations = range.to > range.from ? DecorationSet.create(state.doc, [Decoration.inline(range.from, range.to, { class: 'docs-nastech-marked' })]) : DecorationSet.empty
 
   return { range, landed, decorations }
 }
@@ -69,8 +69,8 @@ export function markedPlugin(): Plugin<MarkedState> {
   })
 }
 
-export const HermesMarked = Extension.create({
-  name: 'hermesMarked',
+export const NasTechMarked = Extension.create({
+  name: 'nastechMarked',
   addProseMirrorPlugins() {
     return [markedPlugin()]
   }
@@ -78,11 +78,11 @@ export const HermesMarked = Extension.create({
 
 export const markedRangeOf = (state: EditorState): MarkedRange | null => markedKey.getState(state)?.range ?? null
 
-/** The undo depth right after Hermes last wrote into the marked range, or null. */
+/** The undo depth right after NasTech last wrote into the marked range, or null. */
 export const markedLandedOf = (state: EditorState): number | null => markedKey.getState(state)?.landed ?? null
 
 /**
- * Hermes writes into the marked range. When it writes there again with nothing else changed since
+ * NasTech writes into the marked range. When it writes there again with nothing else changed since
  * (it refines its wording), its last write is taken back first, so the request stays one step to undo.
  */
 export function writeMarked(view: LiveView, build: (state: EditorState) => Op): boolean {
@@ -99,7 +99,7 @@ export function writeMarked(view: LiveView, build: (state: EditorState) => Op): 
   return changed
 }
 
-/** Mark a range (the selection, by default) for Hermes, or clear the mark with null. */
+/** Mark a range (the selection, by default) for NasTech, or clear the mark with null. */
 export function setMarked(view: EditorView, range: MarkedRange | null | 'selection' = 'selection'): MarkedRange | null {
   const chosen = range === 'selection' ? { from: view.state.selection.from, to: view.state.selection.to } : range
   view.dispatch(view.state.tr.setMeta(markedKey, { range: chosen }).setMeta('addToHistory', false))

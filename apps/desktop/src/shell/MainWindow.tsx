@@ -8,7 +8,7 @@ import { Sidebar } from './Sidebar.tsx'
 // Pages load on first visit and stay mounted afterwards (keep-alive: chat, files, terminals).
 const PAGE_VIEW: Record<PageId, ComponentType> = {
   overview: lazy(() => import('../features/overview/OverviewPage.tsx').then(m => ({ default: m.OverviewPage }))),
-  hermes: lazy(() => import('../features/hermes/HermesPage.tsx').then(m => ({ default: m.HermesPage }))),
+  nastech: lazy(() => import('../features/nastech/NasTechPage.tsx').then(m => ({ default: m.NasTechPage }))),
   missions: lazy(() => import('../features/missions/MissionsPage.tsx').then(m => ({ default: m.MissionsPage }))),
   memory: lazy(() => import('../features/memory/MemoryPage.tsx').then(m => ({ default: m.MemoryPage }))),
   files: lazy(() => import('../features/files/FilesPage.tsx').then(m => ({ default: m.FilesPage }))),
@@ -19,7 +19,7 @@ const PAGE_VIEW: Record<PageId, ComponentType> = {
 
 const PAGE_LABEL: Record<PageId, string> = {
   overview: 'Overview',
-  hermes: 'Hermes',
+  nastech: 'NasTech',
   missions: 'Missions',
   memory: 'Memory',
   files: 'Files',

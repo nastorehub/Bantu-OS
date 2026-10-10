@@ -15,7 +15,7 @@ import { openStudio } from './studio.ts'
 import { $page, showPage } from './windows.ts'
 
 /*
- * "Pick up where you left off". On boot and whenever the user comes back from a break, Hermes
+ * "Pick up where you left off". On boot and whenever the user comes back from a break, NasTech
  * reads what this computer shows of their recent work (main's context snapshot, conversations,
  * today's calendar) in one stateless call, with no session and no tools, and answers with up to
  * three threads. Threads live in prefs so the Overview shows the last ones at once. Resuming is
@@ -83,7 +83,7 @@ export function refreshThreads(options: { force?: boolean; awayMs?: number } = {
 
 async function catchUp(awayMs?: number): Promise<ContinuityThread[]> {
   if (!isGatewayOpen()) {
-    $catchUp.set({ phase: 'error', message: 'Hermes is still starting.' })
+    $catchUp.set({ phase: 'error', message: 'NasTech is still starting.' })
 
     return $threads.get()
   }
@@ -99,7 +99,7 @@ async function catchUp(awayMs?: number): Promise<ContinuityThread[]> {
       const parsed = parseThreads(answer.text, request.refs)
 
       if (!parsed) {
-        throw new Error('Hermes answered in a form Herald OS could not read. Try again.')
+        throw new Error('NasTech answered in a form Herald OS could not read. Try again.')
       }
 
       threads = parsed
@@ -122,7 +122,7 @@ async function gatherEvidence(awayMs?: number): Promise<CatchUpEvidence> {
   const [snapshot, calendar] = await Promise.all([window.heraldOS.context.snapshot(), window.heraldOS.calendar.today().catch(() => null)])
   const now = Date.now()
   // Conversations only: automation runs (a reminder every half hour) would crowd them out. A request
-  // Hermes never answered (stopped or failed) counts: that is unfinished work.
+  // NasTech never answered (stopped or failed) counts: that is unfinished work.
   const candidates = $missions
     .get()
     .filter(mission => (!mission.source || LISTED_SESSION_SOURCES.has(mission.source)) && mission.messageCount > 0 && !hidden(mission.title) && !hidden(mission.goal))
@@ -187,23 +187,23 @@ function asFileItem(item: ContinuityItem): FileItem {
   return { name, path: item.ref, kind: 'file', size: 0, modifiedAt: 0, extension: name.includes('.') ? name.split('.').pop()!.toLowerCase() : '', hidden: name.startsWith('.') }
 }
 
-/** Show a resumed conversation: in Studio when it built the thread's project folder, else on the Hermes page. */
+/** Show a resumed conversation: in Studio when it built the thread's project folder, else on the NasTech page. */
 function showChat(chat: ChatState, thread: ContinuityThread): void {
   const place = placeOf(thread)
 
   if (place && samePath(chat.info.cwd, place.ref)) {
     openStudio(chat.sessionId, thread.title)
   } else {
-    showPage('hermes')
+    showPage('nastech')
   }
 }
 
-/** Open one item of a thread: a document in its viewer, a folder in Files, a conversation on the Hermes page. */
+/** Open one item of a thread: a document in its viewer, a folder in Files, a conversation on the NasTech page. */
 export async function openThreadItem(item: ContinuityItem): Promise<void> {
   try {
     if (item.kind === 'chat') {
       await openStoredSession(item.ref)
-      showPage('hermes')
+      showPage('nastech')
     } else if (item.kind === 'file') {
       openItem(asFileItem(item))
     } else {

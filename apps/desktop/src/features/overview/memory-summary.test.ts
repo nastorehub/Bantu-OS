@@ -12,7 +12,7 @@ const USER_MD = ['Timezone: Australia/Sydney.', 'Writes in British English.'].jo
 
 function read(files: Partial<Record<MemoryFile, string>>) {
   const entries = Object.entries(files).flatMap(([file, text]) =>
-    buildEntries({ file: file as MemoryFile, path: `/home/sam/.hermes/memories/${file}`, exists: true, modifiedAt: 0, truncated: false, texts: parse(text ?? '') })
+    buildEntries({ file: file as MemoryFile, path: `/home/sam/.nastech/memories/${file}`, exists: true, modifiedAt: 0, truncated: false, texts: parse(text ?? '') })
   )
 
   return { entries, loaded: true, error: null }

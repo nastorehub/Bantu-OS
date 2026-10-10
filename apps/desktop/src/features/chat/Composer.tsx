@@ -76,7 +76,7 @@ export function Composer({ disabled, streaming, placeholder, autoFocus, onSubmit
           autoFocus={autoFocus}
           disabled={disabled}
           rows={1}
-          placeholder={placeholder ?? 'Message Hermes'}
+          placeholder={placeholder ?? 'Message NasTech'}
           onChange={event => setValue(event.target.value)}
           onKeyDown={event => {
             if (completions.length > 0) {

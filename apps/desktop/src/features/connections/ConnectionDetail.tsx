@@ -65,7 +65,7 @@ export function ConnectionDetail({
           <span
             role="img"
             className="text-fg-3"
-            title={connection.kind === 'mcp' ? 'Hermes enables or disables an MCP server as a whole; the lines below are what the server can do.' : 'Each switch controls whether Hermes may use that capability.'}
+            title={connection.kind === 'mcp' ? 'NasTech enables or disables an MCP server as a whole; the lines below are what the server can do.' : 'Each switch controls whether NasTech may use that capability.'}
             aria-label="About permissions"
           >
             <IconHelpCircle size={15} />
@@ -103,7 +103,7 @@ export function ConnectionDetail({
           <LinkAction onClick={() => showPage('missions')}>View all</LinkAction>
         </div>
         {recent.length === 0 ? (
-          <div className="px-1 py-1 text-[12px] text-fg-4">Nothing yet. Activity shows up here when Hermes uses {connection.name}.</div>
+          <div className="px-1 py-1 text-[12px] text-fg-4">Nothing yet. Activity shows up here when NasTech uses {connection.name}.</div>
         ) : (
           <ul className="flex flex-col">
             {recent.map(entry => (
@@ -121,7 +121,7 @@ export function ConnectionDetail({
         {confirmingRemove ? (
           <div className="glass-card flex flex-col gap-2.5 rounded-xl p-3">
             <div className="text-[12.5px] text-fg-2">
-              {connection.kind === 'provider' ? `Sign out of ${connection.name}?` : `Disconnect ${connection.name}?`} Hermes loses this access until you add it again.
+              {connection.kind === 'provider' ? `Sign out of ${connection.name}?` : `Disconnect ${connection.name}?`} NasTech loses this access until you add it again.
             </div>
             <div className="flex gap-2">
               <GlassButton size="sm" className="flex-1" onClick={onCancelRemove} disabled={busy}>
@@ -147,7 +147,7 @@ export function ConnectionDetail({
         )}
         <div className="flex items-center justify-center gap-1.5 text-[12px] text-fg-3">
           <IconShield size={14} />
-          Hermes uses only the access you choose.
+          NasTech uses only the access you choose.
         </div>
       </div>
     </div>
@@ -214,7 +214,7 @@ function PermissionRow({ row, disabled, onChange }: { row: ConnectionTool; disab
   )
 }
 
-/** Locally remembered folder chips; Hermes has no per-connection folder scope yet, so this is a hint Hermes reads via the prompt. */
+/** Locally remembered folder chips; NasTech has no per-connection folder scope yet, so this is a hint NasTech reads via the prompt. */
 function AllowedFolders({ connectionId }: { connectionId: string }) {
   // The detail is keyed by connection id, so a fresh mount reads the right list.
   const [folders, setFolders] = useState<string[]>(() => readFolders(connectionId))
@@ -256,7 +256,7 @@ function AllowedFolders({ connectionId }: { connectionId: string }) {
         </GlassButton>
       </div>
       {folders.length === 0 ? (
-        <div className="px-1 text-[12px] text-fg-4">Everything Hermes may already reach. Add folders to narrow it down.</div>
+        <div className="px-1 text-[12px] text-fg-4">Everything NasTech may already reach. Add folders to narrow it down.</div>
       ) : (
         <div className="flex flex-wrap gap-1.5">
           {folders.map(path => (

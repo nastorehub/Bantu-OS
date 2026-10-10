@@ -54,12 +54,12 @@ describe('History steps', () => {
     const history = new History(25)
     const count = counter()
     history.push(count.step('Mine'))
-    history.push(count.step('Hermes'))
+    history.push(count.step('NasTech'))
     history.tagLast('command')
     expect(history.steps.map((step) => step.origin)).toEqual([undefined, 'command'])
     history.push(count.step('Third'))
     expect(history.dropped).toBe(1)
-    expect(history.steps[0].label).toBe('Hermes')
+    expect(history.steps[0].label).toBe('NasTech')
   })
 })
 
@@ -88,7 +88,7 @@ describe('CanvasDocument history', () => {
   })
 })
 
-describe('history for Hermes', () => {
+describe('history for NasTech', () => {
   it('reads a step count, one by default', () => {
     expect(stepCount(undefined)).toBe(1)
     expect(stepCount(3.4)).toBe(3)
@@ -114,6 +114,6 @@ describe('history for Hermes', () => {
       ],
       2
     )
-    expect(described).toEqual([{ step: 1, label: 'Brush' }, { step: 2, label: 'Add Layer', by: 'Hermes or a command' }, { step: 3, label: 'Crop', undone: true }])
+    expect(described).toEqual([{ step: 1, label: 'Brush' }, { step: 2, label: 'Add Layer', by: 'NasTech or a command' }, { step: 3, label: 'Crop', undone: true }])
   })
 })

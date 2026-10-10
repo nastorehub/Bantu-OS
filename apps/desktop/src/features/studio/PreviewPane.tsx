@@ -13,8 +13,8 @@ const RELOAD_DEBOUNCE_MS = 700
 const isWeb = (target: string): boolean => /^https?:\/\//i.test(target)
 
 /**
- * The site Hermes is building, live: its dev server, or the project's `index.html` for a static
- * site. Waits while the server is still starting and refreshes after Hermes changes files.
+ * The site NasTech is building, live: its dev server, or the project's `index.html` for a static
+ * site. Waits while the server is still starting and refreshes after NasTech changes files.
  */
 export function PreviewPane({ win, target, root, contentKey, compact = false }: { win: OSWindow; target: string | null; root: string | null; contentKey: number; compact?: boolean }) {
   const [viewId, setViewId] = useState<string | null>(null)
@@ -95,7 +95,7 @@ export function PreviewPane({ win, target, root, contentKey, compact = false }: 
     return () => clearTimeout(timer)
   }, [error, target])
 
-  // Hermes changed files: refresh (dev servers with hot reload simply repaint).
+  // NasTech changed files: refresh (dev servers with hot reload simply repaint).
   useEffect(() => {
     if (!contentKey || !idRef.current) {
       return
@@ -134,13 +134,13 @@ export function PreviewPane({ win, target, root, contentKey, compact = false }: 
             {error && target ? <Spinner /> : <IconWorld size={26} className="text-fg-4" />}
             <span>
               {!target
-                ? 'The site appears here once Hermes starts it or writes an index.html.'
+                ? 'The site appears here once NasTech starts it or writes an index.html.'
                 : error
                   ? retries.current >= MAX_RETRIES
                     ? `The site did not load: ${error}`
                     : 'Waiting for the site to start…'
                   : covered
-                    ? 'The preview is hidden while a Hermes panel is open.'
+                    ? 'The preview is hidden while a NasTech panel is open.'
                     : occluded
                       ? 'Bring the Studio forward to see the preview.'
                       : 'Opening…'}

@@ -22,7 +22,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, Iterable
 
-from .util import data_dir, expand, hermes_home
+from .util import data_dir, expand, nastech_home
 
 
 class Tier(str, Enum):
@@ -47,8 +47,8 @@ BUILTIN_PROTECTED = (
     "~/.gnupg",
     "~/Library/Keychains",
     "~/Library/Cookies",
-    "$HERMES_HOME/.env",
-    "$HERMES_HOME/auth.json",
+    "$NASTECH_HOME/.env",
+    "$NASTECH_HOME/auth.json",
     "/System",
     "/usr",
     "/bin",
@@ -103,10 +103,10 @@ def policy_path() -> Path:
 
 
 def _expand_protected(raw: Iterable[str]) -> tuple[Path, ...]:
-    home = str(hermes_home())
+    home = str(nastech_home())
     out: list[Path] = []
     for entry in raw:
-        text = str(entry).replace("$HERMES_HOME", home)
+        text = str(entry).replace("$NASTECH_HOME", home)
         out.append(expand(text))
     return tuple(out)
 
@@ -189,7 +189,7 @@ def _stable_rule_key(tool: str, action: str) -> str:
 def _confirm(tool: str, reason: str, rule_key: str) -> Decision:
     try:
         from tools.approval import request_tool_approval
-    except Exception:  # noqa: BLE001 - outside the Hermes runtime there is nobody to ask: fail closed.
+    except Exception:  # noqa: BLE001 - outside the NasTech runtime there is nobody to ask: fail closed.
         return Decision(False, "blocked", "No approval channel is available; refusing without confirmation.")
     result = request_tool_approval(tool, reason, rule_key=rule_key)
     if result.get("approved"):

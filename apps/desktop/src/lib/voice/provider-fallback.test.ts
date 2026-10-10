@@ -31,7 +31,7 @@ beforeEach(() => {
 describe('isProviderConfigError', () => {
   it('recognises setup failures and ignores audio failures', () => {
     expect(isProviderConfigError(new Error('TTS configuration error (openai): neither tts.openai.api_key in config nor OPENAI_API_KEY is set'))).toBe(true)
-    expect(isProviderConfigError(new Error('the Nous Tool Gateway is not available (not entitled or unreachable)'))).toBe(true)
+    expect(isProviderConfigError(new Error('the NasTech Tool Gateway is not available (not entitled or unreachable)'))).toBe(true)
     expect(isProviderConfigError(new Error('Audio recording is empty'))).toBe(false)
   })
 })

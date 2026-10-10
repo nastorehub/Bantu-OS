@@ -1,4 +1,4 @@
-// The free engine: microphone -> endpointed utterance -> `/api/audio/transcribe` -> Hermes turn
+// The free engine: microphone -> endpointed utterance -> `/api/audio/transcribe` -> NasTech turn
 // (`surface: voice-live` for spoken-style replies) -> `/api/audio/speak-stream` sentence by
 // sentence while the reply streams. Barge-in cuts speech and interrupts the turn.
 import { rest } from '../rest.ts'
@@ -17,7 +17,7 @@ type Mode = 'idle' | 'listen' | 'monitor' | 'answer'
 
 const PRE_ROLL_MS = 400
 const MAX_CONTEXT_EXCHANGES = 6
-/** Silence before a stray tone tells the user Hermes is still working. */
+/** Silence before a stray tone tells the user NasTech is still working. */
 const THINKING_TICK_MS = 1800
 
 interface TranscribeResult {
@@ -47,7 +47,7 @@ export class ChainedEngine implements ConversationEngine {
   private speechEnded = false
   private speechStarted = false
   private thinkingTimer: ReturnType<typeof setTimeout> | null = null
-  private readonly exchanges: Array<{ user: string; hermes: string }> = []
+  private readonly exchanges: Array<{ user: string; nastech: string }> = []
 
   constructor(private readonly host: VoiceHost) {}
 
@@ -249,7 +249,7 @@ export class ChainedEngine implements ConversationEngine {
     this.host.setState(this.speak.speaking ? 'speaking' : 'thinking')
   }
 
-  /** The user spoke over Hermes (or pressed stop): cut speech, interrupt the turn, listen. */
+  /** The user spoke over NasTech (or pressed stop): cut speech, interrupt the turn, listen. */
   private bargeIn(fromSpeech: boolean): void {
     this.clearThinkingTimer()
     this.speak?.stop()
@@ -314,7 +314,7 @@ export class ChainedEngine implements ConversationEngine {
     }
   }
 
-  /** What a final transcript becomes: an answer to a waiting card, the end, an OS command, or a Hermes turn. */
+  /** What a final transcript becomes: an answer to a waiting card, the end, an OS command, or a NasTech turn. */
   private async handleTranscript(transcript: string): Promise<void> {
     if (!transcript || isNoiseTranscript(transcript)) {
       this.beginListening(true)
@@ -350,7 +350,7 @@ export class ChainedEngine implements ConversationEngine {
     }
 
     if (intent.handled) {
-      this.exchanges.push({ user: transcript, hermes: intent.spoken })
+      this.exchanges.push({ user: transcript, nastech: intent.spoken })
       this.host.setCaptions({ assistant: intent.spoken })
       this.host.setState('speaking')
       this.mode = 'monitor'
@@ -398,7 +398,7 @@ export class ChainedEngine implements ConversationEngine {
 
     return this.exchanges
       .slice(-MAX_CONTEXT_EXCHANGES)
-      .flatMap(({ user, hermes }) => [`User: ${user}`, hermes ? `Hermes: ${hermes}` : null])
+      .flatMap(({ user, nastech }) => [`User: ${user}`, nastech ? `NasTech: ${nastech}` : null])
       .filter((line): line is string => Boolean(line))
       .join('\n')
       .slice(-5000)
@@ -411,8 +411,8 @@ export class ChainedEngine implements ConversationEngine {
     this.fallbackText = null
     this.speechEnded = false
     this.speechStarted = false
-    const interrupted = this.exchanges.length > 0 && !this.exchanges[this.exchanges.length - 1].hermes
-    this.exchanges.push({ user: text, hermes: '' })
+    const interrupted = this.exchanges.length > 0 && !this.exchanges[this.exchanges.length - 1].nastech
+    this.exchanges.push({ user: text, nastech: '' })
 
     // Open the speech socket before the model answers so the first sentence plays immediately.
     const speak = new SpeakStream({
@@ -435,7 +435,7 @@ export class ChainedEngine implements ConversationEngine {
           this.host.notify('Speech unavailable', error, 'warn')
         }
 
-        // Provider has no chunked API, or the stream ended while Hermes was still working (its socket
+        // Provider has no chunked API, or the stream ended while NasTech was still working (its socket
         // closed): speak the whole reply once the turn completes.
         if (reason === 'fallback' || (reason !== 'stopped' && !this.turnDone)) {
           this.fallbackText = ''
@@ -463,8 +463,8 @@ export class ChainedEngine implements ConversationEngine {
     }
 
     if (!sessionId) {
-      this.host.notify('Hermes could not take that', failure || 'The request did not reach Hermes.', 'warn')
-      this.sayInstead('Sorry, I could not reach Hermes for that request.')
+      this.host.notify('NasTech could not take that', failure || 'The request did not reach NasTech.', 'warn')
+      this.sayInstead('Sorry, I could not reach NasTech for that request.')
 
       return
     }
@@ -489,7 +489,7 @@ export class ChainedEngine implements ConversationEngine {
         const last = this.exchanges[this.exchanges.length - 1]
 
         if (last) {
-          last.hermes = sanitizeForSpeech(this.replyText).slice(0, 800)
+          last.nastech = sanitizeForSpeech(this.replyText).slice(0, 800)
         }
 
         // The backend answered with an error (or the assistant text is itself the error): say what
@@ -514,9 +514,9 @@ export class ChainedEngine implements ConversationEngine {
 
         if (silent) {
           if (silent.problem) {
-            this.host.notify('Hermes', silent.spoken, 'warn')
+            this.host.notify('NasTech', silent.spoken, 'warn')
           } else if (last) {
-            last.hermes = silent.spoken
+            last.nastech = silent.spoken
           }
 
           this.sayInstead(silent.spoken)

@@ -1,7 +1,7 @@
 import { $prefs, updatePrefs } from './backend.ts'
 import { $activeChat, $activeChatId, $chats, createChat, interruptChat, openStoredSession, runSlash, sendPrompt } from './chat.ts'
 import { $connection, gatewayRequest } from './gateway.ts'
-import { $hermesAuth, requestHermesLogin } from './hermes-auth.ts'
+import { $nastechAuth, requestNasTechLogin } from './nastech-auth.ts'
 import { $notifications } from './notifications.ts'
 import { $pendingRequests, resolveRequest } from './requests.ts'
 import { $sessions } from './sessions.ts'
@@ -38,7 +38,7 @@ export function installDebugHook(): void {
         intent: runVoiceIntent,
         log: () => $commandLog.get()
       },
-      auth: { request: requestHermesLogin, state: () => $hermesAuth.get() },
+      auth: { request: requestNasTechLogin, state: () => $nastechAuth.get() },
       web: { open: openWebWindow, close: closeWebWindow, state: () => $webWindows.get() },
       studio: { open: openStudio, build: startBuild, preview: setPreview, state: () => $studios.get() },
       voice: {

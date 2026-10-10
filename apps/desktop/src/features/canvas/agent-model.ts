@@ -1,6 +1,6 @@
 /*
  * The pure half of Herald Canvas's commands: reading paths, finding layers, describing them for
- * Hermes and placing pictures. No window, no I/O, so it is tested directly.
+ * NasTech and placing pictures. No window, no I/O, so it is tested directly.
  */
 
 import {
@@ -37,7 +37,7 @@ import { MASK_ACTIONS, type MaskAction } from './engine/masks.ts'
 import type { Rect } from './engine/raster.ts'
 import { postScriptName } from './engine/text.ts'
 
-/** A full path from what Hermes or the person typed (`~/…` works); trailing slashes go. */
+/** A full path from what NasTech or the person typed (`~/…` works); trailing slashes go. */
 export function resolvePath(input: string, home: string): string {
   let value = input.trim()
 
@@ -92,7 +92,7 @@ export const kindOf = (layer: CanvasLayer): LayerKind => (layer.isGroup ? 'folde
 
 const round = (value: number, places = 2): number => Math.round(value * 10 ** places) / 10 ** places
 
-/** One layer the way Hermes reads it. */
+/** One layer the way NasTech reads it. */
 export function describeLayer(state: DocState, layer: CanvasLayer): Record<string, unknown> {
   const { transform } = layer
   const box = boundsOf(transform)
@@ -762,7 +762,7 @@ export function jsonObject(value: unknown, what: string, example: string): Recor
   return parsed as Record<string, unknown>
 }
 
-/** A colour Hermes wrote (any CSS colour) as the format's red, green and blue from 0 to 1. */
+/** A colour NasTech wrote (any CSS colour) as the format's red, green and blue from 0 to 1. */
 export type ColourReader = (value: unknown) => RGB
 
 /** Colours written as text in a record ("color", or named fields like a gradient map's ends) as red, green and blue. */
@@ -837,7 +837,7 @@ export function heraldWith(current: HeraldAdjustment, settings: Record<string, u
   return checkHeraldAdjustment({ ...mergeSettings(current, prepared), kind: current.kind })
 }
 
-/** Herald-only settings as Hermes reads and sets them: the record without its kind. */
+/** Herald-only settings as NasTech reads and sets them: the record without its kind. */
 export const heraldSettings = (settings: HeraldAdjustment): Record<string, unknown> => {
   const { kind: _kind, ...rest } = settings
 
@@ -1135,9 +1135,9 @@ export function stepThrough(doc: { undo(): string | null; redo(): string | null 
   return labels
 }
 
-/** History steps the way Hermes reads them: numbered from 1, who made them, and which are undone. */
+/** History steps the way NasTech reads them: numbered from 1, who made them, and which are undone. */
 export function describeHistory(steps: readonly HistoryStep[], applied: number): Record<string, unknown>[] {
-  return steps.map((step, i) => ({ step: i + 1, label: step.label, ...(step.origin ? { by: step.origin === 'command' ? 'Hermes or a command' : 'outside the window' } : {}), ...(i + 1 > applied ? { undone: true } : {}) }))
+  return steps.map((step, i) => ({ step: i + 1, label: step.label, ...(step.origin ? { by: step.origin === 'command' ? 'NasTech or a command' : 'outside the window' } : {}), ...(i + 1 > applied ? { undone: true } : {}) }))
 }
 
 /** Settings over an adjustment's defaults: nested objects merge, the rest replaces. */

@@ -38,7 +38,7 @@ import { $pages } from './store.ts'
 import { savedTemplates } from './templates/saved.ts'
 
 /*
- * What Hermes (and voice, the command bar and `herald-os docs`) does with a document's page and
+ * What NasTech (and voice, the command bar and `herald-os docs`) does with a document's page and
  * review in Herald Docs: headers and footers, fields, notes, sections, comments, tables of contents,
  * templates and statistics. As in agent.ts, a command works on the document it names or the one in
  * front, and each change is one step to undo in an open document, or the file written back.

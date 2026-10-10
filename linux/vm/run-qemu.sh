@@ -8,7 +8,7 @@
 #   bash linux/vm/run-qemu.sh --image herald-os-<v>-aarch64.qcow2   # boot a built Herald OS image
 #   bash linux/vm/run-qemu.sh stop|status|console|reset
 #
-# First boot runs cloud-init provisioning (several minutes: dnf + Hermes Agent install). Watch it
+# First boot runs cloud-init provisioning (several minutes: dnf + NasTech Agent install). Watch it
 # with `bash linux/vm/run-qemu.sh console`.
 set -euo pipefail
 
@@ -32,7 +32,7 @@ EFI_VARS="$BUILD/efivars.fd"
 PIDFILE="$BUILD/qemu.pid"
 SERIAL="$BUILD/serial.log"
 MONITOR="$BUILD/monitor.sock"
-SSH_PORT="${HERALD_VM_PORT:-${HERMES_VM_PORT:-2222}}"
+SSH_PORT="${HERALD_VM_PORT:-${NASTECH_VM_PORT:-2222}}"
 CPUS="${CPUS:-4}"
 MEM="${MEM:-8192}"
 DISK_SIZE="${DISK_SIZE:-64G}"
@@ -54,7 +54,7 @@ running() {
 
 case "${1:-start}" in
   status)
-    if running; then echo "running (pid $(cat "$PIDFILE")), ssh -p $SSH_PORT hermes@127.0.0.1"; else echo "stopped"; fi
+    if running; then echo "running (pid $(cat "$PIDFILE")), ssh -p $SSH_PORT nastech@127.0.0.1"; else echo "stopped"; fi
     exit 0 ;;
   stop)
     if running; then
@@ -103,7 +103,7 @@ if [[ -n "${HEADLESS:-}" ]]; then
   DISPLAY_ARGS=(-vnc 127.0.0.1:1)
 fi
 
-echo "==> Starting QEMU (ssh -p $SSH_PORT -i $BUILD/id_hermes hermes@127.0.0.1)"
+echo "==> Starting QEMU (ssh -p $SSH_PORT -i $BUILD/id_nastech nastech@127.0.0.1)"
 : >"$SERIAL"
 # Not `-daemonize`: QEMU forks after Cocoa/CoreAudio initialise, which macOS aborts. Instead start
 # it in its own session (perl setsid; macOS has no setsid binary) so closing this terminal or a

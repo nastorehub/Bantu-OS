@@ -16,8 +16,8 @@ const VOCABULARY = new Map<string, Word>([
     'no', 'nope', 'nah', 'cancel', 'cancel it', 'cancel that', 'dont', 'dont do it', 'dont do that', 'do not', 'do not do it',
     'do not do that', 'stop', 'stop it', 'deny', 'deny it', 'denied', 'not now', 'not yet'
   ].map(phrase => [phrase, 'deny'] as const),
-  // Words that ride along with either answer: "yes please", "no thanks", "hey Hermes, do it".
-  ...['please', 'thanks', 'thank you', 'hey', 'hermes', 'just', 'then'].map(phrase => [phrase, 'filler'] as const)
+  // Words that ride along with either answer: "yes please", "no thanks", "hey NasTech, do it".
+  ...['please', 'thanks', 'thank you', 'hey', 'nastech', 'just', 'then'].map(phrase => [phrase, 'filler'] as const)
 ])
 
 const LONGEST_PHRASE = Math.max(...[...VOCABULARY.keys()].map(phrase => phrase.split(' ').length))

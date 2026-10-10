@@ -18,8 +18,8 @@ export function MenuBarSurface() {
   const wm = useStore($wm)
 
   const focused = wm.windows.find(w => w.id === wm.focusedWindowId)
-  // Our own Hermes window is the brand itself; other shell windows (dock, overlay) are not a "title".
-  const title = focused ? (focused.ours ? (focused.title === OUR_MAIN_TITLE ? 'Hermes' : null) : windowLabel(focused)) : null
+  // Our own NasTech window is the brand itself; other shell windows (dock, overlay) are not a "title".
+  const title = focused ? (focused.ours ? (focused.title === OUR_MAIN_TITLE ? 'NasTech' : null) : windowLabel(focused)) : null
 
   return (
     <header className="flex h-full w-full items-center justify-between px-3 text-[12.5px] text-fg select-none" style={{ background: 'linear-gradient(180deg, var(--menubar-from, rgba(3,10,40,.72)), var(--menubar-to, rgba(3,10,40,.42)))' }}>
@@ -47,7 +47,7 @@ export function MenuBarSurface() {
 
 function openNotifications(): void {
   relayToMain({ type: 'notifications' })
-  // Raise the Hermes window so the panel is actually visible.
+  // Raise the NasTech window so the panel is actually visible.
   openSurface('main')
 }
 

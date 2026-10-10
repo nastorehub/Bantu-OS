@@ -5,7 +5,7 @@ import type { SlidesDocument } from './document.ts'
 import type { DeckChange } from './model.ts'
 
 /*
- * Where a change from outside the editor lands (Hermes's slides commands): in the deck open in a
+ * Where a change from outside the editor lands (NasTech's slides commands): in the deck open in a
  * window, as one step to undo that the window saves by its own rules, or in a file on disk, read,
  * changed and written back (main backs the original up first). A file whose reading approximated
  * or left something out is not written over without being told to, so nothing is lost silently.

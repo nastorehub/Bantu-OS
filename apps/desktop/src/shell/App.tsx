@@ -7,7 +7,7 @@ import { runCommand } from '../store/os-commands.ts'
 import { toggleSidebar } from '../store/sidebar.ts'
 import { $applicationsOpen, $commandBarOpen, toggleCommandBar } from '../store/surface.ts'
 import { $focusedWindowId, closeWindow, MAIN_WINDOW_ID, minimizeWindow, openApp } from '../store/windows.ts'
-import { HERMES_APPS } from './apps.ts'
+import { NASTECH_APPS } from './apps.ts'
 import { BootScreen } from './BootScreen.tsx'
 import { Desktop } from './Desktop.tsx'
 
@@ -33,7 +33,7 @@ export function App() {
         return
       }
 
-      // Cmd+Shift+S: select part of the screen and ask Hermes about it (Mod+Shift+S on Linux).
+      // Cmd+Shift+S: select part of the screen and ask NasTech about it (Mod+Shift+S on Linux).
       if (meta && event.shiftKey && key === 's') {
         event.preventDefault()
         void runCommand('screen.askRegion', {}, { source: 'shortcut' })
@@ -57,7 +57,7 @@ export function App() {
       }
 
       if (meta && !event.shiftKey && !event.altKey) {
-        const target = HERMES_APPS.find(a => a.shortcut === event.key)
+        const target = NASTECH_APPS.find(a => a.shortcut === event.key)
 
         if (target) {
           event.preventDefault()

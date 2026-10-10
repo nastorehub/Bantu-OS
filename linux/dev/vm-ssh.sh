@@ -8,10 +8,10 @@ set -euo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BUILD="$HERE/../vm/build"
-KEY="$BUILD/id_hermes"
+KEY="$BUILD/id_nastech"
 
-HOST="${HERALD_VM_HOST:-${HERMES_VM_HOST:-}}"
-PORT="${HERALD_VM_PORT:-${HERMES_VM_PORT:-}}"
+HOST="${HERALD_VM_HOST:-${NASTECH_VM_HOST:-}}"
+PORT="${HERALD_VM_PORT:-${NASTECH_VM_PORT:-}}"
 
 if [[ -z "$HOST" ]]; then
   if [[ -f "$BUILD/vfkit.pid" ]] && kill -0 "$(cat "$BUILD/vfkit.pid")" 2>/dev/null; then
@@ -22,4 +22,4 @@ fi
 HOST="${HOST:-127.0.0.1}"
 PORT="${PORT:-2222}"
 
-exec ssh -i "$KEY" -p "$PORT" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=6 hermes@"$HOST" "$@"
+exec ssh -i "$KEY" -p "$PORT" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=6 nastech@"$HOST" "$@"

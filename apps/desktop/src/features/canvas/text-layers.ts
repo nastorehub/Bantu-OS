@@ -1,6 +1,6 @@
 /*
  * Making and redrawing text and shape layers, for the Type and Shape tools, the options bar and
- * Hermes's commands. A text layer keeps its anchor (the point its text hangs from) and its scale,
+ * NasTech's commands. A text layer keeps its anchor (the point its text hangs from) and its scale,
  * turn and flips when its text or style changes, and draws its text at the size it is shown, so
  * it stays sharp.
  */

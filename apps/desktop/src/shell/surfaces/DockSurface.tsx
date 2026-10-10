@@ -2,7 +2,7 @@ import { useStore } from '@nanostores/react'
 import { IconX } from '@tabler/icons-react'
 import { type ReactNode, useEffect, useMemo, useRef, useState } from 'react'
 import type { InstalledApp, WmWindow } from '../../../shared/ipc.ts'
-import { AppGlyph, AppTile, HermesAvatar } from '../../components/app-icon.tsx'
+import { AppGlyph, AppTile, NasTechAvatar } from '../../components/app-icon.tsx'
 import { openInCanvas } from '../../features/canvas/open.ts'
 import { cn } from '../../lib/cn.ts'
 import { $env } from '../../store/backend.ts'
@@ -117,9 +117,9 @@ export function DockSurface() {
 
     const list: DockEntry[] = [
       {
-        id: 'hermes',
-        label: 'Hermes',
-        render: () => <HermesAvatar size={44} rounded={11} />,
+        id: 'nastech',
+        label: 'NasTech',
+        render: () => <NasTechAvatar size={44} rounded={11} />,
         onClick: () => showPage('overview'),
         running: mainRunning
       }
@@ -157,10 +157,10 @@ export function DockSurface() {
     // A shortcut beside the one in Applications; an open Canvas window belongs to it rather than to an entry of its own.
     const canvasWindows = ours.filter(w => ourFloatingAppId(w) === 'canvas')
     list.push({
-      id: 'hermes:canvas',
+      id: 'nastech:canvas',
       label: 'Herald Canvas',
       render: () => <AppTile id="canvas" size={44} />,
-      onClick: () => (canvasWindows.length > 0 ? focusGroup('hermes:canvas', canvasWindows) : openInCanvas()),
+      onClick: () => (canvasWindows.length > 0 ? focusGroup('nastech:canvas', canvasWindows) : openInCanvas()),
       running: canvasWindows.length > 0,
       windows: canvasWindows
     })
@@ -169,15 +169,15 @@ export function DockSurface() {
     // short for a chooser, so with none open it opens Applications, where the three sit together.
     const officeWindows = ours.filter(w => isOfficeApp(ourFloatingAppId(w) ?? ''))
     list.push({
-      id: 'hermes:office',
+      id: 'nastech:office',
       label: 'Herald Office',
       render: () => <AppTile id="office" size={44} />,
-      onClick: () => (officeWindows.length > 0 ? focusGroup('hermes:office', officeWindows) : void openSurface('command', { type: 'applications' })),
+      onClick: () => (officeWindows.length > 0 ? focusGroup('nastech:office', officeWindows) : void openSurface('command', { type: 'applications' })),
       running: officeWindows.length > 0,
       windows: officeWindows
     })
 
-    // Our own floating Hermes apps (terminal, system, popped-out chat) as running entries.
+    // Our own floating NasTech apps (terminal, system, popped-out chat) as running entries.
     const floatingGroups = new Map<FloatingAppId, WmWindow[]>()
 
     for (const win of ours) {
@@ -191,10 +191,10 @@ export function DockSurface() {
     for (const [appId, windows] of floatingGroups) {
       const def = appById(appId)
       list.push({
-        id: `hermes:${appId}`,
+        id: `nastech:${appId}`,
         label: def.name,
         render: () => <AppTile id={def.icon} size={44} />,
-        onClick: () => focusGroup(`hermes:${appId}`, windows),
+        onClick: () => focusGroup(`nastech:${appId}`, windows),
         running: true,
         windows
       })

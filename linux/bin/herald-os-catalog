@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Herald OS install catalog: the software the control menu, Settings, Hermes and `herald-os install <id>` offer.
+"""Herald OS install catalog: the software the control menu, Settings, NasTech and `herald-os install <id>` offer.
 
   herald-os-catalog list [--json] [--group <id>]
   herald-os-catalog install <id> [--ram <GB>] [--cpus <n>] [--disk <GB>]
@@ -262,7 +262,7 @@ def mise_installed(ref: str) -> bool:
 
 def webapp_desktop(label: str) -> Path:
     slug = re.sub(r"[^a-z0-9]+", "-", label.lower()).strip("-") or "webapp"
-    return APPS_DIR / f"hermes-webapp-{slug}.desktop"
+    return APPS_DIR / f"nastech-webapp-{slug}.desktop"
 
 
 class Probe:
@@ -323,7 +323,7 @@ def entry_view(group: dict, entry: dict, m: dict, probe: Probe) -> dict:
     }
     if reason:
         view["reason"] = reason
-    for key in ("terminal", "terminalApp", "hermes"):
+    for key in ("terminal", "terminalApp", "nastech"):
         if entry.get(key):
             view[key] = entry[key]
     if entry.get("bin"):
@@ -549,13 +549,13 @@ class Ollama(Recipe):
             return code
         self.UNIT.parent.mkdir(parents=True, exist_ok=True)
         self.UNIT.write_text(
-            "[Unit]\nDescription=Ollama (local models for Hermes)\nAfter=network-online.target\n\n"
+            "[Unit]\nDescription=Ollama (local models for NasTech)\nAfter=network-online.target\n\n"
             "[Service]\nExecStart=%h/.local/bin/ollama serve\nEnvironment=OLLAMA_HOST=127.0.0.1:11434\nRestart=on-failure\n\n"
             "[Install]\nWantedBy=default.target\n"
         )
         call(["systemctl", "--user", "daemon-reload"])
         call(["systemctl", "--user", "enable", "--now", "ollama.service"])
-        print("Ollama runs on 127.0.0.1:11434. Pull a model with `ollama pull llama3.2`, then choose Use with Hermes.")
+        print("Ollama runs on 127.0.0.1:11434. Pull a model with `ollama pull llama3.2`, then choose Use with NasTech.")
         return 0
 
     def remove(self, opts: dict) -> int:

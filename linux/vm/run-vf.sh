@@ -27,7 +27,7 @@ CPUS="${CPUS:-4}"
 MEM="${MEM:-8192}"
 GUEST_W="${GUEST_W:-2048}"
 GUEST_H="${GUEST_H:-1280}"
-KEY="$BUILD/id_hermes"
+KEY="$BUILD/id_nastech"
 # --image: a Herald OS disk from bootc-image-builder; it sets itself up on the first boot (no cloud-init).
 IMAGE=""
 if [[ "${1:-}" == "--image" ]]; then
@@ -83,7 +83,7 @@ case "${1:-start}" in
   console)
     exec tail -n 80 -f "$SERIAL" ;;
   ssh)
-    exec ssh -i "$KEY" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR hermes@"$(vm_ip)" ;;
+    exec ssh -i "$KEY" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR nastech@"$(vm_ip)" ;;
   start) ;;
   *) echo "usage: $0 [start|stop|status|console|ip|ssh]" >&2; exit 2 ;;
 esac

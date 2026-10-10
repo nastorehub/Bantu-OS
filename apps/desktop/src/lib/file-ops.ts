@@ -1,5 +1,5 @@
 /*
- * What Hermes's `system_files` tool leaves on disk, read from its arguments: created folders and
+ * What NasTech's `system_files` tool leaves on disk, read from its arguments: created folders and
  * where moves and copies land. A move's source and anything trashed are gone afterwards.
  */
 

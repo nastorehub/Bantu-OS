@@ -2,7 +2,7 @@ import { useStore } from '@nanostores/react'
 import { IconBrandSlack, IconPlugConnected, IconServer, IconTerminal2, IconWifi } from '@tabler/icons-react'
 import { useState } from 'react'
 import { GlassButton, Pill, type PillTone, Toggle } from '../../../components/ui/glass.tsx'
-import { type HermesStatusPayload, rest } from '../../../lib/rest.ts'
+import { type NasTechStatusPayload, rest } from '../../../lib/rest.ts'
 import { useBackendData } from '../../../lib/use-async.ts'
 import { $backend } from '../../../store/backend.ts'
 import { $connection } from '../../../store/gateway.ts'
@@ -26,14 +26,14 @@ export function NetworkSection() {
 
   return (
     <>
-      <SectionTitle title="Network" subtitle="The Hermes runtime this shell talks to, and what Hermes itself is connected to." />
+      <SectionTitle title="Network" subtitle="The NasTech runtime this shell talks to, and what NasTech itself is connected to." />
 
-      <SettingsGroup title="Hermes runtime">
-        <SettingsRow icon={<IconServer />} label="Backend" description={<span className="selectable font-mono text-[11.5px]">{backend.baseUrl ?? 'not running'}</span>} keywords="hermes runtime server status">
+      <SettingsGroup title="NasTech runtime">
+        <SettingsRow icon={<IconServer />} label="Backend" description={<span className="selectable font-mono text-[11.5px]">{backend.baseUrl ?? 'not running'}</span>} keywords="nastech runtime server status">
           <Pill tone={phaseTone(backend.phase)} dot>
             {backend.phase}
           </Pill>
-          <GlassButton size="sm" variant="ghost" onClick={() => void window.heraldOS.backend.restart()} aria-label="Restart Hermes">
+          <GlassButton size="sm" variant="ghost" onClick={() => void window.heraldOS.backend.restart()} aria-label="Restart NasTech">
             Restart
           </GlassButton>
         </SettingsRow>
@@ -46,13 +46,13 @@ export function NetworkSection() {
           icon={<IconTerminal2 />}
           label="Runtime command"
           description={<span className="selectable font-mono text-[11.5px]">{backend.runtime?.kind === 'attached' ? `Using ${backend.runtime.label} (HERALD_OS_BACKEND_URL)` : backend.runtime ? backend.runtime.command.join(' ') : '—'}</span>}
-          keywords="hermes command path managed attached shared"
+          keywords="nastech command path managed attached shared"
         >
           {backend.runtime && <Pill>{backend.runtime.kind}</Pill>}
         </SettingsRow>
         {backend.sharedGateway && (
           <InlineNote tone="info">
-            Another app (Hermes Desktop, say) runs a Hermes gateway on this Hermes home (pid {backend.sharedGateway}). That is fine: Hermes runs each scheduled job once and keeps one messaging gateway. To share its backend
+            Another app (NasTech Desktop, say) runs a NasTech gateway on this NasTech home (pid {backend.sharedGateway}). That is fine: NasTech runs each scheduled job once and keeps one messaging gateway. To share its backend
             too, start Herald OS with HERALD_OS_BACKEND_URL and HERALD_OS_BACKEND_TOKEN.
           </InlineNote>
         )}
@@ -128,18 +128,18 @@ function platformTone(value: PlatformState): PillTone {
 }
 
 function PlatformsGroup() {
-  const status = useBackendData(() => rest.get<HermesStatusPayload & { gateway_platforms?: Record<string, PlatformState>; platforms?: Record<string, PlatformState> | PlatformState[] }>('/api/status'))
+  const status = useBackendData(() => rest.get<NasTechStatusPayload & { gateway_platforms?: Record<string, PlatformState>; platforms?: Record<string, PlatformState> | PlatformState[] }>('/api/status'))
   const raw = status.data?.gateway_platforms ?? status.data?.platforms
   const entries: [string, PlatformState][] = Array.isArray(raw) ? raw.map((item, index) => [typeof item === 'string' ? item : String(item.name ?? item.id ?? index), item]) : Object.entries(raw ?? {})
 
   return (
     <SettingsGroup title="Messaging platforms">
-      {entries.length === 0 && <SettingsRow icon={<IconBrandSlack />} label="Messaging platforms" description={status.loading ? 'Loading…' : 'No messaging platforms connected to the Hermes gateway.'} keywords="telegram discord slack whatsapp" />}
+      {entries.length === 0 && <SettingsRow icon={<IconBrandSlack />} label="Messaging platforms" description={status.loading ? 'Loading…' : 'No messaging platforms connected to the NasTech gateway.'} keywords="telegram discord slack whatsapp" />}
       {entries.map(([name, value]) => {
         const state = typeof value === 'string' ? value : String(value.state ?? value.status ?? 'unknown')
 
         return (
-          <SettingsRow key={name} icon={<IconBrandSlack />} label={name} description="Connected to the Hermes gateway." keywords="messaging platform">
+          <SettingsRow key={name} icon={<IconBrandSlack />} label={name} description="Connected to the NasTech gateway." keywords="messaging platform">
             <Pill tone={platformTone(value)} dot>
               {state}
             </Pill>

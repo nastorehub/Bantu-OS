@@ -8,14 +8,14 @@ OUT="${1:-}"
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
   HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  KEY="$HERE/../vm/build/id_hermes"
-  HOST="${HERALD_VM_HOST:-${HERMES_VM_HOST:-127.0.0.1}}"
-  PORT="${HERALD_VM_PORT:-${HERMES_VM_PORT:-2222}}"
+  KEY="$HERE/../vm/build/id_nastech"
+  HOST="${HERALD_VM_HOST:-${NASTECH_VM_HOST:-127.0.0.1}}"
+  PORT="${HERALD_VM_PORT:-${NASTECH_VM_PORT:-2222}}"
   OUT="${OUT:-$HERE/../vm/build/shots/herald-os-$(date +%Y%m%d-%H%M%S).png}"
   mkdir -p "$(dirname "$OUT")"
-  ssh -q -i "$KEY" -p "$PORT" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null hermes@"$HOST" \
+  ssh -q -i "$KEY" -p "$PORT" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null nastech@"$HOST" \
     'bash -s' <"$0" -- /tmp/herald-os-shot.png >/dev/null
-  scp -q -i "$KEY" -P "$PORT" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null hermes@"$HOST":/tmp/herald-os-shot.png "$OUT"
+  scp -q -i "$KEY" -P "$PORT" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null nastech@"$HOST":/tmp/herald-os-shot.png "$OUT"
   echo "$OUT"
   exit 0
 fi

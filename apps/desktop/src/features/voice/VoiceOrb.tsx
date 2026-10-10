@@ -8,7 +8,7 @@ import { $voice, $voiceActive, $voiceLevel, endConversation, interruptSpeech, LI
 
 const LABEL: Record<VoiceState, string> = {
   off: '',
-  armed: 'Say "hey hermes"',
+  armed: 'Say "hey nastech"',
   connecting: 'Connecting…',
   listening: 'Listening',
   transcribing: 'Got it…',
@@ -53,7 +53,7 @@ export function Orb({ state, level, size = 44, className }: { state: VoiceState;
 }
 
 /**
- * Persistent conversation overlay: orb, state, captions and controls. Mounted once per Hermes
+ * Persistent conversation overlay: orb, state, captions and controls. Mounted once per NasTech
  * window beside Toasts/RequestHost; hidden while no conversation runs (the menu bar shows the
  * armed/mic state instead), so it never steals attention on its own.
  */

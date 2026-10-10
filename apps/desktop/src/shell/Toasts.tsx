@@ -1,7 +1,7 @@
 import { useStore } from '@nanostores/react'
 import { IconX } from '@tabler/icons-react'
 import { Dot } from '../components/ui/primitives.tsx'
-import { $toasts, activateDesktopNotification, dismissNotification, dismissToast, type HermesNotification, type NotificationLevel } from '../store/notifications.ts'
+import { $toasts, activateDesktopNotification, dismissNotification, dismissToast, type NasTechNotification, type NotificationLevel } from '../store/notifications.ts'
 import { runCommand } from '../store/os-commands.ts'
 import { showSurface } from '../store/surface.ts'
 
@@ -14,7 +14,7 @@ export function Toasts() {
     return null
   }
 
-  const open = (toast: HermesNotification) => {
+  const open = (toast: NasTechNotification) => {
     if (toast.desktop) {
       activateDesktopNotification(toast, 'default')
 
@@ -29,7 +29,7 @@ export function Toasts() {
   }
 
   // Closing a desktop notification's toast tells the sender; closing our own just hides the toast.
-  const close = (toast: HermesNotification) => (toast.desktop ? dismissNotification(toast.id) : dismissToast(toast.id))
+  const close = (toast: NasTechNotification) => (toast.desktop ? dismissNotification(toast.id) : dismissToast(toast.id))
 
   return (
     <div className="pointer-events-none absolute top-11 right-3 z-(--z-overlay) flex w-80 flex-col gap-2">
@@ -55,7 +55,7 @@ export function Toasts() {
 }
 
 /** Buttons on Herald OS's own notifications: each runs its OS command, then the notification goes. */
-export function CommandActions({ item, className }: { item: HermesNotification; className?: string }) {
+export function CommandActions({ item, className }: { item: NasTechNotification; className?: string }) {
   const actions = item.actions ?? []
 
   if (actions.length === 0) {
@@ -83,7 +83,7 @@ export function CommandActions({ item, className }: { item: HermesNotification; 
 }
 
 /** The buttons another app attached to its notification; each reports its key back through D-Bus. */
-export function DesktopActions({ item, className }: { item: HermesNotification; className?: string }) {
+export function DesktopActions({ item, className }: { item: NasTechNotification; className?: string }) {
   const actions = item.desktop?.actions ?? []
 
   if (actions.length === 0) {

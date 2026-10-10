@@ -503,8 +503,8 @@ def test_omarchy_install_never_overwrites_the_persons_files(tmp_path, monkeypatc
     assert hook.exists() and menu.exists()
 
 
-class FakeHermes:
-    """`hermes` as setup sees it: replies by command, and a config that `config set` changes."""
+class FakeNasTech:
+    """`nastech` as setup sees it: replies by command, and a config that `config set` changes."""
 
     def __init__(self, replies: dict[str, tuple[int, str]] | None = None, tool_search: str = "auto"):
         self.replies = replies or {}
@@ -523,38 +523,38 @@ class FakeHermes:
 
 
 @pytest.fixture
-def hermes_setup(tmp_path, monkeypatch):
+def nastech_setup(tmp_path, monkeypatch):
     bridge = tmp_path / "share" / "bridge"
     bridge.mkdir(parents=True)
     (bridge / "plugin.yaml").write_text("name: herald-os-bridge\n")
-    hermes_home = tmp_path / ".hermes"
+    nastech_home = tmp_path / ".nastech"
     monkeypatch.setattr(cli, "BRIDGE_DIRS", [tmp_path / "missing", bridge])
-    monkeypatch.setattr(cli, "HERMES_HOME", hermes_home)
-    monkeypatch.setattr(cli, "hermes_command", lambda: ["/usr/bin/hermes"])
+    monkeypatch.setattr(cli, "NASTECH_HOME", nastech_home)
+    monkeypatch.setattr(cli, "nastech_command", lambda: ["/usr/bin/nastech"])
     monkeypatch.setattr(cli, "is_omarchy", lambda: False)
 
-    def install(hermes: FakeHermes) -> FakeHermes:
-        monkeypatch.setattr(cli.subprocess, "run", hermes)
-        return hermes
+    def install(nastech: FakeNasTech) -> FakeNasTech:
+        monkeypatch.setattr(cli.subprocess, "run", nastech)
+        return nastech
 
-    return bridge, hermes_home, install
+    return bridge, nastech_home, install
 
 
-def test_setup_links_the_bridge_enables_it_and_says_what_changed(hermes_setup, capsys):
-    bridge, hermes_home, install = hermes_setup
-    hermes = install(FakeHermes())
+def test_setup_links_the_bridge_enables_it_and_says_what_changed(nastech_setup, capsys):
+    bridge, nastech_home, install = nastech_setup
+    nastech = install(FakeNasTech())
     assert cli.setup([]) == 0
-    link = hermes_home / "plugins" / "herald-os-bridge"
+    link = nastech_home / "plugins" / "herald-os-bridge"
     assert link.is_symlink() and link.resolve() == bridge.resolve()
-    assert ["plugins", "enable", "herald-os-bridge"] in hermes.ran and ["tools", "enable", "herald_os"] in hermes.ran
-    assert ["config", "set", "tools.tool_search.enabled", "off"] in hermes.ran
-    assert (hermes_home / "herald-os" / "tool-search-before").read_text() == "auto\n"
+    assert ["plugins", "enable", "herald-os-bridge"] in nastech.ran and ["tools", "enable", "herald_os"] in nastech.ran
+    assert ["config", "set", "tools.tool_search.enabled", "off"] in nastech.ran
+    assert (nastech_home / "herald-os" / "tool-search-before").read_text() == "auto\n"
     out = capsys.readouterr().out
     assert "plugins.enabled" in out and "platform_toolsets.cli" in out and "it was auto" in out and "setup --undo" in out
     # Running it again replaces its own link and keeps the value from before Herald OS.
     assert cli.setup([]) == 0 and link.is_symlink()
-    assert hermes.ran.count(["config", "set", "tools.tool_search.enabled", "off"]) == 1
-    assert (hermes_home / "herald-os" / "tool-search-before").read_text() == "auto\n"
+    assert nastech.ran.count(["config", "set", "tools.tool_search.enabled", "off"]) == 1
+    assert (nastech_home / "herald-os" / "tool-search-before").read_text() == "auto\n"
 
 
 @pytest.mark.parametrize("step, reply", [
@@ -562,61 +562,61 @@ def test_setup_links_the_bridge_enables_it_and_says_what_changed(hermes_setup, c
     # An unknown toolset is a ✗ line with exit 0.
     ("tools enable herald_os", (0, "✗ Unknown toolset 'herald_os'")),
 ])
-def test_setup_stops_at_a_failed_hermes_step(hermes_setup, capsys, step, reply):
-    _, hermes_home, install = hermes_setup
-    hermes = install(FakeHermes({step: reply}))
+def test_setup_stops_at_a_failed_nastech_step(nastech_setup, capsys, step, reply):
+    _, nastech_home, install = nastech_setup
+    nastech = install(FakeNasTech({step: reply}))
     with pytest.raises(SystemExit) as stopped:
         cli.setup([])
     assert stopped.value.code == 1
-    assert ["config", "set", "tools.tool_search.enabled", "off"] not in hermes.ran
+    assert ["config", "set", "tools.tool_search.enabled", "off"] not in nastech.ran
     assert reply[1] in capsys.readouterr().err
-    assert not (hermes_home / "herald-os" / "tool-search-before").exists()
+    assert not (nastech_home / "herald-os" / "tool-search-before").exists()
 
 
-def test_setup_undo_takes_back_every_change(hermes_setup, capsys):
-    _, hermes_home, install = hermes_setup
-    hermes = install(FakeHermes(tool_search="on"))
+def test_setup_undo_takes_back_every_change(nastech_setup, capsys):
+    _, nastech_home, install = nastech_setup
+    nastech = install(FakeNasTech(tool_search="on"))
     cli.setup([])
 
     assert cli.setup(["--undo"]) == 0
 
-    assert hermes.ran[-4:] == [["tools", "disable", "herald_os"], ["plugins", "disable", "herald-os-bridge"], ["config", "get", "tools.tool_search.enabled"], ["config", "set", "tools.tool_search.enabled", "on"]]
-    assert not (hermes_home / "plugins" / "herald-os-bridge").exists()
-    assert not (hermes_home / "herald-os" / "tool-search-before").exists()
+    assert nastech.ran[-4:] == [["tools", "disable", "herald_os"], ["plugins", "disable", "herald-os-bridge"], ["config", "get", "tools.tool_search.enabled"], ["config", "set", "tools.tool_search.enabled", "on"]]
+    assert not (nastech_home / "plugins" / "herald-os-bridge").exists()
+    assert not (nastech_home / "herald-os" / "tool-search-before").exists()
     # The app's first start must not turn it all back on.
-    assert (hermes_home / "herald-os" / "bridge-enabled").exists()
+    assert (nastech_home / "herald-os" / "bridge-enabled").exists()
 
 
-def test_setup_undo_finishes_what_is_left(hermes_setup, capsys):
-    _, hermes_home, install = hermes_setup
-    hermes = install(FakeHermes({"tools disable herald_os": (0, "✗ Unknown toolset 'herald_os'"), "plugins disable herald-os-bridge": (1, "No plugin named 'herald-os-bridge'.")}, tool_search="off"))
+def test_setup_undo_finishes_what_is_left(nastech_setup, capsys):
+    _, nastech_home, install = nastech_setup
+    nastech = install(FakeNasTech({"tools disable herald_os": (0, "✗ Unknown toolset 'herald_os'"), "plugins disable herald-os-bridge": (1, "No plugin named 'herald-os-bridge'.")}, tool_search="off"))
 
     assert cli.setup(["--undo"]) == 0
 
     out = capsys.readouterr().out
     assert out.count("nothing to change") == 2
-    # No record (a setup from before it was kept): back to Hermes's default, saying how to undo that.
-    assert ["config", "set", "tools.tool_search.enabled", "auto"] in hermes.ran and "hermes config set tools.tool_search.enabled off" in out
+    # No record (a setup from before it was kept): back to NasTech's default, saying how to undo that.
+    assert ["config", "set", "tools.tool_search.enabled", "auto"] in nastech.ran and "nastech config set tools.tool_search.enabled off" in out
 
 
-def test_setup_undo_leaves_tool_search_the_person_changed_since(hermes_setup, capsys):
-    _, hermes_home, install = hermes_setup
-    hermes = install(FakeHermes())
+def test_setup_undo_leaves_tool_search_the_person_changed_since(nastech_setup, capsys):
+    _, nastech_home, install = nastech_setup
+    nastech = install(FakeNasTech())
     cli.setup([])
-    hermes.tool_search = "auto"
+    nastech.tool_search = "auto"
 
     assert cli.setup(["--undo"]) == 0
 
-    assert hermes.ran.count(["config", "set", "tools.tool_search.enabled", "auto"]) == 0
+    assert nastech.ran.count(["config", "set", "tools.tool_search.enabled", "auto"]) == 0
     assert "left as it is" in capsys.readouterr().out
-    assert not (hermes_home / "herald-os" / "tool-search-before").exists()
+    assert not (nastech_home / "herald-os" / "tool-search-before").exists()
 
 
-def hermes_checkout(root: Path, executables: list[str], serve: bool = True) -> Path:
-    """A Hermes Agent checkout with these executables in it (and its `serve` subcommand, unless not)."""
+def nastech_checkout(root: Path, executables: list[str], serve: bool = True) -> Path:
+    """A NasTech Agent checkout with these executables in it (and its `serve` subcommand, unless not)."""
     if serve:
-        (root / "hermes_cli" / "subcommands").mkdir(parents=True)
-        (root / "hermes_cli" / "subcommands" / "dashboard.py").write_text("")
+        (root / "nastech_cli" / "subcommands").mkdir(parents=True)
+        (root / "nastech_cli" / "subcommands" / "dashboard.py").write_text("")
     for name in executables:
         (root / name).parent.mkdir(parents=True, exist_ok=True)
         (root / name).write_text("#!/bin/sh\n")
@@ -625,84 +625,84 @@ def hermes_checkout(root: Path, executables: list[str], serve: bool = True) -> P
 
 
 @pytest.fixture
-def hermes_home(tmp_path, monkeypatch):
-    """An account with no Hermes yet: its home, HERMES_HOME and a PATH with nothing on it."""
+def nastech_home(tmp_path, monkeypatch):
+    """An account with no NasTech yet: its home, NASTECH_HOME and a PATH with nothing on it."""
     monkeypatch.setattr(cli, "HOME", tmp_path)
-    monkeypatch.setattr(cli, "HERMES_HOME", tmp_path / ".hermes")
+    monkeypatch.setattr(cli, "NASTECH_HOME", tmp_path / ".nastech")
     monkeypatch.setenv("PATH", str(tmp_path / "empty"))
-    monkeypatch.delenv("HERALD_OS_HERMES_ROOT", raising=False)
-    monkeypatch.delenv("HERMES_OS_HERMES_ROOT", raising=False)
+    monkeypatch.delenv("HERALD_OS_NASTECH_ROOT", raising=False)
+    monkeypatch.delenv("NASTECH_OS_NASTECH_ROOT", raising=False)
     return tmp_path
 
 
-def test_hermes_is_found_in_today_s_layout_and_in_the_one_before(hermes_home):
-    agent = hermes_home / ".hermes" / "hermes-agent"
-    assert cli.hermes_install() is None
-    hermes_checkout(agent, ["venv/bin/python", "venv/bin/hermes"])
-    assert cli.hermes_install() == ("managed", [str(agent / "venv" / "bin" / "hermes")])
-    # Today's installers: no venv, the launcher in .hermes/bin. An update leaves the old venv behind.
-    hermes_checkout(agent, [".hermes/bin/hermes"], serve=False)
-    assert cli.hermes_install() == ("managed", [str(agent / ".hermes" / "bin" / "hermes")])
-    assert cli.hermes_command() == [str(agent / ".hermes" / "bin" / "hermes")]
+def test_nastech_is_found_in_today_s_layout_and_in_the_one_before(nastech_home):
+    agent = nastech_home / ".nastech" / "nastech-agent"
+    assert cli.nastech_install() is None
+    nastech_checkout(agent, ["venv/bin/python", "venv/bin/nastech"])
+    assert cli.nastech_install() == ("managed", [str(agent / "venv" / "bin" / "nastech")])
+    # Today's installers: no venv, the launcher in .nastech/bin. An update leaves the old venv behind.
+    nastech_checkout(agent, [".nastech/bin/nastech"], serve=False)
+    assert cli.nastech_install() == ("managed", [str(agent / ".nastech" / "bin" / "nastech")])
+    assert cli.nastech_command() == [str(agent / ".nastech" / "bin" / "nastech")]
 
 
-def test_hermes_is_found_where_the_shell_looks_and_nowhere_else(hermes_home, monkeypatch):
-    agent = hermes_checkout(hermes_home / ".hermes" / "hermes-agent", [".hermes/bin/hermes"], serve=False)
-    # Without the serve subcommand it is not a Hermes the shell could start either.
-    assert cli.hermes_install() is None
-    (agent / "hermes_cli" / "subcommands").mkdir(parents=True)
-    (agent / "hermes_cli" / "subcommands" / "dashboard.py").write_text("")
-    assert cli.hermes_install() == ("managed", [str(agent / ".hermes" / "bin" / "hermes")])
-    own = hermes_checkout(hermes_home / "own", [".hermes/bin/hermes"])
-    monkeypatch.setenv("HERALD_OS_HERMES_ROOT", str(own))
-    assert cli.hermes_install() == ("env", [str(own / ".hermes" / "bin" / "hermes")])
+def test_nastech_is_found_where_the_shell_looks_and_nowhere_else(nastech_home, monkeypatch):
+    agent = nastech_checkout(nastech_home / ".nastech" / "nastech-agent", [".nastech/bin/nastech"], serve=False)
+    # Without the serve subcommand it is not a NasTech the shell could start either.
+    assert cli.nastech_install() is None
+    (agent / "nastech_cli" / "subcommands").mkdir(parents=True)
+    (agent / "nastech_cli" / "subcommands" / "dashboard.py").write_text("")
+    assert cli.nastech_install() == ("managed", [str(agent / ".nastech" / "bin" / "nastech")])
+    own = nastech_checkout(nastech_home / "own", [".nastech/bin/nastech"])
+    monkeypatch.setenv("HERALD_OS_NASTECH_ROOT", str(own))
+    assert cli.nastech_install() == ("env", [str(own / ".nastech" / "bin" / "nastech")])
 
 
-def test_hermes_on_the_path_counts_and_so_does_the_installers_local_bin(hermes_home, monkeypatch):
-    local = hermes_home / ".local" / "bin"
+def test_nastech_on_the_path_counts_and_so_does_the_installers_local_bin(nastech_home, monkeypatch):
+    local = nastech_home / ".local" / "bin"
     local.mkdir(parents=True)
-    (local / "hermes").write_text("#!/bin/sh\nexec /x/.hermes/hermes-agent/.hermes/bin/hermes \"$@\"\n")
-    (local / "hermes").chmod(0o755)
-    # sudo and systemd leave ~/.local/bin off the PATH, which is where the installers put `hermes`.
-    assert cli.hermes_install() == ("path", [str(local / "hermes")])
-    other = hermes_home / "bin"
+    (local / "nastech").write_text("#!/bin/sh\nexec /x/.nastech/nastech-agent/.nastech/bin/nastech \"$@\"\n")
+    (local / "nastech").chmod(0o755)
+    # sudo and systemd leave ~/.local/bin off the PATH, which is where the installers put `nastech`.
+    assert cli.nastech_install() == ("path", [str(local / "nastech")])
+    other = nastech_home / "bin"
     other.mkdir()
-    (other / "hermes").write_text("#!/bin/sh\n")
-    (other / "hermes").chmod(0o755)
+    (other / "nastech").write_text("#!/bin/sh\n")
+    (other / "nastech").chmod(0o755)
     monkeypatch.setenv("PATH", str(other))
-    assert cli.hermes_install() == ("path", [str(other / "hermes")])
+    assert cli.nastech_install() == ("path", [str(other / "nastech")])
 
 
-def test_hermes_command_tells_scripts_how_to_run_hermes(hermes_home, capsys):
-    assert cli.main(["hermes-command"]) == 1 and capsys.readouterr().out == ""
-    local = hermes_home / ".local" / "bin"
+def test_nastech_command_tells_scripts_how_to_run_nastech(nastech_home, capsys):
+    assert cli.main(["nastech-command"]) == 1 and capsys.readouterr().out == ""
+    local = nastech_home / ".local" / "bin"
     local.mkdir(parents=True)
-    (local / "hermes").write_text("#!/bin/sh\n")
-    (local / "hermes").chmod(0o755)
-    assert cli.main(["hermes-command"]) == 0 and capsys.readouterr().out == f"{local / 'hermes'}\n"
-    # `herald-os update` updates only the checkout in ~/.hermes/hermes-agent.
-    assert cli.main(["hermes-command", "--managed"]) == 1
-    agent = hermes_checkout(hermes_home / ".hermes" / "hermes-agent", [".hermes/bin/hermes"])
-    assert cli.main(["hermes-command", "--managed"]) == 0 and capsys.readouterr().out == f"{agent / '.hermes' / 'bin' / 'hermes'}\n"
+    (local / "nastech").write_text("#!/bin/sh\n")
+    (local / "nastech").chmod(0o755)
+    assert cli.main(["nastech-command"]) == 0 and capsys.readouterr().out == f"{local / 'nastech'}\n"
+    # `herald-os update` updates only the checkout in ~/.nastech/nastech-agent.
+    assert cli.main(["nastech-command", "--managed"]) == 1
+    agent = nastech_checkout(nastech_home / ".nastech" / "nastech-agent", [".nastech/bin/nastech"])
+    assert cli.main(["nastech-command", "--managed"]) == 0 and capsys.readouterr().out == f"{agent / '.nastech' / 'bin' / 'nastech'}\n"
 
 
 @pytest.fixture
-def no_hermes(tmp_path, monkeypatch):
-    """setup on an account without Hermes; what it tried to install with, if anything."""
+def no_nastech(tmp_path, monkeypatch):
+    """setup on an account without NasTech; what it tried to install with, if anything."""
     bridge = tmp_path / "bridge"
     bridge.mkdir()
     (bridge / "plugin.yaml").write_text("name: herald-os-bridge\n")
     monkeypatch.setattr(cli, "BRIDGE_DIRS", [bridge])
-    monkeypatch.setattr(cli, "HERMES_HOME", tmp_path / ".hermes")
-    monkeypatch.setattr(cli, "HERMES_PENDING", tmp_path / "hermes-pending")
-    monkeypatch.setattr(cli, "hermes_command", lambda: None)
+    monkeypatch.setattr(cli, "NASTECH_HOME", tmp_path / ".nastech")
+    monkeypatch.setattr(cli, "NASTECH_PENDING", tmp_path / "nastech-pending")
+    monkeypatch.setattr(cli, "nastech_command", lambda: None)
     installs: list[list[str]] = []
     monkeypatch.setattr(cli.subprocess, "call", lambda argv, **kwargs: installs.append(argv) or 1)
     return tmp_path, installs
 
 
-def test_setup_offers_to_install_hermes_even_without_a_terminal(no_hermes, monkeypatch, capsys):
-    _, installs = no_hermes
+def test_setup_offers_to_install_nastech_even_without_a_terminal(no_nastech, monkeypatch, capsys):
+    _, installs = no_nastech
     monkeypatch.setattr(cli.sys, "stdin", _Stdin(False))
     with pytest.raises(SystemExit) as stopped:
         cli.setup([])
@@ -710,31 +710,31 @@ def test_setup_offers_to_install_hermes_even_without_a_terminal(no_hermes, monke
     assert "`herald-os setup --yes` installs it and then sets it up" in capsys.readouterr().err
     with pytest.raises(SystemExit):
         cli.setup(["--yes"])
-    assert installs == [["bash", "-c", f"curl -fsSL {cli.HERMES_INSTALLER} | bash"]]
+    assert installs == [["bash", "-c", f"curl -fsSL {cli.NASTECH_INSTALLER} | bash"]]
 
 
-def test_setup_leaves_the_image_s_install_to_the_service_already_at_it(no_hermes, monkeypatch, capsys):
-    tmp_path, installs = no_hermes
-    (tmp_path / "hermes-pending").write_text("offline\n")
+def test_setup_leaves_the_image_s_install_to_the_service_already_at_it(no_nastech, monkeypatch, capsys):
+    tmp_path, installs = no_nastech
+    (tmp_path / "nastech-pending").write_text("offline\n")
     with pytest.raises(SystemExit) as stopped:
         cli.setup(["--yes"])
     assert stopped.value.code == 1 and installs == []
     err = capsys.readouterr().err
-    assert "herald-os-hermes.service installs it once this computer is online" in err and "(offline now)" in err
+    assert "herald-os-nastech.service installs it once this computer is online" in err and "(offline now)" in err
 
 
 def test_setup_leaves_a_foreign_plugin_folder_alone(tmp_path, monkeypatch):
     bridge = tmp_path / "bridge"
     bridge.mkdir()
     (bridge / "plugin.yaml").write_text("name: herald-os-bridge\n")
-    hermes_home = tmp_path / ".hermes"
-    (hermes_home / "plugins" / "herald-os-bridge").mkdir(parents=True)
+    nastech_home = tmp_path / ".nastech"
+    (nastech_home / "plugins" / "herald-os-bridge").mkdir(parents=True)
     monkeypatch.setattr(cli, "BRIDGE_DIRS", [bridge])
-    monkeypatch.setattr(cli, "HERMES_HOME", hermes_home)
-    monkeypatch.setattr(cli, "hermes_command", lambda: ["/usr/bin/hermes"])
+    monkeypatch.setattr(cli, "NASTECH_HOME", nastech_home)
+    monkeypatch.setattr(cli, "nastech_command", lambda: ["/usr/bin/nastech"])
     with pytest.raises(SystemExit):
         cli.setup([])
-    assert (hermes_home / "plugins" / "herald-os-bridge").is_dir()
+    assert (nastech_home / "plugins" / "herald-os-bridge").is_dir()
 
 
 def test_unknown_keymap_falls_back_to_herald(tmp_path, monkeypatch):

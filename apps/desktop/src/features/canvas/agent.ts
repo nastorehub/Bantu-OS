@@ -1,5 +1,5 @@
 /*
- * What Hermes (and the command bar, voice and the CLI) does in Herald Canvas. A command works on a
+ * What NasTech (and the command bar, voice and the CLI) does in Herald Canvas. A command works on a
  * project: the one it names, or the image in front. When that project is open in this window the
  * change lands in the open document (one undoable step, saved right after); otherwise it is read
  * from disk, changed and written back, and any window showing it reloads.
@@ -113,12 +113,12 @@ export interface Target {
 
 const store = () => import('./store.ts')
 
-/** A file's name with its extension, for what Hermes says back. */
+/** A file's name with its extension, for what NasTech says back. */
 const fileName = (file: string): string => file.split('/').pop() || file
 
 // --- Paths and projects ------------------------------------------------------------------------
 
-/** A full path from what Hermes or the person typed (`~/…` works). */
+/** A full path from what NasTech or the person typed (`~/…` works). */
 const resolve = (input: string): string => resolvePath(input, $env.get()?.homeDir ?? '')
 
 /** The project in front of the person: the active document of the Canvas window used last. */
@@ -580,7 +580,7 @@ export async function group(args: Record<string, unknown>): Promise<Outcome> {
   return { summary: refs.length ? `Put ${refs.length} layer${refs.length === 1 ? '' : 's'} in “${folder.name}”` : `Added the folder “${folder.name}”`, data: { folder: folder.id } }
 }
 
-/** A Color Lookup's table from a `.cube` file Hermes named, with the settings it gives (its name and size). */
+/** A Color Lookup's table from a `.cube` file NasTech named, with the settings it gives (its name and size). */
 async function tableFrom(file: unknown): Promise<{ table: ColorTable; name: string; size: number }> {
   const path = resolve(String(file))
   const table = parseCube(await window.heraldOS.canvas.readTable(path))
@@ -588,7 +588,7 @@ async function tableFrom(file: unknown): Promise<{ table: ColorTable; name: stri
   return { table, name: fileName(path), size: table.size }
 }
 
-/** Herald-only settings changed by what Hermes gave, with the table its `table` file holds. */
+/** Herald-only settings changed by what NasTech gave, with the table its `table` file holds. */
 async function heraldChanged(current: HeraldAdjustment, settings: Record<string, unknown>): Promise<{ settings: HeraldAdjustment; table?: ColorTable }> {
   const next = heraldWith(current, settings, readColour)
 
@@ -1112,7 +1112,7 @@ export async function save(args: Record<string, unknown>): Promise<Outcome> {
 
 const PREVIEW_FOLDER = '/tmp/herald-canvas-previews'
 
-/** A flattened PNG of the image for Hermes to look at, at most `size` pixels on its long side. */
+/** A flattened PNG of the image for NasTech to look at, at most `size` pixels on its long side. */
 export async function preview(args: Record<string, unknown>): Promise<Outcome> {
   const on = await target(args.project)
   const { state } = on.doc

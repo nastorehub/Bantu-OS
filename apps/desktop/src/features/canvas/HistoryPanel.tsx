@@ -14,8 +14,8 @@ import { settleTools } from './tools/sessions.ts'
  */
 
 const ORIGIN: Record<NonNullable<HistoryStep['origin']>, { title: string; icon: React.ReactNode }> = {
-  command: { title: 'Made by Hermes or a command', icon: <IconSparkles size={12} /> },
-  outside: { title: 'Changed outside the window (Hermes writing the project, a script, Compositor)', icon: <IconRefresh size={12} /> }
+  command: { title: 'Made by NasTech or a command', icon: <IconSparkles size={12} /> },
+  outside: { title: 'Changed outside the window (NasTech writing the project, a script, Compositor)', icon: <IconRefresh size={12} /> }
 }
 
 function Row({ label, current, undone, onClick, children }: { label: string; current: boolean; undone: boolean; onClick: () => void; children?: React.ReactNode }) {
@@ -71,7 +71,7 @@ export function HistoryPanel({ doc, header }: { doc: CanvasDocument; header?: Re
             </span>
           </Row>
         ))}
-        {!steps.length && <div className="px-3 py-2 text-[12px] text-fg-3">Each change you or Hermes make is listed here: click one to go back to it.</div>}
+        {!steps.length && <div className="px-3 py-2 text-[12px] text-fg-3">Each change you or NasTech make is listed here: click one to go back to it.</div>}
       </div>
     </div>
   )

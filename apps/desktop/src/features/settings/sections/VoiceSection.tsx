@@ -16,18 +16,18 @@ import { errorText, focusSettings, InlineNote, markSaved, MenuDropdown, RadioCar
 
 /*
  * Voice: the two engines (free chained pipeline, paid GPT-Live), how a conversation starts (wake
- * word, hotkey), the speech providers Hermes uses (written to the runtime's config.yaml through
+ * word, hotkey), the speech providers NasTech uses (written to the runtime's config.yaml through
  * PUT /api/config), and the Live cost controls. See docs/VOICE.md.
  */
 
-interface HermesConfig {
+interface NasTechConfig {
   stt?: { provider?: string; local?: { model?: string }; [key: string]: unknown }
   tts?: { provider?: string; [key: string]: unknown }
   [key: string]: unknown
 }
 
 const STT_PROVIDERS = [
-  { id: 'nous', label: 'Nous subscription', description: 'OpenAI transcription through the Nous gateway; no extra cost' },
+  { id: 'nastech', label: 'NasTech subscription', description: 'OpenAI transcription through the NasTech gateway; no extra cost' },
   { id: 'local', label: 'On this device (faster-whisper)', description: 'Free and private; slower on long utterances' },
   { id: 'openai', label: 'OpenAI', description: 'gpt-4o-mini-transcribe with your OPENAI_API_KEY' },
   { id: 'groq', label: 'Groq Whisper', description: 'GROQ_API_KEY' },
@@ -36,7 +36,7 @@ const STT_PROVIDERS = [
 ] as const
 
 const TTS_PROVIDERS = [
-  { id: 'nous', label: 'Nous subscription', description: 'gpt-4o-mini-tts through the Nous gateway; no extra cost' },
+  { id: 'nastech', label: 'NasTech subscription', description: 'gpt-4o-mini-tts through the NasTech gateway; no extra cost' },
   { id: 'edge', label: 'Edge neural voices', description: 'Free, no key; whole sentences at a time' },
   { id: 'openai', label: 'OpenAI', description: 'gpt-4o-mini-tts, streams sentence by sentence' },
   { id: 'elevenlabs', label: 'ElevenLabs', description: 'Most expressive; streams; paid' },
@@ -54,7 +54,7 @@ export function VoiceSection() {
   const wake = useStore($wake)
   const live = useStore($voice).live
   const active = useStore($voiceActive)
-  const config = useBackendData(() => rest.get<HermesConfig>('/api/config'))
+  const config = useBackendData(() => rest.get<NasTechConfig>('/api/config'))
   const [liveStatus, setLiveStatus] = useState<LiveStatus | null>(live.status)
   const [mic, setMic] = useState<MicPermission>('unknown')
   const [hotkeyDraft, setHotkeyDraft] = useState(voice.hotkey)
@@ -82,7 +82,7 @@ export function VoiceSection() {
       config.reload()
       markSaved()
     } catch (error) {
-      notify({ title: 'Could not update Hermes config', body: errorText(error), level: 'error' })
+      notify({ title: 'Could not update NasTech config', body: errorText(error), level: 'error' })
     }
   }
 
@@ -108,7 +108,7 @@ export function VoiceSection() {
     setTesting(true)
 
     try {
-      await speakWithFreeFallback('Hello. This is Hermes, speaking from Herald OS.')
+      await speakWithFreeFallback('Hello. This is NasTech, speaking from Herald OS.')
       config.reload()
       markSaved()
     } catch (error) {
@@ -125,7 +125,7 @@ export function VoiceSection() {
       config.reload()
       markSaved()
     } catch (error) {
-      notify({ title: 'Could not update Hermes config', body: errorText(error), level: 'error' })
+      notify({ title: 'Could not update NasTech config', body: errorText(error), level: 'error' })
     }
   }
 
@@ -137,7 +137,7 @@ export function VoiceSection() {
 
   return (
     <>
-      <SectionTitle title="Voice" subtitle="Talk to Hermes and hear it answer. Hermes stays the brain in every mode; only the audio path changes." />
+      <SectionTitle title="Voice" subtitle="Talk to NasTech and hear it answer. NasTech stays the brain in every mode; only the audio path changes." />
 
       <SettingsGroup title="Voice">
         <SettingsRow icon={<IconMicrophone />} label="Enable voice" description="Shows the microphone in the menu bar and composers, and registers the hotkey. Off means the mic is never opened." keywords="talk speak jarvis">
@@ -174,7 +174,7 @@ export function VoiceSection() {
       <SettingsGroup title="Engine">
         <SettingsRow
           label="Conversation engine"
-          description="Free: your mic is transcribed, Hermes answers, and the reply is spoken as it streams (about 2 s per turn). Live: OpenAI's full-duplex voice model talks with you and delegates to Hermes (under 1 s, natural interruptions)."
+          description="Free: your mic is transcribed, NasTech answers, and the reply is spoken as it streams (about 2 s per turn). Live: OpenAI's full-duplex voice model talks with you and delegates to NasTech (under 1 s, natural interruptions)."
           keywords="chained gpt-live realtime cost"
           below={
             <div className="flex flex-col gap-2">
@@ -183,7 +183,7 @@ export function VoiceSection() {
                 <RadioCard
                   icon={<IconBolt />}
                   label="Live"
-                  description={liveStatus?.available ? `$${LIVE_RATE_PER_MINUTE.toFixed(2)} per minute while talking` : 'Needs an OpenAI key and Hermes 0.21.3+'}
+                  description={liveStatus?.available ? `$${LIVE_RATE_PER_MINUTE.toFixed(2)} per minute while talking` : 'Needs an OpenAI key and NasTech 0.21.3+'}
                   selected={voice.engine === 'live'}
                   onSelect={() => void setEngine('live')}
                   disabled={liveStatus ? !liveStatus.available : false}
@@ -201,12 +201,12 @@ export function VoiceSection() {
           label={`Wake word: “${wake.phrase}”`}
           description={
             wake.listening
-              ? `Listening${wake.capture === 'local' ? ' (Hermes opened the mic itself)' : ''}.`
+              ? `Listening${wake.capture === 'local' ? ' (NasTech opened the mic itself)' : ''}.`
               : wake.error
                 ? wake.error
-                : `Runs the on-device openWakeWord detector inside Hermes; nothing leaves this ${deviceNoun()} until you speak to it.`
+                : `Runs the on-device openWakeWord detector inside NasTech; nothing leaves this ${deviceNoun()} until you speak to it.`
           }
-          keywords="hey hermes always listening"
+          keywords="hey nastech always listening"
         >
           {wake.listening && <Pill tone="ok" dot>Armed</Pill>}
           <Toggle checked={voice.wakeWord} onChange={next => void setWakeWordEnabled(next).then(markSaved)} label="Wake word" />
@@ -226,19 +226,19 @@ export function VoiceSection() {
             className="glass-input h-8 w-[200px] rounded-lg px-2.5 font-mono text-[12px] text-fg outline-none"
           />
         </SettingsRow>
-        <SettingsRow icon={<IconHourglass />} label="Follow-up window" description="Seconds the mic keeps listening after Hermes finishes speaking." keywords="continue listening">
+        <SettingsRow icon={<IconHourglass />} label="Follow-up window" description="Seconds the mic keeps listening after NasTech finishes speaking." keywords="continue listening">
           <Stepper value={voice.followUpSeconds} min={0} max={30} onChange={next => void save({ followUpSeconds: next })} label="follow-up seconds" />
         </SettingsRow>
-        <SettingsRow icon={<IconEye />} label="Follow Hermes" description="Show what Hermes changes as it works (a new memory, a paused automation, a written file) even when you are not in a voice conversation. Voice conversations always follow." keywords="watch show work">
-          <Toggle checked={voice.followHermes} onChange={next => void save({ followHermes: next })} label="Follow Hermes" />
+        <SettingsRow icon={<IconEye />} label="Follow NasTech" description="Show what NasTech changes as it works (a new memory, a paused automation, a written file) even when you are not in a voice conversation. Voice conversations always follow." keywords="watch show work">
+          <Toggle checked={voice.followNasTech} onChange={next => void save({ followNasTech: next })} label="Follow NasTech" />
         </SettingsRow>
-        <SettingsRow icon={<IconBellRinging />} label="Speak notifications" description="Read Hermes notifications aloud (missions, reminders) while voice is enabled and no conversation is running." keywords="announce read aloud">
+        <SettingsRow icon={<IconBellRinging />} label="Speak notifications" description="Read NasTech notifications aloud (missions, reminders) while voice is enabled and no conversation is running." keywords="announce read aloud">
           <Toggle checked={voice.announceNotifications} onChange={next => void save({ announceNotifications: next })} label="Speak notifications" />
         </SettingsRow>
       </SettingsGroup>
 
       <SettingsGroup title="Speech providers (free engine)">
-        <SettingsRow icon={<IconLanguage />} label="Speech to text" description={config.error ? `Could not read Hermes config: ${config.error}` : 'Which service turns your voice into text. Stored in Hermes config.yaml (stt.provider).'} keywords="stt transcribe whisper">
+        <SettingsRow icon={<IconLanguage />} label="Speech to text" description={config.error ? `Could not read NasTech config: ${config.error}` : 'Which service turns your voice into text. Stored in NasTech config.yaml (stt.provider).'} keywords="stt transcribe whisper">
           <MenuDropdown ariaLabel="Speech-to-text provider" label={STT_PROVIDERS.find(p => p.id === sttProvider)?.label ?? sttProvider} value={sttProvider} items={STT_PROVIDERS} onSelect={id => void saveConfig('stt', id)} disabled={!config.data} />
         </SettingsRow>
         {sttProvider === 'local' && (
@@ -246,7 +246,7 @@ export function VoiceSection() {
             <MenuDropdown ariaLabel="Local transcription model" label={LOCAL_STT_MODELS.find(m => m.id === localModel)?.label ?? localModel} value={localModel} items={LOCAL_STT_MODELS} onSelect={id => void saveLocalModel(id)} disabled={!config.data} />
           </SettingsRow>
         )}
-        <SettingsRow icon={<IconSpeakerphone />} label="Text to speech" description="Which voice speaks Hermes's replies. Stored in Hermes config.yaml (tts.provider); voices and speed follow `hermes tools`." keywords="tts voice speak">
+        <SettingsRow icon={<IconSpeakerphone />} label="Text to speech" description="Which voice speaks NasTech's replies. Stored in NasTech config.yaml (tts.provider); voices and speed follow `nastech tools`." keywords="tts voice speak">
           <MenuDropdown ariaLabel="Text-to-speech provider" label={TTS_PROVIDERS.find(p => p.id === ttsProvider)?.label ?? ttsProvider} value={ttsProvider} items={TTS_PROVIDERS} onSelect={id => void saveConfig('tts', id)} disabled={!config.data} />
         </SettingsRow>
       </SettingsGroup>

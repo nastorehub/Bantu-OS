@@ -185,7 +185,7 @@ export const copyElement = <T extends SlideElement>(element: T): T => ({ ...elem
 
 export const ARROW_NAMES: Record<ArrowHead, string> = { none: 'None', triangle: 'Arrow', arrow: 'Open arrow', stealth: 'Stealth arrow', oval: 'Dot', diamond: 'Diamond' }
 
-/** What an element is called in menus and in what Hermes is told. */
+/** What an element is called in menus and in what NasTech is told. */
 export function describeElement(element: SlideElement): string {
   if (element.placeholder) {
     return { title: 'Title', subtitle: 'Subtitle', body: 'Text', heading: 'Heading', caption: 'Caption', picture: 'Picture', date: 'Date', footer: 'Footer', number: 'Slide number' }[element.placeholder.role]

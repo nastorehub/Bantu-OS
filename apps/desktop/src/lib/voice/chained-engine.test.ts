@@ -40,7 +40,7 @@ function fakeHost(answer: (text: string) => 'approve' | 'deny' | null, cardWaiti
   return { host, calls }
 }
 
-/** An engine in the middle of a Hermes turn: watching for barge-in, the reply not finished. */
+/** An engine in the middle of a NasTech turn: watching for barge-in, the reply not finished. */
 function midTurn(host: VoiceHost): { engine: ChainedEngine; inner: EngineInternals } {
   const engine = new ChainedEngine(host)
   Object.assign(engine, { mode: 'monitor', turnDone: false, speak: { speaking: false, stop: () => undefined }, stopObserving: () => undefined, endpointer: new Endpointer(BARGE_IN_ENDPOINTER) })

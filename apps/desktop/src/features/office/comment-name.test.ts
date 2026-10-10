@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { HeraldOSPrefs, SystemInfo } from '../../../shared/ipc.ts'
 import { $prefs } from '../../store/backend.ts'
 import { $systemInfo } from '../../store/system.ts'
-import { $commentName, $nameQuestion, accountName, answerCommentName, askCommentName, commentNameFor, HERMES_NAME, loadCommentName, NEUTRAL_NAME, setCommentName } from './comment-name.ts'
+import { $commentName, $nameQuestion, accountName, answerCommentName, askCommentName, commentNameFor, NASTECH_NAME, loadCommentName, NEUTRAL_NAME, setCommentName } from './comment-name.ts'
 
 const ACCOUNT = { fullName: 'Pat Example', userName: 'pat' } as SystemInfo
 const FIRST_PREFS = $prefs.get()
@@ -82,17 +82,17 @@ describe('the name on the person’s comments', () => {
 })
 
 describe('the name on what commands add', () => {
-  it('is the confirmed name, else the neutral one, never the account’s; Hermes signs as Hermes; nothing asks', () => {
+  it('is the confirmed name, else the neutral one, never the account’s; NasTech signs as NasTech; nothing asks', () => {
     $systemInfo.set(ACCOUNT)
 
     expect(commentNameFor('palette')).toBe(NEUTRAL_NAME)
     expect(commentNameFor()).toBe(NEUTRAL_NAME)
-    expect(commentNameFor('agent')).toBe(HERMES_NAME)
+    expect(commentNameFor('agent')).toBe(NASTECH_NAME)
 
     $commentName.set('Sam Rivera')
 
     expect(commentNameFor('voice')).toBe('Sam Rivera')
-    expect(commentNameFor('agent')).toBe(HERMES_NAME)
+    expect(commentNameFor('agent')).toBe(NASTECH_NAME)
     expect($nameQuestion.get()).toBeNull()
   })
 })

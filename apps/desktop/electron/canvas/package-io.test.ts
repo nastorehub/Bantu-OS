@@ -177,11 +177,11 @@ describe('PackageWatcher', () => {
       await checks.next()
       expect(seen).toEqual([])
       const theirs = twoLayers()
-      theirs.layers[1].name = 'From Hermes'
+      theirs.layers[1].name = 'From NasTech'
       await fs.writeFile(path.join(dir, 'manifest.json'), JSON.stringify(theirs))
       await until(() => seen.length > 0)
-      expect(seen).toEqual(['From Hermes'])
-      expect(parseManifestText(await fs.readFile(path.join(dir, 'manifest.json'), 'utf8')).layers[1].name).toBe('From Hermes')
+      expect(seen).toEqual(['From NasTech'])
+      expect(parseManifestText(await fs.readFile(path.join(dir, 'manifest.json'), 'utf8')).layers[1].name).toBe('From NasTech')
     } finally {
       watcher.stop()
     }

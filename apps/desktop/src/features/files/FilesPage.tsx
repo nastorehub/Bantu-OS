@@ -41,8 +41,8 @@ import {
   $selectedPath,
   $showHidden,
   $viewMode,
-  askHermesAbout,
-  askHermesToFind,
+  askNasTechAbout,
+  askNasTechToFind,
   copyPath,
   createFolder,
   createTextFile,
@@ -207,7 +207,7 @@ export function FilesPage() {
     }
 
     if (natural) {
-      askHermesToFind(trimmed)
+      askNasTechToFind(trimmed)
       $query.set('')
     } else if (items.length > 0) {
       $selectedPath.set(items[0].path)
@@ -234,7 +234,7 @@ export function FilesPage() {
           void trashItems([item])
           break
         case 'ask':
-          askHermesAbout(item.path)
+          askNasTechAbout(item.path)
           break
         case 'edit-canvas':
           openInCanvas(item.path)
@@ -381,7 +381,7 @@ export function FilesPage() {
       .filter((path): path is string => Boolean(path))
 
     if (paths.length === 0) {
-      notify({ title: 'Cannot locate dropped files', body: 'Drop files from another Hermes window, or open their folder from the sidebar.', level: 'warn' })
+      notify({ title: 'Cannot locate dropped files', body: 'Drop files from another NasTech window, or open their folder from the sidebar.', level: 'warn' })
 
       return
     }
@@ -445,7 +445,7 @@ export function FilesPage() {
             {natural && query.trim() && (
               <div className="pointer-events-none absolute top-10 right-0 left-0 flex items-center gap-2 rounded-lg bg-accent-soft px-3 py-1.5 text-[11.5px] text-fg-2 animate-fade-in">
                 <IconMessage size={13} className="shrink-0 text-accent-strong" />
-                Press Enter to ask Hermes to find these files
+                Press Enter to ask NasTech to find these files
               </div>
             )}
             {filterMenu && (
@@ -510,7 +510,7 @@ export function FilesPage() {
               items={[
                 { id: 'folder', label: 'New folder', icon: <IconFolderPlus />, onSelect: () => openNewPrompt('folder') },
                 { id: 'file', label: 'New text file', icon: <IconFileText />, onSelect: () => openNewPrompt('file') },
-                { id: 'ask', label: 'Ask Hermes to create…', icon: <IconMessage />, onSelect: () => showPage('hermes'), dividerBefore: true }
+                { id: 'ask', label: 'Ask NasTech to create…', icon: <IconMessage />, onSelect: () => showPage('nastech'), dividerBefore: true }
               ]}
             />
           )}
@@ -565,8 +565,8 @@ export function FilesPage() {
               <EmptyGlass
                 icon={query.trim() ? <IconSearch /> : <IconFolderOpen />}
                 title={query.trim() ? `Nothing here matches “${query.trim()}”` : location?.kind === 'favorites' ? 'No favourites yet' : location?.kind === 'recent' ? 'No recent files' : 'Empty folder'}
-                description={query.trim() ? 'Try a sentence like “find my screenshots from yesterday” to ask Hermes.' : location?.kind === 'favorites' ? 'Star a file or folder from its details to keep it here.' : undefined}
-                action={query.trim() ? <GlassButton size="sm" onClick={() => askHermesToFind(query.trim())}>Ask Hermes to find it</GlassButton> : undefined}
+                description={query.trim() ? 'Try a sentence like “find my screenshots from yesterday” to ask NasTech.' : location?.kind === 'favorites' ? 'Star a file or folder from its details to keep it here.' : undefined}
+                action={query.trim() ? <GlassButton size="sm" onClick={() => askNasTechToFind(query.trim())}>Ask NasTech to find it</GlassButton> : undefined}
                 className="mt-2"
               />
             )}

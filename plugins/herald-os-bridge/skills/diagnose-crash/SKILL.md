@@ -2,13 +2,13 @@
 name: diagnose-crash
 description: Explain why a program crashed from its crash report or core dump, and whether it is worth reporting
 metadata:
-  hermes:
+  nastech:
     tags: [herald-os, crash, diagnostics, macos, linux]
 ---
 
 # Diagnose a crash
 
-Herald OS offers this when a program on the computer crashes and the person chooses "Ask Hermes".
+Herald OS offers this when a program on the computer crashes and the person chooses "Ask NasTech".
 The opening message says which program crashed, when, and where its report is. Your job: find out
 what happened from the evidence, explain it in plain words, and say what to do next.
 

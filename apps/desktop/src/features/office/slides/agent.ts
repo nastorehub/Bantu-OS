@@ -47,7 +47,7 @@ import { decks, slidesSession as session } from './store.ts'
 import { loadCustomThemes } from './theme-store.ts'
 
 /*
- * What Hermes (and voice, the command bar and `herald-os slides`) does in Herald Slides. A command
+ * What NasTech (and voice, the command bar and `herald-os slides`) does in Herald Slides. A command
  * works on the presentation it names or the one in front. Open in a window, each change is one
  * step to undo there (a batch too) and saves the way the person's own edits do; a file that is not
  * open is read, changed and written back, unless reading it approximated something (then it has to
@@ -137,7 +137,7 @@ export async function change(found: Local<Deck>, make: (deck: Deck, front: strin
         throw new Unchanged(step)
       }
 
-      return { ...step, label: `Hermes: ${step.label}` }
+      return { ...step, label: `NasTech: ${step.label}` }
     })
 
     return { step: landed as Step, changed: true, name, path: on.path }
@@ -273,7 +273,7 @@ async function startDeck(deck: Deck, name: string | undefined, file: string | nu
 }
 
 /**
- * Panels mode, from the Hermes window with no Herald Slides window open: the new presentation is
+ * Panels mode, from the NasTech window with no Herald Slides window open: the new presentation is
  * made in Herald Slides' own window, which comes up with a blank one; the command runs there and fills it.
  */
 async function inSlidesWindow(command: string, args: Args, context: CommandContext): Promise<Outcome> {

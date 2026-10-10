@@ -1,7 +1,7 @@
-const READY_RE = /^(?:HERMES_BACKEND_READY|HERMES_DASHBOARD_READY)\s+port=(\d+)\s*$/
+const READY_RE = /^(?:NASTECH_BACKEND_READY|NASTECH_DASHBOARD_READY)\s+port=(\d+)\s*$/
 const READY_FILE_RE = /^backend-ready-(\d+)\.json$/
 
-/** The ready file `hermes serve` writes for the Electron process `pid`. */
+/** The ready file `nastech serve` writes for the Electron process `pid`. */
 export function readyFileName(pid: number): string {
   return `backend-ready-${pid}.json`
 }
@@ -15,7 +15,7 @@ export function staleReadyFiles(names: readonly string[], ownPid: number, isAliv
   })
 }
 
-/** Parse the machine sentinel `hermes serve` writes to fd 1 once it is listening. */
+/** Parse the machine sentinel `nastech serve` writes to fd 1 once it is listening. */
 export function parseReadyLine(line: string): number | null {
   const match = READY_RE.exec(line.trim())
 

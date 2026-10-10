@@ -40,7 +40,7 @@ function wordsOf(element: SlideElement): string {
   return element.kind === 'text' || element.kind === 'shape' ? plainText(element.body) : element.kind === 'table' ? tableText(element) : element.kind === 'image' ? (element.alt ?? '') : ''
 }
 
-/** What is selected, for Hermes: the slide in front, with the text picked while typing or the elements picked on it. */
+/** What is selected, for NasTech: the slide in front, with the text picked while typing or the elements picked on it. */
 function selectionOf(doc: SlidesDocument): string {
   const title = slideTitle(doc.slide)
   const typing = textSessionOf(doc)

@@ -2,7 +2,7 @@
 name: file-documents
 description: Find documents such as invoices among badly named files, read them, name them clearly and file them where the person keeps them, with a plan they approve and an undo
 metadata:
-  hermes:
+  nastech:
     tags: [herald-os, files, documents, invoices, ocr]
 ---
 

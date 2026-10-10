@@ -1,7 +1,7 @@
 // AudioWorklet that forwards mono microphone frames to the main thread. Served as a static asset
 // (not bundled) because the shell's CSP allows scripts from 'self' only, not blob: URLs.
 // Frames are posted at ~20 ms granularity (context sample rate); resampling happens in the page.
-class HermesCaptureProcessor extends AudioWorkletProcessor {
+class NasTechCaptureProcessor extends AudioWorkletProcessor {
   constructor() {
     super()
     // Fixed frame size; the buffer is transferred on post, so the length must not be re-read from it.
@@ -38,4 +38,4 @@ class HermesCaptureProcessor extends AudioWorkletProcessor {
   }
 }
 
-registerProcessor('hermes-capture', HermesCaptureProcessor)
+registerProcessor('nastech-capture', NasTechCaptureProcessor)

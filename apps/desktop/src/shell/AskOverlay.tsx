@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { $askDraft } from '../store/surface.ts'
 import { AskPanel } from './surfaces/CommandSurface.tsx'
 
-/** Desktop mode: "Ask Hermes" about a screen region (or any attached files), centred over the desktop. */
+/** Desktop mode: "Ask NasTech" about a screen region (or any attached files), centred over the desktop. */
 export function AskOverlay() {
   const draft = useStore($askDraft)
 

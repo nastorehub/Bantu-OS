@@ -37,7 +37,7 @@ export interface SkillRow {
   [key: string]: unknown
 }
 
-export interface HermesStatusPayload {
+export interface NasTechStatusPayload {
   version?: string
   gateway_running?: boolean
   gateway_state?: string

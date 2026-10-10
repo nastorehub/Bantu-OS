@@ -5,7 +5,7 @@ import { type CellSnapshot, plainTextOf } from '../../../../shared/office/workbo
 import { type CellRange, columnIndex, columnName, MAX_COLUMNS, MAX_ROWS, parseRange, rangeName, splitSheet } from '../../../../shared/office/xlsx/address.ts'
 
 /*
- * What Hermes's commands do in a workbook, on the live one in a window or on one loaded from a file
+ * What NasTech's commands do in a workbook, on the live one in a window or on one loaded from a file
  * with nothing drawn: read a range, write values and formulas, format, add and rename sheets,
  * filter and freeze; and, from the feature folders, charts, data tools (sorting among them) and
  * summaries, named ranges, validation, comments and notes. Each change is one step to undo,

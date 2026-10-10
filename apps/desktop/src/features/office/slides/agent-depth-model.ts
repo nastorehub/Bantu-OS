@@ -71,7 +71,7 @@ import { editTheme, sameBackground, THEMES } from './themes.ts'
 import { DIRECTIONS, TRANSITION_NAMES, transitionFor } from './transitions.ts'
 
 /*
- * Herald Slides' depth for Hermes, without a window: the slide master and its layouts, backgrounds
+ * Herald Slides' depth for NasTech, without a window: the slide master and its layouts, backgrounds
  * and the header and footer, transitions, groups, connectors, table borders and fills, custom
  * themes and slides from a sheet, each change a pure step on the deck as the Phase 3 steps are, so
  * a batch takes them too. The master and its layouts are changed the way the master view changes
@@ -1022,7 +1022,7 @@ export function themeFromArgs(args: Args, base: Theme, known: readonly Theme[]):
   })
 }
 
-/** Herald's themes and the person's, as Hermes reads them: id, name, fonts, colours and background. */
+/** Herald's themes and the person's, as NasTech reads them: id, name, fonts, colours and background. */
 export function themesList(custom: readonly Theme[]) {
   const read = (theme: Theme) => ({
     id: theme.id,
@@ -1039,7 +1039,7 @@ export function themesList(custom: readonly Theme[]) {
 
 const fontName = (font: FontRef, deck: Deck): string => (font === '+heading' ? `heading (${deck.theme.fonts.heading})` : font === '+body' ? `body (${deck.theme.fonts.body})` : font)
 
-/** A placeholder of the master or a layout as Hermes reads it: its role, place, and how its text looks. */
+/** A placeholder of the master or a layout as NasTech reads it: its role, place, and how its text looks. */
 function readPlaceholder(deck: Deck, element: SlideElement) {
   const own = element.kind === 'text' || element.kind === 'shape' ? element.body : null
 
@@ -1061,14 +1061,14 @@ function readPlaceholder(deck: Deck, element: SlideElement) {
   }
 }
 
-/** The master's own slide's or a layout's elements as Hermes reads them: its placeholders, and its drawings numbered from 1. */
+/** The master's own slide's or a layout's elements as NasTech reads them: its placeholders, and its drawings numbered from 1. */
 const readPart = (deck: Deck, elements: readonly SlideElement[]) => ({
   placeholders: elements.filter((element) => element.placeholder).map((element) => readPlaceholder(deck, element)),
   elements: drawingsOf(elements).map((element, index) => ({ number: index + 1, ...readElement(element) }))
 })
 
 /**
- * The slide master and its layouts as Hermes reads them: the master's background, placeholders and
+ * The slide master and its layouts as NasTech reads them: the master's background, placeholders and
  * drawings; each layout's name, background, whether its slides show the master's graphics, its
  * placeholders and drawings and the slides on it; and the header and footer the slides show.
  */

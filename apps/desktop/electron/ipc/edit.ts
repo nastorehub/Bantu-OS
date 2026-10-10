@@ -7,7 +7,7 @@ import type { WebViews } from './web.ts'
  * enter"). Chromium performs them on the focused element of the target contents exactly as if the
  * keyboard had, so they work in text fields, the composer, xterm's terminal input and web pages.
  * The renderer restores focus to the last text field before asking, and names a web view when the
- * focused Hermes window hosts one.
+ * focused NasTech window hosts one.
  */
 
 const NAMED_KEYS: Record<string, { keyCode: string; char?: string }> = {

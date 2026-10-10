@@ -23,7 +23,7 @@ export interface CatalogEntry {
   detect?: string[]
   terminal?: boolean
   terminalApp?: string
-  hermes?: 'ollama' | 'lmstudio'
+  nastech?: 'ollama' | 'lmstudio'
   arch?: string[]
   needs?: string[]
   install: CatalogMethod[]
@@ -140,7 +140,7 @@ export function entryView(group: CatalogGroup, entry: CatalogEntry, state: { ins
     ...(state.method ? {} : { reason: state.reason ?? 'not on this computer' }),
     ...(entry.terminal ? { terminal: true } : {}),
     ...(entry.terminalApp ? { terminalApp: entry.terminalApp } : {}),
-    ...(entry.hermes ? { hermes: entry.hermes } : {}),
+    ...(entry.nastech ? { nastech: entry.nastech } : {}),
     ...(entry.bin?.[0] ? { bin: entry.bin[0] } : {}),
     ...(state.method?.kind === 'link' ? { url: state.method.ref } : {})
   }

@@ -5,7 +5,7 @@ import { activityIcon, formatTime } from './mission-helpers.ts'
 
 export function ActivityTimeline({ entries }: { entries: ActivityEntry[] }) {
   if (entries.length === 0) {
-    return <EmptyGlass icon={<IconActivity />} title="No activity yet" description="Tool calls, plan updates and saved files show up here as Hermes works." />
+    return <EmptyGlass icon={<IconActivity />} title="No activity yet" description="Tool calls, plan updates and saved files show up here as NasTech works." />
   }
 
   return (

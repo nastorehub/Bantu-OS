@@ -483,7 +483,7 @@ def test_the_schema_describes_the_new_arguments_with_one_type_each(plugin):
 def test_the_description_names_the_new_capabilities(plugin):
     tools = _mod(plugin, "tools")
     description = tools.DOCS_SCHEMA["description"]
-    for words in ("headers and footers", "Page {page} of {pages}", "page numbers and fields", "footnotes and endnotes", "sections and page setup", "comments and reviews", "part=comments", "ONE add_comments call", "signed Hermes", "tables of contents", "list_templates", "statistics"):
+    for words in ("headers and footers", "Page {page} of {pages}", "page numbers and fields", "footnotes and endnotes", "sections and page setup", "comments and reviews", "part=comments", "ONE add_comments call", "signed NasTech", "tables of contents", "list_templates", "statistics"):
         assert words in description
 
 

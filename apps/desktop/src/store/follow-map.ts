@@ -1,6 +1,6 @@
 import type { ToolCompletePayload } from '@herald-os/client'
 
-/** Tools that mean Hermes is building something the Studio can show (code, commands). */
+/** Tools that mean NasTech is building something the Studio can show (code, commands). */
 export function isBuildActivity(name: string | undefined): boolean {
   return name === 'write_file' || name === 'patch' || name === 'terminal'
 }

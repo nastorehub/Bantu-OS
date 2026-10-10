@@ -1,17 +1,17 @@
 import type { ComponentType } from 'react'
 import type { InstalledApp } from '../../shared/ipc.ts'
 
-/** Pages inside the main Hermes window (sidebar navigation). */
-export type PageId = 'overview' | 'hermes' | 'missions' | 'memory' | 'files' | 'automations' | 'connections' | 'settings'
+/** Pages inside the main NasTech window (sidebar navigation). */
+export type PageId = 'overview' | 'nastech' | 'missions' | 'memory' | 'files' | 'automations' | 'connections' | 'settings'
 
 /** Apps that open in their own floating window. */
 export type FloatingAppId = 'terminal' | 'system' | 'chat-popout' | 'web' | 'studio' | 'capture-editor' | 'camera' | 'widget' | 'canvas' | 'docs' | 'sheets' | 'slides'
 
-export type HermesAppId = PageId | FloatingAppId
+export type NasTechAppId = PageId | FloatingAppId
 
 export type AppCategory = 'productivity' | 'creative' | 'development' | 'system'
 
-export interface HermesAppDef<Id extends HermesAppId = HermesAppId> {
+export interface NasTechAppDef<Id extends NasTechAppId = NasTechAppId> {
   id: Id
   name: string
   tagline: string
@@ -25,7 +25,7 @@ export interface HermesAppDef<Id extends HermesAppId = HermesAppId> {
 }
 
 export type AppIconId =
-  | 'hermes'
+  | 'nastech'
   | 'overview'
   | 'missions'
   | 'memory'
@@ -46,42 +46,42 @@ export type AppIconId =
   | 'grid'
   | 'trash'
 
-export const PAGES: readonly HermesAppDef<PageId>[] = [
+export const PAGES: readonly NasTechAppDef<PageId>[] = [
   { id: 'overview', name: 'Overview', tagline: 'Your day, already in motion.', category: 'productivity', kind: 'page', icon: 'overview', shortcut: '1' },
-  { id: 'hermes', name: 'Hermes', tagline: 'Talk to your computer.', category: 'productivity', kind: 'page', icon: 'hermes', shortcut: '2' },
+  { id: 'nastech', name: 'NasTech', tagline: 'Talk to your computer.', category: 'productivity', kind: 'page', icon: 'nastech', shortcut: '2' },
   { id: 'missions', name: 'Missions', tagline: 'From intent to finished work.', category: 'productivity', kind: 'page', icon: 'missions', shortcut: '3' },
-  { id: 'memory', name: 'Memory', tagline: 'What Hermes knows, and why.', category: 'productivity', kind: 'page', icon: 'memory', shortcut: '4' },
+  { id: 'memory', name: 'Memory', tagline: 'What NasTech knows, and why.', category: 'productivity', kind: 'page', icon: 'memory', shortcut: '4' },
   { id: 'files', name: 'Files', tagline: 'Everything on this Mac.', category: 'productivity', kind: 'page', icon: 'files', shortcut: '5' },
   { id: 'automations', name: 'Automations', tagline: 'Good routines, handled.', category: 'productivity', kind: 'page', icon: 'automations', shortcut: '6' },
   { id: 'connections', name: 'Connections', tagline: 'Bring your tools into one workspace.', category: 'system', kind: 'page', icon: 'connections', shortcut: '7' },
-  { id: 'settings', name: 'Settings', tagline: 'Choose how Hermes works with you.', category: 'system', kind: 'page', icon: 'settings', shortcut: ',' }
+  { id: 'settings', name: 'Settings', tagline: 'Choose how NasTech works with you.', category: 'system', kind: 'page', icon: 'settings', shortcut: ',' }
 ]
 
-export const FLOATING_APPS: readonly HermesAppDef<FloatingAppId>[] = [
+export const FLOATING_APPS: readonly NasTechAppDef<FloatingAppId>[] = [
   { id: 'terminal', name: 'Terminal', tagline: 'A real shell.', category: 'development', kind: 'window', icon: 'terminal', defaultSize: { width: 900, height: 560 }, shortcut: '8' },
   { id: 'system', name: 'System', tagline: 'Monitor and control your Mac.', category: 'system', kind: 'window', icon: 'system', defaultSize: { width: 980, height: 640 }, shortcut: '9' },
-  { id: 'chat-popout', name: 'Hermes', tagline: 'A conversation in its own window.', category: 'productivity', kind: 'window', icon: 'hermes', defaultSize: { width: 820, height: 620 } },
+  { id: 'chat-popout', name: 'NasTech', tagline: 'A conversation in its own window.', category: 'productivity', kind: 'window', icon: 'nastech', defaultSize: { width: 820, height: 620 } },
   // Opened by the shell for a specific page (e.g. the provider sign-in); not launchable on its own.
   { id: 'web', name: 'Web', tagline: 'A page inside Herald OS.', category: 'productivity', kind: 'window', icon: 'grid', defaultSize: { width: 960, height: 680 } },
-  // One per Hermes session; opened with "build …" or "show me the code".
-  { id: 'studio', name: 'Studio', tagline: 'Watch Hermes build.', category: 'development', kind: 'window', icon: 'studio', defaultSize: { width: 1280, height: 800 } },
+  // One per NasTech session; opened with "build …" or "show me the code".
+  { id: 'studio', name: 'Studio', tagline: 'Watch NasTech build.', category: 'development', kind: 'window', icon: 'studio', defaultSize: { width: 1280, height: 800 } },
   // Opens on a screenshot (the capture preview's Edit).
   { id: 'capture-editor', name: 'Markup', tagline: 'Draw on a screenshot, hide what is private.', category: 'creative', kind: 'window', icon: 'documents', defaultSize: { width: 960, height: 680 } },
   { id: 'camera', name: 'Camera', tagline: 'Your camera in a bubble, for screen recordings.', category: 'creative', kind: 'window', icon: 'system', defaultSize: { width: 260, height: 290 } },
   // A widget plugin in its own window (its `panel` placement); opened with plugin.open.
   { id: 'widget', name: 'Widget', tagline: 'A widget plugin in a window.', category: 'productivity', kind: 'window', icon: 'grid', defaultSize: { width: 360, height: 280 } },
-  { id: 'canvas', name: 'Herald Canvas', tagline: 'Edit images in layers, with Hermes.', category: 'creative', kind: 'window', icon: 'canvas', defaultSize: { width: 1320, height: 840 } },
-  { id: 'docs', name: 'Herald Docs', tagline: 'Write and edit documents, with Hermes.', category: 'productivity', kind: 'window', icon: 'docs', defaultSize: { width: 1120, height: 840 } },
-  { id: 'sheets', name: 'Herald Sheets', tagline: 'Spreadsheets and formulas, with Hermes.', category: 'productivity', kind: 'window', icon: 'sheets', defaultSize: { width: 1280, height: 820 } },
-  { id: 'slides', name: 'Herald Slides', tagline: 'Make presentations, with Hermes.', category: 'productivity', kind: 'window', icon: 'slides', defaultSize: { width: 1280, height: 820 } }
+  { id: 'canvas', name: 'Herald Canvas', tagline: 'Edit images in layers, with NasTech.', category: 'creative', kind: 'window', icon: 'canvas', defaultSize: { width: 1320, height: 840 } },
+  { id: 'docs', name: 'Herald Docs', tagline: 'Write and edit documents, with NasTech.', category: 'productivity', kind: 'window', icon: 'docs', defaultSize: { width: 1120, height: 840 } },
+  { id: 'sheets', name: 'Herald Sheets', tagline: 'Spreadsheets and formulas, with NasTech.', category: 'productivity', kind: 'window', icon: 'sheets', defaultSize: { width: 1280, height: 820 } },
+  { id: 'slides', name: 'Herald Slides', tagline: 'Make presentations, with NasTech.', category: 'productivity', kind: 'window', icon: 'slides', defaultSize: { width: 1280, height: 820 } }
 ]
 
 /** Floating apps the launcher and command bar offer; the rest open only with a payload. */
-export const LAUNCHABLE_APPS: readonly HermesAppDef[] = [...PAGES, ...FLOATING_APPS].filter(app => app.id !== 'chat-popout' && app.id !== 'web' && app.id !== 'studio' && app.id !== 'capture-editor' && app.id !== 'widget')
+export const LAUNCHABLE_APPS: readonly NasTechAppDef[] = [...PAGES, ...FLOATING_APPS].filter(app => app.id !== 'chat-popout' && app.id !== 'web' && app.id !== 'studio' && app.id !== 'capture-editor' && app.id !== 'widget')
 
-export const HERMES_APPS: readonly HermesAppDef[] = [...PAGES, ...FLOATING_APPS]
+export const NASTECH_APPS: readonly NasTechAppDef[] = [...PAGES, ...FLOATING_APPS]
 
-export const appById = (id: HermesAppId): HermesAppDef => HERMES_APPS.find(a => a.id === id) ?? PAGES[0]
+export const appById = (id: NasTechAppId): NasTechAppDef => NASTECH_APPS.find(a => a.id === id) ?? PAGES[0]
 
 /** Native macOS apps the launcher and dock feature by name; matched against the installed list. */
 export interface NativeAppAlias {

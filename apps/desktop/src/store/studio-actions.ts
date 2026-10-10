@@ -17,8 +17,8 @@ export function projectsRoot(): string {
 }
 
 /**
- * "Build a website for a hair salon": a fresh project folder, a Hermes session working in it, and
- * the Studio open on that session before Hermes writes its first file.
+ * "Build a website for a hair salon": a fresh project folder, a NasTech session working in it, and
+ * the Studio open on that session before NasTech writes its first file.
  */
 export async function startBuild(goal: string): Promise<{ sessionId: string; folder: string; title: string }> {
   const trimmed = goal.trim()

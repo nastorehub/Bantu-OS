@@ -31,7 +31,7 @@ describe('crop ratios', () => {
     expect(holdRatio({ x: 100, y: 0, width: 200, height: 300 }, 1, 's')).toEqual({ x: 50, y: 0, width: 300, height: 300 })
   })
 
-  it('reads ratios however Hermes writes them', () => {
+  it('reads ratios however NasTech writes them', () => {
     expect(ratioFrom('4:5', canvas)).toBeCloseTo(0.8)
     expect(ratioFrom('16x9', canvas)).toBeCloseTo(16 / 9)
     expect(ratioFrom('1.5', canvas)).toBe(1.5)
@@ -90,7 +90,7 @@ describe('straighten', () => {
     expect(rotateLayers(state, 0)).toBe(state)
   })
 
-  it('plans a crop for Hermes: a ratio alone, a ratio over a box, and a turn', () => {
+  it('plans a crop for NasTech: a ratio alone, a ratio over a box, and a turn', () => {
     expect(cropPlan(canvas, { ratio: '1:1' })).toEqual({ box: { x: 200, y: 0, width: 800, height: 800 }, angle: 0 })
     expect(cropPlan(canvas, { x: 0, y: 0, width: 600, ratio: '3:2' }).box).toEqual({ x: 0, y: 200, width: 600, height: 400 })
     const turned = cropPlan(canvas, { angle: -3 })

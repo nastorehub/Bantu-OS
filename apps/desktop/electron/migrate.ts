@@ -2,8 +2,8 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 export interface LegacyLocations {
-  /** `$HERMES_HOME`. */
-  hermesHome: string
+  /** `$NASTECH_HOME`. */
+  nastechHome: string
   /** Electron's `appData` (`~/Library/Application Support`, `~/.config`). */
   appData: string
   /** Electron's `userData` for Herald OS. */
@@ -72,7 +72,7 @@ function mergeInto(from: string, to: string, moved: string[]): void {
 }
 
 /**
- * Carries data over from the pre-rename "Hermes OS" locations: the shell's folder in the Hermes home
+ * Carries data over from the pre-rename "NasTech OS" locations: the shell's folder in the NasTech home
  * (prefs, permission policy, audit log) and the Chromium profile (local storage, web-window logins).
  * Must run before anything opens the profile; the single-instance lock writes into `userData`.
  */
@@ -86,11 +86,11 @@ export function migrateLegacyData(locations: LegacyLocations): string[] {
     }
   }
 
-  attempt(() => mergeInto(path.join(locations.hermesHome, 'hermes-os'), path.join(locations.hermesHome, 'herald-os'), moved))
-  attempt(() => moveIfMissing(path.join(locations.appData, 'Hermes OS'), locations.userData, moved))
+  attempt(() => mergeInto(path.join(locations.nastechHome, 'nastech-os'), path.join(locations.nastechHome, 'herald-os'), moved))
+  attempt(() => moveIfMissing(path.join(locations.appData, 'NasTech OS'), locations.userData, moved))
 
   for (const name of PARTITIONS) {
-    attempt(() => moveIfMissing(path.join(locations.userData, 'Partitions', `hermes-${name}`), path.join(locations.userData, 'Partitions', `herald-${name}`), moved))
+    attempt(() => moveIfMissing(path.join(locations.userData, 'Partitions', `nastech-${name}`), path.join(locations.userData, 'Partitions', `herald-${name}`), moved))
   }
 
   return moved

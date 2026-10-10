@@ -3,16 +3,16 @@ import { fail, ok, type OsCommand } from '../store/os-commands.ts'
 import { showPage } from '../store/windows.ts'
 import { $memory, addEntry, focusMemory, forgetEntry, loadMemory, type MemoryEntry, type MemoryFile, updateEntry } from '../features/memory/memory-store.ts'
 
-/* Hermes memory (MEMORY.md / USER.md), edited through the same store as the Memory page. */
+/* NasTech memory (MEMORY.md / USER.md), edited through the same store as the Memory page. */
 
 async function ensureLoaded(options: { fresh?: boolean } = {}): Promise<string> {
-  const home = $env.get()?.hermesHome
+  const home = $env.get()?.nastechHome
 
   if (!home) {
-    throw new Error('Hermes home is not known yet.')
+    throw new Error('NasTech home is not known yet.')
   }
 
-  // Hermes's own memory tool writes the same files behind our back; re-read when asked to show.
+  // NasTech's own memory tool writes the same files behind our back; re-read when asked to show.
   if (options.fresh || !$memory.get().loaded) {
     await loadMemory(home)
   }
@@ -57,7 +57,7 @@ function findEntries(query: string): MemoryEntry[] {
   return []
 }
 
-const fileArg = { name: 'file', type: 'string', description: 'memory (what Hermes knows) or user (facts about you)', enum: ['memory', 'user'] } as const
+const fileArg = { name: 'file', type: 'string', description: 'memory (what NasTech knows) or user (facts about you)', enum: ['memory', 'user'] } as const
 const toFile = (value: unknown): MemoryFile => (String(value ?? 'memory').toLowerCase() === 'user' ? 'USER.md' : 'MEMORY.md')
 
 export const memoryCommands: readonly OsCommand[] = [
@@ -108,7 +108,7 @@ export const memoryCommands: readonly OsCommand[] = [
   {
     id: 'memory.add',
     title: 'Remember something',
-    description: 'Add an entry to Hermes memory (or to the facts about you) and show it.',
+    description: 'Add an entry to NasTech memory (or to the facts about you) and show it.',
     tier: 'mutate',
     args: [{ name: 'text', type: 'string', description: 'What to remember', required: true }, fileArg],
     phrases: ['remember that {text}', 'add to memory {text}', 'add {text} to my memory', 'save to memory {text}', 'remember {text}'],

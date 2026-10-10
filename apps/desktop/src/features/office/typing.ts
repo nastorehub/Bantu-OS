@@ -142,7 +142,7 @@ async function typeIntoDocs(text: string, submit: boolean): Promise<string | nul
   const editor = editorOf(doc?.key)
   const focused = document.activeElement
 
-  // A field outside the page (the find bar, a dialog, Hermes's composer) takes the words itself.
+  // A field outside the page (the find bar, a dialog, NasTech's composer) takes the words itself.
   if (!doc || !editor || editor.isDestroyed || !editor.isEditable || (isEditable(focused) && !editor.view.dom.contains(focused))) {
     return null
   }

@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # Run the herald-os-bridge plugin tests and the Linux CLI tests.
-# Prefers the Hermes runtime's venv when it has pytest (same interpreter the gateway loads the plugin
-# with); otherwise runs in an ephemeral uv environment so the user's Hermes venv is never modified.
+# Prefers the NasTech runtime's venv when it has pytest (same interpreter the gateway loads the plugin
+# with); otherwise runs in an ephemeral uv environment so the user's NasTech venv is never modified.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-HERMES_HOME="${HERMES_HOME:-$HOME/.hermes}"
-PY="${HERALD_OS_PYTHON:-$HERMES_HOME/hermes-agent/venv/bin/python}"
+NASTECH_HOME="${NASTECH_HOME:-$HOME/.nastech}"
+PY="${HERALD_OS_PYTHON:-$NASTECH_HOME/nastech-agent/venv/bin/python}"
 
 cd "$ROOT/plugins/herald-os-bridge/tests"
 # The CLI tests sit outside the plugin, so with no arguments both folders run; arguments (a file,

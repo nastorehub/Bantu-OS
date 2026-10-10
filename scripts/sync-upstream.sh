@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Fetch the pinned upstream Hermes Agent snapshot into upstream/hermes-agent.
+# Fetch the pinned upstream NasTech Agent snapshot into upstream/nastech-agent.
 # Works without git (tarball by commit sha). Idempotent: skips when the sha already matches.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 LOCK="$ROOT/upstream/UPSTREAM.lock"
-DEST="$ROOT/upstream/hermes-agent"
+DEST="$ROOT/upstream/nastech-agent"
 STAMP="$DEST/.herald-os-upstream-sha"
 
 repo="$(sed -n 's/^repo=//p' "$LOCK" | tr -d '[:space:]')"

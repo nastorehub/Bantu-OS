@@ -5,7 +5,7 @@ import type { CatalogEntryView } from '../../../../shared/ipc.ts'
 import { GlassButton, Pill } from '../../../components/ui/glass.tsx'
 import { Spinner } from '../../../components/ui/primitives.tsx'
 import { hostPlatform } from '../../../lib/platform-labels.ts'
-import { $catalog, loadCatalog, runCatalog, useWithHermes } from '../../../store/catalog.ts'
+import { $catalog, loadCatalog, runCatalog, useWithNasTech } from '../../../store/catalog.ts'
 import { notify } from '../../../store/notifications.ts'
 import { openTerminalProgram } from '../../../store/terminal.ts'
 import { errorText, InlineNote, MenuDropdown, SectionTitle, SettingsGroup, SettingsRow } from './shared.tsx'
@@ -91,7 +91,7 @@ function CatalogRow({ entry, icon, busy }: { entry: CatalogEntryView; icon: Reac
               <IconTerminal2 size={14} /> Open
             </GlassButton>
           )}
-          {entry.hermes && <UseWithHermes kind={entry.hermes} label={entry.label} />}
+          {entry.nastech && <UseWithNasTech kind={entry.nastech} label={entry.label} />}
           {entry.removable && (
             <GlassButton size="sm" variant="ghost" onClick={() => void runCatalog(entry.id, 'remove')} aria-label={`Remove ${entry.label}`}>
               Remove
@@ -109,8 +109,8 @@ function CatalogRow({ entry, icon, busy }: { entry: CatalogEntryView; icon: Reac
   )
 }
 
-/** Point Hermes at one of the local server's models. */
-function UseWithHermes({ kind, label }: { kind: 'ollama' | 'lmstudio'; label: string }) {
+/** Point NasTech at one of the local server's models. */
+function UseWithNasTech({ kind, label }: { kind: 'ollama' | 'lmstudio'; label: string }) {
   const [models, setModels] = useState<string[] | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -128,17 +128,17 @@ function UseWithHermes({ kind, label }: { kind: 'ollama' | 'lmstudio'; label: st
 
   const choose = async (model: string) => {
     try {
-      await useWithHermes(kind, model)
-      notify({ title: `Hermes uses ${model}`, body: `Through ${label} on this computer; switch back in Settings > Hermes & agents.`, level: 'success' })
+      await useWithNasTech(kind, model)
+      notify({ title: `NasTech uses ${model}`, body: `Through ${label} on this computer; switch back in Settings > NasTech & agents.`, level: 'success' })
     } catch (error) {
-      notify({ title: 'Could not switch Hermes', body: errorText(error), level: 'error' })
+      notify({ title: 'Could not switch NasTech', body: errorText(error), level: 'error' })
     }
   }
 
   if (!models) {
     return (
-      <GlassButton size="sm" onClick={() => void load()} disabled={loading} aria-label={`Use ${label} with Hermes`}>
-        {loading ? <Spinner /> : <IconBrain size={14} />} Use with Hermes
+      <GlassButton size="sm" onClick={() => void load()} disabled={loading} aria-label={`Use ${label} with NasTech`}>
+        {loading ? <Spinner /> : <IconBrain size={14} />} Use with NasTech
       </GlassButton>
     )
   }

@@ -1,4 +1,4 @@
-// The Studio's view of one Hermes session while it builds: which files it is writing and editing
+// The Studio's view of one NasTech session while it builds: which files it is writing and editing
 // (with the changed lines), the commands it runs, its background processes' live output, and the
 // site to preview. Pure: `reduceStudioEvent` folds gateway events into a `StudioState`.
 import { parseUnifiedDiff } from './unified-diff.ts'
@@ -10,7 +10,7 @@ export interface StudioFile {
   status: StudioFileStatus
   /** 1-based lines added or changed by the latest edit. */
   changedLines: number[]
-  /** Content Hermes is writing right now (from the tool arguments), before it lands on disk. */
+  /** Content NasTech is writing right now (from the tool arguments), before it lands on disk. */
   pending?: string
   updatedAt: number
 }
@@ -43,13 +43,13 @@ export interface StudioState {
   commands: StudioCommand[]
   processes: Record<string, StudioProcess>
   previewUrl: string | null
-  /** 'explicit' previews (Hermes or the user chose them) are never replaced by a detected URL. */
+  /** 'explicit' previews (NasTech or the user chose them) are never replaced by a detected URL. */
   previewSource: 'auto' | 'explicit' | null
   /** Bumped whenever something on disk changed, so the tree and preview refresh. */
   revision: number
   status: string
   running: boolean
-  /** Hermes is composing a tool call's arguments (a whole file for write_file) before it runs. */
+  /** NasTech is composing a tool call's arguments (a whole file for write_file) before it runs. */
   generating: { tool: string; since: number } | null
 }
 
@@ -320,12 +320,12 @@ export function reduceStudioEvent(state: StudioState, event: StudioEvent, now = 
   }
 }
 
-/** Point the preview somewhere on purpose (Hermes via `studio.preview`, or the user). */
+/** Point the preview somewhere on purpose (NasTech via `studio.preview`, or the user). */
 export function setStudioPreview(state: StudioState, url: string): StudioState {
   return withPreview(state, url, 'explicit')
 }
 
-/** A file changed on disk without a Hermes edit (a scaffolder, a formatter): list it and refresh. */
+/** A file changed on disk without a NasTech edit (a scaffolder, a formatter): list it and refresh. */
 export function noteDiskChange(state: StudioState, paths: string[], now = Date.now()): StudioState {
   let next = state
 

@@ -1,14 +1,14 @@
 # Herald OS Linux
 
 Herald OS as a whole operating system: a Fedora base, greetd signing you in, niri arranging the
-windows, the Herald shell drawing the menu bar, dock and system menus, and Hermes Agent underneath.
+windows, the Herald shell drawing the menu bar, dock and system menus, and NasTech Agent underneath.
 Today it installs on x86_64 PCs from the installer ISO in the v0.1.0-alpha.3 release (tested in a
 virtual machine in CI, not yet on real PC hardware), runs as an app inside Omarchy, and on an Apple
 Silicon Mac (aarch64) runs in a virtual machine for trying it and for development; nothing on the
 Mac changes.
 
 ```
-kernel + systemd  ->  greetd (autologin: hermes)  ->  niri  ->  Herald OS shell  ->  hermes serve
+kernel + systemd  ->  greetd (autologin: nastech)  ->  niri  ->  Herald OS shell  ->  nastech serve
                                                                       |                    |
                                                           HostPlatform (linux.ts)   herald-os-bridge (LinuxHost)
                                                                       \__________  ps ss nmcli wpctl gio journalctl plocate
@@ -36,33 +36,33 @@ MacBook Pro), so the window fills the screen; override with `GUEST_W`/`GUEST_H`.
 matches Mac apps in size. View -> Zoom To Fit in QEMU's menu still works (toggle it after boot;
 enabling it at launch makes the guest adopt the initial window size).
 
-### Signing Hermes in
+### Signing NasTech in
 
-Hermes in the VM starts signed out. Sign it in from the card Herald OS shows (a short code you
+NasTech in the VM starts signed out. Sign it in from the card Herald OS shows (a short code you
 confirm on any device), or from a shell in the VM:
 
 ```bash
 bash linux/dev/push.sh ssh
-hermes setup          # any provider, including API keys; `hermes portal` for Nous Portal only
+nastech setup          # any provider, including API keys; `nastech portal` for NasTech Portal only
 ```
 
-`--with-hermes-config` copies `~/.hermes/{config.yaml,.env}` (model choice and any API keys) into
-the VM. It deliberately does not copy `auth.json`: OAuth providers (Nous Portal, Codex, Copilot)
+`--with-nastech-config` copies `~/.nastech/{config.yaml,.env}` (model choice and any API keys) into
+the VM. It deliberately does not copy `auth.json`: OAuth providers (NasTech Portal, Codex, Copilot)
 use rotating refresh tokens, so a copied login works only until the next refresh and whichever
-machine refreshes second is logged out. (`--with-hermes-auth` copies it anyway, for short
+machine refreshes second is logged out. (`--with-nastech-auth` copies it anyway, for short
 experiments where that trade-off is fine.)
 
-To use the Mac's Nous Portal sign-in without copying it, run Hermes's subscription proxy on the Mac
+To use the Mac's NasTech Portal sign-in without copying it, run NasTech's subscription proxy on the Mac
 and point the VM at it. The credentials stay on the Mac, which is the only machine that refreshes
 them:
 
 ```bash
-hermes proxy start                       # on the Mac; serves http://127.0.0.1:8645/v1
+nastech proxy start                       # on the Mac; serves http://127.0.0.1:8645/v1
 bash linux/dev/push.sh ssh               # then, in the VM:
-hermes config set model.provider custom
-hermes config set model.base_url http://10.0.2.2:8645/v1   # QEMU's address for the Mac
-hermes config set model.api_key proxy    # any value; the proxy attaches the real token
-hermes config set model.default <model>  # a Portal model id, as in the Mac's config.yaml
+nastech config set model.provider custom
+nastech config set model.base_url http://10.0.2.2:8645/v1   # QEMU's address for the Mac
+nastech config set model.api_key proxy    # any value; the proxy attaches the real token
+nastech config set model.default <model>  # a Portal model id, as in the Mac's config.yaml
 ```
 
 ## Quick start (UTM, a nicer window)
@@ -86,22 +86,22 @@ hermes config set model.default <model>  # a Portal model id, as in the Mac's co
   Electron runtime libraries, fonts, Node.js + toolchain, and the CLI tools the Linux adapters use
   (`xdg-utils`, `gio`, `plocate`, `fd`, `rsvg-convert`, `notify-send`, `grim`), plus Firefox,
   Nautilus, Text Editor and `foot` as a rescue terminal.
-- Hermes Agent cloned to `~/.hermes/hermes-agent` at the revision in `upstream/UPSTREAM.lock`,
-  installed with upstream's `setup-hermes.sh` (prompts answered "no").
+- NasTech Agent cloned to `~/.nastech/nastech-agent` at the revision in `upstream/UPSTREAM.lock`,
+  installed with upstream's `setup-nastech.sh` (prompts answered "no").
 - Session files installed (below); `greetd` enabled; default target `graphical`.
-- Dev helpers on the `hermes` user's PATH: `herald-os-build`, `herald-os-sync`,
+- Dev helpers on the `nastech` user's PATH: `herald-os-build`, `herald-os-sync`,
   `herald-os-restart-shell`, `herald-os-shot`.
 
 ## Session model (`linux/session/`)
 
 | Piece | Role |
 | --- | --- |
-| `/etc/greetd/config.toml` | Logs `hermes` in on VT1 and runs `herald-os-compositor`. Respawns when it exits. |
+| `/etc/greetd/config.toml` | Logs `nastech` in on VT1 and runs `herald-os-compositor`. Respawns when it exits. |
 | `herald-os-compositor` | Sets `XDG_*`, picks `WLR_RENDERER=pixman` when there is no GPU render node, sources `~/.config/herald-os/session.env`, renders Herald's niri config (`~/.config/niri/herald-os.kdl`, from the installed template and your keymap) and starts niri with it. A `~/.config/niri/config.kdl` of your own is never read or changed, so the session also starts on a fresh account; Herald's other files beside it are `theme.kdl`, `outputs.kdl` and `local.kdl` (yours to edit). Without hardware GL (QEMU and Apple Virtualization without virgl) niri runs windowed inside `cage` (`herald-os-niri-nested`). `HERALD_OS_COMPOSITOR=cage` runs the Stage 1 kiosk instead. |
-| `herald-os-session` | Publishes `WAYLAND_DISPLAY` to systemd/D-Bus, starts PipeWire + portals and the session services below, runs Electron on Wayland (Ozone) as panels: the menu bar, dock and Hermes window are separate windows niri places. Restarts the shell on a crash (5 per minute), exits on a clean quit. |
+| `herald-os-session` | Publishes `WAYLAND_DISPLAY` to systemd/D-Bus, starts PipeWire + portals and the session services below, runs Electron on Wayland (Ozone) as panels: the menu bar, dock and NasTech window are separate windows niri places. Restarts the shell on a crash (5 per minute), exits on a clean quit. |
 | `herald-os.desktop` | `wayland-sessions` entry so a normal greeter can also start Herald OS. |
 
-The Hermes backend is still spawned by the shell (`electron/backend/manager.ts`), the same as on
+The NasTech backend is still spawned by the shell (`electron/backend/manager.ts`), the same as on
 macOS. A systemd unit comes with the Stage 2 broker.
 
 `~/.config/herald-os/session.env` overrides (all optional; changes to this file or to the session
@@ -136,19 +136,19 @@ images; `Mod+Ctrl+V` opens the picker), and `herald-os-idle`, which runs `swayid
 from Settings > General (`~/.config/herald-os/idle.conf`: screensaver, lock after 10 min only when
 the account has a password, screens off after 15, no sleep by default; "stay awake" stops the
 unit). Night light is `wlsunset` as the `herald-os-nightlight` unit. Notifications from other apps
-arrive through the shell's own `org.freedesktop.Notifications` daemon. The `hermes` VM user has no password by default, so
+arrive through the shell's own `org.freedesktop.Notifications` daemon. The `nastech` VM user has no password by default, so
 `herald-os lock` refuses until you run `herald-os password` in a terminal; a lock nobody can undo
 would leave the compositor's session lock engaged.
 
 `Mod+M` or `Mod+Alt+Space` opens the control menu (Install / Remove / Update / Style / Trigger /
-System / Hermes); every item is a `herald-os` command, so the agent (`system_os` tool) and scripts
+System / NasTech); every item is a `herald-os` command, so the agent (`system_os` tool) and scripts
 can do the same. `Mod` is `Super` on real hardware and `Alt` when niri runs nested (the QEMU VM),
 where `Mod+Alt+Space` is only `Alt+Space` and `Mod+M` is the way in. `Mod+K` lists every hotkey.
 Web apps (`herald-os install webapp <name> <url>`) open as their own frameless windows.
 
 The menu bar's status items open quick panels (`herald-os panel wifi|bluetooth|audio|display|power|clock`,
 backed by `nmcli`, `bluetoothctl`, `pactl`, `niri msg output`, `powerprofilesctl` and `upower`).
-Dictation (`Mod+Ctrl+X`, `herald-os dictate`) records until a pause, transcribes through Hermes's
+Dictation (`Mod+Ctrl+X`, `herald-os dictate`) records until a pause, transcribes through NasTech's
 speech-to-text and types the words into the focused app with `wtype`; the emoji picker
 (`Mod+Ctrl+E`) types its pick the same way. `herald-os keymap omarchy` renders
 `~/.config/niri/herald-os.kdl` from the installed template (`linux/niri/config.kdl`) with Omarchy's
@@ -166,7 +166,7 @@ start renders it again, so an update's new template takes effect at the next log
   files, shown in the menu bar, on the Overview or in their own window. `herald-os plugin add
   <git-url>` clones one turned off; `herald-os plugin list | enable | disable | update | remove`
   manage them, and `enable` prints what the widget may do and asks at the terminal. Settings >
-  Plugins does the same, and Hermes's `system_os plugin_*` actions can do everything except turn
+  Plugins does the same, and NasTech's `system_os plugin_*` actions can do everything except turn
   one on. Each runs in a sandboxed frame served from `herald-plugin://<id>/`, under a Content
   Security Policy that allows only its own files and the hosts it was granted. The manual's
   [Make it yours](manual/make-it-yours.md#widgets) explains how to write one.
@@ -180,13 +180,13 @@ start renders it again, so an update's new template takes effect at the next log
   replaces Herald's bind for the same key.
 - **The install catalog** (`linux/catalog/*.json`, run by `herald-os-catalog`) is everything else
   worth one click: coding agents (Claude Code, Codex, OpenCode, Gemini CLI, Copilot CLI through npm
-  in `~/.local`), Ollama and LM Studio with "Use with Hermes", languages through mise, editors,
+  in `~/.local`), Ollama and LM Studio with "Use with NasTech", languages through mise, editors,
   terminals, games, a Windows 11 VM (`herald-os install windows`, dockur/windows under Podman), media
   apps, services and web apps. Each entry lists install methods in order (Flatpak, dnf, pacman, AUR,
   npm, mise, a recipe, a web app, a download page); the first one the machine can use wins, so the
   same catalog serves Fedora, Arch and Omarchy, and the image (Flatpak and `~/.local` only). It
   backs Settings > Software, Install and Remove in the control menu, `herald-os install <id>`, and
-  Hermes's `system_os catalog_*` actions. On macOS the shell installs the entries that have a Mac
+  NasTech's `system_os catalog_*` actions. On macOS the shell installs the entries that have a Mac
   method (npm, Homebrew, a download page).
 - **Omakase** (`linux/omakase/{packages,flatpaks,webapps}.txt`) is the curated software set every
   install gets: Firefox, Nautilus, Text Editor, LibreOffice, Loupe, Papers, Calculator, Calendar,
@@ -197,7 +197,7 @@ start renders it again, so an update's new template takes effect at the next log
   stable|edge`; both track `main` until releases exist), runs one-shot `linux/migrations/*.sh`
   (tracked in `/var/lib/herald-os/migrations`), upgrades the system (dnf on Fedora, pacman and the
   AUR helper on Arch; on Omarchy it leaves the system to `omarchy-update`, which Omarchy requires;
-  the Herald OS image updates as a whole with `bootc upgrade`) and Flatpaks, updates Hermes Agent,
+  the Herald OS image updates as a whole with `bootc upgrade`) and Flatpaks, updates NasTech Agent,
   rebuilds the shell and restarts it. A daily user timer runs `herald-os update
   --check`, which lights the menu-bar indicator when anything is pending. A repo pushed from a Mac
   (no `.git`) skips the shell step; use `linux/dev/push.sh` there. A release tarball in
@@ -214,13 +214,13 @@ VM's provisioner also runs, so the VM and the image cannot drift apart:
   the boot splash and its initramfs, Flathub, the services. `--dev` does the same for the VM under
   `/usr/local`, with the build tools from `packages-dev.txt`.
 - **`linux/image/firstboot.sh`, on the first boot:** the session user, its niri config, theme and
-  update timer, and Hermes Agent (`herald-os-firstboot.service`, before the login screen), then the
-  omakase Flatpaks (`herald-os-firstboot-apps.service`, while the session is up). Hermes Agent comes
+  update timer, and NasTech Agent (`herald-os-firstboot.service`, before the login screen), then the
+  omakase Flatpaks (`herald-os-firstboot-apps.service`, while the session is up). NasTech Agent comes
   from GitHub, so a first boot without a network (Wi-Fi is joined later, in setup) leaves it to
-  `herald-os-hermes.service`: it waits for the network, installs Hermes with its voice extras, runs
+  `herald-os-nastech.service`: it waits for the network, installs NasTech with its voice extras, runs
   `herald-os setup` and tries again ten minutes after a failed install. Meanwhile the shell's boot
-  screen says how it goes, shows the Wi-Fi panel and starts Hermes once it is set up
-  (`journalctl -u herald-os-hermes` has the details).
+  screen says how it goes, shows the Wi-Fi panel and starts NasTech once it is set up
+  (`journalctl -u herald-os-nastech` has the details).
 
 `linux/image/Containerfile` starts from `quay.io/fedora/fedora-bootc:44`; `.github/workflows/image.yml`
 builds it for x86_64 and aarch64 on matching runners, pushes it to the repository's GHCR package
@@ -245,13 +245,13 @@ there); the system itself changes only by a whole new image.
 **Updates you can undo.** `herald-os update` runs `bootc upgrade` (the image tag of the channel:
 `stable` for releases, `edge` for main once it is published; `herald-os channel edge` switches with
 `bootc switch`), then
-Flatpaks and `hermes update`. The new image starts on the next restart and the previous one stays in
+Flatpaks and `nastech update`. The new image starts on the next restart and the previous one stays in
 the boot menu; `herald-os rollback` (or Update > Go back to the previous version) makes it the
 default again.
 
-**Setup and reset.** The first boot makes the account and installs Hermes; then the shell's setup
+**Setup and reset.** The first boot makes the account and installs NasTech; then the shell's setup
 asks who the computer is for. For yourself: a name, a password (set with `passwd` as you, so the
-setup never needs root), Wi-Fi and Hermes's sign-in. For someone else: just Wi-Fi, and setup waits
+setup never needs root), Wi-Fi and NasTech's sign-in. For someone else: just Wi-Fi, and setup waits
 for them at the next start. `herald-os reset` (type ERASE, then your password) erases the account,
 its apps and saved networks on the next restart and runs setup again; the system stays.
 
@@ -278,13 +278,13 @@ Fedora Silverblue, Kinoite, Bazzite, Bluefin and other bootc systems can switch 
 image in place. It replaces the system you run, so try it on a spare machine or in a virtual machine,
 not on the computer you work on. What happens on its first start:
 
-- **A new account signs in by itself.** The first boot creates `hermes`, an administrator (in
+- **A new account signs in by itself.** The first boot creates `nastech`, an administrator (in
   `wheel`) with no password, and greetd signs it in with no login screen, so you cannot pick your own
   account there. Until you set a password in Herald OS's first-start setup (or with
   `herald-os password`), anyone at the keyboard has administrator rights. Your own account and its
   files stay.
-- **The first start takes a while.** It installs Hermes Agent, which needs the network, before the
-  desktop appears. Without a network the desktop comes up first, and Hermes installs once you are
+- **The first start takes a while.** It installs NasTech Agent, which needs the network, before the
+  desktop appears. Without a network the desktop comes up first, and NasTech installs once you are
   online.
 - **SELinux becomes permissive** (greetd and the compositors have no policy yet, ADR-012).
 - **The firewall changes.** firewalld's default zone becomes `herald-os`, which refuses every
@@ -313,9 +313,9 @@ OS, `herald-os rollback`) makes it the default again, and the next restart start
 Herald OS has updated itself, that place holds the previous Herald OS version instead; to keep your old
 system in the boot menu through updates, run `sudo ostree admin pin booted` before you switch
 (`ostree admin status` lists what is pinned). `sudo bootc switch <your old image>` works too, but it
-keeps what changed in `/etc` under Herald OS, the `hermes` account among it: remove that with
-`sudo userdel -r hermes`. After a rollback, Herald OS's files in `/var` stay behind, the `hermes`
-home folder (`/var/home/hermes`) and `/var/lib/herald-os`; delete them when you no longer want them.
+keeps what changed in `/etc` under Herald OS, the `nastech` account among it: remove that with
+`sudo userdel -r nastech`. After a rollback, Herald OS's files in `/var` stay behind, the `nastech`
+home folder (`/var/home/nastech`) and `/var/lib/herald-os`; delete them when you no longer want them.
 
 On bootc and ostree systems Herald OS did not make, `herald-os update` and `herald-os rollback` never
 run `bootc`: the system is left to its own updates. The install catalog uses Flatpak and `~/.local`
@@ -333,7 +333,7 @@ Neither is on the AUR yet; build them from the repository:
 ```bash
 cd packaging/arch/herald-os-bin
 makepkg -si            # downloads the release tarball for this architecture
-herald-os setup        # once per user: Hermes Agent and the bridge plugin
+herald-os setup        # once per user: NasTech Agent and the bridge plugin
 ```
 
 `HERALD_OS_TARBALL_URL=file:///path/to/herald-os-<version>-linux-x64.tar.gz makepkg -si --skipchecksums`
@@ -354,7 +354,7 @@ sha256sum -c herald-os-<version>-linux-x64.tar.gz.sha256
 sudo mkdir -p /opt/herald-os
 sudo tar -xzf herald-os-<version>-linux-x64.tar.gz -C /opt/herald-os --strip-components=1
 sudo /opt/herald-os/resources/herald-os-linux/bin/herald-os-tarball install
-herald-os setup        # once per user: Hermes Agent and the bridge plugin
+herald-os setup        # once per user: NasTech Agent and the bridge plugin
 ```
 
 `herald-os-tarball install` lays out what the Arch package does, under `/usr/local`, which package
@@ -441,12 +441,12 @@ This has been tested under Hyprland 0.56 with Omarchy 4's own config, theme scri
 (`omarchy-theme-set`, `omarchy-hook`) and menu parser, including real key presses, but not yet on an
 Omarchy install on real hardware. Reports are welcome.
 
-**Sharing a Hermes home.** Omarchy's Hermes Desktop owns `~/.hermes` and runs its own backend and
-messaging gateway. A second backend from Herald is safe (Hermes takes a lock for every cron tick and
+**Sharing a NasTech home.** Omarchy's NasTech Desktop owns `~/.nastech` and runs its own backend and
+messaging gateway. A second backend from Herald is safe (NasTech takes a lock for every cron tick and
 keeps one gateway per home), and Settings > Network says when another app's gateway is running. To
 not run a second backend at all, start Herald with `HERALD_OS_BACKEND_URL=http://127.0.0.1:<port>`
 and the backend's token in `HERALD_OS_BACKEND_TOKEN` (or `~/.config/herald-os/backend-token`); Herald
-then attaches to it and writes `~/.hermes/herald-os/control.json` (mode 0600) so the bridge plugin
+then attaches to it and writes `~/.nastech/herald-os/control.json` (mode 0600) so the bridge plugin
 can still drive Herald's UI.
 
 ## Known limits

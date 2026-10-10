@@ -154,7 +154,7 @@ def test_plugin_arguments_are_validated(plugin, linux, args, needle):
     assert linux.argv is None
 
 
-def test_plugins_cannot_be_turned_on_by_hermes(plugin):
+def test_plugins_cannot_be_turned_on_by_nastech(plugin):
     tools = _mod(plugin, "tools")
     actions = tools.SYSTEM_OS_SCHEMA["parameters"]["properties"]["action"]["enum"]
     assert "plugin_enable" not in actions

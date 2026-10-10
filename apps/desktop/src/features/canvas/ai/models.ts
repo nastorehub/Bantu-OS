@@ -1,7 +1,7 @@
 /*
  * Which on-device models this computer has, and getting one: the window asks the person first
  * (name, size, licence), shows the download and lets them cancel it. Commands never download:
- * they say which model is missing so Hermes can ask the person.
+ * they say which model is missing so NasTech can ask the person.
  */
 
 import { atom } from 'nanostores'

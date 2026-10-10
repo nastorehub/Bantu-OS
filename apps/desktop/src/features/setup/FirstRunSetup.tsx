@@ -5,21 +5,21 @@ import { HeraldLogo } from '../../components/herald-logo.tsx'
 import { GlassButton } from '../../components/ui/glass.tsx'
 import { Spinner } from '../../components/ui/primitives.tsx'
 import { cn } from '../../lib/cn.ts'
-import { $hermesAuth, refreshHermesAuth, requestHermesLogin } from '../../store/hermes-auth.ts'
+import { $nastechAuth, refreshNasTechAuth, requestNasTechLogin } from '../../store/nastech-auth.ts'
 import { StatusPanel } from '../status/StatusPanel.tsx'
 
-type Step = 'welcome' | 'account' | 'wifi' | 'hermes' | 'done'
+type Step = 'welcome' | 'account' | 'wifi' | 'nastech' | 'done'
 
 /**
  * First-boot setup on the Herald OS image: who the computer is for, their name and password,
- * Wi-Fi, and Hermes's sign-in. Setting it up for someone else skips the account and leaves setup
+ * Wi-Fi, and NasTech's sign-in. Setting it up for someone else skips the account and leaves setup
  * waiting for them at the next start.
  */
 export function FirstRunSetup() {
   const [due, setDue] = useState(false)
   const [step, setStep] = useState<Step>('welcome')
   const [forSomeoneElse, setForSomeoneElse] = useState(false)
-  const auth = useStore($hermesAuth)
+  const auth = useStore($nastechAuth)
 
   useEffect(() => {
     void window.heraldOS.setup
@@ -32,8 +32,8 @@ export function FirstRunSetup() {
     return null
   }
 
-  // Signing in happens on Hermes's own card; setup steps aside until it is done.
-  if (step === 'hermes' && auth.needsLogin) {
+  // Signing in happens on NasTech's own card; setup steps aside until it is done.
+  if (step === 'nastech' && auth.needsLogin) {
     return null
   }
 
@@ -42,7 +42,7 @@ export function FirstRunSetup() {
     setDue(false)
   }
 
-  const steps: Step[] = forSomeoneElse ? ['welcome', 'wifi', 'done'] : ['welcome', 'account', 'wifi', 'hermes', 'done']
+  const steps: Step[] = forSomeoneElse ? ['welcome', 'wifi', 'done'] : ['welcome', 'account', 'wifi', 'nastech', 'done']
   const next = () => setStep(steps[Math.min(steps.length - 1, steps.indexOf(step) + 1)] ?? 'done')
 
   return (
@@ -76,13 +76,13 @@ export function FirstRunSetup() {
             <Footer onNext={next} label="Next" />
           </div>
         )}
-        {step === 'hermes' && <HermesStep onDone={next} />}
+        {step === 'nastech' && <NasTechStep onDone={next} />}
         {step === 'done' && (
           <div className="flex flex-col gap-4">
             <Heading
               icon={forSomeoneElse ? <IconGift size={18} /> : <IconCheck size={18} />}
               title={forSomeoneElse ? 'Ready to hand over' : 'You are all set'}
-              text={forSomeoneElse ? 'The next time it starts, it asks its new owner for a name, a password and their Hermes sign-in.' : 'Press Super+Space to ask Hermes about anything on screen, or Super+M for the Herald OS menu.'}
+              text={forSomeoneElse ? 'The next time it starts, it asks its new owner for a name, a password and their NasTech sign-in.' : 'Press Super+Space to ask NasTech about anything on screen, or Super+M for the Herald OS menu.'}
             />
             <Footer onNext={() => void finish()} label={forSomeoneElse ? 'Done' : 'Start using Herald OS'} />
           </div>
@@ -121,7 +121,7 @@ function Welcome({ onChoose }: { onChoose: (someoneElse: boolean) => void }) {
       <div className="grid grid-cols-2 gap-3">
         <button type="button" onClick={() => onChoose(false)} className="glass-input flex flex-col items-start gap-1 rounded-xl p-4 text-left hover:border-line-strong">
           <span className="text-[14px] font-medium text-fg">It is for me</span>
-          <span className="text-[12px] text-fg-3">Choose your name, a password and sign in to Hermes.</span>
+          <span className="text-[12px] text-fg-3">Choose your name, a password and sign in to NasTech.</span>
         </button>
         <button type="button" onClick={() => onChoose(true)} className="glass-input flex flex-col items-start gap-1 rounded-xl p-4 text-left hover:border-line-strong">
           <span className="text-[14px] font-medium text-fg">For someone else</span>
@@ -185,12 +185,12 @@ function Account({ onDone }: { onDone: () => void }) {
   )
 }
 
-function HermesStep({ onDone }: { onDone: () => void }) {
-  const auth = useStore($hermesAuth)
+function NasTechStep({ onDone }: { onDone: () => void }) {
+  const auth = useStore($nastechAuth)
   const [checking, setChecking] = useState(true)
 
   useEffect(() => {
-    void refreshHermesAuth().finally(() => setChecking(false))
+    void refreshNasTechAuth().finally(() => setChecking(false))
   }, [])
 
   const signedIn = auth.checked && !auth.needsLogin && Boolean(auth.activeProvider)
@@ -199,8 +199,8 @@ function HermesStep({ onDone }: { onDone: () => void }) {
     <div className="flex flex-col gap-4">
       <Heading
         icon={<IconUser size={18} />}
-        title="Sign in to Hermes"
-        text={signedIn ? `Hermes is signed in${auth.activeProvider ? ` with ${auth.activeProvider}` : ''}.` : 'Hermes needs a model provider to think with. Signing in opens the provider page beside a short code.'}
+        title="Sign in to NasTech"
+        text={signedIn ? `NasTech is signed in${auth.activeProvider ? ` with ${auth.activeProvider}` : ''}.` : 'NasTech needs a model provider to think with. Signing in opens the provider page beside a short code.'}
       />
       <div className="flex justify-end gap-2">
         {!signedIn && (
@@ -211,7 +211,7 @@ function HermesStep({ onDone }: { onDone: () => void }) {
         {signedIn ? (
           <Footer onNext={onDone} label="Next" />
         ) : (
-          <GlassButton variant="primary" onClick={() => requestHermesLogin('setup')} disabled={checking}>
+          <GlassButton variant="primary" onClick={() => requestNasTechLogin('setup')} disabled={checking}>
             {checking ? <Spinner /> : null} Sign in <IconArrowRight size={15} />
           </GlassButton>
         )}

@@ -3,7 +3,7 @@ import { $prefs } from '../store/backend.ts'
 import { $crashes, diagnoseCrash, loadCrashes, setCrashHelpEnabled, setCrashMuted } from '../store/crashes.ts'
 import { fail, ok, type OsCommand } from '../store/os-commands.ts'
 
-/* Crash help: Hermes explains why a program crashed. */
+/* Crash help: NasTech explains why a program crashed. */
 
 export const crashCommands: readonly OsCommand[] = [
   {
@@ -29,7 +29,7 @@ export const crashCommands: readonly OsCommand[] = [
     id: 'crash.diagnose',
     title: 'Diagnose a crash',
     description:
-      'Start a chat where Hermes reads a crash report and explains what went wrong: the newest crash, one named by id, program or pid, or one Herald OS did not see (pass pid or report, with app).',
+      'Start a chat where NasTech reads a crash report and explains what went wrong: the newest crash, one named by id, program or pid, or one Herald OS did not see (pass pid or report, with app).',
     tier: 'act',
     args: [
       { name: 'crash', type: 'string', description: 'Crash id, program name or pid' },
@@ -44,7 +44,7 @@ export const crashCommands: readonly OsCommand[] = [
       const when = at ? Date.parse(String(at)) : Number.NaN
       const reports = $crashes.get().length > 0 ? $crashes.get() : await loadCrashes()
       const known = findCrash(reports, crash ? String(crash) : pid !== undefined ? String(pid) : undefined)
-      // A crash from before Herald OS started (`herald-os crash diagnose <pid>`, or Hermes naming a report).
+      // A crash from before Herald OS started (`herald-os crash diagnose <pid>`, or NasTech naming a report).
       const named =
         !known && (pid !== undefined || reportPath)
           ? {
@@ -65,7 +65,7 @@ export const crashCommands: readonly OsCommand[] = [
 
       const sessionId = await diagnoseCrash(report)
 
-      return ok(`Asked Hermes why ${report.app} crashed`, { page: 'hermes', data: { sessionId } })
+      return ok(`Asked NasTech why ${report.app} crashed`, { page: 'nastech', data: { sessionId } })
     }
   },
   {

@@ -1,9 +1,9 @@
 type KeyValueStorage = Pick<Storage, 'length' | 'key' | 'getItem' | 'setItem' | 'removeItem'>
 
-const LEGACY_PREFIX = 'hermes-os.'
+const LEGACY_PREFIX = 'nastech-os.'
 const PREFIX = 'herald-os.'
 
-/** Moves shell settings saved under the pre-rename `hermes-os.` prefix; a value already saved under the new name wins. */
+/** Moves shell settings saved under the pre-rename `nastech-os.` prefix; a value already saved under the new name wins. */
 export function migrateLegacyStorage(storage: KeyValueStorage): number {
   const legacy: string[] = []
 

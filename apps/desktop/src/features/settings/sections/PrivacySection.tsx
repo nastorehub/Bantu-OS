@@ -13,7 +13,7 @@ import { errorText, markSaved, SectionTitle, SettingsBlock, SettingsGroup, Setti
 /*
  * Privacy: what "Pick up where you left off" may look at, the raw permission policy the Herald OS
  * bridge plugin enforces, and the audit trail. The textarea is the source of truth; the "Ask
- * before sending" toggle in Hermes & agents edits the same file line by line.
+ * before sending" toggle in NasTech & agents edits the same file line by line.
  */
 
 function ContinuitySettings() {
@@ -33,7 +33,7 @@ function ContinuitySettings() {
       <SettingsRow
         icon={<IconBrain />}
         label="Pick up where you left off"
-        description="When you open Herald OS or come back after a break, Hermes reads the names and dates of your recent documents, project folders (with their git state), conversations, open apps and today's calendar, then suggests where to continue. Never file contents, window titles or the screen. Your Hermes model provider writes the suggestions."
+        description="When you open Herald OS or come back after a break, NasTech reads the names and dates of your recent documents, project folders (with their git state), conversations, open apps and today's calendar, then suggests where to continue. Never file contents, window titles or the screen. Your NasTech model provider writes the suggestions."
         keywords="continuity resume catch up brain context recent work suggestions welcome back"
       >
         <Toggle checked={continuity.enabled === true} onChange={enabled => void setContinuityEnabled(enabled)} label="Pick up where you left off" />
@@ -92,7 +92,7 @@ function ContinuitySettings() {
           Add folder…
         </GlassButton>
       </SettingsRow>
-      <SettingsRow icon={<IconTrash />} label="Forget suggestions" description="Clear the threads Hermes found. Herald OS keeps nothing else from a catch-up." keywords="clear delete reset threads">
+      <SettingsRow icon={<IconTrash />} label="Forget suggestions" description="Clear the threads NasTech found. Herald OS keeps nothing else from a catch-up." keywords="clear delete reset threads">
         <GlassButton size="sm" variant="ghost" disabled={!continuity.threads?.length} onClick={() => void forgetThreads()}>
           Forget
         </GlassButton>
@@ -131,7 +131,7 @@ export function PrivacySection() {
 
   return (
     <>
-      <SectionTitle title="Privacy" subtitle={`What Hermes may look at and do on this ${deviceNoun()}, and the record of what it did.`} />
+      <SectionTitle title="Privacy" subtitle={`What NasTech may look at and do on this ${deviceNoun()}, and the record of what it did.`} />
 
       <ContinuitySettings />
 
@@ -165,7 +165,7 @@ export function PrivacySection() {
         <SettingsRow
           icon={<IconShieldLock />}
           label="Protected paths"
-          description="Paths listed under protected_paths are never read, written or moved by the bridge, whatever the tier says. Hermes's own config.yaml and secrets are protected upstream regardless."
+          description="Paths listed under protected_paths are never read, written or moved by the bridge, whatever the tier says. NasTech's own config.yaml and secrets are protected upstream regardless."
           keywords="secrets config.yaml never touched"
         />
       </SettingsGroup>

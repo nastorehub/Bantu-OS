@@ -8,7 +8,7 @@ import { log } from '../log.ts'
 import { run } from '../platform/exec.ts'
 import { pickColourMac, readImageMac } from '../platform/mac-tools.ts'
 
-/** Screen grabs handed to Hermes; they only need to outlive the question about them. */
+/** Screen grabs handed to NasTech; they only need to outlive the question about them. */
 export function capturesDir(): string {
   return path.join(os.tmpdir(), 'herald-os-captures')
 }

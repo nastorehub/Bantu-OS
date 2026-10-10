@@ -15,7 +15,7 @@ export async function waitForStatus(baseUrl: string, token: string, timeoutMs: n
 
     try {
       const response = await fetch(`${baseUrl}/api/status`, {
-        headers: { 'X-Hermes-Session-Token': token },
+        headers: { 'X-Nastech-Session-Token': token },
         signal: AbortSignal.timeout(2500)
       })
 

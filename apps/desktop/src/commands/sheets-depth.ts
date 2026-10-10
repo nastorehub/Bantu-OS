@@ -4,7 +4,7 @@ import { range, run, sheet, workbook } from './sheets-shared.ts'
 
 /*
  * Herald Sheets' charts, summaries, data tools, named ranges, validation, comments and notes for
- * Hermes, voice, the command bar and `herald-os sheets`, on the workbook named or the one in front
+ * NasTech, voice, the command bar and `herald-os sheets`, on the workbook named or the one in front
  * as the other sheets.* commands are. Each change is one step to undo in an open workbook, but
  * comment threads change outside the undo history, as Univer keeps them.
  */
@@ -356,7 +356,7 @@ export const sheetsDepthCommands: readonly OsCommand[] = [
   {
     id: 'sheets.addComment',
     title: 'Comment on a cell',
-    description: 'Start a comment thread on a cell; comments Hermes writes are signed Hermes. A cell holds a comment or a note, as in Excel. Comments stay out of the undo history: sheets.deleteComment takes one off. The answer gives the comment’s id.',
+    description: 'Start a comment thread on a cell; comments NasTech writes are signed NasTech. A cell holds a comment or a note, as in Excel. Comments stay out of the undo history: sheets.deleteComment takes one off. The answer gives the comment’s id.',
     tier: 'act',
     args: [workbook, cell, { name: 'text', type: 'string', description: 'The comment', required: true }, sheet],
     run: depth('addComment')
@@ -364,7 +364,7 @@ export const sheetsDepthCommands: readonly OsCommand[] = [
   {
     id: 'sheets.replyToComment',
     title: 'Reply to a comment',
-    description: 'Reply to the comment thread on a cell (or of a comment’s id); replies Hermes writes are signed Hermes. Replies stay out of the undo history: sheets.deleteComment takes one off.',
+    description: 'Reply to the comment thread on a cell (or of a comment’s id); replies NasTech writes are signed NasTech. Replies stay out of the undo history: sheets.deleteComment takes one off.',
     tier: 'act',
     args: [workbook, ...thread, { name: 'text', type: 'string', description: 'The reply', required: true }, sheet],
     run: depth('replyToComment')
@@ -396,7 +396,7 @@ export const sheetsDepthCommands: readonly OsCommand[] = [
   {
     id: 'sheets.setNote',
     title: 'Write a note on a cell',
-    description: 'Write a cell’s note, in place of the note it had, as one step to undo; a note Hermes starts is signed Hermes. A cell holds a note or a comment, as in Excel.',
+    description: 'Write a cell’s note, in place of the note it had, as one step to undo; a note NasTech starts is signed NasTech. A cell holds a note or a comment, as in Excel.',
     tier: 'act',
     args: [workbook, cell, { name: 'text', type: 'string', description: 'The note', required: true }, sheet],
     run: depth('setNote')

@@ -21,9 +21,9 @@ if [[ -f "$HOME/.config/herald-os/session.env" ]]; then
   source "$HOME/.config/herald-os/session.env"
   set +a
 fi
-# Overrides written before the rename (HERMES_OS_*) still apply; everything below reads HERALD_OS_*.
-for legacy in "${!HERMES_OS_@}"; do
-  current="HERALD_OS_${legacy#HERMES_OS_}"
+# Overrides written before the rename (NASTECH_OS_*) still apply; everything below reads HERALD_OS_*.
+for legacy in "${!NASTECH_OS_@}"; do
+  current="HERALD_OS_${legacy#NASTECH_OS_}"
   [[ -n "${!current:-}" ]] || export "$current=${!legacy}"
 done
 

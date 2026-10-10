@@ -6,7 +6,7 @@ import { $focusedWindowId, $windows, focusWindow } from './windows.ts'
 /*
  * Where voice typing and editing land. Speaking usually starts with a click on the mic or the orb,
  * which moves focus off the text field the user meant, so the last focused editable element is
- * remembered and focused again before typing. When the frontmost Hermes window is a web page, the
+ * remembered and focused again before typing. When the frontmost NasTech window is a web page, the
  * action goes to that page instead.
  */
 
@@ -70,7 +70,7 @@ function windowIdOf(element: HTMLElement): string | null {
   return element.closest<HTMLElement>('[data-window-id]')?.dataset.windowId ?? null
 }
 
-/** Describe the target for captions: "the terminal", "the Hermes composer", "the web page". */
+/** Describe the target for captions: "the terminal", "the NasTech composer", "the web page". */
 export function describeTarget(): string {
   const web = frontWebView()
 

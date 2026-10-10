@@ -137,7 +137,7 @@ def test_entry_view_reports_state_and_extras(monkeypatch):
         "available": True,
         "method": "link",
         "removable": False,
-        "hermes": "lmstudio",
+        "nastech": "lmstudio",
         "url": "https://lmstudio.ai/download",
     }
     agent = cat.entry_view(group, ENTRIES["codex"], fedora(), Nothing(fedora()))

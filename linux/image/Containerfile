@@ -15,7 +15,7 @@ RUN bash /tmp/herald-os/linux/image/packages.sh --image /tmp/herald-os/shell.tar
  && rm -rf /tmp/herald-os /var/cache/* /var/log/* /var/lib/dnf
 
 LABEL org.opencontainers.image.title="Herald OS" \
-      org.opencontainers.image.description="An AI-native desktop built around Hermes Agent" \
+      org.opencontainers.image.description="An AI-native desktop built around NasTech Agent" \
       org.opencontainers.image.source="https://github.com/iamlukethedev/Herald-OS" \
       org.opencontainers.image.licenses="MIT" \
       containers.bootc="1"

@@ -2,7 +2,7 @@ import type { CommandArg, OsCommand } from '../store/os-commands.ts'
 import { document, office, run } from './docs-shared.ts'
 
 /*
- * Herald Docs' page and review for Hermes: headers and footers, fields, notes, sections, comments,
+ * Herald Docs' page and review for NasTech: headers and footers, fields, notes, sections, comments,
  * tables of contents, templates and statistics. Like the rest of docs.*, a command works on the
  * document it names or the one in front, and each change is one step to undo in an open document.
  */

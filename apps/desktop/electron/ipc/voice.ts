@@ -70,7 +70,7 @@ let registeredHotkey: string | null = null
 
 /**
  * Register (or re-register) the voice hotkey. Unlike the fullscreen shortcut this one stays active
- * while the window is blurred: the whole point is reaching Hermes from inside another app.
+ * while the window is blurred: the whole point is reaching NasTech from inside another app.
  */
 export function applyVoiceHotkey(accelerator: string, getWindows: () => BrowserWindow[]): void {
   if (registeredHotkey) {

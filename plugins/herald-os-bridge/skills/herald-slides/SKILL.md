@@ -2,7 +2,7 @@
 name: herald-slides
 description: Make and change presentations in Herald Slides, the presentation editor in Herald OS - a deck from a topic (an outline first, a title slide, one idea a slide, short bullets, speaker notes, a closing slide), decks from a Herald Docs document and slides of a Herald Sheets range, layouts chosen for the content, the slide master and its layouts (a logo, slide numbers, a footer and the date on every slide, placeholders, backgrounds), themes and custom themes in a brand's colours, transitions, gradients, flowcharts and diagrams with grouped shapes and connectors, table borders, speaker notes for every slide, pictures, tables, text boxes and shapes, reordering, duplicating and hiding slides, find and replace, saving PowerPoint files and exporting PDFs, all through the slides tool
 metadata:
-  hermes:
+  nastech:
     tags: [herald-os, slides, presentation, deck, powerpoint, pptx, talk, pitch, outline, speaker notes, layouts, slide master, logo, slide numbers, footer, themes, custom themes, brand, transitions, gradients, shapes, flowchart, diagram, connectors, groups, table borders, pdf]
 ---
 

@@ -15,8 +15,8 @@ local user), what they gain, and how to reproduce it. Expect a first reply withi
 
 Herald OS is pre-1.0. Only the latest `main` is supported, and fixes land there.
 
-Vulnerabilities in Hermes Agent itself (the `hermes` runtime, its tools, providers, or gateway)
-belong upstream: [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent).
+Vulnerabilities in NasTech Agent itself (the `nastech` runtime, its tools, providers, or gateway)
+belong upstream: [nastechresearch/nastech-agent](https://github.com/nastechresearch/nastech-agent).
 
 ## Security model
 
@@ -25,10 +25,10 @@ These are the guarantees Herald OS aims for. Breaking one of them is a vulnerabi
 - **Desktop tools are gated.** The agent's desktop tools come from the `herald-os-bridge` plugin,
   and each has a tier. `read` and `act` tools run immediately and are logged; `mutate` tools need
   your approval; `destructive` tools need approval on every call. Protected paths (`~/.ssh`,
-  `~/.gnupg`, keychains, browser cookies, `$HERMES_HOME/.env`, `$HERMES_HOME/auth.json`, system
+  `~/.gnupg`, keychains, browser cookies, `$NASTECH_HOME/.env`, `$NASTECH_HOME/auth.json`, system
   folders) are refused before any prompt. Every call is appended to
-  `$HERMES_HOME/herald-os/audit.jsonl`. See [docs/SYSTEM-BRIDGE.md](docs/SYSTEM-BRIDGE.md).
-- **The backend is local.** `hermes serve` listens on 127.0.0.1 only, behind a random token that
+  `$NASTECH_HOME/herald-os/audit.jsonl`. See [docs/SYSTEM-BRIDGE.md](docs/SYSTEM-BRIDGE.md).
+- **The backend is local.** `nastech serve` listens on 127.0.0.1 only, behind a random token that
   changes on every launch. The Electron main process adds the token to REST calls.
 - **The control socket is private.** The socket the agent uses to operate the interface (the
   `os_ui` tool) is readable only by your user (mode 0600) and refuses requests without a
@@ -43,9 +43,9 @@ These are the guarantees Herald OS aims for. Breaking one of them is a vulnerabi
   cannot open pop-ups. The Studio preview loads web pages and files inside the project folder,
   nothing else. A local page reads only what is open for viewing: a page in a viewer, the files
   open in viewers; a preview, the project folders being previewed. Paths are judged after symlinks
-  resolve, and anything else, such as `~/.hermes/.env`, looks missing.
-- **No credentials in the repository.** API keys and logins live in `~/.hermes`, managed by
-  Hermes. CI scans the full history with [gitleaks](https://github.com/gitleaks/gitleaks); run
+  resolve, and anything else, such as `~/.nastech/.env`, looks missing.
+- **No credentials in the repository.** API keys and logins live in `~/.nastech`, managed by
+  NasTech. CI scans the full history with [gitleaks](https://github.com/gitleaks/gitleaks); run
   `bash scripts/check-secrets.sh` to do the same locally.
 
 ## In scope
@@ -61,6 +61,6 @@ These are the guarantees Herald OS aims for. Breaking one of them is a vulnerabi
 ## Out of scope
 
 - What the agent does with permissions you grant: approving a destructive call, turning approvals
-  off, or yolo mode. Hermes's own terminal tool follows Hermes's approval settings.
+  off, or yolo mode. NasTech's own terminal tool follows NasTech's approval settings.
 - Attacks that already require running code as your user.
 - Gatekeeper warnings on unsigned builds.

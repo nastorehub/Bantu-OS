@@ -130,7 +130,7 @@ describe('custom themes', () => {
     files = new Map()
     writes = 0
     reads = 0
-    $env.set({ platform: 'darwin', hermesHome: '/home/me/.hermes/', homeDir: '/home/me', version: '0.0.0', isDev: false, shellMode: 'panels' })
+    $env.set({ platform: 'darwin', nastechHome: '/home/me/.nastech/', homeDir: '/home/me', version: '0.0.0', isDev: false, shellMode: 'panels' })
     ;(globalThis as unknown as { window: unknown }).window = {
       heraldOS: {
         canvas: {
@@ -162,10 +162,10 @@ describe('custom themes', () => {
     $customThemes.set([])
   })
 
-  const path = '/home/me/.hermes/herald-os/office/slide-themes.json'
+  const path = '/home/me/.nastech/herald-os/office/slide-themes.json'
 
   it('keeps custom themes in Herald’s data folder under ids of their own', async () => {
-    expect(customThemesPath('/home/me/.hermes/')).toBe(path)
+    expect(customThemesPath('/home/me/.nastech/')).toBe(path)
     expect(await loadCustomThemes()).toEqual([])
     expect(writes).toBe(0)
     // Main logs a read that fails, so a file not written yet is never read.
@@ -214,6 +214,6 @@ describe('custom themes', () => {
     await expect(loadCustomThemes()).rejects.toThrow(/newer Herald/)
 
     $env.set(null)
-    await expect(loadCustomThemes()).rejects.toThrow(/Hermes home/)
+    await expect(loadCustomThemes()).rejects.toThrow(/NasTech home/)
   })
 })

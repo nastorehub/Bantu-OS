@@ -1,6 +1,6 @@
 /*
  * Herald Canvas's open documents in this window. Projects on disk are watched: a change made
- * elsewhere (Hermes, Compositor, another window) comes in as an undoable step, or as a question
+ * elsewhere (NasTech, Compositor, another window) comes in as an undoable step, or as a question
  * when there are unsaved edits here. Saved projects save themselves shortly after each edit.
  */
 
@@ -76,7 +76,7 @@ const tracked = new Map<string, Tracked>()
 
 export const activeDocument = (): CanvasDocument | null => $documents.get().find((doc) => doc.key === $activeKey.get()) ?? null
 
-/** Tell main what is open here, so Hermes's commands know which image is in front. */
+/** Tell main what is open here, so NasTech's commands know which image is in front. */
 export function reportPresence(focused = false): void {
   window.heraldOS.canvas.report({
     focused,

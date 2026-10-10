@@ -5,7 +5,7 @@ import { useEditorState } from '@tiptap/react'
 import { useEffect, useState } from 'react'
 import { cn } from '../../../lib/cn.ts'
 import { Menu } from '../../files/Menu.tsx'
-import { docsActions } from '../hermes/actions.ts'
+import { docsActions } from '../nastech/actions.ts'
 import { menuItems } from '../shell/OfficeWindow.tsx'
 import * as act from './actions.ts'
 import { anchorIn, clampLeft } from './overlay.ts'
@@ -16,7 +16,7 @@ const WIDTH = 348
 
 /**
  * Formatting over a selection of text: the common marks, a link, colour and highlight, and what
- * Hermes does with the selection.
+ * NasTech does with the selection.
  */
 export function BubbleBar({ editor, frame, tick }: { editor: Editor; frame: HTMLElement | null; tick: number }) {
   const [pressed, setPressed] = useState(false)
@@ -89,7 +89,7 @@ export function BubbleBar({ editor, frame, tick }: { editor: Editor; frame: HTML
       <div className="relative shrink-0">
         <button
           type="button"
-          title="Ask Hermes about the selection"
+          title="Ask NasTech about the selection"
           aria-haspopup="menu"
           aria-expanded={menuOpen}
           onMouseDown={(event) => {
@@ -99,7 +99,7 @@ export function BubbleBar({ editor, frame, tick }: { editor: Editor; frame: HTML
           onClick={() => setMenuFor(menuOpen ? null : at)}
           className={cn('flex h-7 shrink-0 items-center gap-1.5 rounded-md px-2 text-[12px] text-fg-2 hover:bg-white/8 hover:text-fg', menuOpen && 'bg-white/10 text-fg')}
         >
-          <IconSparkles size={14} /> Ask Hermes
+          <IconSparkles size={14} /> Ask NasTech
         </button>
         {menuOpen && (
           // The menu stops mousedown before the bubble sees it: the page keeps the focus, and the selection, from here.

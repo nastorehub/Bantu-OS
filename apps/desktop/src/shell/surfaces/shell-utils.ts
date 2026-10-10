@@ -28,7 +28,7 @@ const OUR_FLOATING_TITLES: Record<string, FloatingAppId> = {
 
 export const OUR_MAIN_TITLE = 'Herald OS'
 
-/** Which floating Hermes app one of our compositor windows hosts, when it is one. */
+/** Which floating NasTech app one of our compositor windows hosts, when it is one. */
 export function ourFloatingAppId(win: WmWindow): FloatingAppId | null {
   return win.ours ? (OUR_FLOATING_TITLES[win.title] ?? null) : null
 }
@@ -43,7 +43,7 @@ export function contextLine(context: WmWindow): string {
   return `Context: the focused window is "${windowLabel(context)}" (${context.appId || 'unknown app'}).`
 }
 
-/** Compose the final prompt text the way HermesComposer does for attachments. */
+/** Compose the final prompt text the way NasTechComposer does for attachments. */
 export function composePrompt(text: string, context?: WmWindow | null, attachments?: string[]): string {
   const parts: string[] = []
 

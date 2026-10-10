@@ -6,8 +6,8 @@ import { parseJsonArg } from '../agent-model.ts'
 import { type BlockStyle, BLOCK_STYLES, counts, documentText, findHeading, findText, jsonOf, type MarkChange, type Op, outline, type PageChange, type Place, type SearchOptions, sectionOf, type Target } from './model.ts'
 
 /*
- * Herald Docs for Hermes, without a window: where a command's content goes and what it changes,
- * read from its arguments; a document read the way Hermes wants it; and the batch of edits that
+ * Herald Docs for NasTech, without a window: where a command's content goes and what it changes,
+ * read from its arguments; a document read the way NasTech wants it; and the batch of edits that
  * lands as one step. Tested directly.
  */
 
@@ -81,7 +81,7 @@ export function placeFor(state: EditorState | null, args: Args, marked: Marked |
   const range = where === 'marked' || (where === 'after' && marked) ? marked : { from: state.selection.from, to: state.selection.to }
 
   if (!range) {
-    throw new Error('Nothing is marked for Hermes in this document: use at=selection, a heading, or end')
+    throw new Error('Nothing is marked for NasTech in this document: use at=selection, a heading, or end')
   }
 
   if (where === 'after') {
@@ -94,7 +94,7 @@ export function placeFor(state: EditorState | null, args: Args, marked: Marked |
   return where === 'marked' ? { from: range.from, to: range.to } : 'selection'
 }
 
-/** Where a write put its content, in words for its answer; `marked` says text was marked for Hermes, which `after` went under. */
+/** Where a write put its content, in words for its answer; `marked` says text was marked for NasTech, which `after` went under. */
 export function placeLabel(args: Args, marked = false): string {
   const at = text(args.at).toLowerCase()
 
@@ -139,7 +139,7 @@ export function targetFor(state: EditorState | null, args: Args, marked: Marked 
 
   if (at === 'marked') {
     if (!marked) {
-      throw new Error('Nothing is marked for Hermes in this document')
+      throw new Error('Nothing is marked for NasTech in this document')
     }
 
     return { from: marked.from, to: marked.to }
@@ -282,7 +282,7 @@ export interface DocumentReading {
   truncated?: boolean
 }
 
-/** A document as Hermes reads it: its outline and counts, and its content as Markdown or text (a section of it with `heading`). */
+/** A document as NasTech reads it: its outline and counts, and its content as Markdown or text (a section of it with `heading`). */
 export function readDocument(doc: PMNode, options: ReadOptions): DocumentReading {
   const page = pageOf({ type: 'doc', attrs: doc.attrs })
   const reading: DocumentReading = {

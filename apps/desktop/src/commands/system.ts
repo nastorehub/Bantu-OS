@@ -15,7 +15,7 @@ import { focusSettings, SETTINGS_SECTION_IDS } from '../features/settings/sectio
 const SECTION_ALIASES: Record<string, string> = {
   agents: 'agents',
   agent: 'agents',
-  hermes: 'agents',
+  nastech: 'agents',
   model: 'agents',
   account: 'agents',
   look: 'appearance',
@@ -227,14 +227,14 @@ export const systemCommands: readonly OsCommand[] = [
   {
     id: 'voice.wake.set',
     title: 'Wake word',
-    description: 'Turn the "hey hermes" wake word on or off.',
+    description: 'Turn the "hey nastech" wake word on or off.',
     tier: 'mutate',
     args: [{ name: 'enabled', type: 'boolean', description: 'true to listen for the wake word', required: true }],
     phrases: [
       { phrase: 'turn on the wake word', args: { enabled: true } },
-      { phrase: 'enable hey hermes', args: { enabled: true } },
+      { phrase: 'enable hey nastech', args: { enabled: true } },
       { phrase: 'turn off the wake word', args: { enabled: false } },
-      { phrase: 'stop listening for hey hermes', args: { enabled: false } }
+      { phrase: 'stop listening for hey nastech', args: { enabled: false } }
     ],
     run: async ({ enabled }) => {
       await setWakeWordEnabled(Boolean(enabled))
@@ -245,7 +245,7 @@ export const systemCommands: readonly OsCommand[] = [
   {
     id: 'voice.start',
     title: 'Start a voice conversation',
-    description: 'Open the microphone and talk to Hermes.',
+    description: 'Open the microphone and talk to NasTech.',
     tier: 'act',
     args: [],
     phrases: ['start listening', 'talk to me'],
@@ -262,7 +262,7 @@ export const systemCommands: readonly OsCommand[] = [
     description: 'Close the microphone and end the conversation.',
     tier: 'read',
     args: [],
-    phrases: ['stop listening', 'end the conversation', 'goodbye hermes'],
+    phrases: ['stop listening', 'end the conversation', 'goodbye nastech'],
     hidden: true,
     run: async () => {
       await endConversation('user')

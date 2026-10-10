@@ -30,8 +30,8 @@ await build({
   external: ['electron', 'node-pty', 'x11', 'usocket'],
   banner: {
     js: [
-      "import { createRequire as __hermesCreateRequire } from 'node:module';",
-      'const require = __hermesCreateRequire(import.meta.url);'
+      "import { createRequire as __nastechCreateRequire } from 'node:module';",
+      'const require = __nastechCreateRequire(import.meta.url);'
     ].join('\n')
   }
 })

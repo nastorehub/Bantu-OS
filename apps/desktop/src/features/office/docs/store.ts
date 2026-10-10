@@ -24,7 +24,7 @@ export const $find = atom<{ key: string; replace: boolean; at: number } | null>(
 /** A request to edit the link at the selection (⌘K), for one document. */
 export const $linkEdit = atom<{ key: string; at: number } | null>(null)
 
-/** Each document's pages as the page view last laid them out, by its key: the status bar, a table of contents and Hermes read them. */
+/** Each document's pages as the page view last laid them out, by its key: the status bar, a table of contents and NasTech read them. */
 export const $pages = atom<Readonly<Record<string, PageMap>>>({})
 
 /** Where something is on screen, in window pixels. */

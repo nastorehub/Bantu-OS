@@ -2,12 +2,12 @@ import type { OfficeDocSummary, OfficePresence } from '../../../shared/ipc.ts'
 import { baseName, OFFICE_APP_NAMES, type OfficeApp } from '../../../shared/office/files.ts'
 
 /*
- * What Hermes's Office commands share, without a window or I/O: the open documents as one list
+ * What NasTech's Office commands share, without a window or I/O: the open documents as one list
  * (every window's report, with what this window knows better), the one a command names, a line
- * that tells Hermes what is in front, and names for new files. Tested directly.
+ * that tells NasTech what is in front, and names for new files. Tested directly.
  */
 
-/** One open document, as Hermes reads it. */
+/** One open document, as NasTech reads it. */
 export interface OfficeEntry {
   app: OfficeApp
   key: string
@@ -87,7 +87,7 @@ export function tildePath(file: string, home: string): string {
   return home && (file === home || file.startsWith(`${home}/`)) ? `~${file.slice(home.length)}` : file
 }
 
-/** A full path from what Hermes or the person typed (`~/…` works); trailing slashes go. */
+/** A full path from what NasTech or the person typed (`~/…` works); trailing slashes go. */
 export function resolvePath(input: string, home: string): string {
   let value = input.trim()
 
@@ -119,7 +119,7 @@ function describeEntry(entry: OfficeEntry, home: string): string {
   return parts.join(', ')
 }
 
-/** One line for Hermes: the Office document in front, its selection, and what else is open; null when nothing is. */
+/** One line for NasTech: the Office document in front, its selection, and what else is open; null when nothing is. */
 export function describeOffice(entries: readonly OfficeEntry[], home = ''): string | null {
   if (!entries.length) {
     return null
@@ -132,7 +132,7 @@ export function describeOffice(entries: readonly OfficeEntry[], home = ''): stri
   return `Office: in front is ${describeEntry(front, home)}${rest}.`
 }
 
-/** A file's name with its extension, for what Hermes says about files on disk. */
+/** A file's name with its extension, for what NasTech says about files on disk. */
 export const fileName = (file: string): string => file.split('/').pop() || file
 
 /** A file name for a new document: a name without characters that cannot name a file, with the extension the format has. */

@@ -1,11 +1,11 @@
 /**
- * Variables that tie a process to a Hermes session, or to a Herald OS backend. Hermes passes a turn's
- * HERMES_SESSION_* on to every command the turn runs, and a process that binds no session of its own
- * (the `hermes` CLI) takes them as its own: a Herald OS started by such a command would hand that
+ * Variables that tie a process to a NasTech session, or to a Herald OS backend. NasTech passes a turn's
+ * NASTECH_SESSION_* on to every command the turn runs, and a process that binds no session of its own
+ * (the `nastech` CLI) takes them as its own: a Herald OS started by such a command would hand that
  * session, and the backend's HERALD_OS markers, to its backend and to every terminal and app it opens.
- * The names are Hermes's session context (gateway/session_context.py) and its per-run markers.
+ * The names are NasTech's session context (gateway/session_context.py) and its per-run markers.
  */
-const INHERITED = /^(HERMES_SESSION_|HERMES_CRON_AUTO_DELIVER_|HERMES_BROWSER_CONTROL_)|^(HERMES_UI_SESSION_ID|HERMES_CRON_SESSION|HERMES_SINGLE_QUERY_SESSION|HERMES_KANBAN_TASK|HERALD_OS|HERALD_OS_CONTROL_SOCKET|HERALD_OS_CONTROL_TOKEN)$/
+const INHERITED = /^(NASTECH_SESSION_|NASTECH_CRON_AUTO_DELIVER_|NASTECH_BROWSER_CONTROL_)|^(NASTECH_UI_SESSION_ID|NASTECH_CRON_SESSION|NASTECH_SINGLE_QUERY_SESSION|NASTECH_KANBAN_TASK|HERALD_OS|HERALD_OS_CONTROL_SOCKET|HERALD_OS_CONTROL_TOKEN)$/
 
 export function isInheritedSessionVariable(name: string): boolean {
   return INHERITED.test(name)

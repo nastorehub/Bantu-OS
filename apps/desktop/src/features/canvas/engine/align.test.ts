@@ -130,7 +130,7 @@ describe('aligning layers', () => {
   })
 })
 
-describe('align arguments for Hermes', () => {
+describe('align arguments for NasTech', () => {
   it('reads edges however they are written', () => {
     expect(alignEdgesFrom('left')).toEqual(['left'])
     expect(alignEdgesFrom('bottom right')).toEqual(['right', 'bottom'])

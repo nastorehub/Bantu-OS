@@ -7,7 +7,7 @@ import { insertNodes, type Op, type Place, type Range, type Target, targetRanges
 
 /*
  * The document API for reviewing: comments and their replies, and tables of contents, as operations
- * on a document like model.ts's, for the editor and for Hermes. A comment is a thread in the
+ * on a document like model.ts's, for the editor and for NasTech. A comment is a thread in the
  * document's `comments` attr whose text carries a `comment` mark with the thread's id; a change to
  * comments is one transaction, marks and threads together, so one step to undo. A table of
  * contents lists the headings as they are and keeps only the page each entry was last on.
@@ -289,7 +289,7 @@ function addThreads(state: EditorState, list: readonly CommentSpec[], options: C
  */
 export const addComment = (target: Target, text: string, options: CommentOptions = {}): Op => (state) => addThreads(state, [{ target, text }], options)
 
-/** Several comments by one author (Hermes's review, say) as one step. */
+/** Several comments by one author (NasTech's review, say) as one step. */
 export const addComments = (list: readonly CommentSpec[], author?: string): Op => (state) => addThreads(state, list, author === undefined ? {} : { author })
 
 export function replyToComment(id: string, text: string, author?: string): Op {

@@ -90,9 +90,9 @@ export async function installThemes(url: string): Promise<string[]> {
 
 let lastSkinSignature = ''
 
-/** Hermes's skin changed (or the gateway reconnected): restyle Herald OS when the person asked for that. */
+/** NasTech's skin changed (or the gateway reconnected): restyle Herald OS when the person asked for that. */
 async function followSkin(skin: { name?: string; colors?: Record<string, string> } | null | undefined): Promise<void> {
-  if (!skin || !$prefs.get().followHermesSkin || !skin.name || skin.name === HERALD_SKIN) {
+  if (!skin || !$prefs.get().followNasTechSkin || !skin.name || skin.name === HERALD_SKIN) {
     return
   }
 
@@ -104,7 +104,7 @@ async function followSkin(skin: { name?: string; colors?: Record<string, string>
   }
 
   lastSkinSignature = signature
-  await updatePrefs({ themeName: `hermes-${skin.name}`, theme: 'ocean', accent: 'blue', themeColors: colors, themeScheme: schemeOf(colors), wallpaper: undefined })
+  await updatePrefs({ themeName: `nastech-${skin.name}`, theme: 'ocean', accent: 'blue', themeColors: colors, themeScheme: schemeOf(colors), wallpaper: undefined })
 }
 
 let bound = false

@@ -16,12 +16,12 @@ import { BackendManager, WAIT_POLL_MS, waitingReason } from './manager.ts'
 let dir: string
 let manager: BackendManager
 
-/** A Hermes whose `serve` exits at once, so a start gets as far as spawning it and no further. */
-const installed = (): BackendRuntime => ({ kind: 'managed', label: 'managed Hermes install', root: dir, command: [process.execPath, '-e', 'process.exit(3)'] })
+/** A NasTech whose `serve` exits at once, so a start gets as far as spawning it and no further. */
+const installed = (): BackendRuntime => ({ kind: 'managed', label: 'managed NasTech install', root: dir, command: [process.execPath, '-e', 'process.exit(3)'] })
 
 beforeEach(() => {
   dir = fs.mkdtempSync(path.join(os.tmpdir(), 'herald-manager-'))
-  vi.stubEnv('HERMES_HOME', dir)
+  vi.stubEnv('NASTECH_HOME', dir)
   vi.stubEnv('HERALD_OS_BACKEND_URL', undefined)
   vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] })
   found.runtime = null
@@ -36,8 +36,8 @@ afterEach(async () => {
   fs.rmSync(dir, { recursive: true, force: true })
 })
 
-describe('BackendManager without a Hermes to start', () => {
-  it('waits, then starts the Hermes that gets installed', async () => {
+describe('BackendManager without a NasTech to start', () => {
+  it('waits, then starts the NasTech that gets installed', async () => {
     await manager.start()
     expect(manager.getState()).toMatchObject({ phase: 'waiting', error: waitingReason(null) })
 
@@ -46,11 +46,11 @@ describe('BackendManager without a Hermes to start', () => {
 
     found.runtime = installed()
     vi.advanceTimersByTime(WAIT_POLL_MS)
-    expect(manager.getState()).toMatchObject({ phase: 'starting', runtime: { label: 'managed Hermes install' } })
+    expect(manager.getState()).toMatchObject({ phase: 'starting', runtime: { label: 'managed NasTech install' } })
     await vi.waitFor(() => expect(manager.getState().phase).toBe('restarting'))
   })
 
-  it("waits for the image's first-boot install even once Hermes is there", async () => {
+  it("waits for the image's first-boot install even once NasTech is there", async () => {
     found.runtime = installed()
     found.install = 'offline'
     await manager.start()

@@ -131,7 +131,7 @@ const Anthropic: Logo = ({ size }) => (
   </svg>
 )
 
-const Nous: Logo = ({ size }) => (
+const NasTech: Logo = ({ size }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true">
     <rect width="24" height="24" rx="6" fill="#0f0f13" />
     <path fill="none" stroke="#f4f0e6" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" d="M6.5 17.5v-11l11 11v-11" />
@@ -154,7 +154,7 @@ const BRANDS: [RegExp, Logo][] = [
   [/whatsapp/i, WhatsApp],
   [/openai|codex|chatgpt/i, OpenAI],
   [/anthropic|claude/i, Anthropic],
-  [/\bnous\b/i, Nous]
+  [/\bnastech\b/i, NasTech]
 ]
 
 export function findBrand(keys: readonly (string | undefined)[]): Logo | null {

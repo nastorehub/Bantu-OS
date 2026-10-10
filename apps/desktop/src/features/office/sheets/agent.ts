@@ -16,7 +16,7 @@ import { addSheet, cellFor, type CellInput, describeWorkbook, filterRange, forma
 import { sheetsSession as session } from './store.ts'
 
 /*
- * What Hermes (and voice, the command bar and `herald-os sheets`) does in Herald Sheets. A command
+ * What NasTech (and voice, the command bar and `herald-os sheets`) does in Herald Sheets. A command
  * works on the workbook it names or the one in front. Open in a window, each change is one step to
  * undo there and saves the way the person's own edits do; a file that is not open is changed with
  * nothing drawn and written back, unless that would lose something Herald Sheets cannot keep.
@@ -207,7 +207,7 @@ export async function create(args: Args): Promise<Outcome> {
       await withHeadlessSheets(model, async (on) => {
         await writeRange(on, { range: 'A1', values })
 
-        // The template's formats fit its own rows, not values Hermes brought.
+        // The template's formats fit its own rows, not values NasTech brought.
         if (template && !given) {
           for (const entry of template.formats) {
             await setFormat(on, entry)

@@ -32,7 +32,7 @@ import { deleteCustomTheme, loadCustomThemes, saveCustomTheme } from './theme-st
 import { THEMES } from './themes.ts'
 
 /*
- * What Hermes (and voice, the command bar and `herald-os slides`) does with Herald Slides' depth:
+ * What NasTech (and voice, the command bar and `herald-os slides`) does with Herald Slides' depth:
  * the slide master and its layouts, backgrounds, the header and footer, themes of the person's own,
  * transitions, groups, connectors, table borders, fills and slides from a sheet. As in agent.ts, a
  * command works on the presentation it names or the one in front, and each change is one step to

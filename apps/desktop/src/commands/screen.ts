@@ -6,13 +6,13 @@ import { openAsk } from '../store/surface.ts'
 import { loadUsage } from '../store/usage.ts'
 import { showPage } from '../store/windows.ts'
 
-/* What is on the screen (ask about part of it) and what Hermes has used. */
+/* What is on the screen (ask about part of it) and what NasTech has used. */
 
 export const screenCommands: readonly OsCommand[] = [
   {
     id: 'screen.askRegion',
     title: 'Ask about part of the screen',
-    description: 'Select part of the screen, then ask Hermes about it (the selection is attached as an image).',
+    description: 'Select part of the screen, then ask NasTech about it (the selection is attached as an image).',
     tier: 'act',
     args: [{ name: 'question', type: 'string', description: 'The question, if already known' }],
     phrases: ['ask about part of the screen', 'ask about this part of the screen', 'what is this on my screen'],
@@ -23,7 +23,7 @@ export const screenCommands: readonly OsCommand[] = [
         return fail('Nothing was selected.')
       }
 
-      // Hermes asked for the picture itself: hand it the file instead of opening a prompt for the person.
+      // NasTech asked for the picture itself: hand it the file instead of opening a prompt for the person.
       if (context.source === 'agent') {
         return ok(`Captured the selection as ${file}`, { data: { file } })
       }
@@ -42,7 +42,7 @@ export const screenCommands: readonly OsCommand[] = [
   {
     id: 'usage.show',
     title: 'Show usage',
-    description: "Show how much Hermes has used this week and what is left on the model plan (Settings > Usage).",
+    description: "Show how much NasTech has used this week and what is left on the model plan (Settings > Usage).",
     tier: 'read',
     args: [],
     phrases: ['how much have i used', 'show my usage', 'how many tokens have i used', 'how much of my plan is left'],

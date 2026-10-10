@@ -29,7 +29,7 @@ export function MemoryPage() {
   const memory = useStore($memory)
   const sessions = useStore($sessions)
   const toolset = useMemoryToolset()
-  const hermesHome = env?.hermesHome ?? null
+  const nastechHome = env?.nastechHome ?? null
 
   const [query, setQuery] = useState('')
   const [filter, setFilter] = useState<Filter>('all')
@@ -38,10 +38,10 @@ export function MemoryPage() {
   const [busy, setBusy] = useState(false)
 
   useEffect(() => {
-    if (hermesHome) {
-      void loadMemory(hermesHome)
+    if (nastechHome) {
+      void loadMemory(nastechHome)
     }
-  }, [hermesHome])
+  }, [nastechHome])
 
   // A command (voice, agent) asked the page to filter or select: follow it.
   const focus = useStore($memoryFocus)
@@ -70,18 +70,18 @@ export function MemoryPage() {
   const selected = filtered.find(entry => entry.id === selectedId) ?? filtered[0] ?? null
   const related = useMemo(() => (selected ? countRelatedSessions(selected, sessions) : 0), [selected, sessions])
   const editable = selected ? !(memory.files?.[selected.file]?.truncated ?? false) : false
-  const loading = !hermesHome || (memory.loading && !memory.loaded)
+  const loading = !nastechHome || (memory.loading && !memory.loaded)
 
   /** Run one write: optimistic in the store, honest re-read after, toast either way. */
   const mutate = async (done: string, failed: string, action: (home: string) => Promise<void>): Promise<boolean> => {
-    if (!hermesHome || busy) {
+    if (!nastechHome || busy) {
       return false
     }
 
     setBusy(true)
 
     try {
-      await action(hermesHome)
+      await action(nastechHome)
       notify({ title: done, level: 'success' })
 
       return true
@@ -121,17 +121,17 @@ export function MemoryPage() {
   }
 
   const reload = () => {
-    if (hermesHome) {
-      void loadMemory(hermesHome).then(() => notify({ title: 'Memory reloaded', level: 'info', toast: false }))
+    if (nastechHome) {
+      void loadMemory(nastechHome).then(() => notify({ title: 'Memory reloaded', level: 'info', toast: false }))
     }
   }
 
   const openFile = (file: MemoryFile) => {
-    if (!hermesHome) {
+    if (!nastechHome) {
       return
     }
 
-    void window.heraldOS.fs.openPath(memoryPath(hermesHome, file)).catch(err => notify({ title: `Could not open ${file}`, body: errorMessage(err), level: 'error' }))
+    void window.heraldOS.fs.openPath(memoryPath(nastechHome, file)).catch(err => notify({ title: `Could not open ${file}`, body: errorMessage(err), level: 'error' }))
   }
 
   const count = filtered.length
@@ -141,14 +141,14 @@ export function MemoryPage() {
       <PageHeader
         icon="memory"
         title="Memory"
-        subtitle="What Hermes knows, and why."
+        subtitle="What NasTech knows, and why."
         actions={
           <>
-            <GlassButton variant="primary" onClick={() => setAdding(true)} disabled={!hermesHome || adding}>
+            <GlassButton variant="primary" onClick={() => setAdding(true)} disabled={!nastechHome || adding}>
               <IconPlus />
               Add memory
             </GlassButton>
-            <MemoryMenu onReload={reload} onOpenFile={openFile} disabled={!hermesHome} />
+            <MemoryMenu onReload={reload} onOpenFile={openFile} disabled={!nastechHome} />
           </>
         }
       />
@@ -189,7 +189,7 @@ export function MemoryPage() {
                   <EmptyGlass
                     icon={<IconBrain />}
                     title="Nothing remembered yet"
-                    description="Hermes saves what matters as you work together. Add the first memory yourself, or just start a conversation."
+                    description="NasTech saves what matters as you work together. Add the first memory yourself, or just start a conversation."
                     action={
                       <GlassButton size="sm" variant="primary" onClick={() => setAdding(true)}>
                         <IconPlus />

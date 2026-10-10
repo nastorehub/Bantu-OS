@@ -46,7 +46,7 @@ const match = (text: string) => matchIntent(text, commands)
 
 describe('normaliseUtterance', () => {
   it('drops the wake word, politeness and punctuation', () => {
-    expect(normaliseUtterance('Hey Hermes, could you please open Missions?')).toBe('open missions')
+    expect(normaliseUtterance('Hey NasTech, could you please open Missions?')).toBe('open missions')
     expect(normaliseUtterance('Open the memory page, please.')).toBe('open the memory page')
     expect(normaliseUtterance("I'd like to see my automations now")).toBe('see my automations')
   })
@@ -55,7 +55,7 @@ describe('normaliseUtterance', () => {
 describe('matchIntent', () => {
   it('routes simple opens through the open router with articles stripped', () => {
     expect(match('open missions')).toMatchObject({ command: 'open.any', args: { name: 'missions' } })
-    expect(match('Hey Hermes, open the memory')).toMatchObject({ command: 'open.any', args: { name: 'memory' } })
+    expect(match('Hey NasTech, open the memory')).toMatchObject({ command: 'open.any', args: { name: 'memory' } })
     expect(match('show me my downloads')).toMatchObject({ command: 'open.any', args: { name: 'downloads' } })
     expect(match('launch Safari')).toMatchObject({ command: 'open.any', args: { name: 'Safari' } })
   })
@@ -82,7 +82,7 @@ describe('matchIntent', () => {
     expect(match('forget that I like tea')).toBeNull()
   })
 
-  it('hands reasoning and long requests to Hermes', () => {
+  it('hands reasoning and long requests to NasTech', () => {
     expect(match('open the file I was editing yesterday afternoon in the herald project')).toBeNull()
     expect(match('why is my disk full')).toBeNull()
     expect(match('write a summary of my missions')).toBeNull()
@@ -91,7 +91,7 @@ describe('matchIntent', () => {
   })
 
   it('routes dictation to text.type with the exact words, even when it sounds like a question', () => {
-    expect(match('Hey Hermes, type how hi are you?')).toMatchObject({ command: 'text.type', args: { text: 'how hi are you?' } })
+    expect(match('Hey NasTech, type how hi are you?')).toMatchObject({ command: 'text.type', args: { text: 'how hi are you?' } })
     expect(match('type why is the sky blue and write me a long essay about it please')).toMatchObject({ command: 'text.type' })
   })
 
@@ -102,7 +102,7 @@ describe('matchIntent', () => {
   })
 
   it('opens the app launcher for "open apps"', () => {
-    expect(match('Hey Hermes, open Apps.')).toMatchObject({ command: 'overlay.applications' })
+    expect(match('Hey NasTech, open Apps.')).toMatchObject({ command: 'overlay.applications' })
     expect(match('show all apps')).toMatchObject({ command: 'overlay.applications' })
   })
 
@@ -115,7 +115,7 @@ describe('matchIntent', () => {
   })
 
   it('starts builds and opens the Studio', () => {
-    expect(match('Hey Hermes, create a website for a hair salon.')).toMatchObject({ command: 'build.start', args: { goal: 'a website for a hair salon' } })
+    expect(match('Hey NasTech, create a website for a hair salon.')).toMatchObject({ command: 'build.start', args: { goal: 'a website for a hair salon' } })
     expect(match('build me an app that tracks my runs')).toMatchObject({ command: 'build.start', args: { goal: 'an app that tracks my runs' } })
     expect(match('build me a portfolio site')).toMatchObject({ command: 'build.start', args: { goal: 'a portfolio site' } })
     // The transcriber often loses the name after "hey", or mishears it.
@@ -145,10 +145,10 @@ describe('document requests', () => {
   ]
   const route = (text: string, context?: MatchContext) => matchIntent(text, withFiles, context)
 
-  it('hands finding, renaming and filing documents to Hermes, whole', () => {
+  it('hands finding, renaming and filing documents to NasTech, whole', () => {
     for (const text of [
       'Find the invoice from Acme in my Downloads, rename it properly and put it where it belongs.',
-      'Hey Hermes, file the invoices in this folder.',
+      'Hey NasTech, file the invoices in this folder.',
       'file these',
       'Can you rename this file properly?',
       'put it where it belongs',
@@ -172,11 +172,11 @@ describe('document requests', () => {
     expect(route('show me my downloads')).toMatchObject({ command: 'open.any', args: { name: 'downloads' } })
   })
 
-  it('sends "undo that" to Hermes right after Hermes acted', () => {
+  it('sends "undo that" to NasTech right after NasTech acted', () => {
     expect(route('undo that')).toMatchObject({ command: 'edit.undo' })
-    expect(route('undo that', { afterHermesAction: true })).toBeNull()
-    expect(route('Take that back.', { afterHermesAction: true })).toBeNull()
-    expect(route('copy that', { afterHermesAction: true })).toMatchObject({ command: 'edit.copy' })
+    expect(route('undo that', { afterNasTechAction: true })).toBeNull()
+    expect(route('Take that back.', { afterNasTechAction: true })).toBeNull()
+    expect(route('copy that', { afterNasTechAction: true })).toMatchObject({ command: 'edit.copy' })
   })
 })
 
@@ -201,10 +201,10 @@ describe('Office requests', () => {
   ]
   const route = (text: string) => matchIntent(text, withOffice)
 
-  it('hands making and changing documents, sheets and decks to Hermes, whole', () => {
+  it('hands making and changing documents, sheets and decks to NasTech, whole', () => {
     for (const text of [
       'Make a budget for my trip.',
-      'Hey Hermes, write a cover letter',
+      'Hey NasTech, write a cover letter',
       'draft a report on our Q3 numbers',
       'turn this into slides',
       'Make this a table.',
@@ -261,7 +261,7 @@ describe('Office requests', () => {
     expect(route('hide the sidebar')).toMatchObject({ command: 'sidebar.toggle', args: { collapsed: true } })
   })
 
-  it('keeps the bare Herald Slides commands on the fast path and hands work on a deck to Hermes', () => {
+  it('keeps the bare Herald Slides commands on the fast path and hands work on a deck to NasTech', () => {
     expect(route('open Herald Slides')).toMatchObject({ command: 'slides.open' })
     expect(route('open slides')).toMatchObject({ command: 'slides.open' })
     expect(route('open the presentation app')).toMatchObject({ command: 'slides.open' })
@@ -281,7 +281,7 @@ describe('Office requests', () => {
       'put my budget table on a slide',
       'go to slide 3',
       'show slide 3',
-      'Hey Hermes, create a presentation from my report'
+      'Hey NasTech, create a presentation from my report'
     ]) {
       expect(route(text), text).toBeNull()
     }

@@ -6,7 +6,7 @@ import path from 'node:path'
 import type { AudioWsKind, BackendRuntime, BackendState, RestRequest } from '../../shared/ipc.ts'
 import { osEnv } from '../env.ts'
 import { log } from '../log.ts'
-import { hermesHome, heraldOsDataDir } from '../paths.ts'
+import { nastechHome, heraldOsDataDir } from '../paths.ts'
 import { ensureBridgePlugin } from './bridge-plugin.ts'
 import { type AttachTarget, attachTarget, foreignGateway } from './coexist.ts'
 import { waitForStatus } from './probe.ts'
@@ -20,29 +20,29 @@ const STATUS_TIMEOUT_MS = 60_000
 const MAX_RESTARTS = 4
 const BACKOFF_MS = [1_000, 3_000, 7_000, 15_000]
 const LOG_TAIL_LINES = 200
-/** How often the shell looks again for a Hermes Agent to start while it waits for one. */
+/** How often the shell looks again for a NasTech Agent to start while it waits for one. */
 export const WAIT_POLL_MS = 3_000
 
-/** What the boot screen says while there is no Hermes to start (`install`: the image's note, see pendingInstall). */
+/** What the boot screen says while there is no NasTech to start (`install`: the image's note, see pendingInstall). */
 export function waitingReason(install: string | null): string {
   switch (install) {
     case null:
-      return 'No Hermes runtime found. Install Hermes Agent (curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash) or set HERALD_OS_HERMES_ROOT; Herald OS starts it as soon as it is installed.'
+      return 'No NasTech runtime found. Install NasTech Agent (curl -fsSL https://raw.githubusercontent.com/nastechresearch/nastech-agent/main/scripts/install.sh | bash) or set HERALD_OS_NASTECH_ROOT; Herald OS starts it as soon as it is installed.'
     case 'offline':
-      return 'Hermes Agent comes from the internet, and this computer was offline when it first started. Join a network and it installs by itself, which takes a few minutes; Herald OS starts it then.'
+      return 'NasTech Agent comes from the internet, and this computer was offline when it first started. Join a network and it installs by itself, which takes a few minutes; Herald OS starts it then.'
     case 'installing':
-      return 'Installing Hermes Agent. It takes a few minutes; Herald OS starts it when it is ready.'
+      return 'Installing NasTech Agent. It takes a few minutes; Herald OS starts it when it is ready.'
     case 'retrying':
-      return 'Hermes Agent did not install, so it tries again in a few minutes (journalctl -u herald-os-hermes says why). Herald OS starts it when it is ready.'
+      return 'NasTech Agent did not install, so it tries again in a few minutes (journalctl -u herald-os-nastech says why). Herald OS starts it when it is ready.'
     default:
-      return 'Hermes Agent is not installed yet. It installs by itself once this computer is online; Herald OS starts it then.'
+      return 'NasTech Agent is not installed yet. It installs by itself once this computer is online; Herald OS starts it then.'
   }
 }
 
 export type BackendListener = (state: BackendState) => void
 
 /**
- * Owns the `hermes serve` child: resolve -> spawn -> ready -> probe -> ready state, restart with
+ * Owns the `nastech serve` child: resolve -> spawn -> ready -> probe -> ready state, restart with
  * bounded backoff on unexpected exit, and REST forwarding that adds the token in main (ADR-007).
  */
 export class BackendManager {
@@ -66,7 +66,7 @@ export class BackendManager {
     return { ...this.state, logTail: this.tail.slice(-LOG_TAIL_LINES) }
   }
 
-  /** Process id of the running `hermes serve`, if any. */
+  /** Process id of the running `nastech serve`, if any. */
   childPid(): number | null {
     return this.child?.pid ?? null
   }
@@ -109,7 +109,7 @@ export class BackendManager {
     const { port, phase } = this.state
 
     if (!port || phase !== 'ready') {
-      throw new Error('Hermes backend is not ready')
+      throw new Error('NasTech backend is not ready')
     }
 
     const paths: Record<AudioWsKind, string> = { 'speak-stream': '/api/audio/speak-stream' }
@@ -121,7 +121,7 @@ export class BackendManager {
     const { baseUrl } = this.state
 
     if (!baseUrl || this.state.phase !== 'ready') {
-      throw new Error('Hermes backend is not ready')
+      throw new Error('NasTech backend is not ready')
     }
 
     if (!request.path.startsWith('/api/')) {
@@ -139,7 +139,7 @@ export class BackendManager {
     const response = await fetch(url, {
       method: request.method,
       headers: {
-        'X-Hermes-Session-Token': this.token,
+        'X-Nastech-Session-Token': this.token,
         ...(request.body === undefined ? {} : { 'Content-Type': 'application/json' })
       },
       body: request.body === undefined ? undefined : JSON.stringify(request.body),
@@ -227,11 +227,11 @@ export class BackendManager {
   }
 
   /**
-   * No Hermes to start: say why, and look again every few seconds. On the image that means waiting
-   * for firstboot.sh's note to go (Hermes is installed and set up then); elsewhere, for one to resolve.
+   * No NasTech to start: say why, and look again every few seconds. On the image that means waiting
+   * for firstboot.sh's note to go (NasTech is installed and set up then); elsewhere, for one to resolve.
    */
   private wait(install: string | null, generation: number): void {
-    log('backend', install ? `waiting for Hermes Agent to be installed (${install})` : 'no Hermes runtime found; waiting for one to be installed')
+    log('backend', install ? `waiting for NasTech Agent to be installed (${install})` : 'no NasTech runtime found; waiting for one to be installed')
     this.update({ phase: 'waiting', runtime: undefined, install: install ?? undefined, error: waitingReason(install) })
     this.waitTimer = setInterval(() => {
       if (generation !== this.startGeneration) {
@@ -243,7 +243,7 @@ export class BackendManager {
       const now = pendingInstall()
 
       if (!now && resolveBackendRuntime()) {
-        log('backend', 'Hermes Agent is installed; starting it')
+        log('backend', 'NasTech Agent is installed; starting it')
         void this.launch(0)
       } else if ((now ?? undefined) !== this.state.install) {
         this.update({ install: now ?? undefined, error: waitingReason(now) })
@@ -254,7 +254,7 @@ export class BackendManager {
   /** Use a backend that is already running (HERALD_OS_BACKEND_URL) instead of starting a second one. */
   private async attach(target: AttachTarget, attempt: number, generation: number): Promise<void> {
     this.token = target.token
-    this.update({ runtime: { kind: 'attached', label: `the Hermes backend at ${target.baseUrl}`, command: [] }, phase: 'starting' })
+    this.update({ runtime: { kind: 'attached', label: `the NasTech backend at ${target.baseUrl}`, command: [] }, phase: 'starting' })
 
     try {
       await waitForStatus(target.baseUrl, this.token, STATUS_TIMEOUT_MS)
@@ -282,9 +282,9 @@ export class BackendManager {
     }
   }
 
-  /** Another app's messaging gateway on this Hermes home (Hermes Desktop, say), for Settings to mention. */
+  /** Another app's messaging gateway on this NasTech home (NasTech Desktop, say), for Settings to mention. */
   sharedGateway(): { pid: number } | null {
-    return foreignGateway(hermesHome(), { appPid: process.pid, backendPid: this.child?.pid ?? null }, { alive: isProcessAlive, parentOf: parentPid })
+    return foreignGateway(nastechHome(), { appPid: process.pid, backendPid: this.child?.pid ?? null }, { alive: isProcessAlive, parentOf: parentPid })
   }
 
   private async spawnServe(runtime: BackendRuntime, generation: number): Promise<number> {
@@ -302,26 +302,26 @@ export class BackendManager {
 
     const env = serveEnvironment(process.env, {
       PATH: await loginShellPath(),
-      HERMES_HOME: hermesHome(),
+      NASTECH_HOME: nastechHome(),
       // Sessions start in the user's world, not inside the runtime checkout.
       TERMINAL_CWD: osEnv('DEFAULT_CWD') || os.homedir(),
-      HERMES_DASHBOARD_SESSION_TOKEN: this.token,
+      NASTECH_DASHBOARD_SESSION_TOKEN: this.token,
       // The loopback token exemption, in-process cron ticker and orphan reaping upstream key on
       // this flag; Herald OS spawns and owns the backend exactly the way Desktop does.
-      HERMES_DESKTOP: '1',
+      NASTECH_DESKTOP: '1',
       HERALD_OS: '1',
-      HERMES_PARENT_PID: String(process.pid),
-      // Remove parent-identity markers inherited from an outer Hermes session
-      // (the app may have been launched from a running Hermes CLI or Desktop
-      // shell). A leaked HERMES_PARENT_START_MARKER + HERMES_PARENT_NONCE pairs
+      NASTECH_PARENT_PID: String(process.pid),
+      // Remove parent-identity markers inherited from an outer NasTech session
+      // (the app may have been launched from a running NasTech CLI or Desktop
+      // shell). A leaked NASTECH_PARENT_START_MARKER + NASTECH_PARENT_NONCE pairs
       // with the marker-parsing watchdog in upstream web_server_lifecycle.py:
       // the backend would conclusively decide "parent replaced" against the
       // real Electron PID and exit immediately after setup.ready. With no
       // marker, the watchdog degrades to plain PID liveness, which is safe.
-      HERMES_PARENT_START_MARKER: undefined,
-      HERMES_PARENT_NONCE: undefined,
-      HERMES_SPAWN: undefined,
-      HERMES_DESKTOP_READY_FILE: readyFile,
+      NASTECH_PARENT_START_MARKER: undefined,
+      NASTECH_PARENT_NONCE: undefined,
+      NASTECH_SPAWN: undefined,
+      NASTECH_DESKTOP_READY_FILE: readyFile,
       PYTHONUNBUFFERED: '1',
       ...(this.control ? { HERALD_OS_CONTROL_SOCKET: this.control.socketPath, HERALD_OS_CONTROL_TOKEN: this.control.token } : {})
     })
@@ -348,7 +348,7 @@ export class BackendManager {
           fn()
         }
       }
-      const timer = setTimeout(() => settle(() => reject(new Error('timed out waiting for HERMES_BACKEND_READY'))), READY_TIMEOUT_MS)
+      const timer = setTimeout(() => settle(() => reject(new Error('timed out waiting for NASTECH_BACKEND_READY'))), READY_TIMEOUT_MS)
       // Fallback for interpreters whose fd 1 is not our pipe: upstream also publishes the port in a ready file.
       const filePoll = setInterval(() => {
         try {
@@ -391,7 +391,7 @@ export class BackendManager {
           this.child = null
         }
 
-        settle(() => reject(new Error(`hermes serve exited early (code ${code ?? 'null'}, signal ${signal ?? 'none'})`)))
+        settle(() => reject(new Error(`nastech serve exited early (code ${code ?? 'null'}, signal ${signal ?? 'none'})`)))
 
         if (settled && generation === this.startGeneration && !this.stopping && this.state.phase === 'ready') {
           this.scheduleRestart(this.state.attempt, `backend exited unexpectedly (code ${code ?? 'null'})`)
@@ -489,8 +489,8 @@ export class BackendManager {
 }
 
 /**
- * The environment `hermes serve` runs with: the app's, then `own`. A session the app inherited
- * (HERMES_SESSION_* and the rest, see session-env.ts) would otherwise be the backend's, and through
+ * The environment `nastech serve` runs with: the app's, then `own`. A session the app inherited
+ * (NASTECH_SESSION_* and the rest, see session-env.ts) would otherwise be the backend's, and through
  * it every gateway and command the backend starts.
  */
 export function serveEnvironment(inherited: NodeJS.ProcessEnv, own: NodeJS.ProcessEnv): NodeJS.ProcessEnv {

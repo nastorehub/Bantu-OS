@@ -21,21 +21,21 @@ export function offerCrashHelp(report: CrashReport): void {
   $crashes.set([report, ...$crashes.get().filter(entry => entry.id !== report.id)].slice(0, 20))
   notify({
     title: crashTitle(report),
-    body: 'Hermes can read the crash report and tell you what happened.',
+    body: 'NasTech can read the crash report and tell you what happened.',
     level: 'warn',
     key: `crash:${report.app.toLowerCase()}`,
     native: true,
     actions: [
-      { label: 'Ask Hermes', command: 'crash.diagnose', args: { crash: report.id } },
+      { label: 'Ask NasTech', command: 'crash.diagnose', args: { crash: report.id } },
       { label: `Mute ${report.app}`, command: 'crash.mute', args: { app: report.app } }
     ]
   })
 }
 
-/** Start a chat that hands the crash to Hermes with the diagnose-crash skill. */
+/** Start a chat that hands the crash to NasTech with the diagnose-crash skill. */
 export async function diagnoseCrash(report: CrashReport): Promise<string | null> {
   const chat = await createChat({ title: `Why ${report.app} crashed` })
-  showPage('hermes')
+  showPage('nastech')
 
   return sendPrompt(crashPrompt(report), { sessionId: chat.sessionId })
 }

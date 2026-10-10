@@ -42,7 +42,7 @@ describe('the open Office documents', () => {
     expect(isPathLike('~/a.docx') && isPathLike('/tmp/a.docx') && !isPathLike('Untitled 2')).toBe(true)
   })
 
-  it('tells Hermes what is in front, what is selected, and what else is open', () => {
+  it('tells NasTech what is in front, what is selected, and what else is open', () => {
     expect(describeOffice(officeEntries(presence), '/Users/sam')).toBe('Office: in front is Budget.xlsx in Herald Sheets (~/Budget.xlsx), selection Sheet1!B2:D9; also open: Notes.md (Herald Docs), Report.docx (Herald Docs).')
     expect(describeOffice([])).toBeNull()
 

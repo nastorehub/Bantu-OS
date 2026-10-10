@@ -2,7 +2,7 @@ import { useStore } from '@nanostores/react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { InstalledApp } from '../../shared/ipc.ts'
 import { OFFICE_APPS, type OfficeApp } from '../../shared/office/files.ts'
-import { AppGlyph, HermesAvatar } from '../components/app-icon.tsx'
+import { AppGlyph, NasTechAvatar } from '../components/app-icon.tsx'
 import { openInCanvas } from '../features/canvas/open.ts'
 import { OfficeChooser } from '../features/office/OfficeChooser.tsx'
 import { openInOffice } from '../features/office/open.ts'
@@ -103,7 +103,7 @@ export function Dock() {
     .join(',')
   const [chooser, setChooser] = useState<number | null>(null)
   const closeChooser = useCallback(() => setChooser(null), [])
-  const openHermes = () => {
+  const openNasTech = () => {
     if (main && main.phase !== 'minimized') {
       focusWindow(MAIN_WINDOW_ID)
     } else {
@@ -125,10 +125,10 @@ export function Dock() {
   const items = useMemo<DockItem[]>(() => {
     const list: DockItem[] = [
       {
-        id: 'hermes',
-        label: 'Hermes',
-        render: () => <HermesAvatar size={44} rounded={11} />,
-        onClick: openHermes,
+        id: 'nastech',
+        label: 'NasTech',
+        render: () => <NasTechAvatar size={44} rounded={11} />,
+        onClick: openNasTech,
         running: Boolean(main) && main.phase !== 'minimized'
       }
     ]

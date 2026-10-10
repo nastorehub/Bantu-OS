@@ -68,7 +68,7 @@ describe('buildCatchUp', () => {
     )
     expect(request.input).toContain('p2 site (~/Projects/site): files changed Saturday 09:15')
     expect(request.input).toContain(
-      'c1 "Build the coffee site", today 11:21, 14 messages; stopped before Hermes finished; unfinished step: "Add the menu page"; it began: "Build this: a website for a coffee shop"; Hermes\'s last reply: "The site is ready in ~/Projects/site."'
+      'c1 "Build the coffee site", today 11:21, 14 messages; stopped before NasTech finished; unfinished step: "Add the menu page"; it began: "Build this: a website for a coffee shop"; NasTech\'s last reply: "The site is ready in ~/Projects/site."'
     )
     expect(request.input).toContain('c2 "Write the launch post", today 12:40, asked but never answered')
     expect(request.input).toContain('e1 15:00-15:30 Design review')

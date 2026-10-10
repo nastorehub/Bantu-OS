@@ -4,15 +4,15 @@ import { cn } from '../../lib/cn.ts'
 import { isMainSurface, relayToMain } from '../../store/shell.ts'
 import { $voiceActive, toggleVoice } from '../../store/voice.ts'
 
-/** The composers' microphone: starts (or ends) a spoken conversation with Hermes. */
+/** The composers' microphone: starts (or ends) a spoken conversation with NasTech. */
 export function MicButton({ size = 17, className, disabled }: { size?: number; className?: string; disabled?: boolean }) {
   const active = useStore($voiceActive)
-  const label = active ? 'End voice conversation' : 'Talk to Hermes'
+  const label = active ? 'End voice conversation' : 'Talk to NasTech'
   const onClick = () => {
     if (isMainSurface) {
       void toggleVoice('button')
     } else {
-      // Overlay windows (panels mode) hand the conversation to the Hermes window.
+      // Overlay windows (panels mode) hand the conversation to the NasTech window.
       relayToMain({ type: 'voice', args: ['toggle'] })
     }
   }

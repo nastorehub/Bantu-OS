@@ -71,7 +71,7 @@ describe('chunkForCommentary', () => {
 describe('isStopPhrase', () => {
   it('matches whole-utterance stop commands regardless of case and punctuation', () => {
     expect(isStopPhrase('Stop.')).toBe(true)
-    expect(isStopPhrase("That's all, Hermes")).toBe(true)
+    expect(isStopPhrase("That's all, NasTech")).toBe(true)
     expect(isStopPhrase('okay stop')).toBe(true)
   })
 

@@ -21,7 +21,7 @@ import { freshName } from './templates/gallery.ts'
 import { savedTemplates } from './templates/saved.ts'
 
 /*
- * What Hermes (and voice, the command bar and `herald-os docs`) does in Herald Docs. A command
+ * What NasTech (and voice, the command bar and `herald-os docs`) does in Herald Docs. A command
  * works on the document it names or the one in front. Open in a window, each change is one step to
  * undo there and saves the way the person's own edits do; a file that is not open is read, changed
  * and written back, unless writing it would lose something Herald cannot keep (then it has to be
@@ -73,7 +73,7 @@ export async function reading(target: Local<DocJSON>): Promise<Reading> {
 }
 
 /**
- * Make one change: built from the document as it is (and the text marked for Hermes), it is one step
+ * Make one change: built from the document as it is (and the text marked for NasTech), it is one step
  * to undo in an open document, or the file written back.
  */
 export async function change(target: Local<DocJSON>, build: (state: EditorState, marked: Marked | null, live: boolean) => Op, options: { intoMarked?: boolean } = {}): Promise<{ changed: boolean; name: string; path: string | null; marked?: boolean }> {

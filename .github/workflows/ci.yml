@@ -26,7 +26,7 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - name: Fetch the pinned Hermes Agent snapshot
+      - name: Fetch the pinned NasTech Agent snapshot
         run: npm run sync-upstream
       - run: npm ci
       - run: npm run typecheck

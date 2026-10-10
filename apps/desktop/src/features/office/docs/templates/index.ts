@@ -8,7 +8,7 @@ import { essay, meetingNotes, proposal, report } from './reports.ts'
 /*
  * Herald Docs' built-in templates: each a pure function from the paper and the locale to a new
  * document with its own look, page setup, and headers and footers where they fit. The gallery
- * shows them when the person makes a document; Hermes makes documents from them by id.
+ * shows them when the person makes a document; NasTech makes documents from them by id.
  */
 
 export interface TemplateInfo {

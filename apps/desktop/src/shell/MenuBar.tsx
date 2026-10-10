@@ -179,7 +179,7 @@ function UsageMeter() {
   )
 }
 
-/** Backend/gateway health badge shown next to the brand while Hermes is not reachable. */
+/** Backend/gateway health badge shown next to the brand while NasTech is not reachable. */
 export function BackendBadge() {
   const backend = useStore($backend)
   const connection = useStore($connection)
@@ -189,7 +189,7 @@ export function BackendBadge() {
     return null
   }
 
-  return <span className="ml-2 rounded-full bg-warn/20 px-2 py-0.5 text-[11px] text-warn">{backend.phase === 'failed' ? 'Hermes offline' : backend.phase === 'waiting' ? 'Waiting for Hermes' : 'Starting Hermes'}</span>
+  return <span className="ml-2 rounded-full bg-warn/20 px-2 py-0.5 text-[11px] text-warn">{backend.phase === 'failed' ? 'NasTech offline' : backend.phase === 'waiting' ? 'Waiting for NasTech' : 'Starting NasTech'}</span>
 }
 
 export function MenuBar() {

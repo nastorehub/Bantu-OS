@@ -19,7 +19,7 @@ export interface NativeViewState {
 
 /**
  * Keep a native web view (owned by main) placed exactly over `element` inside window `win`. The view
- * shows only while the window is fully open and nothing the user needs sits above it (a Hermes panel,
+ * shows only while the window is fully open and nothing the user needs sits above it (a NasTech panel,
  * a window stacked on top); it leaves room for the voice pill and action captions.
  */
 export function useNativeView(viewId: string | null, element: RefObject<HTMLElement | null>, win: OSWindow, options: { active?: boolean; followFrameRadius?: boolean } = {}): NativeViewState {

@@ -9,7 +9,7 @@ export const $recording = atom<RecordingState>({ recording: false })
 
 const fileName = (file: string) => file.split('/').pop() ?? file
 
-/** After a screenshot: a notification that offers to mark it up, copy it, ask Hermes or show it. */
+/** After a screenshot: a notification that offers to mark it up, copy it, ask NasTech or show it. */
 export function offerCapture(file: string): void {
   notify({
     title: 'Screenshot saved',
@@ -19,13 +19,13 @@ export function offerCapture(file: string): void {
     actions: [
       { label: 'Edit', command: 'capture.edit', args: { file } },
       { label: 'Copy', command: 'capture.copy', args: { file } },
-      { label: 'Ask Hermes', command: 'capture.ask', args: { file } },
+      { label: 'Ask NasTech', command: 'capture.ask', args: { file } },
       { label: 'Show', command: 'files.show', args: { path: file } }
     ]
   })
 }
 
-/** Open "Ask Hermes" with a file attached: the command overlay on Linux, the ask panel on a Mac. */
+/** Open "Ask NasTech" with a file attached: the command overlay on Linux, the ask panel on a Mac. */
 export function askAbout(file: string, question = ''): void {
   if (isPanels) {
     openSurface('command', { type: 'ask', text: question, attachments: [file] })
@@ -53,7 +53,7 @@ export function bindRecording(): () => void {
     const before = $recording.get()
     $recording.set(state)
 
-    // The Hermes window says where a finished recording went (once, not in every window).
+    // The NasTech window says where a finished recording went (once, not in every window).
     if (isMainSurface && before.recording && !state.recording && state.file) {
       const file = state.file
       notify({

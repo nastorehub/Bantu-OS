@@ -1,6 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import { hermesHome } from './paths.ts'
+import { nastechHome } from './paths.ts'
 
 const MAX_TAIL = 400
 const tail: string[] = []
@@ -12,7 +12,7 @@ function ensureStream(): fs.WriteStream | null {
   }
 
   try {
-    const dir = path.join(hermesHome(), 'logs')
+    const dir = path.join(nastechHome(), 'logs')
     fs.mkdirSync(dir, { recursive: true })
     stream = fs.createWriteStream(path.join(dir, 'herald-os.log'), { flags: 'a' })
   } catch {

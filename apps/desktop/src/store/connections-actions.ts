@@ -38,7 +38,7 @@ export async function setConnectionEnabled(connection: Connection, enabled: bool
   switch (source.kind) {
     case 'mcp':
       await api.setMcpEnabled(source.server.name, enabled)
-      notify({ title: `${connection.name} ${enabled ? 'enabled' : 'disabled'}`, body: 'Takes effect on the next Hermes session.', level: 'success' })
+      notify({ title: `${connection.name} ${enabled ? 'enabled' : 'disabled'}`, body: 'Takes effect on the next NasTech session.', level: 'success' })
       break
     case 'messaging':
       await api.setPlatformEnabled(source.platform.id, enabled)

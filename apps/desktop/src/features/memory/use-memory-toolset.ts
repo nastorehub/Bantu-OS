@@ -11,7 +11,7 @@ interface ToolsetRow {
 }
 
 export interface MemoryToolsetState {
-  /** True when the `memory` toolset is disabled: Hermes cannot save or edit memories, but still uses the saved ones. */
+  /** True when the `memory` toolset is disabled: NasTech cannot save or edit memories, but still uses the saved ones. */
   paused: boolean
   /** False until GET /api/tools/toolsets has answered with a `memory` row. */
   known: boolean
@@ -20,8 +20,8 @@ export interface MemoryToolsetState {
 }
 
 /**
- * "Pause memory" = disable the `memory` toolset (PUT /api/tools/toolsets/memory {enabled}). Hermes
- * keeps that in `platform_toolsets.cli`, so the `hermes` command line is paused too. Saved memories
+ * "Pause memory" = disable the `memory` toolset (PUT /api/tools/toolsets/memory {enabled}). NasTech
+ * keeps that in `platform_toolsets.cli`, so the `nastech` command line is paused too. Saved memories
  * still reach every session, and an external memory provider such as Honcho keeps recalling and
  * saving. Optimistic: the override applies until the next successful refetch replaces it.
  */
@@ -38,7 +38,7 @@ export function useMemoryToolset(): MemoryToolsetState {
 
     try {
       await rest.put(`/api/tools/toolsets/memory`, { enabled: !paused })
-      notify({ title: paused ? 'Memory paused' : 'Memory resumed', body: paused ? 'Hermes stops saving to its own memory, in its CLI too, but still uses it.' : 'Hermes can save memories again.', level: 'success' })
+      notify({ title: paused ? 'Memory paused' : 'Memory resumed', body: paused ? 'NasTech stops saving to its own memory, in its CLI too, but still uses it.' : 'NasTech can save memories again.', level: 'success' })
     } catch (err) {
       setOverride(null)
       notify({ title: paused ? 'Could not pause memory' : 'Could not resume memory', body: err instanceof Error ? err.message : String(err), level: 'error' })

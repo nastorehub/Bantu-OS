@@ -21,7 +21,7 @@ export interface NotificationAction {
   args?: Record<string, unknown>
 }
 
-export interface HermesNotification {
+export interface NasTechNotification {
   id: string
   title: string
   body?: string
@@ -38,10 +38,10 @@ export interface HermesNotification {
   actions?: NotificationAction[]
 }
 
-export const $notifications = atom<HermesNotification[]>([])
+export const $notifications = atom<NasTechNotification[]>([])
 export const $notificationsOpen = atom(false)
 /** Transient toasts: the most recent unread notifications, shown for a few seconds. */
-export const $toasts = atom<HermesNotification[]>([])
+export const $toasts = atom<NasTechNotification[]>([])
 
 const MAX = 200
 let counter = 0
@@ -60,9 +60,9 @@ export interface NotifyInput {
   actions?: NotificationAction[]
 }
 
-export function notify(input: NotifyInput): HermesNotification {
+export function notify(input: NotifyInput): NasTechNotification {
   const existing = input.key ? $notifications.get().find(n => n.key === input.key) : undefined
-  const item: HermesNotification = {
+  const item: NasTechNotification = {
     id: existing?.id ?? `n${Date.now().toString(36)}${(counter++).toString(36)}`,
     title: input.title,
     body: input.body,
@@ -95,7 +95,7 @@ export function notify(input: NotifyInput): HermesNotification {
 let historyBound = false
 
 /**
- * Keep the notification list across restarts (the Hermes window only): load the last week once,
+ * Keep the notification list across restarts (the NasTech window only): load the last week once,
  * then save after every change. Other apps' notifications come back as plain entries, since the
  * app that sent them can no longer be told what was clicked.
  */
@@ -114,7 +114,7 @@ export function bindNotificationHistory(): () => void {
     .load()
     .then(saved => {
       const known = new Set($notifications.get().map(n => n.id))
-      const restored = (saved as HermesNotification[]).filter(n => !known.has(n.id)).map(n => ({ ...n, read: true, desktop: undefined }))
+      const restored = (saved as NasTechNotification[]).filter(n => !known.has(n.id)).map(n => ({ ...n, read: true, desktop: undefined }))
       $notifications.set([...$notifications.get(), ...restored].sort((a, b) => b.ts - a.ts).slice(0, MAX))
     })
     .catch(() => undefined)
@@ -177,7 +177,7 @@ export function reportDesktopAction(ref: DesktopNotificationRef, actionKey: stri
 }
 
 /** The user activated a desktop notification: report the chosen key and drop it from the list. */
-export function activateDesktopNotification(item: HermesNotification, actionKey = 'default'): void {
+export function activateDesktopNotification(item: NasTechNotification, actionKey = 'default'): void {
   if (item.desktop) {
     reportDesktopAction(item.desktop, actionKey)
   }
@@ -189,7 +189,7 @@ export function activateDesktopNotification(item: HermesNotification, actionKey 
 const urgencyLevel = (urgency: IncomingNotification['urgency']): NotificationLevel => (urgency === 'critical' ? 'error' : 'info')
 
 /** Push a notification another application sent (panels mode) into the shell's list and toasts. */
-export function notifyFromDesktop(incoming: IncomingNotification): HermesNotification {
+export function notifyFromDesktop(incoming: IncomingNotification): NasTechNotification {
   const title = incoming.summary.trim() || incoming.appName.trim() || 'Notification'
   const body = incoming.body.trim() || undefined
   // Same app re-sending the same id replaces the earlier entry instead of stacking.
@@ -231,7 +231,7 @@ export function bindNotificationEvents(): () => void {
       return
     }
 
-    notify({ title: 'Hermes', body: payload.text, level: levelFrom(payload.level), key: payload.key ?? undefined, surface: 'chat' })
+    notify({ title: 'NasTech', body: payload.text, level: levelFrom(payload.level), key: payload.key ?? undefined, surface: 'chat' })
   })
   const offClear = onGatewayEvent('notification.clear', event => {
     const key = event.payload?.key

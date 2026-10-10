@@ -2,7 +2,7 @@
 name: herald-os
 description: Act as the operating environment on this computer via the system bridge
 metadata:
-  hermes:
+  nastech:
     tags: [herald-os, system, macos, linux]
 ---
 
@@ -15,7 +15,7 @@ and render as clean cards in the shell.
 
 ## You are the OS's hands: `os_ui`
 
-The user is looking at the Herald OS shell (pages: overview, hermes, missions, memory, files,
+The user is looking at the Herald OS shell (pages: overview, nastech, missions, memory, files,
 automations, connections, settings; apps: terminal, system). When they ask to open, show, add,
 find or change something *in Herald OS*, do it with `os_ui` and then say what you did in one
 sentence. Never describe where a button is when you can press it.
@@ -128,7 +128,7 @@ read `skill_view name="herald-os-bridge:herald-docs"`,
 | "Add my backup script to the menu" | write `~/.config/herald-os/menu.json` (the `herald-os-tailor` skill has the format) |
 | "Put our company logo in About" / "Use this photo on the lock screen" | `os_ui` run `branding.set logo=<path>` / `branding.set lock=<path>` (`name=` for the line under the logo) |
 | "Install Claude Code" / "Get me Steam" / "Set up a Windows VM" / "What can I install?" | `os_ui` run `software.install name=...` (or `software.list`); on Linux `system_os` action=catalog_list / catalog_install id=... does the same. Say why when an entry is unavailable (the listing gives the reason) |
-| "Use my local model" / "Run Hermes on Ollama" | `os_ui` run `software.localModel server=ollama` to list models, then again with `model=...` |
+| "Use my local model" / "Run NasTech on Ollama" | `os_ui` run `software.localModel server=ollama` to list models, then again with `model=...` |
 | "Open Codex in the terminal" | `os_ui` run `software.agent name=codex` |
 | "Let me dictate into this app" / "I want to type an emoji" | `os_ui` run `dictation.toggle` / `emoji.pick` (the hotkeys are Super+Ctrl+X and Super+Ctrl+E, Cmd+Ctrl on a Mac) |
 | "Make Super+C copy like on Omarchy" | `os_ui` run `keymap.set keymap=omarchy` (Herald OS Linux; voice moves to Super+Shift+V) |
@@ -144,7 +144,7 @@ Herald OS notices these events: `login`, `wake`, `unlock`, `returned` (back afte
   `os_ui action=run command=automation.create args={"name": …, "event": "login", "prompt": …}`.
   For `crash` and `network-change`, `"match"` narrows it to a program or a Wi-Fi network. It shows
   on the Automations page as "When I log in"; runs keep their history like scheduled ones.
-- Something that is not a Hermes task (a script, a sound, syncing a folder): a hook. Write an
+- Something that is not a NasTech task (a script, a sound, syncing a folder): a hook. Write an
   executable script into `~/.config/herald-os/hooks/<event>.d/` (any name; files ending in
   `.sample` are ignored). It runs with the event as `$1` and `HERALD_EVENT`, its details as
   `HERALD_EVENT_<NAME>` (for example `HERALD_EVENT_APP`), and everything as JSON in
@@ -156,7 +156,7 @@ Herald OS notices these events: `login`, `wake`, `unlock`, `returned` (back afte
 - Read before you act: check what is on a port before killing it, list a folder before reorganising it.
 - Destructive actions (kill, trash, quit) always prompt the user; do not try to route around a denial.
 - Never delete permanently. `system_files` trashes; if the user insists on `rm`, explain the difference first.
-- Protected locations (`~/.ssh`, Keychains, Hermes secrets, system directories) are off limits; say so.
+- Protected locations (`~/.ssh`, Keychains, NasTech secrets, system directories) are off limits; say so.
 - When something needs macOS permission (Screen Recording, Automation), tell the user which System
   Settings pane to open.
 - Report in one or two short sentences with the concrete result (paths, pids, counts). No preamble.
@@ -191,7 +191,7 @@ logs from `journalctl`, trash from `gio trash`, notifications from `notify-send`
   (Linux) or `screensaver.set` with `{"enabled": true|false}`; `idle.set` changes when the screen
   locks, turns off and sleeps (minutes).
 - In process lists, `niri` is the compositor (it draws every window), the `electron` processes are
-  the Herald OS shell (menu bar, dock and the Hermes window) and `hermes` is you. Name them that way:
+  the Herald OS shell (menu bar, dock and the NasTech window) and `nastech` is you. Name them that way:
   this is the operating system, not an app running on one.
 
 ### `system_os`: Herald OS Linux's own chores
@@ -212,7 +212,7 @@ the tool is tiered, audited, and returns the CLI's output. It is unavailable on 
 | "Lock the screen" / "Put the computer to sleep" | `system_os` action=lock / suspend |
 | "Which themes are there?" / "Switch to the X theme" | `system_os` action=theme_list / theme_set name=X / theme_current |
 | "Update Herald OS" | `system_os` action=update |
-| "Show my missions" / "Open memory" | `system_os` action=show_page page=missions (overview, hermes, missions, memory, files, automations, connections, settings) |
+| "Show my missions" / "Open memory" | `system_os` action=show_page page=missions (overview, nastech, missions, memory, files, automations, connections, settings) |
 | "Open a terminal" / "Open the system panel" | `system_os` action=open_window window=terminal / system / chat-popout |
 | "Launch Obsidian" | `system_os` action=launch name=obsidian |
 | "Go to my Work space" | `system_os` action=focus_workspace name=work |

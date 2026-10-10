@@ -269,7 +269,7 @@ export function AutomationsPage() {
           )}
 
           {empty && (
-            <EmptyGlass icon={<IconRefresh />} title="No automations yet" description="Ask Hermes to brief you every morning, tidy your downloads, or check on something while you are away." action={newButton} className="min-h-64" />
+            <EmptyGlass icon={<IconRefresh />} title="No automations yet" description="Ask NasTech to brief you every morning, tidy your downloads, or check on something while you are away." action={newButton} className="min-h-64" />
           )}
 
           {!initialLoading && !jobs.error && all.length > 0 && (

@@ -1,7 +1,7 @@
 """Documents for ``system_documents``: what a PDF or a photo of a page says, the facts a filing needs
 (kind, vendor, date, number, total) and the folders a person already files into.
 
-The host adapters extract the text (PDFKit and Vision on macOS; pdftotext, the Hermes runtime's own
+The host adapters extract the text (PDFKit and Vision on macOS; pdftotext, the NasTech runtime's own
 converter and tesseract on Linux). Everything here works on that text, on PDF bytes or on folder
 listings and never runs a program, so it is tested with fixture strings on any platform. The hints
 are heuristics for the agent to check against the text, not answers."""
@@ -128,7 +128,7 @@ def plain_text(markdown: str) -> str:
 
 
 def text_with_python(path: Path, max_pages: int) -> DocumentText:
-    """PDF text without poppler: the Hermes runtime's own document converter (anydoc, which returns
+    """PDF text without poppler: the NasTech runtime's own document converter (anydoc, which returns
     the whole document as one block and names the pages that are scans) or pypdf, when importable."""
     count = count_pdf_pages(path.read_bytes()) or 1
     try:

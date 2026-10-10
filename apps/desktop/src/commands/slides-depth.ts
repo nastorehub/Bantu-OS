@@ -2,7 +2,7 @@ import type { CommandArg, OsCommand } from '../store/os-commands.ts'
 import { color, elements, fill, gradient, height, masterLayout, presentation, run, sheetArgs, shapeKind, slide, slides, width, x, y } from './slides-shared.ts'
 
 /*
- * Herald Slides' depth for Hermes: the slide master and its layouts, backgrounds, the header and
+ * Herald Slides' depth for NasTech: the slide master and its layouts, backgrounds, the header and
  * footer, custom themes, transitions, groups, connectors, table borders, fills and slides from a
  * sheet. Like the rest of slides.*, a command works on the presentation it names or the one in
  * front, and each change is one step to undo in an open presentation.

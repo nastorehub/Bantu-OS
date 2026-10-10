@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # Update Herald OS: the shell (repo + rebuild, or a newer release tarball in /opt/herald-os), one-shot
 # migrations, system packages (dnf on Fedora, pacman and the AUR helper on Arch, Omarchy's own updater
-# on Omarchy, the whole image with bootc on the Herald OS image), Flatpaks and Hermes Agent. `--check`
+# on Omarchy, the whole image with bootc on the Herald OS image), Flatpaks and NasTech Agent. `--check`
 # only reports and records whether anything is pending (the menu bar shows a dot). Channels
 # (~/.config/herald-os/channel): stable (default) or edge. A checkout tracks the repo's main branch on
 # both; a release tarball follows releases, with pre-releases on edge.
 #
-#   herald-os-update [--check] [--migrate] [--no-system] [--no-hermes]
+#   herald-os-update [--check] [--migrate] [--no-system] [--no-nastech]
 #
 # `--migrate` only runs pending one-shot migrations (linux/dev/build.sh calls it after every build).
 set -uo pipefail
@@ -23,13 +23,13 @@ IMAGE_SHELL=/usr/share/herald-os/app/resources/app.asar
 CHECK=0
 MIGRATE=0
 SYSTEM=1
-HERMES=1
+NASTECH=1
 for arg in "$@"; do
   case "$arg" in
     --check) CHECK=1 ;;
     --migrate) MIGRATE=1 ;;
     --no-system) SYSTEM=0 ;;
-    --no-hermes) HERMES=0 ;;
+    --no-nastech) NASTECH=0 ;;
     *) echo "unknown option $arg" >&2; exit 2 ;;
   esac
 done
@@ -256,13 +256,13 @@ if [[ $SYSTEM -eq 1 ]]; then
   fi
 fi
 
-if [[ $HERMES -eq 1 ]]; then
-  # The checkout in ~/.hermes/hermes-agent, in whichever layout its installer left; a Hermes that
+if [[ $NASTECH -eq 1 ]]; then
+  # The checkout in ~/.nastech/nastech-agent, in whichever layout its installer left; a NasTech that
   # came from another installer is that installer's to update.
-  mapfile -t hermes < <(herald-os hermes-command --managed 2>/dev/null)
-  if [[ ${#hermes[@]} -gt 0 ]]; then
-    echo "==> Hermes Agent"
-    "${hermes[@]}" update </dev/null >/dev/null 2>&1 || echo "WARNING: hermes update did not complete (run it in a terminal)"
+  mapfile -t nastech < <(herald-os nastech-command --managed 2>/dev/null)
+  if [[ ${#nastech[@]} -gt 0 ]]; then
+    echo "==> NasTech Agent"
+    "${nastech[@]}" update </dev/null >/dev/null 2>&1 || echo "WARNING: nastech update did not complete (run it in a terminal)"
   fi
 fi
 

@@ -16,7 +16,7 @@ echo "==> syncing $SRC -> $REPO"
 mkdir -p "$REPO"
 rsync -a --delete \
   --exclude node_modules --exclude dist --exclude release --exclude .git \
-  --exclude 'upstream/hermes-agent' --exclude 'linux/vm/build' --exclude '.DS_Store' \
+  --exclude 'upstream/nastech-agent' --exclude 'linux/vm/build' --exclude '.DS_Store' \
   "$SRC/" "$REPO/"
 
 bash "$HERE/build.sh"

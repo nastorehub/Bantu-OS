@@ -2,7 +2,7 @@
 name: herald-canvas
 description: Make and edit pictures in Herald Canvas, the layered image editor in Herald OS - posters, banners, thumbnails, collages and photo fixes through the canvas tool, with editable text and shape layers, layer effects (shadows, strokes, glows) copied between layers, masks, alignment and guides, auto tone and colour, filters (sharpen, denoise, blur), colour lookup tables, on-device background removal and content-aware fill, generated pictures placed where asked, Photoshop files opened and exported with their layers, how to plan an edit from a description, plus the .comp project format and every adjustment setting
 metadata:
-  hermes:
+  nastech:
     tags: [herald-os, canvas, images, design, photo, poster, layers, text, typography, effects, masks, alignment, guides, filters, sharpen, lut, background removal, content-aware fill, generative fill, photoshop, psd]
 ---
 
@@ -326,7 +326,7 @@ made. If you have no image generation tool, or it fails, say so in a sentence an
 ## Planning an edit from a description
 
 Requests like "make it moodier", "warmer and brighter", "put the logo bottom right" or "make the sky
-dramatic" come from the window's Ask Hermes field with the project, its layers and a preview.
+dramatic" come from the window's Ask NasTech field with the project, its layers and a preview.
 
 1. Look first: `canvas action=preview` and `canvas action=layers`. Decide what the request means
    for this picture (moodier: darker midtones, less saturation, cooler shadows, a vignette).

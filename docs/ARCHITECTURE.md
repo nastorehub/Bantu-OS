@@ -1,20 +1,20 @@
 # Herald OS Architecture
 
-Herald OS is an agent-native operating system: it makes Hermes Agent the primary interface between
+Herald OS is an agent-native operating system: it makes NasTech Agent the primary interface between
 the user and the computer. Herald OS Linux is the whole system (Fedora underneath, the Herald shell
 as the session); on macOS the same shell runs fullscreen over the macOS desktop. It is a separate
-product from Hermes Desktop: it consumes the upstream Hermes runtime unchanged and grows its own
+product from NasTech Desktop: it consumes the upstream NasTech runtime unchanged and grows its own
 shell on top.
 
 ## Three authorities
 
-The same seam rules upstream Hermes Desktop uses apply here:
+The same seam rules upstream NasTech Desktop uses apply here:
 
 | Party | Owns | Lives in |
 | --- | --- | --- |
 | Electron main | The machine: window/fullscreen lifecycle, backend process, PTYs, filesystem, app discovery, system stats, notifications, typed IPC | `apps/desktop/electron` |
 | Renderer (React) | The experience: surfaces, navigation, presentation, ephemeral interaction state | `apps/desktop/src` |
-| Hermes runtime | The work: sessions, model calls, tools, skills, memory, cron, approvals | the user's Hermes install (`$HERMES_HOME/hermes-agent`) |
+| NasTech runtime | The work: sessions, model calls, tools, skills, memory, cron, approvals | the user's NasTech install (`$NASTECH_HOME/nastech-agent`) |
 
 The renderer never touches Node or Electron directly; native power arrives through a narrow,
 typed preload bridge (`window.heraldOS`). Agent behaviour is never re-implemented in React.
@@ -27,8 +27,8 @@ flowchart LR
     Renderer[React renderer]
     Main --> Preload --> Renderer
   end
-  subgraph runtime [Hermes runtime in HERMES_HOME]
-    Serve["hermes serve (JSON-RPC + REST)"]
+  subgraph runtime [NasTech runtime in NASTECH_HOME]
+    Serve["nastech serve (JSON-RPC + REST)"]
     Agent[AIAgent, tools, skills, memory]
     Bridge[herald-os-bridge plugin]
     Serve --> Agent --> Bridge
@@ -58,17 +58,17 @@ Setup, session model and dev loop for Linux: `docs/LINUX.md`.
 ## Backend lifecycle
 
 1. Resolve a runtime through an ordered ladder (`apps/desktop/electron/backend/resolve.ts`):
-   `HERALD_OS_HERMES_ROOT` -> `$HERMES_HOME/hermes-agent` managed install (the `.hermes/bin/hermes`
-   launcher today's installers publish, else the `venv/bin/python` of earlier ones) -> `hermes` on
+   `HERALD_OS_NASTECH_ROOT` -> `$NASTECH_HOME/nastech-agent` managed install (the `.nastech/bin/nastech`
+   launcher today's installers publish, else the `venv/bin/python` of earlier ones) -> `nastech` on
    `PATH` or in `~/.local/bin`. Each candidate is probed before use. `herald-os` looks the same way
-   (`hermes_install`; `herald-os hermes-command` for scripts such as `firstboot.sh` and
+   (`nastech_install`; `herald-os nastech-command` for scripts such as `firstboot.sh` and
    `herald-os-update`). With no runtime the shell waits and looks again every few seconds; on the
-   image it also waits while `/var/lib/herald-os/hermes-pending` says the first boot's Hermes install
-   is still to come (`herald-os-hermes.service`).
-2. Spawn `hermes serve --host 127.0.0.1 --port 0` with `HERMES_DASHBOARD_SESSION_TOKEN` (random per
-   launch), `HERALD_OS=1`, and `HERMES_HOME`.
-3. Read `HERMES_BACKEND_READY port=N` from stdout, then poll `GET /api/status` with
-   `X-Hermes-Session-Token` until it answers.
+   image it also waits while `/var/lib/herald-os/nastech-pending` says the first boot's NasTech install
+   is still to come (`herald-os-nastech.service`).
+2. Spawn `nastech serve --host 127.0.0.1 --port 0` with `NASTECH_DASHBOARD_SESSION_TOKEN` (random per
+   launch), `HERALD_OS=1`, and `NASTECH_HOME`.
+3. Read `NASTECH_BACKEND_READY port=N` from stdout, then poll `GET /api/status` with
+   `X-Nastech-Session-Token` until it answers.
 4. Hand `{ wsUrl, baseUrl }` to the renderer. The renderer dials `ws://127.0.0.1:N/api/ws?token=...`
    with the upstream `JsonRpcGatewayClient`; REST calls go through main so the renderer only ever
    sees a capability, not a credential.
@@ -79,11 +79,11 @@ Setup, session model and dev loop for Linux: `docs/LINUX.md`.
 
 The wire is declared in Python (`tui_gateway/contracts`) and generated into
 `apps/shared/src/gateway-contract.generated.ts` upstream. Herald OS re-exports that file through
-`packages/hermes-client`, so a field the backend stops sending fails `tsc` here instead of drifting.
+`packages/nastech-client`, so a field the backend stops sending fails `tsc` here instead of drifting.
 
 Sessions are created with `source: "herald_os"`. Upstream only folds Desktop-only GUI tools into
 sessions whose source is `desktop`, so a Herald OS session never receives tools whose client half
-lives in Hermes Desktop.
+lives in NasTech Desktop.
 
 Server-to-client requests the shell answers: `approval`, `clarify`, `sudo`, `secret`. Anything else
 is declined with `-32601` so the backend treats it as unanswered rather than hanging.
@@ -95,7 +95,7 @@ Paths in this section and the next are relative to `apps/desktop`.
 The renderer draws a whole desktop: wallpaper, menu bar, dock, command bar (`Cmd+K`), notifications
 and a small window manager. Its apps are registered in `src/shell/apps.ts`:
 
-- **Pages** of the main Hermes window, picked from its sidebar: Overview, Hermes (chat), Missions,
+- **Pages** of the main NasTech window, picked from its sidebar: Overview, NasTech (chat), Missions,
   Memory, Files, Automations, Connections, Settings.
 - **Floating apps** with their own window: Terminal, System, Web, Studio, Herald Canvas, Herald
   Docs, Sheets and Slides, and a chat pop-out.
@@ -120,8 +120,8 @@ catalogue in `src/commands/`), so three callers drive the UI the same way:
 1. The command bar.
 2. The voice fast path (`src/lib/voice/intents.ts`), which runs simple requests such as "open
    missions" or "hide the sidebar" locally, without a model round-trip.
-3. Hermes itself, through the bridge's `os_ui` tool. Electron main serves a JSON-lines Unix socket
-   (`~/.hermes/herald-os/control.sock` in desktop mode, `$XDG_RUNTIME_DIR/herald-os/control.sock`
+3. NasTech itself, through the bridge's `os_ui` tool. Electron main serves a JSON-lines Unix socket
+   (`~/.nastech/herald-os/control.sock` in desktop mode, `$XDG_RUNTIME_DIR/herald-os/control.sock`
    in panels mode) and hands the backend its path and a per-launch token
    (`HERALD_OS_CONTROL_SOCKET`, `HERALD_OS_CONTROL_TOKEN`). The socket is readable only by the
    user (mode 0600) and refuses requests without the token. In panels mode it also serves the
@@ -141,7 +141,7 @@ The Overview leads with up to three threads of work the user may want to resume.
   words the user excluded are dropped before anything leaves main. `powerMonitor` turns a wake, an
   unlock or the end of a 15-minute idle stretch into a `context:returned` event when the user was
   away for at least ten minutes.
-- **The renderer** (`src/store/continuity.ts`) adds recent Hermes conversations and today's
+- **The renderer** (`src/store/continuity.ts`) adds recent NasTech conversations and today's
   calendar, numbers every entry (`f1`, `p1`, `c1`) and sends it with fixed instructions through the
   gateway's `llm.oneshot`: one stateless model call with no session, no tools and no transcript.
   `src/lib/continuity.ts` parses the JSON answer and keeps only items whose ids were in the
@@ -149,9 +149,9 @@ The Overview leads with up to three threads of work the user may want to resume.
   refreshed on boot (when older than ten minutes), when the user returns, and on demand.
 - **Acting stays with the user.** Continue reopens a thread's conversation (in Studio when it built
   the thread's project), its folder and its documents. The suggested next step is a button that
-  sends the prompt Hermes proposed. A return only updates the cards, or posts a notification when
+  sends the prompt NasTech proposed. A return only updates the cards, or posts a notification when
   another page is showing. `continuity.catchUp`, `continuity.continue` and `continuity.nextStep`
-  expose the same actions to voice, the command bar and Hermes.
+  expose the same actions to voice, the command bar and NasTech.
 
 The feature stays off until the user turns it on, because the names of files, projects,
 conversations and events go to the model provider.
@@ -176,9 +176,9 @@ The image editor (decision record: ADR-020; using it: [the manual](manual/canvas
   on-device models (`model-store.ts`).
 - **Workers** run what would stall the window: the ONNX models (`ai/ml-worker.ts`), PatchMatch
   (`ai/inpaint-worker.ts`) and Photoshop files (`psd/psd-worker.ts`, mapped by `psd/psd-map.ts`).
-- **Hermes** edits through the `canvas.*` commands (`src/commands/canvas.ts`, `agent.ts`), which change
+- **NasTech** edits through the `canvas.*` commands (`src/commands/canvas.ts`, `agent.ts`), which change
   the open document as one step and save it, or change the project on disk; the bridge's `canvas`
-  tool maps its actions to them. In panels mode the commands run in the Hermes window and the Canvas
+  tool maps its actions to them. In panels mode the commands run in the NasTech window and the Canvas
   window, its own process, reloads the project when it changes.
 
 ## Herald Office
@@ -189,7 +189,7 @@ and file access in `electron/office`.
 
 - **One frame for three apps** (`shell/OfficeWindow.tsx`): the menus (File and Edit shared, then
   the app's own) and their shortcuts in one table (`shell/commands.ts`), the document tabs, the
-  status bar with the Ask Hermes bar, and the dialogs. Each app's session (`session.ts`) opens,
+  status bar with the Ask NasTech bar, and the dialogs. Each app's session (`session.ts`) opens,
   saves, watches, prints and closes its documents through an adapter that reads, writes and prints
   its formats (`docs/adapter.ts` and so on); `shared/office/files.ts` says which formats each app
   opens and saves, and main builds its dialogs from it.
@@ -233,23 +233,23 @@ and file access in `electron/office`.
   Docs document and tables from a Sheets range by rule. PowerPoint files are written by PptxGenJS
   with a finishing pass and read by Herald's own DrawingML reader (`slides/pptx/`), and each file
   Herald saves carries its deck for exact reopening (`slides/pptx/herald-part.ts`).
-- **Hermes** works through the `docs.*`, `sheets.*`, `slides.*` and `office.list` commands
+- **NasTech** works through the `docs.*`, `sheets.*`, `slides.*` and `office.list` commands
   (`src/commands/docs.ts`, `docs-depth.ts`, `sheets.ts`, `sheets-depth.ts`, `slides.ts`,
   `office.ts`), which find their document in `agent.ts`: open in this window, the change is one
   transaction (Docs), one Univer undo group (Sheets) or one step of the deck's history (Slides), so
   it is one step to undo and saves the way the person's edits do; a file that is not open is
   changed and written back only when Herald keeps everything in it. In panels mode each Office app
-  is its own window, and main relays a command from the Hermes window to the window that has the
+  is its own window, and main relays a command from the NasTech window to the window that has the
   document open (`officeRun`). Each window's report carries its documents' selections, which
-  `office.list`, the `os_ui` state and spoken requests pass on to Hermes. The Ask Hermes bar and the
-  inline actions (`hermes/`) build each request from the live document and follow it in the
-  document's own Hermes session; a request marks the text it is about (`docs/marked.ts`), so the
-  answer lands there even after the person clicks elsewhere, and Review with Hermes leaves its
-  comments in one `docs.addComments` call (`hermes/docs-review.ts`). Dictation types into the page,
+  `office.list`, the `os_ui` state and spoken requests pass on to NasTech. The Ask NasTech bar and the
+  inline actions (`nastech/`) build each request from the live document and follow it in the
+  document's own NasTech session; a request marks the text it is about (`docs/marked.ts`), so the
+  answer lands there even after the person clicks elsewhere, and Review with NasTech leaves its
+  comments in one `docs.addComments` call (`nastech/docs-review.ts`). Dictation types into the page,
   the cell or the text box in front (`typing.ts`).
 - **Main** (`electron/office/`): `ipc.ts` shows the open and save dialogs, reads and writes files
   whole and atomically (inside the home folder, up to 512 MB), keeps what each window has open for
-  Hermes and relays `officeRun`. `file-watch.ts` watches each open file's folder, with a poll as a
+  NasTech and relays `officeRun`. `file-watch.ts` watches each open file's folder, with a poll as a
   safety net, and `watches.ts` ends each watch with its window. `print.ts` gives Export as PDF and
   Print one path: the window's print view is loaded, scripts off, in a hidden window that prints it
   to PDF bytes or through the system's print dialog, so paper shows what the PDF does.
@@ -260,7 +260,7 @@ and file access in `electron/office`.
 
 ## System bridge
 
-`plugins/herald-os-bridge` is a regular out-of-tree Hermes plugin. It registers a narrow toolset
+`plugins/herald-os-bridge` is a regular out-of-tree NasTech plugin. It registers a narrow toolset
 (`herald_os`) that exposes the host machine through explicit, permission-tiered tools. Execution
 happens on the backend host behind a `HostAdapter` abstraction (`darwin` and `linux` implemented;
 `windows` is a stub). Sensitive operations route through upstream's own approval gate
@@ -269,11 +269,11 @@ See [`SYSTEM-BRIDGE.md`](SYSTEM-BRIDGE.md).
 
 ## Upstream compatibility
 
-- The Python runtime is never forked: it is whatever `hermes update` installs.
+- The Python runtime is never forked: it is whatever `nastech update` installs.
 - Only `apps/shared/src` is compiled into Herald OS, from a pinned snapshot
   (`upstream/UPSTREAM.lock`, fetched by `scripts/sync-upstream.sh`).
 - The plugin uses only public plugin APIs (`register`, `ctx.register_tool`, `ctx.register_skill`,
-  `tools.approval.request_tool_approval`), and reads each turn's session source the way Hermes's own
+  `tools.approval.request_tool_approval`), and reads each turn's session source the way NasTech's own
   tools do (`gateway.session_context.get_session_env`) to keep its tools to Herald OS sessions.
 - Anything Herald OS needs from core that does not exist yet (for example a generic plugin
   server-request hook for client-side execution) is proposed upstream rather than patched locally.

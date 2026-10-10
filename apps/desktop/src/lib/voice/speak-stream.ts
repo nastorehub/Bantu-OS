@@ -4,7 +4,7 @@ import { atom } from 'nanostores'
 import { rest } from '../rest.ts'
 import { int16ToFloat } from './pcm.ts'
 
-/** Output level 0..1 while Hermes speaks, for the orb. */
+/** Output level 0..1 while NasTech speaks, for the orb. */
 export const $speakLevel = atom(0)
 
 export type SpeakStreamEnd = 'drained' | 'stopped' | 'fallback' | 'error'

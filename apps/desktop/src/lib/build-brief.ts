@@ -1,4 +1,4 @@
-// "Build …" requests: the project folder name and the brief Hermes gets, which asks it to work in a
+// "Build …" requests: the project folder name and the brief NasTech gets, which asks it to work in a
 // way the Studio can show (files through the file tools, servers in the background, a preview).
 
 const FILLER = new Set(['a', 'an', 'the', 'me', 'my', 'for', 'to', 'that', 'which', 'with', 'of', 'and', 'please', 'build', 'create', 'make', 'some', 'simple', 'new', 'nice', 'cool', 'little', 'small', 'where', 'can', 'i', 'we', 'our', 'in', 'on'])

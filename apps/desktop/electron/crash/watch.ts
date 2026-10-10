@@ -18,9 +18,9 @@ const JOURNAL_RESTARTS = 5
 const JOURNAL_RETRY_MS = 60_000
 
 /**
- * Notices when a program crashes so Hermes can offer to explain it: macOS crash reports in
+ * Notices when a program crashes so NasTech can offer to explain it: macOS crash reports in
  * ~/Library/Logs/DiagnosticReports, Linux core dumps through systemd-coredump's journal entries.
- * It only offers (a notification the renderer shows with "Ask Hermes"); it never opens anything.
+ * It only offers (a notification the renderer shows with "Ask NasTech"); it never opens anything.
  */
 export class CrashWatcher {
   private readonly recent: CrashReport[] = []
@@ -32,9 +32,9 @@ export class CrashWatcher {
   private stopped = false
 
   constructor(
-    /** Hand a crash worth offering help with to the Hermes window. */
+    /** Hand a crash worth offering help with to the NasTech window. */
     private readonly deliver: (report: CrashReport) => void,
-    /** Processes Herald OS restarts on its own (the Hermes backend). */
+    /** Processes Herald OS restarts on its own (the NasTech backend). */
     private readonly ownPids: () => number[],
     /** Every crash that is not Herald OS's own, muted or not (hooks and automations react to these). */
     private readonly onCrash?: (report: CrashReport) => void

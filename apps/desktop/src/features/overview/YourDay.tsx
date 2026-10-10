@@ -10,7 +10,7 @@ import { formatHourMinute, formatSpan, isToday, Quiet, Shimmer, toMs } from './s
 
 /*
  * Today's timeline: macOS Calendar events (through the bridge, which owns the permission prompt)
- * merged with Hermes cron jobs that run today. One vertical line, one dot per entry.
+ * merged with NasTech cron jobs that run today. One vertical line, one dot per entry.
  */
 
 interface DayEntry {
@@ -116,7 +116,7 @@ export function YourDay({ now }: { now: Date }) {
             </span>
             <div className="text-[13px] font-medium text-fg">Calendar access needed</div>
           </div>
-          <div className="text-[12px] text-fg-3">{status === 'not-determined' ? 'Let Hermes read today\u2019s events to plan around them.' : 'Enable Calendars for Herald OS in System Settings > Privacy & Security, then try again.'}</div>
+          <div className="text-[12px] text-fg-3">{status === 'not-determined' ? 'Let NasTech read today\u2019s events to plan around them.' : 'Enable Calendars for Herald OS in System Settings > Privacy & Security, then try again.'}</div>
           <GlassButton size="sm" variant="primary" className="self-start" onClick={() => calendar.reload()}>
             Grant access
           </GlassButton>

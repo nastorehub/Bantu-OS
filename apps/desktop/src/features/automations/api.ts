@@ -2,7 +2,7 @@ import { type CronJob, rest } from '../../lib/rest.ts'
 import { scheduleToString } from './cron-humanize.ts'
 
 /*
- * Thin typed wrappers over the Hermes cron REST (hermes_cli/web_routers/cron.py). The page owns
+ * Thin typed wrappers over the NasTech cron REST (nastech_cli/web_routers/cron.py). The page owns
  * these locally; `CronJob` itself comes from lib/rest.ts.
  */
 
@@ -45,7 +45,7 @@ export interface CronJobDraft {
   script?: string | null
 }
 
-export const LOCAL_TARGET: DeliveryTarget = { id: 'local', name: 'Hermes (local)', home_target_set: true, home_env_var: null }
+export const LOCAL_TARGET: DeliveryTarget = { id: 'local', name: 'NasTech (local)', home_target_set: true, home_env_var: null }
 
 const profileQuery = (job: Pick<CronJob, 'profile'>) => (job.profile ? { profile: job.profile } : undefined)
 

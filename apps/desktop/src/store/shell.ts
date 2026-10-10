@@ -4,7 +4,7 @@ import type { ShellCommand, ShellMode, ShellSurface, WmAction, WmState, WmWindow
 /**
  * Which surface this renderer window is, and how the shell is composed.
  * - `desktop` mode (macOS, cage): one window, `surface === 'desktop'`.
- * - `panels` mode (niri): the menu bar, dock, Hermes window, command overlay and floating apps are
+ * - `panels` mode (niri): the menu bar, dock, NasTech window, command overlay and floating apps are
  *   separate windows; stores that act on another window go through `relay`.
  */
 export const surface: ShellSurface = window.heraldOS?.shell?.surface ?? 'desktop'
@@ -59,7 +59,7 @@ export function onShellCommand(handler: CommandHandler): () => void {
   return () => handlers.delete(handler)
 }
 
-/** Send a command to the Hermes window (no-op relay when this window is the Hermes window). */
+/** Send a command to the NasTech window (no-op relay when this window is the NasTech window). */
 export function relayToMain(command: ShellCommand): void {
   if (isMainSurface) {
     dispatch(command)

@@ -56,7 +56,7 @@ describe('macOS', () => {
     }
 
     const view = entryView(found.group, found.entry, { installed: false, ...pickMacMethod(found.entry, { npm: true, brew: false }) })
-    expect(view).toMatchObject({ id: 'lm-studio', group: 'ai', available: true, method: 'link', hermes: 'lmstudio', url: 'https://lmstudio.ai/download' })
+    expect(view).toMatchObject({ id: 'lm-studio', group: 'ai', available: true, method: 'link', nastech: 'lmstudio', url: 'https://lmstudio.ai/download' })
     expect(view.reason).toBeUndefined()
   })
 })

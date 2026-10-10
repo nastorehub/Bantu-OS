@@ -38,9 +38,9 @@ import { plainText, tidyRuns } from './text.ts'
 import { sameTransition, transitionFor } from './transitions.ts'
 
 /*
- * Herald Slides for Hermes, without a window: the slide, layout, colour and theme a command names;
+ * Herald Slides for NasTech, without a window: the slide, layout, colour and theme a command names;
  * every change as a pure step on the deck, so a batch is its steps one after another and lands as
- * one step to undo; a deck read the way Hermes wants it; find and replace over a deck's text; and
+ * one step to undo; a deck read the way NasTech wants it; find and replace over a deck's text; and
  * the slides a Herald Docs document makes and the tables a Herald Sheets range makes, as the
  * editor's own File and Insert menus make them. Tested directly.
  */
@@ -364,7 +364,7 @@ export function gradientArg(args: Args): { stops: GradientStop[]; angle: number;
   return { stops: stops.sort((a, b) => a.at - b.at), angle: ((angle % 360) + 360) % 360, ...(radial ? { radial } : {}) }
 }
 
-/** A colour as Hermes reads it: a theme colour by the name a command gives it (accent1, text, background), or #rrggbb. */
+/** A colour as NasTech reads it: a theme colour by the name a command gives it (accent1, text, background), or #rrggbb. */
 export const colorName = (color: Color): string => SLOT_NAMES_READ[color] ?? color
 
 /** A built-in theme, or one of the custom themes the person made, by id or name. */
@@ -615,7 +615,7 @@ export interface StepContext {
   sheets?: ReadonlyMap<string, SheetSource>
 }
 
-/** A change made by one command or edit: what it did in a few words, and what Hermes is told back. */
+/** A change made by one command or edit: what it did in a few words, and what NasTech is told back. */
 export type Step = DeckChange & { done: string; info?: Record<string, unknown> }
 
 /** What one command or edit does to a deck. */
@@ -1015,7 +1015,7 @@ const READ_ROLES = new Set(['title', 'body', 'subtitle', 'caption'])
 /** How a connector runs, as a command names it. */
 const CONNECTOR_KINDS: Record<string, string> = { straight: 'straight', bent: 'elbow', curved: 'curved' }
 
-/** A connector as Hermes reads it: how it runs, and the elements (and their connection sites) its ends are glued to. */
+/** A connector as NasTech reads it: how it runs, and the elements (and their connection sites) its ends are glued to. */
 function readConnector(connector: Connector) {
   const { start, end } = connector
 
@@ -1026,7 +1026,7 @@ function readConnector(connector: Connector) {
   }
 }
 
-/** A background as Hermes reads it: a colour, a gradient's colours and angle, or a picture. */
+/** A background as NasTech reads it: a colour, a gradient's colours and angle, or a picture. */
 export function backgroundText(background: Background): string {
   switch (background.kind) {
     case 'solid':
@@ -1038,7 +1038,7 @@ export function backgroundText(background: Background): string {
   }
 }
 
-/** A slide's transition as Hermes reads it: its kind, which way it goes and how long it takes. */
+/** A slide's transition as NasTech reads it: its kind, which way it goes and how long it takes. */
 export function transitionText(transition: SlideTransition) {
   return { kind: transition.kind, ...(transition.direction ? { direction: transition.direction } : {}), ...(transition.orientation ? { orientation: transition.orientation } : {}), seconds: transition.duration / 1000 }
 }
@@ -1046,7 +1046,7 @@ export function transitionText(transition: SlideTransition) {
 /** The names a command gives PowerPoint's date formats. */
 export const DATE_NAMES: Record<DateFormat, string> = { datetime1: 'numeric', datetime2: 'long', datetime3: 'dmy', datetime4: 'mdy' }
 
-/** The deck's header and footer as Hermes reads them, when its slides show any: the date (its format, or the text in its place), the slide number and the footer's text, and whether title slides go without. */
+/** The deck's header and footer as NasTech reads them, when its slides show any: the date (its format, or the text in its place), the slide number and the footer's text, and whether title slides go without. */
 export function readHeaderFooter(deck: Deck) {
   const settings = headerFooterOf(deck)
   const footer = settings.footer && settings.footerText ? settings.footerText : ''
@@ -1101,7 +1101,7 @@ function readSlide(deck: Deck, slide: Slide, index: number) {
 }
 
 /**
- * A deck as Hermes reads it: its title, size, theme and transition, its header and footer, and each
+ * A deck as NasTech reads it: its title, size, theme and transition, its header and footer, and each
  * slide (or only `only`) with its text and elements, and its own theme, transition and background
  * where it has them, and whether it hides the master's graphics.
  */

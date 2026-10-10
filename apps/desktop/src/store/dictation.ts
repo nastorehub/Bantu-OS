@@ -10,7 +10,7 @@ import { isMainSurface, isPanels, onShellCommand, surface } from './shell.ts'
 import { $voiceActive } from './voice.ts'
 
 /*
- * Dictation into any app: one key starts listening, a pause (or the key again) ends it, Hermes's
+ * Dictation into any app: one key starts listening, a pause (or the key again) ends it, NasTech's
  * speech-to-text turns it into words with spoken punctuation applied, and main types them into
  * whatever field has focus. Nothing goes to the model; this is transcription only.
  */
@@ -46,7 +46,7 @@ export async function startDictation(): Promise<void> {
   }
 
   if ($voiceActive.get()) {
-    notify({ title: 'Dictation', body: 'End the voice conversation first; Hermes would hear the dictation too.', level: 'warn' })
+    notify({ title: 'Dictation', body: 'End the voice conversation first; NasTech would hear the dictation too.', level: 'warn' })
 
     return
   }
@@ -145,13 +145,13 @@ export function toggleDictation(): void {
 
 let bound = false
 
-/** The Hermes window owns the microphone; hotkeys reach it as a `dictate` ShellCommand. */
+/** The NasTech window owns the microphone; hotkeys reach it as a `dictate` ShellCommand. */
 export function bindDictation(): () => void {
   if (bound) {
     return () => undefined
   }
 
-  // Panels-mode menu bar: mirror the Hermes window's state for the "Dictating" indicator. Only
+  // Panels-mode menu bar: mirror the NasTech window's state for the "Dictating" indicator. Only
   // there: a handler registered early on every surface would swallow the commands that open
   // overlays and panels, which wait in a queue until their window's own handler mounts.
   if (!isMainSurface) {

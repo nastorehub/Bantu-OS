@@ -117,7 +117,7 @@ export function OverviewComposer({ disabled, placeholder, onSubmit, className, d
           value={value}
           disabled={disabled}
           rows={1}
-          aria-label="Ask Hermes"
+          aria-label="Ask NasTech"
           placeholder={placeholder ?? 'What would you like to make happen?'}
           onChange={event => setValue(event.target.value)}
           onKeyDown={event => {

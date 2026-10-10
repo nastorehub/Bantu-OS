@@ -10,14 +10,14 @@ describe('summariseUsage', () => {
         totals: { total_input: 1_200_000, total_output: 300_000, total_estimated_cost: 4.2, total_actual_cost: 3.9, total_sessions: 12 },
         by_model: [
           { model: 'small', input_tokens: 100, output_tokens: 50 },
-          { model: 'hermes-4', input_tokens: 1_100_000, output_tokens: 290_000 }
+          { model: 'nastech-4', input_tokens: 1_100_000, output_tokens: 290_000 }
         ],
         daily: [{ day: '2026-10-05', input_tokens: 10, output_tokens: 5 }, { day: '2026-10-06', input_tokens: null, output_tokens: 7 }, {}]
       },
       7
     )
 
-    expect(summary).toEqual({ days: 7, tokens: 1_500_000, input: 1_200_000, output: 300_000, sessions: 12, cost: 3.9, topModel: 'hermes-4', daily: [{ day: '2026-10-05', tokens: 15 }, { day: '2026-10-06', tokens: 7 }] })
+    expect(summary).toEqual({ days: 7, tokens: 1_500_000, input: 1_200_000, output: 300_000, sessions: 12, cost: 3.9, topModel: 'nastech-4', daily: [{ day: '2026-10-05', tokens: 15 }, { day: '2026-10-06', tokens: 7 }] })
   })
 
   it('survives an empty answer', () => {

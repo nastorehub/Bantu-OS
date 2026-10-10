@@ -1,5 +1,5 @@
 /*
- * Image > Auto Tone, Auto Contrast and Auto Color, for the menus and for Hermes: the picture under
+ * Image > Auto Tone, Auto Contrast and Auto Color, for the menus and for NasTech: the picture under
  * where the new layer goes is read once (reduced to a few megapixels, plenty for a histogram), and
  * the fix lands as a Levels adjustment layer above the active layer, editable like any other.
  */

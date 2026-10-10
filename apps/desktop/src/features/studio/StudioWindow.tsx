@@ -38,7 +38,7 @@ function Splitter({ axis, onDrag }: { axis: 'x' | 'y'; onDrag: (delta: number) =
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value))
 
 /**
- * Watch Hermes build: the project's files, the file being written with its changes marked, the
+ * Watch NasTech build: the project's files, the file being written with its changes marked, the
  * commands and dev-server output, and the running site, side by side for one session.
  */
 export function StudioWindow({ win }: { win: OSWindow }) {
@@ -88,7 +88,7 @@ export function StudioWindow({ win }: { win: OSWindow }) {
   const shownFile = pinned ?? studio?.activeFile ?? null
   const files = studio?.files ?? {}
 
-  // Static sites preview their own index.html until Hermes starts (or names) a server.
+  // Static sites preview their own index.html until NasTech starts (or names) a server.
   const staticIndex = root ? `${root}/index.html` : null
   const [indexOnDisk, setIndexOnDisk] = useState(false)
 
@@ -119,7 +119,7 @@ export function StudioWindow({ win }: { win: OSWindow }) {
   const status = studio?.status || (running ? 'Working…' : plan.length && done === plan.length ? 'Done' : 'Idle')
 
   if (!sessionId) {
-    return <div className="flex h-full items-center justify-center text-[13px] text-fg-3">{storedSessionId ? 'Opening the session…' : 'This Studio is not attached to a Hermes session.'}</div>
+    return <div className="flex h-full items-center justify-center text-[13px] text-fg-3">{storedSessionId ? 'Opening the session…' : 'This Studio is not attached to a NasTech session.'}</div>
   }
 
   const send = () => {
@@ -164,7 +164,7 @@ export function StudioWindow({ win }: { win: OSWindow }) {
             send()
           }}
         >
-          <input value={draft} onChange={event => setDraft(event.target.value)} placeholder="Ask for a change, or just say it" className="min-w-0 flex-1 bg-transparent text-[12px] text-fg outline-none placeholder:text-fg-4" aria-label="Ask Hermes for a change" />
+          <input value={draft} onChange={event => setDraft(event.target.value)} placeholder="Ask for a change, or just say it" className="min-w-0 flex-1 bg-transparent text-[12px] text-fg outline-none placeholder:text-fg-4" aria-label="Ask NasTech for a change" />
           <button type="submit" disabled={!draft.trim()} className="flex size-5 items-center justify-center rounded-md text-fg-3 hover:text-fg disabled:opacity-40" aria-label="Send">
             <IconSend size={13} />
           </button>
@@ -174,7 +174,7 @@ export function StudioWindow({ win }: { win: OSWindow }) {
             <IconPlayerStopFilled size={12} /> Stop
           </button>
         )}
-        <button type="button" onClick={() => openApp('chat-popout', { payload: { sessionId: chat?.storedSessionId ?? sessionId }, title: chat?.title || 'Hermes' })} className="flex size-7 shrink-0 items-center justify-center rounded-lg text-fg-3 hover:bg-white/8 hover:text-fg" title="Open the conversation" aria-label="Open the conversation">
+        <button type="button" onClick={() => openApp('chat-popout', { payload: { sessionId: chat?.storedSessionId ?? sessionId }, title: chat?.title || 'NasTech' })} className="flex size-7 shrink-0 items-center justify-center rounded-lg text-fg-3 hover:bg-white/8 hover:text-fg" title="Open the conversation" aria-label="Open the conversation">
           <IconMessage size={15} />
         </button>
         {root && (

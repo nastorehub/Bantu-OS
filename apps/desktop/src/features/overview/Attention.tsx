@@ -9,12 +9,12 @@ import { FileThumb, IconTile, Quiet } from './shared.tsx'
 
 /*
  * Things only the user can unblock: open approval / clarify / sudo / secret requests (answered in
- * the RequestHost on the Hermes page) and missions whose result is waiting to be looked at.
+ * the RequestHost on the NasTech page) and missions whose result is waiting to be looked at.
  */
 
 const REQUEST_COPY: Record<PendingRequest['kind'], { title: string; icon: React.ReactNode }> = {
   approval: { title: 'Approval needed', icon: <IconShieldCheck /> },
-  clarify: { title: 'Hermes has a question', icon: <IconMessageQuestion /> },
+  clarify: { title: 'NasTech has a question', icon: <IconMessageQuestion /> },
   sudo: { title: 'Password needed', icon: <IconKey /> },
   secret: { title: 'Password needed', icon: <IconKey /> }
 }
@@ -23,7 +23,7 @@ function describe(entry: PendingRequest): string {
   const params = entry.request.params as Record<string, unknown>
   const text = [params.description, params.command, params.question, params.prompt, params.tool_name].find((v): v is string => typeof v === 'string' && v.trim().length > 0)
 
-  return text ?? 'Hermes is waiting for you.'
+  return text ?? 'NasTech is waiting for you.'
 }
 
 export function Attention() {
@@ -51,7 +51,7 @@ export function Attention() {
                     </div>
                   </div>
                 </div>
-                <GlassButton size="sm" variant="primary" className="self-start" onClick={() => showPage('hermes')}>
+                <GlassButton size="sm" variant="primary" className="self-start" onClick={() => showPage('nastech')}>
                   Review
                   <IconArrowRight />
                 </GlassButton>
@@ -80,7 +80,7 @@ export function Attention() {
                   variant="primary"
                   className="self-start"
                   onClick={() => {
-                    showPage('hermes')
+                    showPage('nastech')
                     void openStoredSession(mission.id)
                     markReviewed(mission.id)
                   }}

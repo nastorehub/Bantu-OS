@@ -5,7 +5,7 @@ import { fail, ok, type OsCommand } from '../store/os-commands.ts'
 import { showPage } from '../store/windows.ts'
 import { humanizeSchedule } from '../features/automations/cron-humanize.ts'
 
-/* Automations (Hermes cron jobs, some fired by events instead of their schedule). */
+/* Automations (NasTech cron jobs, some fired by events instead of their schedule). */
 
 const summarise = (job: CronJob) => {
   const rule = eventRuleFor(job.id)
@@ -128,11 +128,11 @@ export const automationCommands: readonly OsCommand[] = [
     id: 'automation.create',
     title: 'Create an automation',
     description:
-      'Make Hermes run a prompt on a schedule (`schedule`: natural like "every day at 9am", "weekdays at 8:00", or cron) or each time something happens on this computer (`event`: login, wake, unlock, returned, battery-low, network-change, crash, theme-set, after-update; `match` narrows it, e.g. a program name for crash or a Wi-Fi network for network-change).',
+      'Make NasTech run a prompt on a schedule (`schedule`: natural like "every day at 9am", "weekdays at 8:00", or cron) or each time something happens on this computer (`event`: login, wake, unlock, returned, battery-low, network-change, crash, theme-set, after-update; `match` narrows it, e.g. a program name for crash or a Wi-Fi network for network-change).',
     tier: 'mutate',
     args: [
       { name: 'name', type: 'string', description: 'Short name', required: true },
-      { name: 'prompt', type: 'string', description: 'What Hermes should do each run', required: true },
+      { name: 'prompt', type: 'string', description: 'What NasTech should do each run', required: true },
       { name: 'schedule', type: 'string', description: 'When it runs (or give event)' },
       { name: 'event', type: 'string', description: 'Run each time this happens instead of on a schedule', enum: ['', ...HERALD_EVENTS.filter(event => event.automation).map(event => event.name)] },
       { name: 'match', type: 'string', description: 'For event: the program (crash) or Wi-Fi network (network-change) it is about' }

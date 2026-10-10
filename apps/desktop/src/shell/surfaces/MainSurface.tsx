@@ -6,7 +6,7 @@ import { bindDesktopNotifications } from '../../store/notifications.ts'
 import { toggleSidebar } from '../../store/sidebar.ts'
 import { $applicationsOpen, $commandBarOpen, toggleCommandBar } from '../../store/surface.ts'
 import { ensureMainWindow, openApp } from '../../store/windows.ts'
-import { HERMES_APPS } from '../apps.ts'
+import { NASTECH_APPS } from '../apps.ts'
 import { BootScreen } from '../BootScreen.tsx'
 import { CommandBar } from '../CommandBar.tsx'
 import { MainWindow } from '../MainWindow.tsx'
@@ -14,7 +14,7 @@ import { NotificationsPanel } from '../NotificationsPanel.tsx'
 import { RequestHost } from '../RequestHost.tsx'
 import { Toasts } from '../Toasts.tsx'
 import { drawWallpaperFrame, tintFor } from '../Wallpaper.tsx'
-import { HermesLoginCard } from '../../features/auth/HermesLoginCard.tsx'
+import { NasTechLoginCard } from '../../features/auth/NasTechLoginCard.tsx'
 import { ActionHud, OsHighlighter } from '../../features/voice/ActionHud.tsx'
 import { VoiceOrb } from '../../features/voice/VoiceOrb.tsx'
 import { FirstRunSetup } from '../../features/setup/FirstRunSetup.tsx'
@@ -22,7 +22,7 @@ import { FirstRunSetup } from '../../features/setup/FirstRunSetup.tsx'
 const ApplicationsOverlay = lazy(() => import('../../features/applications/ApplicationsOverlay.tsx').then(m => ({ default: m.ApplicationsOverlay })))
 
 /**
- * Panels mode: the Hermes window. niri tiles it like any other client, so it is just the sidebar and
+ * Panels mode: the NasTech window. niri tiles it like any other client, so it is just the sidebar and
  * pages filling the window plus the overlays that belong to it. Other surfaces and the `herald-os` CLI
  * drive it through `ShellCommand`s.
  */
@@ -68,7 +68,7 @@ export function MainSurface() {
       }
 
       if (meta && !event.shiftKey && !event.altKey) {
-        const target = HERMES_APPS.find(a => a.shortcut === event.key)
+        const target = NASTECH_APPS.find(a => a.shortcut === event.key)
 
         if (target) {
           event.preventDefault()
@@ -105,7 +105,7 @@ export function MainSurface() {
         <VoiceOrb offsetClass="bottom-6" />
         <ActionHud offsetClass="top-4" />
         <OsHighlighter />
-        <HermesLoginCard />
+        <NasTechLoginCard />
         <FirstRunSetup />
         <RequestHost />
         <Toasts />

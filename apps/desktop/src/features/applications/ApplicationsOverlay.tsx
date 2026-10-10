@@ -1,6 +1,6 @@
 import { IconApps, IconX } from '@tabler/icons-react'
 import { type KeyboardEvent, useCallback, useMemo, useRef, useState } from 'react'
-import { HermesAvatar } from '../../components/app-icon.tsx'
+import { NasTechAvatar } from '../../components/app-icon.tsx'
 import { EmptyGlass, GlassButton, SearchField, Tabs } from '../../components/ui/glass.tsx'
 import { MicButton } from '../voice/MicButton.tsx'
 import { Kbd } from '../../components/ui/primitives.tsx'
@@ -17,12 +17,12 @@ import { LAUNCHER_FILTERS, type LauncherFilter, type LauncherTile, buildCatalog,
 
 const COLUMNS = 6
 const ARROWS: Record<string, number> = { ArrowRight: 1, ArrowLeft: -1, ArrowDown: COLUMNS, ArrowUp: -COLUMNS }
-const HERMES_SUFFIX = '. If this needs an application, open the right one for me with system_open.'
+const NASTECH_SUFFIX = '. If this needs an application, open the right one for me with system_open.'
 
 /**
- * The Applications launcher: a modal over the desktop listing Hermes apps first, then every installed
- * macOS app. Search filters the grid, arrows move a focus ring, Enter opens; anything Hermes cannot
- * match becomes a prompt to Hermes instead.
+ * The Applications launcher: a modal over the desktop listing NasTech apps first, then every installed
+ * macOS app. Search filters the grid, arrows move a focus ring, Enter opens; anything NasTech cannot
+ * match becomes a prompt to NasTech instead.
  */
 export function ApplicationsOverlay() {
   const close = useCallback(() => $applicationsOpen.set(false), [])
@@ -36,7 +36,7 @@ export function ApplicationsOverlay() {
 
 export interface ApplicationsPanelProps {
   onClose: () => void
-  /** Standalone: hosted in its own window (panels mode); prompts are relayed to the Hermes window. */
+  /** Standalone: hosted in its own window (panels mode); prompts are relayed to the NasTech window. */
   standalone?: boolean
   /** Sizing classes; the desktop overlay uses a fixed 760px dialog, the panels overlay fills its window. */
   className?: string
@@ -67,7 +67,7 @@ export function ApplicationsPanel({ onClose, standalone = false, className }: Ap
 
   const close = onClose
 
-  const askHermes = useCallback(
+  const askNasTech = useCallback(
     (text: string) => {
       const prompt = text.trim()
 
@@ -78,21 +78,21 @@ export function ApplicationsPanel({ onClose, standalone = false, className }: Ap
       close()
 
       if (standalone) {
-        relayToMain({ type: 'send-prompt', text: `${prompt}${HERMES_SUFFIX}` })
+        relayToMain({ type: 'send-prompt', text: `${prompt}${NASTECH_SUFFIX}` })
         openSurface('main')
 
         return
       }
 
-      showPage('hermes')
-      void sendPrompt(`${prompt}${HERMES_SUFFIX}`)
+      showPage('nastech')
+      void sendPrompt(`${prompt}${NASTECH_SUFFIX}`)
     },
     [close, standalone]
   )
 
   const activate = useCallback(
     (tile: LauncherTile) => {
-      if (tile.kind === 'hermes') {
+      if (tile.kind === 'nastech') {
         openApp(tile.appId)
         close()
 
@@ -113,7 +113,7 @@ export function ApplicationsPanel({ onClose, standalone = false, className }: Ap
     if (target) {
       activate(target)
     } else if (trimmed) {
-      askHermes(trimmed)
+      askNasTech(trimmed)
     }
   }
 
@@ -183,11 +183,11 @@ export function ApplicationsPanel({ onClose, standalone = false, className }: Ap
           <EmptyGlass
             icon={<IconApps />}
             title={trimmed ? `No apps match “${trimmed}”` : 'No apps in this category'}
-            description={trimmed ? 'Press Enter to ask Hermes to find the right one.' : undefined}
+            description={trimmed ? 'Press Enter to ask NasTech to find the right one.' : undefined}
             action={
               trimmed ? (
-                <GlassButton size="sm" variant="primary" onClick={() => askHermes(trimmed)}>
-                  Ask Hermes
+                <GlassButton size="sm" variant="primary" onClick={() => askNasTech(trimmed)}>
+                  Ask NasTech
                 </GlassButton>
               ) : undefined
             }
@@ -198,18 +198,18 @@ export function ApplicationsPanel({ onClose, standalone = false, className }: Ap
       <div className="mx-7 h-px bg-line" />
       <div ref={footerRef} className="px-5 py-4">
         <label className="glass-input flex h-12 items-center gap-3 rounded-lg px-3">
-          <HermesAvatar size={28} rounded={8} />
+          <NasTechAvatar size={28} rounded={8} />
           <input
             value={ask}
             onChange={event => setAsk(event.target.value)}
             onKeyDown={event => {
               if (event.key === 'Enter') {
                 event.preventDefault()
-                askHermes(ask)
+                askNasTech(ask)
               }
             }}
-            placeholder="Tell Hermes what you need. It will find the right app."
-            aria-label="Tell Hermes what you need"
+            placeholder="Tell NasTech what you need. It will find the right app."
+            aria-label="Tell NasTech what you need"
             className="min-w-0 flex-1 bg-transparent text-[13px] outline-none placeholder:text-fg-4"
           />
           <MicButton size={18} className="size-8" />

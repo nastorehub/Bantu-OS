@@ -56,7 +56,7 @@ export function ActionHud({ offsetClass = 'top-12' }: { offsetClass?: string }) 
         <AvoidedByViews key={event.id} className={cn('float pointer-events-auto flex max-w-xl items-center gap-2.5 rounded-full px-3.5 py-1.5 animate-rise', !event.result.ok && 'border-warn/40')}>
           <span className={cn('flex size-5 items-center justify-center', event.result.ok ? 'text-accent-strong' : 'text-warn')}>{event.source === 'agent' ? <IconRobot size={14} /> : event.result.ok ? <IconBolt size={14} /> : <IconX size={14} />}</span>
           <span className="truncate text-[12.5px] text-fg">{event.result.ok ? event.result.summary : event.result.error ?? event.result.summary}</span>
-          <span className="text-[11px] text-fg-4">{event.source === 'agent' ? 'Hermes' : event.source === 'voice' ? 'voice' : event.source === 'follow' ? 'following Hermes' : event.source}</span>
+          <span className="text-[11px] text-fg-4">{event.source === 'agent' ? 'NasTech' : event.source === 'voice' ? 'voice' : event.source === 'follow' ? 'following NasTech' : event.source}</span>
         </AvoidedByViews>
       ))}
     </div>

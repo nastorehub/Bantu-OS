@@ -1,6 +1,6 @@
 // The Live engine: OpenAI `gpt-live-1` owns the microphone and speaker over WebRTC (full duplex,
-// natural interruptions) and DELEGATES every real request to Hermes. Herald OS turns each
-// `session.delegation.created` into a normal Hermes turn and streams the reply back over the
+// natural interruptions) and DELEGATES every real request to NasTech. Herald OS turns each
+// `session.delegation.created` into a normal NasTech turn and streams the reply back over the
 // `oai-events` data channel as `session.commentary.append`, which the voice paraphrases aloud.
 //
 // Cost model (why this engine is opt-in): the session bills per second while open, so the engine
@@ -49,7 +49,7 @@ interface LiveHistoryMessage {
   content: Array<{ type: 'input_text' | 'output_text'; text: string }>
 }
 
-/** Turn transcript fragments into a Hermes turn: the user's last words plus the spoken exchange. */
+/** Turn transcript fragments into a NasTech turn: the user's last words plus the spoken exchange. */
 export function delegationPrompt(context: LiveTranscriptFragment[]): { prompt: string; voiceContext: string } {
   const turns: Array<{ speaker: 'assistant' | 'user'; text: string }> = []
 
@@ -259,7 +259,7 @@ export class LiveEngine implements ConversationEngine {
     this.send({ event_id: this.nextEventId(muted ? 'mute' : 'unmute'), type: muted ? 'session.input_audio.mute' : 'session.input_audio.unmute' })
   }
 
-  /** The user pressed stop: cut Hermes's in-flight work; the live model handles its own speech. */
+  /** The user pressed stop: cut NasTech's in-flight work; the live model handles its own speech. */
   interrupt(): void {
     if (this.turnBusy) {
       this.stopObserving?.()
@@ -291,7 +291,7 @@ export class LiveEngine implements ConversationEngine {
   }
 
   private seedHistory(): LiveHistoryMessage[] {
-    // Herald OS starts each spoken conversation fresh; Hermes itself carries memory across sessions.
+    // Herald OS starts each spoken conversation fresh; NasTech itself carries memory across sessions.
     return []
   }
 
@@ -384,7 +384,7 @@ export class LiveEngine implements ConversationEngine {
     return text.replace(/\s+/g, ' ').trim()
   }
 
-  // ---- delegation -> Hermes turn -> commentary -------------------------------------------------
+  // ---- delegation -> NasTech turn -> commentary -------------------------------------------------
 
   private async onDelegation(delegationId: string): Promise<void> {
     const { prompt, voiceContext } = delegationPrompt(this.contextWindow())
@@ -415,7 +415,7 @@ export class LiveEngine implements ConversationEngine {
     this.activeDelegationId = delegationId
     this.host.setCaptions({ user: prompt, assistant: '', interim: '' })
 
-    // OS commands run locally and the result is handed to the voice to say; no Hermes turn needed.
+    // OS commands run locally and the result is handed to the voice to say; no NasTech turn needed.
     const intent = await this.host.runIntent(prompt)
 
     if (this.finalized || this.activeDelegationId !== delegationId) {
@@ -442,7 +442,7 @@ export class LiveEngine implements ConversationEngine {
     this.spoken.reset()
     this.pendingUserText = ''
     this.host.setState('thinking')
-    this.think(delegationId, 'Hermes is working on it.')
+    this.think(delegationId, 'NasTech is working on it.')
 
     void this.host
       .submit(prompt, { voiceContext, interrupted })
@@ -453,7 +453,7 @@ export class LiveEngine implements ConversationEngine {
 
         if (!sessionId) {
           this.turnBusy = false
-          this.speak(delegationId, 'Sorry, I could not reach Hermes for that request.')
+          this.speak(delegationId, 'Sorry, I could not reach NasTech for that request.')
           this.host.setState('listening')
 
           return
@@ -474,7 +474,7 @@ export class LiveEngine implements ConversationEngine {
           },
           onTool: name => {
             if (this.activeDelegationId === delegationId) {
-              this.think(delegationId, `Hermes is using ${name.replace(/_/g, ' ')}.`)
+              this.think(delegationId, `NasTech is using ${name.replace(/_/g, ' ')}.`)
             }
           },
           onComplete: (full, status, error, tools = []) => {
@@ -506,7 +506,7 @@ export class LiveEngine implements ConversationEngine {
 
             if (silent) {
               if (silent.problem) {
-                this.host.notify('Hermes', silent.spoken, 'warn')
+                this.host.notify('NasTech', silent.spoken, 'warn')
               }
 
               this.host.setCaptions({ assistant: silent.spoken })
@@ -521,7 +521,7 @@ export class LiveEngine implements ConversationEngine {
         if (this.activeDelegationId === delegationId) {
           this.turnBusy = false
           this.host.notify('Voice', error instanceof Error ? error.message : String(error), 'warn')
-          this.speak(delegationId, 'Sorry, I could not reach Hermes for that request.')
+          this.speak(delegationId, 'Sorry, I could not reach NasTech for that request.')
           this.host.setState('listening')
         }
       })

@@ -36,7 +36,7 @@ export function agentNameFor(goal: string): string {
     .filter(Boolean)
     .slice(0, 3)
 
-  return words.length ? titleCase(words.join(' ')) : 'Hermes'
+  return words.length ? titleCase(words.join(' ')) : 'NasTech'
 }
 
 export function Avatar({ label, size = 28, className }: { label: string; size?: number; className?: string }) {

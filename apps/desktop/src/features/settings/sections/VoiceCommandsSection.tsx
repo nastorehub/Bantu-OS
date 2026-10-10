@@ -24,7 +24,7 @@ const GROUPS: readonly Group[] = [
   { id: 'nav', title: 'Open and navigate', prefixes: ['open', 'page', 'overlay', 'sidebar', 'space', 'help'] },
   { id: 'windows', title: 'Windows', prefixes: ['window'] },
   { id: 'typing', title: 'Typing and editing', prefixes: ['text', 'key', 'edit', 'view'] },
-  { id: 'hermes', title: 'Hermes, chats and missions', prefixes: ['chat', 'mission', 'agents'] },
+  { id: 'nastech', title: 'NasTech, chats and missions', prefixes: ['chat', 'mission', 'agents'] },
   { id: 'build', title: 'Build and watch (Studio)', prefixes: ['build', 'studio'] },
   { id: 'memory', title: 'Memory', prefixes: ['memory'] },
   { id: 'files', title: 'Files', prefixes: ['files', 'file'] },
@@ -78,7 +78,7 @@ function renderPhrase(phrase: string) {
 function groupOf(command: CommandSummary): string {
   const prefix = command.id.split('.')[0]
 
-  return GROUPS.find(group => group.prefixes.includes(prefix))?.id ?? 'hermes'
+  return GROUPS.find(group => group.prefixes.includes(prefix))?.id ?? 'nastech'
 }
 
 /** An example sentence with the slots filled in, for the section subtitle and tooltips. */
@@ -110,7 +110,7 @@ export function VoiceCommandsSection() {
     <>
       <SectionTitle
         title="Voice commands"
-        subtitle={`${commands.length} things Herald OS can do. ${voiceKey ? `Press ${voiceKey} (or say "hey hermes")` : 'Say "hey hermes"'} and say one of these; anything else goes to Hermes, who can use every command too.`}
+        subtitle={`${commands.length} things Herald OS can do. ${voiceKey ? `Press ${voiceKey} (or say "hey nastech")` : 'Say "hey nastech"'} and say one of these; anything else goes to NasTech, who can use every command too.`}
       />
 
       <GlassCard className="settings-item flex flex-wrap items-center gap-x-5 gap-y-2 px-4 py-3 text-[12px] text-fg-2">
@@ -118,7 +118,7 @@ export function VoiceCommandsSection() {
           <IconMicrophone size={14} className="text-accent-strong" /> Instant: runs on this {deviceNoun()}, no tokens
         </span>
         <span className="flex items-center gap-1.5">
-          <IconShieldCheck size={14} className="text-warn" /> Asks first: Hermes shows an approval card
+          <IconShieldCheck size={14} className="text-warn" /> Asks first: NasTech shows an approval card
         </span>
         <span className="flex items-center gap-1.5">
           <span className="rounded bg-accent-soft px-1 text-accent-strong">slot</span> say your own words there
@@ -147,7 +147,7 @@ export function VoiceCommandsSection() {
       {agentOnly.length > 0 && (
         <section className="settings-item flex flex-col gap-1.5">
           <h3 className="flex items-center gap-1.5 px-0.5 text-[12.5px] font-medium text-fg-2">
-            <IconRobot size={14} /> Ask Hermes to do these
+            <IconRobot size={14} /> Ask NasTech to do these
           </h3>
           <GlassCard className="flex flex-col divide-y divide-line">
             {agentOnly.map(command => (

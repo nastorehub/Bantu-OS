@@ -17,7 +17,7 @@ function CommandLog({ commands }: { commands: StudioCommand[] }) {
   }, [commands])
 
   if (commands.length === 0) {
-    return <div className="p-3 text-[12px] text-fg-3">Commands Hermes runs (installs, builds, servers) appear here with their output.</div>
+    return <div className="p-3 text-[12px] text-fg-3">Commands NasTech runs (installs, builds, servers) appear here with their output.</div>
   }
 
   return (
@@ -107,7 +107,7 @@ function ProcessOutput({ process }: { process: StudioProcess }) {
   return <div ref={host} className="h-full w-full px-2 py-1" />
 }
 
-/** Bottom of the Studio: what Hermes ran, and a live tab per background process. */
+/** Bottom of the Studio: what NasTech ran, and a live tab per background process. */
 export function TerminalPane({ commands, processes }: { commands: StudioCommand[]; processes: Record<string, StudioProcess> }) {
   const list = Object.values(processes)
   const [tab, setTab] = useState<string>('commands')

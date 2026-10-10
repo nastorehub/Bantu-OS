@@ -58,7 +58,7 @@ export const GUEST_PREFERENCES: Electron.WebPreferences = {
 /** Local files: same lockdown, own partition, plus Chromium's PDF viewer plugin. */
 const VIEWER_PREFERENCES: Electron.WebPreferences = { ...GUEST_PREFERENCES, plugins: true, partition: VIEWER_PARTITION }
 
-/** Studio previews of the site Hermes is building: same lockdown, own partition so dev-server state never mixes with browsing. */
+/** Studio previews of the site NasTech is building: same lockdown, own partition so dev-server state never mixes with browsing. */
 const PREVIEW_PARTITION = 'persist:herald-preview'
 const PREVIEW_PREFERENCES: Electron.WebPreferences = { ...GUEST_PREFERENCES, partition: PREVIEW_PARTITION }
 
@@ -474,7 +474,7 @@ const confinedPartitions = new Set<string>()
 
 /**
  * Electron lets a file:// page read every other file:// URL, so a previewed site or an SVG in the
- * viewer could read ~/.hermes/.env. Here a partition serves only the files `allows` accepts, judged
+ * viewer could read ~/.nastech/.env. Here a partition serves only the files `allows` accepts, judged
  * after symlinks resolve; anything else looks missing.
  */
 function confineFiles(partition: string, allows: (file: string) => boolean): void {

@@ -110,10 +110,10 @@ describe('who writes comments and notes in Herald Sheets', () => {
     expect(result).toEqual({ done: true, author: 'Sam Rivera', note: 'Sam Rivera', asked: null })
   })
 
-  it('leaves Hermes’s comments, and those of commands, signed as they come, without asking', async () => {
-    const result = await inSheets(async ({ post, authorOf }) => ({ done: await post('c1', 'B2', 'Hermes'), author: authorOf('c1'), asked: $nameQuestion.get() }))
+  it('leaves NasTech’s comments, and those of commands, signed as they come, without asking', async () => {
+    const result = await inSheets(async ({ post, authorOf }) => ({ done: await post('c1', 'B2', 'NasTech'), author: authorOf('c1'), asked: $nameQuestion.get() }))
 
-    expect(result).toEqual({ done: true, author: 'Hermes', asked: null })
+    expect(result).toEqual({ done: true, author: 'NasTech', asked: null })
   })
 
   it('opens the note editor once the person confirmed a name, and not when they cancel', async () => {

@@ -2,7 +2,7 @@ import type { HeaderKind } from '../../../../../shared/office/document.ts'
 
 /*
  * A document's pages as the page view laid them out, for the status bar, a table of contents and
- * Hermes: each page's number, the document positions its text runs between, which header it
+ * NasTech: each page's number, the document positions its text runs between, which header it
  * shows, and the page each heading and footnote is on.
  */
 

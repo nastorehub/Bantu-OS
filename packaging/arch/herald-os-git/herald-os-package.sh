@@ -44,7 +44,7 @@ _herald_os_package() {
   install -Dm644 /dev/stdin "$pkgdir/usr/share/applications/herald-os.desktop" <<'DESKTOP'
 [Desktop Entry]
 Name=Herald OS
-Comment=The AI-native desktop built around Hermes Agent
+Comment=The AI-native desktop built around NasTech Agent
 Exec=herald-os-app
 Icon=herald-os
 Type=Application

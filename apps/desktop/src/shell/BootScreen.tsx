@@ -8,13 +8,13 @@ import { StatusPanel } from '../features/status/StatusPanel.tsx'
 
 const PHASE_COPY: Record<BackendState['phase'], string> = {
   idle: 'Preparing',
-  resolving: 'Locating your Hermes runtime',
-  waiting: 'Waiting for Hermes Agent',
-  starting: 'Starting Hermes',
+  resolving: 'Locating your NasTech runtime',
+  waiting: 'Waiting for NasTech Agent',
+  starting: 'Starting NasTech',
   ready: 'Ready',
-  restarting: 'Restarting Hermes',
-  failed: 'Hermes could not start',
-  stopped: 'Hermes stopped'
+  restarting: 'Restarting NasTech',
+  failed: 'NasTech could not start',
+  stopped: 'NasTech stopped'
 }
 
 export function BootScreen({ state, leaving = false }: { state: BackendState; leaving?: boolean }) {

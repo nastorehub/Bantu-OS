@@ -4,9 +4,9 @@ import { log } from '../log.ts'
 import { readPrefs } from '../prefs.ts'
 
 /**
- * Fire the Hermes automations waiting for this event. Each is a paused cron job: triggering a paused
- * job runs it and resumes it (Hermes's `force` fire), so it is paused again straight away to keep
- * it event-only. The run itself happens in Hermes's cron runner, with its usual history and delivery.
+ * Fire the NasTech automations waiting for this event. Each is a paused cron job: triggering a paused
+ * job runs it and resumes it (NasTech's `force` fire), so it is paused again straight away to keep
+ * it event-only. The run itself happens in NasTech's cron runner, with its usual history and delivery.
  */
 export async function fireEventAutomations(event: HeraldEvent, backend: BackendManager): Promise<void> {
   const rules = (readPrefs().eventAutomations ?? []).filter(rule => matchesRule(rule, event))
@@ -16,7 +16,7 @@ export async function fireEventAutomations(event: HeraldEvent, backend: BackendM
   }
 
   if (backend.getState().phase !== 'ready') {
-    log('events', `${event.name}: ${rules.length} automation(s) skipped, Hermes is not running`)
+    log('events', `${event.name}: ${rules.length} automation(s) skipped, NasTech is not running`)
 
     return
   }

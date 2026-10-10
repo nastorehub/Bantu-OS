@@ -3,7 +3,7 @@ import { slidesDepthCommands } from './slides-depth.ts'
 import { fill, gradient, height, office, presentation, run, sheetArgs, shapeKind, slide, slides, theme, width, x, y } from './slides-shared.ts'
 
 /*
- * Herald Slides for Hermes, voice, the command bar and `herald-os slides`. A command works on the
+ * Herald Slides for NasTech, voice, the command bar and `herald-os slides`. A command works on the
  * `presentation` it names (a file, or an open presentation's name) or on the one in front; open in
  * a window, each change is one step to undo there (a batch of edits too), and the person watches it
  * land. The editor's code loads only when one of these runs.
@@ -264,7 +264,7 @@ export const slidesCommands: readonly OsCommand[] = [
   {
     id: 'slides.undo',
     title: 'Undo in Herald Slides',
-    description: 'Undo the last change to a presentation open in Herald Slides, whoever made it (each Hermes change is one step, a batch of edits too); steps undoes several.',
+    description: 'Undo the last change to a presentation open in Herald Slides, whoever made it (each NasTech change is one step, a batch of edits too); steps undoes several.',
     tier: 'act',
     args: [presentation, { name: 'steps', type: 'number', description: 'How many steps (1)' }],
     run: run('slides.undo', async (args) => (await agent()).step('undo', args))

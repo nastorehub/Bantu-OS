@@ -2,7 +2,7 @@ import { type CalloutKind, DEFAULT_HEADER_DISTANCE, type DocJSON, type DocMark, 
 
 /*
  * What the built-in templates are made of: blocks and runs as the document keeps them (TipTap's
- * JSON), so a template is plain data that the editor, the converters and Hermes all take as it is.
+ * JSON), so a template is plain data that the editor, the converters and NasTech all take as it is.
  */
 
 /** What a template is built for: the paper, the date order and the size of a card. */

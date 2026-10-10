@@ -6,7 +6,7 @@ import { openWebWindow } from '../../../store/web-windows.ts'
 import { Comments } from './comments.ts'
 import { FindHighlight } from './find.ts'
 import { WordKeys } from './keys.ts'
-import { HermesMarked } from './marked.ts'
+import { NasTechMarked } from './marked.ts'
 import { applyLive, insertImage, type Place } from './model.ts'
 import { revealInDesk } from './overlay.ts'
 import { withPageViews } from './pages/fields.ts'
@@ -91,7 +91,7 @@ export function createDocsEditor(element: HTMLElement, content: DocJSON, events:
       WordKeys,
       SlashCommand,
       FindHighlight,
-      HermesMarked
+      NasTechMarked
     ],
     editorProps: {
       attributes: { spellcheck: 'true', 'aria-label': 'Document', 'aria-multiline': 'true', role: 'textbox' },

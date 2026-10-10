@@ -2,7 +2,7 @@ import { useStore } from '@nanostores/react'
 import { IconArrowRight, IconBolt, IconMessage, IconSlash } from '@tabler/icons-react'
 import { Command } from 'cmdk'
 import { useMemo, useState } from 'react'
-import { AppGlyph, HermesAvatar } from '../components/app-icon.tsx'
+import { AppGlyph, NasTechAvatar } from '../components/app-icon.tsx'
 import { Kbd } from '../components/ui/primitives.tsx'
 import { cn } from '../lib/cn.ts'
 import { shortcutLabel } from '../lib/platform-labels.ts'
@@ -19,8 +19,8 @@ import { LAUNCHABLE_APPS } from './apps.ts'
 import { useSlashCatalog } from '../features/chat/use-slash-catalog.ts'
 
 /**
- * The global command bar (Cmd+K): type to talk to Hermes, or jump to a page, session, app or slash
- * command. Enter on free text sends it to Hermes and opens the Hermes page.
+ * The global command bar (Cmd+K): type to talk to NasTech, or jump to a page, session, app or slash
+ * command. Enter on free text sends it to NasTech and opens the NasTech page.
  */
 export function CommandBar() {
   const open = useStore($commandBarOpen)
@@ -42,7 +42,7 @@ export interface CommandPaletteProps {
   onClose: () => void
   /**
    * Standalone: the palette lives in its own window (panels mode) with its own gateway connection, so
-   * anything that must land in the Hermes window is relayed there instead of run locally.
+   * anything that must land in the NasTech window is relayed there instead of run locally.
    */
   standalone?: boolean
   /** Standalone hosts show the launcher themselves; the desktop toggles the overlay store. */
@@ -68,7 +68,7 @@ export function CommandPalette({ onClose, standalone = false, onApplications, cl
       return
     }
 
-    showPage('hermes')
+    showPage('nastech')
 
     if (text.startsWith('/')) {
       await runSlash(text)
@@ -87,7 +87,7 @@ export function CommandPalette({ onClose, standalone = false, onApplications, cl
       return
     }
 
-    showPage('hermes')
+    showPage('nastech')
     void openStoredSession(id)
   }
 
@@ -156,7 +156,7 @@ export function CommandPalette({ onClose, standalone = false, onApplications, cl
 
   return (
     <Command
-      label="Hermes command bar"
+      label="NasTech command bar"
       shouldFilter={false}
       className={cn('float overflow-hidden rounded-2xl', className)}
       onMouseDown={event => event.stopPropagation()}
@@ -167,16 +167,16 @@ export function CommandPalette({ onClose, standalone = false, onApplications, cl
       }}
     >
       <div className="flex items-center gap-3 px-4 py-3">
-        <HermesAvatar size={22} rounded={6} />
-        <Command.Input autoFocus value={query} onValueChange={setQuery} placeholder="Ask Hermes anything, or type / for commands" className="h-7 flex-1 bg-transparent text-[15px] text-fg placeholder:text-fg-4 outline-none" />
+        <NasTechAvatar size={22} rounded={6} />
+        <Command.Input autoFocus value={query} onValueChange={setQuery} placeholder="Ask NasTech anything, or type / for commands" className="h-7 flex-1 bg-transparent text-[15px] text-fg placeholder:text-fg-4 outline-none" />
         <Kbd>esc</Kbd>
       </div>
       <div className="h-px bg-line" />
       <Command.List className="max-h-[420px] overflow-y-auto p-2 [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-[11px] [&_[cmdk-group-heading]]:tracking-[0.08em] [&_[cmdk-group-heading]]:text-fg-3 [&_[cmdk-group-heading]]:uppercase">
         {trimmed && (
-          <Command.Group heading="Hermes">
+          <Command.Group heading="NasTech">
             <Item value={`ask:${trimmed}`} onSelect={() => void ask(trimmed)} icon={<IconMessage size={15} />} hint="↵">
-              {isSlash ? `Run ${trimmed}` : `Ask Hermes: “${trimmed}”`}
+              {isSlash ? `Run ${trimmed}` : `Ask NasTech: “${trimmed}”`}
             </Item>
           </Command.Group>
         )}

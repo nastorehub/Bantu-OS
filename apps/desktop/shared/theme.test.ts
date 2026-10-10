@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { contrast, hermesSkinYaml, luminance, mix, paletteVars, parseHex, schemeOf, terminalColors, themeColorsFromSkin, themeFromPixels, themeSlug, toHex, type ThemeColors, validateTheme, wallpaperTint } from './theme.ts'
+import { contrast, nastechSkinYaml, luminance, mix, paletteVars, parseHex, schemeOf, terminalColors, themeColorsFromSkin, themeFromPixels, themeSlug, toHex, type ThemeColors, validateTheme, wallpaperTint } from './theme.ts'
 
 const OCEAN: ThemeColors = { bg: '#04113f', bg2: '#0a2a96', surface: '#0b1c5a', fg: '#e9eefb', fg_dim: '#9fb0dc', accent: '#4d92ff', accent_strong: '#5296ff', border_active: '#4d92ff', border_inactive: '#1c2c66', urgent: '#ff6b6b', ok: '#36e6a6', warn: '#f2c25e' }
 const PAPER: ThemeColors = { ...OCEAN, bg: '#f4f1ea', bg2: '#ebe5d8', surface: '#ffffff', fg: '#25221c', fg_dim: '#6b6456', accent: '#b4532a', accent_strong: '#9c4522' }
@@ -115,16 +115,16 @@ describe('themes on disk', () => {
   })
 })
 
-describe('Hermes skins', () => {
-  it('writes a skin Hermes can load', () => {
-    const yaml = hermesSkinYaml('Herald Ocean', OCEAN)
+describe('NasTech skins', () => {
+  it('writes a skin NasTech can load', () => {
+    const yaml = nastechSkinYaml('Herald Ocean', OCEAN)
 
     expect(yaml).toContain('name: herald-os')
     expect(yaml).toContain('  ui_accent: "#4d92ff"')
     expect(yaml).toContain('  status_bar_bg: "#0a2a96"')
   })
 
-  it('reads a Hermes skin back into Herald colours', () => {
+  it('reads a NasTech skin back into Herald colours', () => {
     const colors = themeColorsFromSkin({ colors: { ui_accent: '#ffbf00', banner_text: '#fff8dc', status_bar_bg: '#1a1a2e', ui_error: '#ef5350' } })
 
     expect(colors?.accent).toBe('#ffbf00')

@@ -26,7 +26,7 @@ import { registerContextIpc } from './ipc/context.ts'
 import { registerFsIpc } from './ipc/fs.ts'
 import { registerSystemIpc } from './ipc/system.ts'
 import { registerTerminalIpc } from './ipc/terminal.ts'
-import { registerThemeIpc, syncHermesSkin } from './ipc/theme.ts'
+import { registerThemeIpc, syncNasTechSkin } from './ipc/theme.ts'
 import { applyVoiceHotkey, registerVoiceIpc } from './ipc/voice.ts'
 import { registerEditIpc } from './ipc/edit.ts'
 import { registerWebIpc } from './ipc/web.ts'
@@ -34,7 +34,7 @@ import { log, logTail } from './log.ts'
 import { migrateLegacyData } from './migrate.ts'
 import { registerNotificationHistoryIpc } from './notifications-history.ts'
 import { SwitchService } from './switches.ts'
-import { hermesHome, heraldOsDataDir, isDev } from './paths.ts'
+import { nastechHome, heraldOsDataDir, isDev } from './paths.ts'
 import { readPrefs, writePrefs } from './prefs.ts'
 import { isOmarchy, readOmarchyTheme } from './theme/omarchy.ts'
 import { prefsForTheme } from './theme/themes.ts'
@@ -70,13 +70,13 @@ protocol.registerSchemesAsPrivileged([
 // shell, the Linux session included, would freeze behind a box nobody may see. Log it and go on.
 process.on('uncaughtException', error => log('main', `uncaught exception: ${error.stack ?? error.message}`))
 
-// Started by a command a Hermes session ran, Herald OS inherits that session; the terminals, apps,
+// Started by a command a NasTech session ran, Herald OS inherits that session; the terminals, apps,
 // hooks and backend it starts must not pass for it (backend/session-env.ts).
 for (const name of forgetInheritedSession()) {
   log('main', `dropped the inherited ${name}`)
 }
 
-for (const line of migrateLegacyData({ hermesHome: hermesHome(), appData: app.getPath('appData'), userData: app.getPath('userData') })) {
+for (const line of migrateLegacyData({ nastechHome: nastechHome(), appData: app.getPath('appData'), userData: app.getPath('userData') })) {
   log('migrate', line)
 }
 
@@ -86,7 +86,7 @@ const mode = shellMode()
 // Panels mode (niri): several surface windows, compositor state mirror, control socket for hotkeys.
 const panels = mode === 'panels' ? new PanelShell(win => attachMainWindow(win)) : null
 const wallpaper = panels ? new WallpaperService(panels) : null
-// The agent's `os_ui` tool and the CLI run registry commands in the Hermes window through this bridge.
+// The agent's `os_ui` tool and the CLI run registry commands in the NasTech window through this bridge.
 const osBridge = new OsCommandBridge(() => (panels ? panels.mainWindow() : mainWindow))
 const plugins = new PluginHost(
   () => BrowserWindow.getAllWindows(),
@@ -120,7 +120,7 @@ const control = shellHost
       broadcastPrefs,
       osBridge,
       spec => {
-        syncHermesSkin(spec, backend)
+        syncNasTechSkin(spec, backend)
         events.emit('theme-set', { theme: spec.name })
       },
       () => void switches.broadcast(),
@@ -175,14 +175,14 @@ const osControl = panels
 backend.setControl(osControlPath, osControlToken())
 // Serves org.freedesktop.Notifications so other apps' notifications reach the shell.
 const notifications = panels ? new NotificationDaemon(panels) : null
-/** Deliver a ShellCommand to the Hermes window; panels mode queues it until that window has loaded. */
-const toHermesWindow = (command: ShellCommand) => (panels ? panels.relay('main', command) : mainWindow?.webContents.send(IPC.shellCommand, command))
+/** Deliver a ShellCommand to the NasTech window; panels mode queues it until that window has loaded. */
+const toNasTechWindow = (command: ShellCommand) => (panels ? panels.relay('main', command) : mainWindow?.webContents.send(IPC.shellCommand, command))
 const crashes = new CrashWatcher(
-  report => toHermesWindow({ type: 'crash', payload: { ...report } }),
+  report => toNasTechWindow({ type: 'crash', payload: { ...report } }),
   () => [backend.childPid()].filter((pid): pid is number => pid !== null),
   report => events.emit('crash', { app: report.app, pid: report.pid, reason: report.reason })
 )
-// Every event runs the person's hook scripts and fires the Hermes automations waiting for it.
+// Every event runs the person's hook scripts and fires the NasTech automations waiting for it.
 events.on(event => {
   runHooks(event)
   void fireEventAutomations(event, backend)
@@ -270,7 +270,7 @@ function registerCoreIpc(): void {
 
   ipcMain.handle(
     IPC.envInfo,
-    (): EnvInfo => ({ platform: process.platform, hermesHome: hermesHome(), homeDir: os.homedir(), version: app.getVersion(), isDev, shellMode: mode })
+    (): EnvInfo => ({ platform: process.platform, nastechHome: nastechHome(), homeDir: os.homedir(), version: app.getVersion(), isDev, shellMode: mode })
   )
 
   registerFsIpc(() => mainWindow)
@@ -350,7 +350,7 @@ function createWindow(): void {
 }
 
 app.whenReady().then(async () => {
-  log('main', `Herald OS ${app.getVersion()} starting (dev=${isDev}, mode=${mode}, HERMES_HOME=${hermesHome()})`)
+  log('main', `Herald OS ${app.getVersion()} starting (dev=${isDev}, mode=${mode}, NASTECH_HOME=${nastechHome()})`)
   // A packaged app carries its icon in the bundle; `electron .` would show Electron's.
   const icon = isDev ? appIconPath() : undefined
 
@@ -398,7 +398,7 @@ app.on('activate', () => {
 })
 
 app.on('window-all-closed', () => {
-  // In panels mode the menu bar and dock keep the session alive; closing the Hermes window is fine.
+  // In panels mode the menu bar and dock keep the session alive; closing the NasTech window is fine.
   if (!panels) {
     app.quit()
   }

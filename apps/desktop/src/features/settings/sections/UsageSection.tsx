@@ -9,8 +9,8 @@ import { openWebWindow } from '../../../store/web-windows.ts'
 import { errorText, InlineNote, markSaved, SectionTitle, SettingsGroup, SettingsRow } from './shared.tsx'
 
 /*
- * What Hermes has used: the provider plan's limits (Nous Portal reports them through `usage.bars`
- * and `billing.state`) and Hermes's own token accounting per session (`/api/analytics/usage`).
+ * What NasTech has used: the provider plan's limits (NasTech Portal reports them through `usage.bars`
+ * and `billing.state`) and NasTech's own token accounting per session (`/api/analytics/usage`).
  */
 
 export function UsageSection() {
@@ -42,7 +42,7 @@ export function UsageSection() {
 
   return (
     <>
-      <SectionTitle title="Usage" subtitle="How much Hermes has used, and what is left on your plan." />
+      <SectionTitle title="Usage" subtitle="How much NasTech has used, and what is left on your plan." />
 
       <SettingsGroup title="Plan">
         {plan?.available ? (
@@ -65,7 +65,7 @@ export function UsageSection() {
           <SettingsRow
             icon={<IconGauge />}
             label="Plan limits"
-            description={billing?.logged_in ? 'Your provider does not report plan limits.' : 'Plan limits appear here when Hermes is signed in to Nous Portal; other providers show their usage on their own site.'}
+            description={billing?.logged_in ? 'Your provider does not report plan limits.' : 'Plan limits appear here when NasTech is signed in to NasTech Portal; other providers show their usage on their own site.'}
             keywords="limit quota subscription plan"
           />
         )}

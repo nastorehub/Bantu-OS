@@ -15,7 +15,7 @@ const GLYPH: Record<ContinuityItem['kind'], React.ReactNode> = {
   project: <IconCode />
 }
 
-/** The Overview's lead section: what Hermes thinks the user will want to resume, one card per thread. */
+/** The Overview's lead section: what NasTech thinks the user will want to resume, one card per thread. */
 export function PickUp() {
   const continuity = useStore($continuity)
   const threads = useStore($threads)
@@ -36,7 +36,7 @@ export function PickUp() {
   const action = (
     <div className="flex items-center gap-3">
       <span className="text-[11.5px] text-fg-4" aria-live="polite">
-        {thinking ? 'Hermes is catching up…' : continuity.updatedAt ? `Updated ${formatRelative(continuity.updatedAt)}` : ''}
+        {thinking ? 'NasTech is catching up…' : continuity.updatedAt ? `Updated ${formatRelative(continuity.updatedAt)}` : ''}
       </span>
       {!thinking && online && <LinkAction onClick={() => void refreshThreads({ force: true })}>Refresh</LinkAction>}
     </div>
@@ -55,7 +55,7 @@ export function PickUp() {
       ) : status.phase === 'error' ? (
         <EmptyGlass
           className="min-h-28"
-          title="Hermes could not catch up"
+          title="NasTech could not catch up"
           description={status.message}
           action={
             online && (
@@ -66,7 +66,7 @@ export function PickUp() {
           }
         />
       ) : (
-        <EmptyGlass className="min-h-28" title="Nothing to pick up yet" description={`When you open Herald OS or come back to this ${deviceNoun()}, Hermes suggests where to continue.`} />
+        <EmptyGlass className="min-h-28" title="Nothing to pick up yet" description={`When you open Herald OS or come back to this ${deviceNoun()}, NasTech suggests where to continue.`} />
       )}
     </Section>
   )
@@ -146,7 +146,7 @@ function ItemChip({ item }: { item: ContinuityItem }) {
 
 function ThinkingCards() {
   return (
-    <div className="flex flex-col gap-3" role="status" aria-label="Hermes is catching up">
+    <div className="flex flex-col gap-3" role="status" aria-label="NasTech is catching up">
       {[0, 1].map(index => (
         <GlassCard key={index} className="flex gap-3.5 p-4">
           <Shimmer className="size-10 rounded-xl" />
@@ -171,7 +171,7 @@ function PickUpOffer() {
       <div className="min-w-0 flex-1">
         <div className="text-[14px] font-semibold text-fg">Pick up where you left off</div>
         <div className="mt-0.5 text-[12.5px] leading-snug text-fg-3">
-          When you open Herald OS or come back after a break, Hermes looks at the names of your recent documents, projects, chats and calendar events and suggests where to continue. Never file contents or your screen.
+          When you open Herald OS or come back after a break, NasTech looks at the names of your recent documents, projects, chats and calendar events and suggests where to continue. Never file contents or your screen.
         </div>
       </div>
       <div className="flex shrink-0 items-center gap-2">

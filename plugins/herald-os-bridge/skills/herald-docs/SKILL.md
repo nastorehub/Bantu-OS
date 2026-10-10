@@ -2,7 +2,7 @@
 name: herald-docs
 description: Write and edit documents in Herald Docs, the word processor in Herald OS - letters, cover letters, CVs, reports, memos, meeting notes, proposals, essays and newsletters drafted from a brief or a template, rewrites of the text Herald marked for a request (shorter, longer, another tone, another language, spelling and grammar), reviews that comment on clarity, grammar and tone, summaries, formatting and paragraph styles, find and replace, tables, pictures, a Herald Sheets range as a table in a report, headers and footers with page numbers and dates, fields, footnotes and endnotes, page setup and sections, comments and replies, tables of contents, templates, statistics such as word count and reading time, saving Word, Markdown and text files and exporting PDFs, all through the docs tool
 metadata:
-  hermes:
+  nastech:
     tags: [herald-os, docs, documents, writing, word, docx, markdown, letter, cover letter, report, memo, resume, cv, proposal, essay, newsletter, rewrite, translate, formatting, tables, headers, footers, page numbers, fields, footnotes, endnotes, sections, page setup, comments, review, proofreading, grammar, tone, table of contents, templates, statistics, word count, readability, pdf]
 ---
 
@@ -92,7 +92,7 @@ docs action=new name="Cover letter - Product designer" content="Dear Hiring Mana
 
 ## Marked and selected text
 
-When the person asks Hermes about text they selected in Herald Docs, Herald marks that text (it
+When the person asks NasTech about text they selected in Herald Docs, Herald marks that text (it
 stays tinted while you work) and the request says text is marked for it. `docs action=read
 part=selection` gives it as `marked`, and what is selected now as `selection`. When nothing was
 selected, the caret's place is marked instead, and `at=marked` writes there.
@@ -242,7 +242,7 @@ whether it is resolved, and its replies.
   comment or a reply says, `resolve_comment comment=<id>` marks it resolved (`resolved=false`
   opens it again), and `delete_comment comment=<id>` deletes a comment with its replies (a reply's
   id deletes only that reply; `all=true` every comment in the document), asking the person first.
-- What you write is signed Hermes, so the person sees who said it. Each change is one step to
+- What you write is signed NasTech, so the person sees who said it. Each change is one step to
   undo, and an open document shows its comments beside the pages.
 - "Deal with the comments": read them, make the changes in one `edit`, and in the same batch
   reply to or resolve each one you dealt with (`{"op": "resolveComment", "comment": "c3"}`).

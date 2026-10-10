@@ -28,7 +28,7 @@ class ShellUnavailable(RuntimeError):
 
 def shared_endpoint() -> tuple[str, str]:
     """A shell attached to a backend it did not start writes ``herald-os/control.json`` (0600) instead."""
-    home = os.environ.get("HERMES_HOME") or os.path.join(os.path.expanduser("~"), ".hermes")
+    home = os.environ.get("NASTECH_HOME") or os.path.join(os.path.expanduser("~"), ".nastech")
     try:
         with open(os.path.join(home, "herald-os", "control.json"), encoding="utf-8") as handle:
             data = json.load(handle)
