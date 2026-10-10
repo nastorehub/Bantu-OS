@@ -2,10 +2,10 @@
 
     python3 scripts/make-icons.py
 
-Source: apps/desktop/src/assets/brand/herald-mark.png (the white winged H on transparency, shared with
+Source: apps/desktop/src/assets/brand/nastech-mark.png (the exact NasTech Bantu mark, shared with
 the Herald mobile app). Writes:
   apps/desktop/build/icon.png, icon.icns     app icon (macOS squircle grid: 824 px body on 1024 canvas)
-  apps/desktop/public/brand/herald-icon.png  256 px icon (window icon, favicon)
+  apps/desktop/public/brand/nastech-icon.png  256 px icon (window icon, favicon)
   linux/plymouth/herald-os/logo.png     boot splash mark
 """
 
@@ -20,8 +20,8 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
-APP = ROOT / "apps" / "os"
-MARK = APP / "src" / "assets" / "brand" / "herald-mark.png"
+APP = ROOT / "apps" / "desktop"
+MARK = APP / "src" / "assets" / "brand" / "nastech-mark.png"
 
 CANVAS = 1024
 BODY = 824
@@ -69,7 +69,7 @@ def main() -> int:
     (APP / "build").mkdir(exist_ok=True)
     icon.save(APP / "build" / "icon.png")
     icns(icon, APP / "build" / "icon.icns")
-    icon.resize((256, 256), Image.LANCZOS).save(APP / "public" / "brand" / "herald-icon.png")
+    icon.resize((256, 256), Image.LANCZOS).save(APP / "public" / "brand" / "nastech-icon.png")
 
     splash = mark.resize((240, round(mark.height * 240 / mark.width)), Image.LANCZOS)
     splash.save(ROOT / "linux" / "plymouth" / "herald-os" / "logo.png")

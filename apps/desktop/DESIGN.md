@@ -21,8 +21,8 @@ secondary apps, a dock, a menu bar. For where files live, see [README.md](README
   `src/features/web/native-view.ts`, which also trims it around the voice pill and action captions.
 - `src/shell/apps.ts` is the registry: `PAGES` (sidebar), `FLOATING_APPS`, `NASTECH_APPS`,
   `FEATURED_NATIVE` (macOS apps by name). Icons are ids rendered by `AppGlyph` / `AppTile`
-  (`src/components/app-icon.tsx`). Two marks, never swapped: `HeraldLogo`
-  (`src/components/herald-logo.tsx`) is the product (menu bar, boot screen), `NasTechAvatar` and
+  (`src/components/app-icon.tsx`). Two marks, never swapped: `NasTechLogo`
+  (`src/components/nastech-logo.tsx`) is the product (menu bar, boot screen), `NasTechAvatar` and
   `NasTechMark` are the agent (chat, dock tile, sign-in card).
 - A page is a component exported from `src/features/<page>/<Name>Page.tsx` and registered in
   `src/shell/MainWindow.tsx`. It fills its container (`h-full`), owns its scrolling, and is kept

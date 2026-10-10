@@ -22,7 +22,7 @@ export const brandingCommands: readonly OsCommand[] = [
       const data = describe()
 
       return ok(
-        [data.name ? `Name: ${data.name}` : 'No name', data.logo ? 'a custom logo' : 'the Herald logo', data.lock ? `lock screen: ${data.lock}` : 'the themed lock screen'].join(', '),
+        [data.name ? `Name: ${data.name}` : 'No name', data.logo ? 'a custom logo' : 'the NasTech logo', data.lock ? `lock screen: ${data.lock}` : 'the themed lock screen'].join(', '),
         { data, highlight: { kind: 'setting', id: 'about' } }
       )
     }
@@ -57,7 +57,7 @@ export const brandingCommands: readonly OsCommand[] = [
   {
     id: 'branding.reset',
     title: 'Reset the branding',
-    description: 'Go back to the Herald logo, no name, and the themed lock screen (or reset just one of them).',
+    description: 'Go back to the NasTech logo, no name, and the themed lock screen (or reset just one of them).',
     tier: 'mutate',
     args: [{ name: 'what', type: 'string', description: 'all, logo, lock or name', enum: ['all', 'logo', 'lock', 'name'] }],
     run: async ({ what }) => {

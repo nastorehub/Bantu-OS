@@ -2,7 +2,7 @@ import { useStore } from '@nanostores/react'
 import { IconCheck, IconChevronDown, IconRefresh } from '@tabler/icons-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { WmWorkspace } from '../../../shared/ipc.ts'
-import { HeraldLogo } from '../../components/herald-logo.tsx'
+import { NasTechLogo } from '../../components/nastech-logo.tsx'
 import { cn } from '../../lib/cn.ts'
 import { $wm, onShellCommand, openSurface, relayToMain, wmAction } from '../../store/shell.ts'
 import { $activeSpace, $spaces, setActiveSpace } from '../../store/spaces.ts'
@@ -24,7 +24,7 @@ export function MenuBarSurface() {
   return (
     <header className="flex h-full w-full items-center justify-between px-3 text-[12.5px] text-fg select-none" style={{ background: 'linear-gradient(180deg, var(--menubar-from, rgba(3,10,40,.72)), var(--menubar-to, rgba(3,10,40,.42)))' }}>
       <div className="flex min-w-0 items-center gap-2.5">
-        <HeraldLogo height={12} />
+        <NasTechLogo height={12} />
         <span className="font-semibold">Herald OS</span>
         {title && (
           <>

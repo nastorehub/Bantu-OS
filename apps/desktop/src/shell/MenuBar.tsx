@@ -3,7 +3,7 @@ import { IconBattery, IconBattery1, IconBattery2, IconBattery3, IconBattery4, Ic
 import { Fragment, type ReactNode, useEffect, useRef, useState } from 'react'
 import type { StatusPanelId, SwitchName } from '../../shared/ipc.ts'
 import { clockText, type MenuBarItem, normalizeMenuBar, visibleMenuBarItems } from '../../shared/menu-bar.ts'
-import { HeraldLogo } from '../components/herald-logo.tsx'
+import { NasTechLogo } from '../components/nastech-logo.tsx'
 import { cn } from '../lib/cn.ts'
 import { planPercent } from '../lib/usage.ts'
 import { $backend, $prefs } from '../store/backend.ts'
@@ -218,7 +218,7 @@ export function MenuBar() {
   return (
     <header className="drag-region absolute inset-x-0 top-0 z-(--z-menubar) flex h-(--menubar-h) items-center justify-between px-3 text-[12.5px] text-fg select-none" style={{ background: 'linear-gradient(180deg, var(--menubar-from, rgba(3,10,40,.55)), var(--menubar-to, rgba(3,10,40,.15)))' }}>
       <div className="flex items-center gap-2.5 pl-[74px]">
-        <HeraldLogo height={12} />
+        <NasTechLogo height={12} />
         <span className="font-semibold">Herald OS</span>
         {title !== 'Herald OS' && (
           <>

@@ -174,7 +174,7 @@ Write it with `write_file`, keeping any entries already there:
   original can move.
 - `branding.set args={"lock": "<image path>"}` (PNG or JPEG) is the picture behind the password
   ring on the Herald OS Linux lock screen.
-- `branding.reset` (or `what=logo`, `lock`, `name`) goes back to the Herald logo and the theme's
+- `branding.reset` (or `what=logo`, `lock`, `name`) goes back to the NasTech logo and the theme's
   lock screen.
 
 ## Settings

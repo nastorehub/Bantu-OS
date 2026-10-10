@@ -9,11 +9,11 @@ import { devServerUrl, isShellPage, rendererIndex } from './paths.ts'
 
 const here = path.dirname(fileURLToPath(import.meta.url))
 
-/** The Herald icon: the 1024 px source in a checkout, the renderer's 256 px copy in a package. */
+/** The NasTech Agent icon: the 1024 px source in a checkout, the renderer's 256 px copy in a package. */
 export function appIconPath(): string | undefined {
   const root = app.getAppPath()
 
-  return [path.join(root, 'build', 'icon.png'), path.join(root, 'dist', 'renderer', 'brand', 'herald-icon.png')].find(file => fs.existsSync(file))
+  return [path.join(root, 'build', 'icon.png'), path.join(root, 'dist', 'renderer', 'brand', 'nastech-icon.png')].find(file => fs.existsSync(file))
 }
 
 export function createMainWindow(prefs: HeraldOSPrefs): BrowserWindow {

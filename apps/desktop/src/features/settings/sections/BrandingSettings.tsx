@@ -1,7 +1,7 @@
 import { useStore } from '@nanostores/react'
 import { IconId, IconLock, IconPhoto } from '@tabler/icons-react'
 import { useEffect, useState } from 'react'
-import { HeraldLogo } from '../../../components/herald-logo.tsx'
+import { NasTechLogo } from '../../../components/nastech-logo.tsx'
 import { GlassButton, GlassCard } from '../../../components/ui/glass.tsx'
 import { $env } from '../../../store/backend.ts'
 import { $branding } from '../../../store/branding.ts'
@@ -31,7 +31,7 @@ async function choose(kind: 'logo' | 'lock') {
   }
 }
 
-/** The top of About: the Herald logo, or the logo and name the person set. */
+/** The top of About: the NasTech logo, or the logo and name the person set. */
 export function AboutIdentity() {
   const env = useStore($env)
   const branding = useStore($branding)
@@ -39,7 +39,7 @@ export function AboutIdentity() {
   return (
     <SettingsBlock label="Herald OS" description={branding.name ?? undefined} keywords="about logo branding version">
       <GlassCard className="flex items-center gap-4 p-5">
-        {branding.logo ? <img src={branding.logo} alt={branding.name ? `${branding.name} logo` : 'Logo'} className="h-12 max-w-[180px] object-contain" /> : <HeraldLogo height={28} />}
+        {branding.logo ? <img src={branding.logo} alt={branding.name ? `${branding.name} logo` : 'Logo'} className="h-12 max-w-[180px] object-contain" /> : <NasTechLogo height={28} />}
         <div className="min-w-0">
           {branding.name && <div className="truncate text-[15px] font-semibold text-fg">{branding.name}</div>}
           <div className={branding.name ? 'text-[12.5px] text-fg-3' : 'text-[15px] font-semibold text-fg'}>Herald OS {env?.version ?? ''}</div>
@@ -65,10 +65,10 @@ export function BrandingSettings() {
 
   return (
     <SettingsGroup title="Branding">
-      <SettingsRow icon={<IconPhoto />} label="Logo" description={branding.logo ? 'Yours, shown above.' : 'The Herald logo. A PNG, JPEG, WebP or SVG of your own replaces it.'} keywords="branding logo company">
+      <SettingsRow icon={<IconPhoto />} label="Logo" description={branding.logo ? 'Yours, shown above.' : 'The NasTech logo. A PNG, JPEG, WebP or SVG of your own replaces it.'} keywords="branding logo company">
         {branding.logo && (
           <GlassButton size="sm" variant="ghost" onClick={() => void run('branding.reset', { what: 'logo' })}>
-            Use the Herald logo
+            Use the NasTech logo
           </GlassButton>
         )}
         <GlassButton size="sm" onClick={() => void choose('logo')}>

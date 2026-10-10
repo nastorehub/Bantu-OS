@@ -1894,7 +1894,7 @@ def branding_cmd(args: list[str]) -> int:
         die(reply.get("error") or "the shell rejected the command", 1)
     view = reply.get("branding") or {}
     print(f"name:  {view.get('name') or '(none)'}")
-    print(f"logo:  {'yours' if view.get('logo') else 'the Herald logo'}")
+    print(f"logo:  {'yours' if view.get('logo') else 'the NasTech logo'}")
     print(f"lock:  {view.get('lock') or 'the theme colours'}")
     return 0
 
