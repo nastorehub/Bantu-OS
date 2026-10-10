@@ -10,7 +10,7 @@ You need macOS 13 or later on Apple Silicon (or Herald OS Linux, see
 Then:
 
 ```bash
-git clone https://github.com/iamlukethedev/Herald-OS.git
+git clone https://github.com/nastorehub/Herald-OS.git
 cd Herald-OS
 npm run bootstrap
 npm run dev

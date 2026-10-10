@@ -9,8 +9,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/iamlukethedev/Herald-OS/releases"><img src="https://img.shields.io/github/v/release/iamlukethedev/Herald-OS?include_prereleases&label=release" alt="Latest release"></a>
-  <a href="https://github.com/iamlukethedev/Herald-OS/actions/workflows/ci.yml"><img src="https://github.com/iamlukethedev/Herald-OS/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/nastorehub/Herald-OS/releases"><img src="https://img.shields.io/github/v/release/nastorehub/Herald-OS?include_prereleases&label=release" alt="Latest release"></a>
+  <a href="https://github.com/nastorehub/Herald-OS/actions/workflows/ci.yml"><img src="https://github.com/nastorehub/Herald-OS/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT license"></a>
   <a href="https://discord.gg/RHyFZ7FX6E"><img src="https://img.shields.io/badge/Discord-join-5865F2?logo=discord&logoColor=white" alt="Discord"></a>
 </p>
@@ -24,7 +24,7 @@ a schedule, and builds software while you watch. Every action that changes somet
 permission system you control.
 
 > [!NOTE]
-> **Herald OS is an independent project by [Luke The Dev](https://github.com/iamlukethedev).** It is
+> **Herald OS is an independent project maintained by [nastorehub](https://github.com/nastorehub).** It is
 > not an official NasTech or NasTech Research product, and it is not affiliated with, sponsored by or
 > endorsed by NasTech Research. Herald OS runs on [NasTech Agent](https://github.com/nastechresearch/nastech-agent),
 > the open-source agent NasTech Research publishes, which is installed alongside it.
@@ -34,7 +34,7 @@ permission system you control.
 
 ## Install
 
-Every download is on the [releases page](https://github.com/iamlukethedev/Herald-OS/releases).
+Every download is on the [releases page](https://github.com/nastorehub/Herald-OS/releases).
 Pick the way that matches your machine:
 
 | Your machine | What to install |
@@ -64,7 +64,7 @@ nastech setup
 ```
 
 **2. Install Herald OS.** Download `HeraldOS-<version>-mac-arm64.dmg` from the
-[releases page](https://github.com/iamlukethedev/Herald-OS/releases), open it and drag Herald OS to
+[releases page](https://github.com/nastorehub/Herald-OS/releases), open it and drag Herald OS to
 Applications.
 
 **3. Let it open.** This build is not notarized by Apple yet, so macOS stops it the first time.
@@ -110,7 +110,7 @@ The whole operating system, for a 64-bit Intel or AMD PC: Fedora underneath, eve
 Herald.
 
 1. Download both parts of the installer from the
-   [releases page](https://github.com/iamlukethedev/Herald-OS/releases),
+   [releases page](https://github.com/nastorehub/Herald-OS/releases),
    `herald-os-<version>-x86_64.iso.part0` and `.part1` (GitHub takes files of up to 2 GB), and join
    them. On macOS or Linux:
 
@@ -137,7 +137,7 @@ how to go back.
 ### Arch Linux
 
 ```bash
-git clone https://github.com/iamlukethedev/Herald-OS.git
+git clone https://github.com/nastorehub/Herald-OS.git
 cd Herald-OS/packaging/arch/herald-os-bin
 makepkg -si
 herald-os setup        # once per user: NasTech Agent and Herald's system tools
@@ -162,14 +162,14 @@ Herald OS becomes an app inside Omarchy. It follows Omarchy's theme and has a ro
 menu. `Super+Alt+H` opens it, and `Super+Alt+A`, `C`, `V`, `X`, `E` and `M` ask NasTech about the
 window, open the command bar, talk, dictate, pick an emoji and show Missions. `herald-os omarchy
 remove` takes it all out again. This has been tested against Omarchy 4's own configuration and
-scripts, but not yet on an Omarchy machine: [reports](https://github.com/iamlukethedev/Herald-OS/issues)
+scripts, but not yet on an Omarchy machine: [reports](https://github.com/nastorehub/Herald-OS/issues)
 are welcome.
 
 ### Another Linux
 
 The tarball carries the app, its command-line tools and the full session. Download
 `herald-os-<version>-linux-x64.tar.gz` and its `.sha256` from the
-[releases page](https://github.com/iamlukethedev/Herald-OS/releases) (the `arm64` ones on ARM), then:
+[releases page](https://github.com/nastorehub/Herald-OS/releases) (the `arm64` ones on ARM), then:
 
 ```bash
 sha256sum -c herald-os-<version>-linux-x64.tar.gz.sha256
@@ -198,7 +198,7 @@ boots it with Apple's virtualization, so the graphics are accelerated:
 
 ```bash
 brew install qemu zstd
-git clone https://github.com/iamlukethedev/Herald-OS.git && cd Herald-OS
+git clone https://github.com/nastorehub/Herald-OS.git && cd Herald-OS
 bash linux/vm/try.sh
 ```
 
@@ -324,7 +324,7 @@ The virtual machine gets 4 cores and 8 GB of memory; on a Mac with 8 GB in total
 
 ```bash
 brew install qemu
-git clone https://github.com/iamlukethedev/Herald-OS.git
+git clone https://github.com/nastorehub/Herald-OS.git
 cd Herald-OS
 ```
 
@@ -393,7 +393,7 @@ nastech        # say hello, then exit with Ctrl+D
 **2. Get the code.**
 
 ```bash
-git clone https://github.com/iamlukethedev/Herald-OS.git
+git clone https://github.com/nastorehub/Herald-OS.git
 cd Herald-OS
 ```
 

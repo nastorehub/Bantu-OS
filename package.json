@@ -4,13 +4,13 @@
   "private": true,
   "description": "Herald OS: an agent-native operating system built on NasTech Agent.",
   "license": "MIT",
-  "author": "Luke The Dev",
-  "homepage": "https://github.com/iamlukethedev/Herald-OS",
+  "author": "nastorehub",
+  "homepage": "https://github.com/nastorehub/Herald-OS",
   "repository": {
     "type": "git",
-    "url": "https://github.com/iamlukethedev/Herald-OS.git"
+    "url": "https://github.com/nastorehub/Herald-OS.git"
   },
-  "bugs": "https://github.com/iamlukethedev/Herald-OS/issues",
+  "bugs": "https://github.com/nastorehub/Herald-OS/issues",
   "type": "module",
   "workspaces": [
     "apps/*",

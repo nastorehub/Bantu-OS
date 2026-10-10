@@ -106,12 +106,12 @@ if [[ "$MODE" == "--image" ]]; then
   if [[ -f "$LINUX/image/cosign.pub" ]]; then
     install -Dm0644 "$LINUX/image/cosign.pub" /etc/pki/containers/herald-os.pub
     install -d /etc/containers/registries.d
-    printf 'docker:\n  ghcr.io/iamlukethedev/herald-os:\n    use-sigstore-attachments: true\n' >/etc/containers/registries.d/herald-os.yaml
+    printf 'docker:\n  ghcr.io/nastorehub/herald-os:\n    use-sigstore-attachments: true\n' >/etc/containers/registries.d/herald-os.yaml
     python3 - <<'PY'
 import json
 path = "/etc/containers/policy.json"
 policy = json.load(open(path))
-policy.setdefault("transports", {}).setdefault("docker", {})["ghcr.io/iamlukethedev/herald-os"] = [
+policy.setdefault("transports", {}).setdefault("docker", {})["ghcr.io/nastorehub/herald-os"] = [
     {"type": "sigstoreSigned", "keyPath": "/etc/pki/containers/herald-os.pub", "signedIdentity": {"type": "matchRepository"}}
 ]
 json.dump(policy, open(path, "w"), indent=2)

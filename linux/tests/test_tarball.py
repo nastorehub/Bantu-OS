@@ -321,7 +321,7 @@ def test_every_request_to_github_is_https_only(tmp_path, monkeypatch):
     ran = []
     monkeypatch.setattr(tb.subprocess, "call", lambda argv, **kwargs: ran.append(argv) or 0)
     monkeypatch.setattr(tb.subprocess, "run", lambda argv, **kwargs: ran.append(argv) or subprocess.CompletedProcess(argv, 0, "[]", ""))
-    tb.download("https://github.com/iamlukethedev/Herald-OS/releases/download/v1/x.tar.gz", tmp_path / "x")
+    tb.download("https://github.com/nastorehub/Herald-OS/releases/download/v1/x.tar.gz", tmp_path / "x")
     tb.releases()
     assert len(ran) == 2
     for argv in ran:

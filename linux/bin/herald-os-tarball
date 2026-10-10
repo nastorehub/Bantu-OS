@@ -35,7 +35,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-RELEASES_API = "https://api.github.com/repos/iamlukethedev/Herald-OS/releases?per_page=30"
+RELEASES_API = "https://api.github.com/repos/nastorehub/Herald-OS/releases?per_page=30"
 SESSION_SCRIPTS = ("herald-os-session", "herald-os-compositor", "herald-os-niri-nested")
 UNITS = ("herald-os-update-check.service", "herald-os-update-check.timer")
 APP_ENTRY = """[Desktop Entry]

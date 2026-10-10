@@ -16,7 +16,7 @@ RUN bash /tmp/herald-os/linux/image/packages.sh --image /tmp/herald-os/shell.tar
 
 LABEL org.opencontainers.image.title="Herald OS" \
       org.opencontainers.image.description="An AI-native desktop built around NasTech Agent" \
-      org.opencontainers.image.source="https://github.com/iamlukethedev/Herald-OS" \
+      org.opencontainers.image.source="https://github.com/nastorehub/Herald-OS" \
       org.opencontainers.image.licenses="MIT" \
       containers.bootc="1"
 

@@ -4,7 +4,7 @@
   "version": "0.1.0-alpha.3",
   "private": true,
   "description": "The Herald OS shell: menu bar, dock, windows and apps for an agent-native operating system.",
-  "author": "Luke The Dev",
+  "author": "nastorehub",
   "license": "MIT",
   "type": "module",
   "main": "dist/electron/main.mjs",

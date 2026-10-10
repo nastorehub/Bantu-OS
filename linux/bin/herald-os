@@ -2324,7 +2324,7 @@ def image_switch(channel: str) -> int:
     try:
         current = json.loads(status.stdout)["spec"]["image"]["image"]
     except (ValueError, KeyError, TypeError):
-        current = "ghcr.io/iamlukethedev/herald-os:stable"
+        current = "ghcr.io/nastorehub/herald-os:stable"
     target = current.rsplit(":", 1)[0] + f":{channel}"
     if target == current:
         return 0

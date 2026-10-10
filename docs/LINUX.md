@@ -224,7 +224,7 @@ VM's provisioner also runs, so the VM and the image cannot drift apart:
 
 `linux/image/Containerfile` starts from `quay.io/fedora/fedora-bootc:44`; `.github/workflows/image.yml`
 builds it for x86_64 and aarch64 on matching runners, pushes it to the repository's GHCR package
-(`ghcr.io/iamlukethedev/herald-os`) and, for a release, turns it into:
+(`ghcr.io/nastorehub/herald-os`) and, for a release, turns it into:
 
 - **an x86_64 installer ISO** (bootc-image-builder `anaconda-iso`, `linux/image/iso.toml`): the
   storage screen stays interactive, so it can install next to another system and encrypt the disk
@@ -269,7 +269,7 @@ its apps and saved networks on the next restart and runs setup again; the system
 - **Image signatures:** the image workflow signs each image with the project's cosign key, never
   keyless (which would publish to a transparency log) and without a log upload. Once
   `linux/image/cosign.pub` is in the repository, the image only accepts signed updates of itself
-  (a `sigstoreSigned` policy for `ghcr.io/iamlukethedev/herald-os`).
+  (a `sigstoreSigned` policy for `ghcr.io/nastorehub/herald-os`).
 - **SELinux** stays permissive for now (ADR-012).
 
 ### Switching a bootc system to Herald OS
@@ -300,12 +300,12 @@ yours stays. Note the image you run now, so you can come back to it, then switch
 
 ```bash
 sudo bootc status                # your current image, for later
-sudo bootc switch ghcr.io/iamlukethedev/herald-os:stable
+sudo bootc switch ghcr.io/nastorehub/herald-os:stable
 systemctl reboot
 ```
 
 If `bootc` is missing or refuses, `sudo rpm-ostree rebase
-ostree-unverified-registry:ghcr.io/iamlukethedev/herald-os:stable` switches through rpm-ostree instead
+ostree-unverified-registry:ghcr.io/nastorehub/herald-os:stable` switches through rpm-ostree instead
 (`unverified`: without a signature check, as above).
 
 **Going back.** The system you switched from stays in the boot menu: `sudo bootc rollback` (on Herald

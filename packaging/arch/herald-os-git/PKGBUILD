@@ -1,4 +1,4 @@
-# Maintainer: Luke The Dev <252071647+iamlukethedev@users.noreply.github.com>
+# Maintainer: nastorehub <nastorehub@users.noreply.github.com>
 #
 # Herald OS built from the main branch. Not on the AUR yet: build it from the repository with makepkg -si.
 
@@ -7,7 +7,7 @@ pkgver=0.1.0alpha.3.r0.g0000000
 pkgrel=1
 pkgdesc='An AI-native desktop built around NasTech Agent (development build from git)'
 arch=('x86_64' 'aarch64')
-url='https://github.com/iamlukethedev/Herald-OS'
+url='https://github.com/nastorehub/Herald-OS'
 license=('MIT')
 depends=('gtk3' 'nss' 'alsa-lib' 'libsecret' 'libnotify' 'python' 'curl' 'wl-clipboard' 'wtype' 'grim' 'slurp')
 makedepends=('git' 'nodejs' 'npm' 'python' 'base-devel')

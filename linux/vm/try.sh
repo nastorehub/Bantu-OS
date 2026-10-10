@@ -15,7 +15,7 @@ disk="${1:-}"
 if [[ -z "$disk" ]]; then
   echo "==> Finding the latest Herald OS VM disk"
   # The disk is over GitHub's 2 GiB limit for one file, so it may come in parts (.part0, .part1, …).
-  urls="$(curl -fsSL https://api.github.com/repos/iamlukethedev/Herald-OS/releases/latest |
+  urls="$(curl -fsSL https://api.github.com/repos/nastorehub/Herald-OS/releases/latest |
     grep -E -o '"browser_download_url": *"[^"]*-aarch64\.qcow2\.zst(\.part[0-9]+)?"' | sed 's/.*"\(https[^"]*\)"/\1/' | sort)"
   [[ -n "$urls" ]] || { echo "try.sh: the latest release has no VM disk; pass one you have" >&2; exit 1; }
   name="$(basename "$(head -n 1 <<<"$urls")")"

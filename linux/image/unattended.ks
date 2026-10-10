@@ -8,7 +8,7 @@ zerombr
 clearpart --all --initlabel --disklabel=gpt
 autopart --type=btrfs --encrypted --passphrase=change-me
 # The image itself; the installer ISO points this at the image it was built from.
-ostreecontainer --url=ghcr.io/iamlukethedev/herald-os:stable
+ostreecontainer --url=ghcr.io/nastorehub/herald-os:stable
 # The first boot creates the session user; the shell's setup sets the name and password.
 rootpw --lock
 # The login screen needs graphical.target, which Anaconda does not pick for greetd by itself.
