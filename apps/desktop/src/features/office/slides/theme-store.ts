@@ -6,12 +6,12 @@ import { normalizeTheme } from './normalize.ts'
 import { setCustomThemes } from './themes.ts'
 
 /*
- * Custom slide themes, kept for every deck in one file in Herald's data folder and written whole
+ * Custom slide themes, kept for every deck in one file in Bantu's data folder and written whole
  * on every change. Each theme is checked as a deck's theme is when it is read, and its id
  * (`custom-` and its name) never takes a built-in theme's place.
  */
 
-export const THEMES_FORMAT = 'herald-slide-themes'
+export const THEMES_FORMAT = 'bantu-slide-themes'
 
 export const THEMES_VERSION = 1
 
@@ -24,7 +24,7 @@ export interface ThemesFile {
 /** The custom themes as last read or written. */
 export const $customThemes = atom<readonly Theme[]>([])
 
-export const customThemesPath = (nastechHome: string): string => `${nastechHome.replace(/\/+$/, '')}/herald-os/office/slide-themes.json`
+export const customThemesPath = (nastechHome: string): string => `${nastechHome.replace(/\/+$/, '')}/bantu-os/office/slide-themes.json`
 
 function nastechHome(): string {
   const home = $env.get()?.nastechHome
@@ -63,14 +63,14 @@ async function readThemes(home: string): Promise<Theme[]> {
   const location = customThemesPath(home)
 
   // Main logs every read that fails, so a file nobody has written yet is not read.
-  if ((await window.heraldOS.canvas.exists(location)) !== 'file') {
+  if ((await window.bantuOS.canvas.exists(location)) !== 'file') {
     return []
   }
 
   let preview: FilePreview
 
   try {
-    preview = await window.heraldOS.fs.readFile(location)
+    preview = await window.bantuOS.fs.readFile(location)
   } catch (error) {
     if (/ENOENT|no such file/i.test(error instanceof Error ? error.message : String(error))) {
       return []
@@ -94,11 +94,11 @@ async function readThemes(home: string): Promise<Theme[]> {
   const file = typeof data === 'object' && data !== null ? (data as Partial<Record<keyof ThemesFile, unknown>>) : {}
 
   if (file.format !== THEMES_FORMAT || typeof file.version !== 'number') {
-    throw new Error('The custom slide themes file is not a Herald slide themes file')
+    throw new Error('The custom slide themes file is not a Bantu slide themes file')
   }
 
   if (file.version > THEMES_VERSION) {
-    throw new Error('The custom slide themes file was written by a newer Herald')
+    throw new Error('The custom slide themes file was written by a newer Bantu')
   }
 
   const themes: Theme[] = []
@@ -114,7 +114,7 @@ async function readThemes(home: string): Promise<Theme[]> {
 async function writeThemes(home: string, themes: Theme[]): Promise<void> {
   const file: ThemesFile = { format: THEMES_FORMAT, version: THEMES_VERSION, themes }
 
-  await window.heraldOS.fs.writeText(customThemesPath(home), `${JSON.stringify(file, null, 2)}\n`)
+  await window.bantuOS.fs.writeText(customThemesPath(home), `${JSON.stringify(file, null, 2)}\n`)
 }
 
 function publish(themes: Theme[]): Theme[] {

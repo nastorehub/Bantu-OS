@@ -65,7 +65,7 @@ export function makeTargets(io: TargetIO) {
     const active = io.active()
 
     if (!active) {
-      throw new Error('No presentation is open in Herald Slides: open one or start one')
+      throw new Error('No presentation is open in Bantu Slides: open one or start one')
     }
 
     return fromOpen(active)
@@ -98,7 +98,7 @@ export function makeTargets(io: TargetIO) {
     }
 
     if (on.notes.length && !options.accept) {
-      throw new Error(`Writing ${baseName(on.path)} back would lose what Herald could not keep of it (${on.notes[0]}); open it in Herald Slides to decide`)
+      throw new Error(`Writing ${baseName(on.path)} back would lose what Bantu could not keep of it (${on.notes[0]}); open it in Bantu Slides to decide`)
     }
 
     const { bytes } = await io.adapter.write(change.deck, extensionOf(on.path), undefined)
@@ -110,7 +110,7 @@ export function makeTargets(io: TargetIO) {
   return { target, apply }
 }
 
-/** The window's own targets, wired to its Herald Slides session. */
+/** The window's own targets, wired to its Bantu Slides session. */
 export async function slidesTargets(): Promise<ReturnType<typeof makeTargets>> {
   const [{ slidesSession, decks }, { slidesAdapter }, { flushTyping }] = await Promise.all([import('./store.ts'), import('./adapter.ts'), import('./editor/active.ts')])
 
@@ -119,8 +119,8 @@ export async function slidesTargets(): Promise<ReturnType<typeof makeTargets>> {
     active: () => slidesSession.active(),
     live: (key) => decks.get(key),
     changed: (doc) => slidesSession.changed(doc),
-    read: (file) => window.heraldOS.office.read(file),
-    write: (file, bytes) => window.heraldOS.office.write(file, bytes),
+    read: (file) => window.bantuOS.office.read(file),
+    write: (file, bytes) => window.bantuOS.office.write(file, bytes),
     adapter: slidesAdapter,
     flush: (doc) => flushTyping(doc)
   })

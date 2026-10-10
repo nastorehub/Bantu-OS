@@ -18,11 +18,11 @@ export function nastechHome(): string {
   return path.join(os.homedir(), '.nastech')
 }
 
-export function heraldOsDataDir(): string {
-  return path.join(nastechHome(), 'herald-os')
+export function bantuOsDataDir(): string {
+  return path.join(nastechHome(), 'bantu-os')
 }
 
-export const isDev = process.env.HERALD_OS_BUILD_MODE === 'development' || Boolean(osEnv('DEV_SERVER'))
+export const isDev = process.env.BANTU_OS_BUILD_MODE === 'development' || Boolean(osEnv('DEV_SERVER'))
 
 export function devServerUrl(): string | undefined {
   return osEnv('DEV_SERVER')

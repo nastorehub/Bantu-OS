@@ -1,5 +1,5 @@
 /*
- * Fills for Herald Canvas: finding the pixels like a clicked one (the paint bucket and the magic
+ * Fills for Bantu Canvas: finding the pixels like a clicked one (the paint bucket and the magic
  * wand), and laying a colour, a gradient (see gradient.ts) or transparency into a layer's pixels
  * with a strength for each pixel (the selection, the found area and the tool's opacity together).
  * Masks take gray.

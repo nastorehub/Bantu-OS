@@ -2,7 +2,7 @@ import type { CommandArg, OsCommand } from '../store/os-commands.ts'
 import { document, office, run } from './docs-shared.ts'
 
 /*
- * Herald Docs' page and review for NasTech: headers and footers, fields, notes, sections, comments,
+ * Bantu Docs' page and review for NasTech: headers and footers, fields, notes, sections, comments,
  * tables of contents, templates and statistics. Like the rest of docs.*, a command works on the
  * document it names or the one in front, and each change is one step to undo in an open document.
  */
@@ -20,14 +20,14 @@ const mode: CommandArg = { name: 'mode', type: 'string', description: 'With head
 /** Where something in a line of text goes, for a field or a note's number; `between` says where it goes at a place between paragraphs. */
 const inText = (between: string): readonly CommandArg[] => [
   quote,
-  { name: 'at', type: 'string', description: `Without quote: end (the default), start, selection (at the caret of an open document), marked (in place of the text Herald marked for this request), after (the marked text’s paragraph, or the selection’s when nothing is marked) or heading; at a place between paragraphs it goes ${between}` },
+  { name: 'at', type: 'string', description: `Without quote: end (the default), start, selection (at the caret of an open document), marked (in place of the text Bantu marked for this request), after (the marked text’s paragraph, or the selection’s when nothing is marked) or heading; at a place between paragraphs it goes ${between}` },
   heading,
   mode
 ]
 
 /** Where a block goes, for a section break or a table of contents. */
 const between = (fallback: 'end' | 'start'): readonly CommandArg[] => [
-  { name: 'at', type: 'string', description: `Where: ${fallback} (the default), ${fallback === 'end' ? 'start' : 'end'}, selection (at the caret of an open document), marked (in place of the text Herald marked), after (under the marked text’s paragraph, or the selection’s when nothing is marked) or heading` },
+  { name: 'at', type: 'string', description: `Where: ${fallback} (the default), ${fallback === 'end' ? 'start' : 'end'}, selection (at the caret of an open document), marked (in place of the text Bantu marked), after (under the marked text’s paragraph, or the selection’s when nothing is marked) or heading` },
   heading,
   mode,
   { name: 'quote', type: 'string', description: 'Exact text in the document: it goes after the paragraph with its first match' }
@@ -249,7 +249,7 @@ export const docsDepthCommands: readonly OsCommand[] = [
   {
     id: 'docs.updateTocs',
     title: 'Update a document’s tables of contents',
-    description: 'Bring the page numbers of a document’s tables of contents up to date with its pages as Herald Docs lays them out, as one step to undo (their entries always follow the headings).',
+    description: 'Bring the page numbers of a document’s tables of contents up to date with its pages as Bantu Docs lays them out, as one step to undo (their entries always follow the headings).',
     tier: 'act',
     args: [document],
     run: run('docs.updateTocs', async (args) => (await depth()).updateTocs(args))
@@ -272,8 +272,8 @@ export const docsDepthCommands: readonly OsCommand[] = [
   },
   {
     id: 'docs.listTemplates',
-    title: 'List Herald Docs’ templates',
-    description: 'The templates a new document can start from (docs.new template=): Herald Docs’ own, each with its id, name and what it holds, and those the person saved, with their id, name and when.',
+    title: 'List Bantu Docs’ templates',
+    description: 'The templates a new document can start from (docs.new template=): Bantu Docs’ own, each with its id, name and what it holds, and those the person saved, with their id, name and when.',
     tier: 'read',
     args: [],
     run: async () => (await office()).done((await depth()).listTemplates())

@@ -22,7 +22,7 @@ export const refused = (reason: Refusal['refused']): Refusal => ({ refused: reas
 
 const isRefusal = (value: string | Refusal): value is Refusal => typeof value !== 'string'
 
-/** Parts never copied: macros, controls and data connections go with the features Herald drops. */
+/** Parts never copied: macros, controls and data connections go with the features Bantu drops. */
 const NEVER = /vbaProject|activeX|controlproperties|macrosheet|\.main\+xml$|spreadsheetml\.(?:connections|queryTable|worksheet|dialogsheet)\+xml/i
 
 const RELATIONSHIPS = 'http://schemas.openxmlformats.org/package/2006/relationships'

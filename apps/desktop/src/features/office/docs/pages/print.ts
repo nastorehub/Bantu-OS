@@ -195,7 +195,7 @@ export async function printDocument(model: DocJSON, title: string): Promise<stri
       return printView(laid.doc, title, laid.pages)
     }
   } catch (error) {
-    console.error('Herald Docs could not lay the pages out for printing', error)
+    console.error('Bantu Docs could not lay the pages out for printing', error)
   }
 
   return printView(model, title)

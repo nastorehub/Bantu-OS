@@ -55,7 +55,7 @@ export function WebWindow({ win }: { win: OSWindow }) {
             type="button"
             onClick={() => openInCanvas(filePath)}
             className="flex h-6 shrink-0 items-center gap-1 rounded-md px-2 text-[11.5px] text-fg-2 hover:bg-white/8 hover:text-fg"
-            title="Edit in Herald Canvas"
+            title="Edit in Bantu Canvas"
           >
             <IconPhotoEdit size={13} /> Edit
           </button>

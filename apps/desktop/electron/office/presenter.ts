@@ -1,19 +1,19 @@
 import { BrowserWindow, screen } from 'electron'
 
 /*
- * Herald Slides' audience window: while the presenter view stays in Herald's window, the slides go
+ * Bantu Slides' audience window: while the presenter view stays in Bantu's window, the slides go
  * full screen on another display, in a window the presenter view opens and draws into itself (an
- * empty page of Herald's own, so nothing loads in it and it needs no preload).
+ * empty page of Bantu's own, so nothing loads in it and it needs no preload).
  */
 
-/** The name Herald Slides opens its audience window under. */
-export const AUDIENCE_WINDOW_NAME = 'herald-slides-audience'
+/** The name Bantu Slides opens its audience window under. */
+export const AUDIENCE_WINDOW_NAME = 'bantu-slides-audience'
 
 /** Fixed, so that compositor rules can match it. */
-const AUDIENCE_TITLE = 'Herald Slides Audience'
+const AUDIENCE_TITLE = 'Bantu Slides Audience'
 
 /**
- * The answer to a page's `window.open` when it asks for Herald Slides' audience window: allowed, full
+ * The answer to a page's `window.open` when it asks for Bantu Slides' audience window: allowed, full
  * screen on a display other than the opener's, or refused when there is none. Null for every other
  * window, which the caller answers as it always has.
  */

@@ -5,12 +5,12 @@ import type { OfficeTemplate, OfficeTemplateInfo } from '../../shared/ipc.ts'
 import { OFFICE_APPS, type OfficeApp } from '../../shared/office/files.ts'
 
 /*
- * Templates the person saves from an Office app, in the Herald OS data folder: one JSON file each
+ * Templates the person saves from an Office app, in the Bantu OS data folder: one JSON file each
  * in `office-templates/<app>/`, with the template's name, when it was saved and the document. A
  * template's id is a UUID that names its file, so nothing here reads or writes outside that folder.
  */
 
-/** The largest template Herald saves, pictures and all. */
+/** The largest template Bantu saves, pictures and all. */
 export const MAX_TEMPLATE_BYTES = 64 * 1024 * 1024
 
 const MAX_NAME = 120
@@ -47,7 +47,7 @@ export class OfficeTemplates {
 
   private folder(app: unknown): string {
     if (!OFFICE_APPS.includes(app as OfficeApp)) {
-      throw new Error(`${String(app)} is not a Herald Office app`)
+      throw new Error(`${String(app)} is not a Bantu Office app`)
     }
 
     return path.join(this.root, app as OfficeApp)

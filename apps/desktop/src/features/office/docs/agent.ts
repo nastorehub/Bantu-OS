@@ -21,11 +21,11 @@ import { freshName } from './templates/gallery.ts'
 import { savedTemplates } from './templates/saved.ts'
 
 /*
- * What NasTech (and voice, the command bar and `herald-os docs`) does in Herald Docs. A command
+ * What NasTech (and voice, the command bar and `bantu-os docs`) does in Bantu Docs. A command
  * works on the document it names or the one in front. Open in a window, each change is one step to
  * undo there and saves the way the person's own edits do; a file that is not open is read, changed
- * and written back, unless writing it would lose something Herald cannot keep (then it has to be
- * opened, so the fidelity report comes first). Main backs a file up before Herald first writes over it.
+ * and written back, unless writing it would lose something Bantu cannot keep (then it has to be
+ * opened, so the fidelity report comes first). Main backs a file up before Bantu first writes over it.
  */
 
 type Args = Record<string, unknown>
@@ -38,7 +38,7 @@ export async function located(ref: unknown): Promise<Local<DocJSON>> {
   const found = await locate('docs', session, ref)
 
   if (found.kind === 'remote') {
-    throw new Error(`${found.entry.name} is open in another Herald Docs window: ask there`)
+    throw new Error(`${found.entry.name} is open in another Bantu Docs window: ask there`)
   }
 
   return found
@@ -54,7 +54,7 @@ interface Reading {
 }
 
 async function readFile(file: string) {
-  const data = await window.heraldOS.office.read(file)
+  const data = await window.bantuOS.office.read(file)
 
   return docsAdapter.read(data.bytes, extensionOf(file), baseName(file))
 }
@@ -82,7 +82,7 @@ export async function change(target: Local<DocJSON>, build: (state: EditorState,
     const read = await readFile(file)
 
     if (read.notes.length) {
-      throw new Error(`${fileName(file)} has things Herald Docs shows differently (${read.notes[0].replace(/\.$/, '')}${read.notes.length > 1 ? `, and ${read.notes.length - 1} more` : ''}): open it in Herald Docs to change it (docs.open)`)
+      throw new Error(`${fileName(file)} has things Bantu Docs shows differently (${read.notes[0].replace(/\.$/, '')}${read.notes.length > 1 ? `, and ${read.notes.length - 1} more` : ''}): open it in Bantu Docs to change it (docs.open)`)
     }
 
     const state = stateOf(read.model)
@@ -95,10 +95,10 @@ export async function change(target: Local<DocJSON>, build: (state: EditorState,
     const written = await docsAdapter.write(jsonOf(tr.doc), extensionOf(file), read.layout)
 
     if (written.losses.length) {
-      throw new Error(`Saving ${fileName(file)} would lose something (${written.losses[0].replace(/\.$/, '')}): open it in Herald Docs to change it (docs.open)`)
+      throw new Error(`Saving ${fileName(file)} would lose something (${written.losses[0].replace(/\.$/, '')}): open it in Bantu Docs to change it (docs.open)`)
     }
 
-    await window.heraldOS.office.write(file, written.bytes)
+    await window.bantuOS.office.write(file, written.bytes)
 
     return { changed: true, name: fileName(file), path: file }
   }
@@ -139,22 +139,22 @@ async function picture(source: string, maxWidth: number): Promise<{ src: string;
     const found = pictureFrom(bytes, match?.[1] ?? '', maxWidth)
 
     if (!found) {
-      throw new Error('That picture is not one Herald Docs shows (PNG, JPEG, GIF, WebP, BMP or SVG)')
+      throw new Error('That picture is not one Bantu Docs shows (PNG, JPEG, GIF, WebP, BMP or SVG)')
     }
 
     return found
   }
 
   if (isRemote(source)) {
-    throw new Error(`Herald Docs puts in pictures from files: save ${source} first and give its path`)
+    throw new Error(`Bantu Docs puts in pictures from files: save ${source} first and give its path`)
   }
 
   const file = resolve(source.replace(/^file:\/\//, ''))
   const mime = IMAGE_TYPES[/\.([a-z0-9]+)$/i.exec(file)?.[1]?.toLowerCase() ?? ''] ?? ''
-  const found = pictureFrom((await window.heraldOS.office.read(file)).bytes, mime, maxWidth)
+  const found = pictureFrom((await window.bantuOS.office.read(file)).bytes, mime, maxWidth)
 
   if (!found) {
-    throw new Error(`${fileName(file)} is not a picture Herald Docs shows (PNG, JPEG, GIF, WebP, BMP or SVG)`)
+    throw new Error(`${fileName(file)} is not a picture Bantu Docs shows (PNG, JPEG, GIF, WebP, BMP or SVG)`)
   }
 
   return found
@@ -203,7 +203,7 @@ export async function open(args: Args): Promise<Outcome> {
   if (!text(args.path)) {
     openInOffice('docs')
 
-    return { summary: 'Opened Herald Docs' }
+    return { summary: 'Opened Bantu Docs' }
   }
 
   const file = resolve(text(args.path))
@@ -213,13 +213,13 @@ export async function open(args: Args): Promise<Outcome> {
   }
 
   if (officeAppFor(file, { libreOffice: false }) !== 'docs') {
-    throw new Error(`Herald Docs opens Word documents (.docx), Markdown and text files, not ${fileName(file)}`)
+    throw new Error(`Bantu Docs opens Word documents (.docx), Markdown and text files, not ${fileName(file)}`)
   }
 
   if (isPanels) {
     openInOffice('docs', { file })
 
-    return { summary: `Opened ${fileName(file)} in Herald Docs`, data: { path: file } }
+    return { summary: `Opened ${fileName(file)} in Bantu Docs`, data: { path: file } }
   }
 
   openApp('docs')
@@ -228,7 +228,7 @@ export async function open(args: Args): Promise<Outcome> {
   const read = readDocument((editorOf(doc.key)?.state ?? stateOf(doc.initial)).doc, { part: 'outline', maxChars: 0 })
 
   return {
-    summary: `Opened ${doc.name} in Herald Docs${doc.notes.length ? ` (shown differently: ${doc.notes.join('; ')})` : ''}`,
+    summary: `Opened ${doc.name} in Bantu Docs${doc.notes.length ? ` (shown differently: ${doc.notes.join('; ')})` : ''}`,
     data: { name: doc.name, path: doc.path, words: read.words, outline: read.outline.slice(0, 40), ...(doc.notes.length ? { notes: doc.notes } : {}) }
   }
 }
@@ -259,7 +259,7 @@ export async function create(args: Args): Promise<Outcome> {
   if (isPanels) {
     openInOffice('docs', { blank: true })
 
-    return { summary: `Started a new document in Herald Docs; write into it with docs.write${template ? ' (its window starts it blank, without the template)' : ''}`, data: { name: name ?? 'Untitled' } }
+    return { summary: `Started a new document in Bantu Docs; write into it with docs.write${template ? ' (its window starts it blank, without the template)' : ''}`, data: { name: name ?? 'Untitled' } }
   }
 
   const doc = session.create({ name, model })
@@ -282,7 +282,7 @@ export async function list(): Promise<Outcome> {
   const current = docs.find((entry) => entry.active) ?? docs[0]
 
   return {
-    summary: docs.length ? `${docs.length} document${docs.length === 1 ? '' : 's'} open${current ? `; in front: ${current.name}` : ''}` : 'Nothing is open in Herald Docs',
+    summary: docs.length ? `${docs.length} document${docs.length === 1 ? '' : 's'} open${current ? `; in front: ${current.name}` : ''}` : 'Nothing is open in Bantu Docs',
     data: { documents: docs.map(({ key: _key, app: _app, front: _front, ...entry }) => entry), current: current ? (current.path ?? current.name) : null }
   }
 }
@@ -298,7 +298,7 @@ export async function read(args: Args): Promise<Outcome> {
   const markedText = marked && marked.to > marked.from ? state.doc.textBetween(marked.from, marked.to, '\n', ' ') : null
 
   if (options.part === 'selection' && !live) {
-    throw new Error('Only a document open in Herald Docs has a selection: open it first (docs.open)')
+    throw new Error('Only a document open in Bantu Docs has a selection: open it first (docs.open)')
   }
 
   return {
@@ -501,7 +501,7 @@ export async function edit(args: Args, context?: CommandContext): Promise<Outcom
             case 'pageBreak':
               return insertPageBreak(placeFor(live ? state : null, { at: 'end', ...entry }, marked))
             default:
-              throw new Error(`Herald Docs has no “${entry.op}” edit`)
+              throw new Error(`Bantu Docs has no “${entry.op}” edit`)
           }
         })
 
@@ -546,7 +546,7 @@ export async function save(args: Args): Promise<Outcome> {
     // Save as for a file: read in its format, written in the new one.
     const read = await readFile(target.path)
     const written = await docsAdapter.write(read.model, extensionOf(to), extensionOf(to) === extensionOf(target.path) ? read.layout : undefined)
-    await window.heraldOS.office.write(to, written.bytes)
+    await window.bantuOS.office.write(to, written.bytes)
 
     return { summary: `Saved ${fileName(target.path)} as ${fileName(to)}${written.losses.length ? ` (it cannot keep: ${written.losses.join('; ')})` : ''}`, data: { path: to, ...(written.losses.length ? { losses: written.losses } : {}) } }
   }
@@ -581,7 +581,7 @@ export async function exportPdf(args: Args): Promise<Outcome> {
 
   if (target.kind === 'file') {
     const view = await docsAdapter.print((await readFile(target.path)).model, name)
-    await window.heraldOS.office.exportPdf({ html: view.html, suggestedName: name, landscape: view.landscape, path: file })
+    await window.bantuOS.office.exportPdf({ html: view.html, suggestedName: name, landscape: view.landscape, path: file })
   } else if (!(await session.exportPdf(target.doc, file))) {
     throw new Error(`Could not export ${name} as a PDF`)
   }
@@ -593,7 +593,7 @@ export async function step(direction: 'undo' | 'redo', args: Args): Promise<Outc
   const target = await located(args.document)
 
   if (target.kind === 'file') {
-    throw new Error(`Undo works in the open Herald Docs window: ${fileName(target.path)} is not open`)
+    throw new Error(`Undo works in the open Bantu Docs window: ${fileName(target.path)} is not open`)
   }
 
   const { doc } = target
@@ -601,7 +601,7 @@ export async function step(direction: 'undo' | 'redo', args: Args): Promise<Outc
   const editor = editorOf(doc.key)
 
   if (!editor) {
-    throw new Error(`${doc.name} is not showing in Herald Docs`)
+    throw new Error(`${doc.name} is not showing in Bantu Docs`)
   }
 
   const wanted = stepCount(args.steps)

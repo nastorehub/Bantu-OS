@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import { ipcMain, nativeImage } from 'electron'
-import { type HeraldOSPrefs, IPC } from '../../shared/ipc.ts'
-import { HERALD_SKIN, type ThemeSpec } from '../../shared/theme.ts'
+import { type BantuOSPrefs, IPC } from '../../shared/ipc.ts'
+import { BANTU_SKIN, type ThemeSpec } from '../../shared/theme.ts'
 import type { BackendManager } from '../backend/manager.ts'
 import { events } from '../events/bus.ts'
 import { log } from '../log.ts'
@@ -12,12 +12,12 @@ import { findTheme, installTheme, listFonts, listThemes, prefsForTheme, saveThem
 export interface ThemeIpcDeps {
   panels: boolean
   /** Push new preferences to every window (and the wallpaper service). */
-  broadcast: (prefs: HeraldOSPrefs) => void
+  broadcast: (prefs: BantuOSPrefs) => void
   backend: BackendManager
 }
 
 /**
- * Point NasTech at the Herald skin, unless the person picked another skin themselves (NasTech's
+ * Point NasTech at the Bantu skin, unless the person picked another skin themselves (NasTech's
  * `display.skin`); then their choice stands, and the skin file still follows the theme.
  */
 export async function selectNasTechSkin(backend: BackendManager): Promise<void> {
@@ -29,27 +29,27 @@ export async function selectNasTechSkin(backend: BackendManager): Promise<void> 
   const skin = typeof saved?.display?.skin === 'string' ? saved.display.skin : ''
 
   if (skin === '' || skin === 'default') {
-    await backend.rest({ method: 'PUT', path: '/api/config', body: { config: { display: { skin: HERALD_SKIN } } } })
+    await backend.rest({ method: 'PUT', path: '/api/config', body: { config: { display: { skin: BANTU_SKIN } } } })
   }
 }
 
 /** Dress NasTech in a theme that was just applied (best effort: the theme stands either way). */
 export function syncNasTechSkin(spec: ThemeSpec, backend: BackendManager): void {
   writeNasTechSkin(spec)
-  selectNasTechSkin(backend).catch(error => log('theme', `could not select the Herald skin: ${(error as Error).message}`))
+  selectNasTechSkin(backend).catch(error => log('theme', `could not select the Bantu skin: ${(error as Error).message}`))
 }
 
 /** Apply an installed theme everywhere it reaches. */
-export async function applyTheme(name: string, deps: ThemeIpcDeps): Promise<HeraldOSPrefs> {
+export async function applyTheme(name: string, deps: ThemeIpcDeps): Promise<BantuOSPrefs> {
   const found = findTheme(name)
 
   if (!found) {
     throw new Error(`No theme called "${name}"`)
   }
 
-  // Herald OS Linux: the engine recolours the session (niri, GTK, the lock screen, the terminal).
+  // Bantu OS Linux: the engine recolours the session (niri, GTK, the lock screen, the terminal).
   if (deps.panels && process.platform === 'linux') {
-    const result = await run('herald-os-theme', ['set', found.spec.name], 30_000)
+    const result = await run('bantu-os-theme', ['set', found.spec.name], 30_000)
 
     if (result.code !== 0 && result.code !== 127) {
       throw new Error(result.stderr.trim() || result.stdout.trim() || 'the theme engine failed')

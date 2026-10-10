@@ -52,7 +52,7 @@ describe('encodePng', () => {
 
 describe('PngStream', () => {
   const written = async (image: { width: number; height: number; data: Uint8Array }, rows: number) => {
-    const folder = await fs.mkdtemp(path.join(os.tmpdir(), 'herald-png-'))
+    const folder = await fs.mkdtemp(path.join(os.tmpdir(), 'bantu-png-'))
     const file = path.join(folder, 'band.png')
 
     try {
@@ -82,7 +82,7 @@ describe('PngStream', () => {
   })
 
   it('refuses rows that do not fit, and an end before every row is in', async () => {
-    const folder = await fs.mkdtemp(path.join(os.tmpdir(), 'herald-png-'))
+    const folder = await fs.mkdtemp(path.join(os.tmpdir(), 'bantu-png-'))
 
     try {
       const stream = await PngStream.open(path.join(folder, 'short.png'), 4, 4, 4)

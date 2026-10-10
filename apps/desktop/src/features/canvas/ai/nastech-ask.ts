@@ -1,6 +1,6 @@
 /*
  * Asking NasTech from the Canvas window: the pictures it needs are saved under /tmp, and the
- * request goes the way every "Ask NasTech" in Herald goes, to the NasTech window (its own renderer
+ * request goes the way every "Ask NasTech" in Bantu goes, to the NasTech window (its own renderer
  * on Linux), where it is sent as a prompt.
  */
 
@@ -13,7 +13,7 @@ import { $autosave, save } from '../store.ts'
 import { compositeArea } from '../tools/screen.ts'
 import { editRequest, generatedLayerRequest, generationBox, generativeFillRequest, type ImageContext, layerLine } from './nastech-requests.ts'
 
-export const REQUEST_FOLDER = '/tmp/herald-canvas-ai'
+export const REQUEST_FOLDER = '/tmp/bantu-canvas-ai'
 
 /** A request's own folder, so two requests never share files. */
 export const requestFolder = (): string => `${REQUEST_FOLDER}/${Date.now().toString(36)}-${crypto.getRandomValues(new Uint32Array(1))[0].toString(36)}`
@@ -49,8 +49,8 @@ export async function prepareGenerativeFill(doc: CanvasDocument, prompt: string)
   const image = await contextOf(doc)
   const box = generationBox(bounds, doc.state.width, doc.state.height)
   const folder = requestFolder()
-  const context = await window.heraldOS.canvas.writeFile(`${folder}/context.png`, rawOf(compositeArea(doc, box)))
-  const mask = await window.heraldOS.canvas.writeFile(`${folder}/mask.png`, rawOf(selection.crop(box)))
+  const context = await window.bantuOS.canvas.writeFile(`${folder}/context.png`, rawOf(compositeArea(doc, box)))
+  const mask = await window.bantuOS.canvas.writeFile(`${folder}/mask.png`, rawOf(selection.crop(box)))
 
   return { text: generativeFillRequest({ image, prompt, box, context, mask, result: `${folder}/result.png` }), attachments: [context, mask] }
 }
@@ -68,7 +68,7 @@ export async function prepareEdit(doc: CanvasDocument, request: string): Promise
   const image = await contextOf(doc)
   const { state } = doc
   const scale = Math.min(1, 1024 / Math.max(state.width, state.height))
-  const picture = await window.heraldOS.canvas.writeFile(`${requestFolder()}/preview.png`, rawOf(flatten(state, scale)))
+  const picture = await window.bantuOS.canvas.writeFile(`${requestFolder()}/preview.png`, rawOf(flatten(state, scale)))
   const text = editRequest({ image, request, layers: describeLayers(state).map(layerLine), selection: state.selection?.opaqueBounds() ?? null, preview: picture })
 
   return { text, attachments: [picture] }

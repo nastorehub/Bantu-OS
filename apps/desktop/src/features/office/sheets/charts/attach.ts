@@ -14,8 +14,8 @@ import { closeChartPanels, openChartPanel } from './panel.tsx'
 import { copyChartPicture } from './picture.ts'
 import { trackChartRanges } from './track.ts'
 
-const SETTINGS = 'herald.operation.chart-settings'
-const COPY = 'herald.operation.chart-copy'
+const SETTINGS = 'bantu.operation.chart-settings'
+const COPY = 'bantu.operation.chart-copy'
 
 /** Before a workbook loads into this Univer: register what draws its charts. */
 export function setupCharts(univer: Univer, api: FUniver): void {

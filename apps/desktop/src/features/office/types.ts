@@ -1,6 +1,6 @@
 import type { OfficeApp } from '../../../shared/office/files.ts'
 
-/** A document's live editor (Univer, or Herald Slides' own), from the moment its view mounts. */
+/** A document's live editor (Univer, or Bantu Slides' own), from the moment its view mounts. */
 export interface EditorHandle<Model> {
   /** The document as it is now. */
   snapshot: () => Model
@@ -63,9 +63,9 @@ export interface OfficeDocument<Model> {
   notes: string[]
   /** How the file was laid out (CSV delimiter, line endings), to write it back the same. */
   layout: unknown
-  /** The person agreed that saving over the file keeps only what Herald keeps; losses they agreed to. */
+  /** The person agreed that saving over the file keeps only what Bantu keeps; losses they agreed to. */
   accepted: Set<string> | null
-  /** Herald saves it by itself once the person has saved it in this session. */
+  /** Bantu saves it by itself once the person has saved it in this session. */
   autosave: boolean
   /** The model it opened with, until its editor mounts. */
   initial: Model

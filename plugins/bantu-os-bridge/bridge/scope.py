@@ -1,0 +1,104 @@
+"""Where the bridge's tools are offered and where they run: Bantu OS's own sessions.
+
+NasTech turns a plugin toolset on for every platform that has not saved a list without it, and the
+Bantu OS backend shares the ``cli`` platform's list with the ``nastech`` CLI, so configuration cannot
+keep these tools out of a person's Telegram, Discord, cron or terminal sessions. The bridge asks the
+session instead: NasTech binds each turn's source for the tools it runs (``NASTECH_SESSION_SOURCE``),
+and Bantu OS creates its sessions with ``source: "bantu_os"`` (ADR-003).
+"""
+
+from __future__ import annotations
+
+import functools
+import os
+from typing import Any, Callable
+
+from . import audit
+from .util import fail
+
+# Sessions saved before the rename keep their old source (ADR-016).
+BANTU_SOURCES = frozenset({"bantu_os", "nastech_os"})
+
+
+def _session_env(name: str) -> str:
+    """A session variable as NasTech binds it for the current task, else the process environment (a
+    process that a session started inherits that session's variables)."""
+    try:
+        from gateway.session_context import get_session_env
+    except ImportError:  # Outside a NasTech runtime.
+        return os.environ.get(name, "")
+    return str(get_session_env(name, "") or "")
+
+
+def session_source() -> str:
+    return _session_env("NASTECH_SESSION_SOURCE").strip().lower()
+
+
+def _nastech_binds_sessions() -> bool:
+    """Whether NasTech binds sessions in this process, as the gateway Bantu OS talks to, a messaging
+    gateway and cron do for every turn. The ``nastech`` CLI never does: its NASTECH_SESSION_* come from
+    its environment, which holds whatever its parent had, since NasTech passes a turn's variables on to
+    every command the turn runs. A NasTech without this latch counts as binding."""
+    try:
+        from gateway.session_context import session_context_engaged
+    except ImportError:
+        return True
+    return bool(session_context_engaged())
+
+
+def in_bantu_session() -> bool:
+    """A Bantu OS turn: NasTech bound the source for it, or the process descends from the backend
+    Bantu OS started (BANTU_OS=1), as a command run by a Bantu OS turn does. A source in the
+    environment of anything else, such as ``nastech chat --source bantu_os``, does not count."""
+    return session_source() in BANTU_SOURCES and (_nastech_binds_sessions() or bantu_backend())
+
+
+def bantu_backend() -> bool:
+    """This process is the ``nastech serve`` Bantu OS started, or a process it started."""
+    return os.environ.get("BANTU_OS") == "1"
+
+
+def other_surface() -> str | None:
+    """What the current turn belongs to when that is plainly not Bantu OS, else ``None``."""
+    if _session_env("NASTECH_CRON_SESSION") == "1":
+        return "a scheduled job"
+    if os.environ.get("NASTECH_KANBAN_TASK"):
+        return "a kanban worker"
+    platform = _session_env("NASTECH_SESSION_PLATFORM").strip()
+    if platform:
+        return platform
+    source = session_source()
+    return source if source and source not in BANTU_SOURCES else None
+
+
+def offered() -> bool:
+    """Whether the model is shown the tools here. Calls are checked again in ``bantu_only``."""
+    if in_bantu_session():
+        return True
+    # The backend also builds and refreshes agents outside a turn: an eager resume binds the source
+    # NasTech derives from NASTECH_DESKTOP=1 (``desktop``) and a late MCP refresh binds none. Only a
+    # turn of another surface (a messaging platform, the API server, cron) is left out there.
+    return bantu_backend() and other_surface() in (None, "desktop")
+
+
+def bantu_only(tool: str, handler: Callable[..., str], enabled: Callable[[], bool]) -> Callable[..., str]:
+    """``handler``, refusing every call outside a Bantu OS session and while the bridge is off.
+
+    NasTech uses a tool's ``check_fn`` only to decide what the model sees, never to gate a call, so
+    this check is the one that holds."""
+
+    @functools.wraps(handler)
+    def gated(args: dict[str, Any], **kwargs: Any) -> str:
+        if not enabled():
+            decision, message = "disabled", "The Bantu OS system bridge is switched off (bantu_os.bridge.enabled: false, or BANTU_OS_BRIDGE_DISABLED=1)."
+        elif not in_bantu_session():
+            where = other_surface() or "a session Bantu OS did not start"
+            decision, message = "outside_bantu", f"{tool} is a Bantu OS system tool and runs only in sessions Bantu OS starts; this call came from {where}."
+            if bantu_backend() and not session_source():
+                message += " If it came from Bantu OS, update NasTech (nastech update): this version does not tell tools which session they run in."
+        else:
+            return handler(args, **kwargs)
+        audit.record(tool=tool, tier="none", action=None, args=args if isinstance(args, dict) else {}, decision=decision, ok=False, error=message)
+        return fail(message, decision=decision)
+
+    return gated

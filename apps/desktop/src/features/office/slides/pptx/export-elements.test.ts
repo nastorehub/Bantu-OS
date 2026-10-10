@@ -8,7 +8,7 @@ import { normalizeDeck } from '../normalize.ts'
 import { settleSpans, tableElement, withCell } from '../tables.ts'
 import { textBody } from '../text.ts'
 import { writePptx } from './export.ts'
-import { HERALD_PART, readEmbeddedDeck } from './herald-part.ts'
+import { BANTU_PART, readEmbeddedDeck } from './bantu-part.ts'
 import { extensionOf, Relationships, resolveTarget } from './write-package.ts'
 import { attr, child, childrenNamed, descendants, elements, find, parseXml, type XmlElement } from './xml.ts'
 
@@ -428,7 +428,7 @@ describe('writing kept objects back', () => {
   })
 })
 
-describe('Herald’s own copy of a deck with a master and kept objects', () => {
+describe('Bantu’s own copy of a deck with a master and kept objects', () => {
   async function written() {
     const { deck: base } = keptObjects()
     const master = defaultMaster(base.size)
@@ -443,7 +443,7 @@ describe('Herald’s own copy of a deck with a master and kept objects', () => {
     }
     const zip = await JSZip.loadAsync(await writePptx(deck))
 
-    return { deck, zip, copy: JSON.parse(await zip.file(HERALD_PART)!.async('string')) }
+    return { deck, zip, copy: JSON.parse(await zip.file(BANTU_PART)!.async('string')) }
   }
 
   it('names the parts already in the file for the master’s and layouts’ pictures, object previews and pictures, and kept parts', async () => {
@@ -475,8 +475,8 @@ describe('Herald’s own copy of a deck with a master and kept objects', () => {
 
     const plain = model.newDeck('Old')
     const old = await JSZip.loadAsync(await writePptx(plain))
-    const oldCopy = JSON.parse(await old.file(HERALD_PART)!.async('string'))
-    old.file(HERALD_PART, JSON.stringify({ ...oldCopy, version: 1 }))
+    const oldCopy = JSON.parse(await old.file(BANTU_PART)!.async('string'))
+    old.file(BANTU_PART, JSON.stringify({ ...oldCopy, version: 1 }))
     const read = await readEmbeddedDeck(old, plain.title)
 
     expect(read && 'deck' in read ? read.deck : read).toEqual(normalizeDeck(plain, plain.title))

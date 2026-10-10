@@ -1,5 +1,5 @@
 /*
- * Gradients for Herald Canvas: colour stops and opacity stops from 0 to 1, each with a midpoint
+ * Gradients for Bantu Canvas: colour stops and opacity stops from 0 to 1, each with a midpoint
  * towards the next (where their mix is half way), laid from a dragged line in one of five styles:
  * linear, radial, angle (a sweep around the start), reflected (linear both ways from the start)
  * and diamond (the end of the line is a corner). Colour and opacity are mixed apart, so a fade to

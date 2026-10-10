@@ -1,4 +1,4 @@
-# Herald OS Linux: the system packages, for the bootc image and the development VM. One per line.
+# Bantu OS Linux: the system packages, for the bootc image and the development VM. One per line.
 # Session.
 niri
 cage
@@ -68,7 +68,7 @@ util-linux
 grim
 socat
 curl
-# Herald Canvas converts HEIF and AVIF stills (libheif; HEVC-compressed HEIC photos also need RPM Fusion's
+# Bantu Canvas converts HEIF and AVIF stills (libheif; HEVC-compressed HEIC photos also need RPM Fusion's
 # libheif-freeworld, which the image does not add) and TIFF, camera RAW and the like (ImageMagick) before opening them.
 libheif-tools
 ImageMagick

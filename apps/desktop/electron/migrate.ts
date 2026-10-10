@@ -6,7 +6,7 @@ export interface LegacyLocations {
   nastechHome: string
   /** Electron's `appData` (`~/Library/Application Support`, `~/.config`). */
   appData: string
-  /** Electron's `userData` for Herald OS. */
+  /** Electron's `userData` for Bantu OS. */
   userData: string
 }
 
@@ -86,11 +86,11 @@ export function migrateLegacyData(locations: LegacyLocations): string[] {
     }
   }
 
-  attempt(() => mergeInto(path.join(locations.nastechHome, 'nastech-os'), path.join(locations.nastechHome, 'herald-os'), moved))
+  attempt(() => mergeInto(path.join(locations.nastechHome, 'nastech-os'), path.join(locations.nastechHome, 'bantu-os'), moved))
   attempt(() => moveIfMissing(path.join(locations.appData, 'NasTech OS'), locations.userData, moved))
 
   for (const name of PARTITIONS) {
-    attempt(() => moveIfMissing(path.join(locations.userData, 'Partitions', `nastech-${name}`), path.join(locations.userData, 'Partitions', `herald-${name}`), moved))
+    attempt(() => moveIfMissing(path.join(locations.userData, 'Partitions', `nastech-${name}`), path.join(locations.userData, 'Partitions', `bantu-${name}`), moved))
   }
 
   return moved

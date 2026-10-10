@@ -6,7 +6,7 @@ import type { ChartValues, SeriesValues } from './data.ts'
 
 /*
  * A chart's ECharts option: what its spec asks for, drawn with the values read from its cells in the
- * colours of Herald's theme. Building it draws nothing, so it can be checked without a page.
+ * colours of Bantu's theme. Building it draws nothing, so it can be checked without a page.
  */
 
 export interface ChartTheme {
@@ -161,7 +161,7 @@ function categoryAxis(spec: ChartSpec, values: ChartValues, theme: ChartTheme, p
     type: 'category',
     data: values.categories,
     show: axis?.hidden !== true,
-    // ECharts starts a vertical category axis at the bottom; Herald's bars start at the top unless reversed.
+    // ECharts starts a vertical category axis at the bottom; Bantu's bars start at the top unless reversed.
     inverse: horizontal !== (axis?.reverse === true),
     boundaryGap: !edgeToEdge,
     ...(axis?.title && !preview ? { name: axis.title, nameLocation: 'middle', nameGap: horizontal ? 40 : 28, nameRotate: horizontal ? 90 : 0, nameMoveOverlap: true, nameTextStyle: { color: theme.muted, fontFamily: theme.font, fontSize: 11 } } : {}),

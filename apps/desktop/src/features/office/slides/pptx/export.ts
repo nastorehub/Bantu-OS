@@ -4,7 +4,7 @@ import type { Color, Deck, Fill, Paragraph, Slide, SlideElement, Stroke, TextBod
 import { isSlot, resolveFont, themeOf } from '../themes.ts'
 import { bulletFor, effectiveStyle, LIST_INDENT, numberingFor, paragraphIndent } from '../text.ts'
 import { finishPresentation, type ShrinkOf } from './finish.ts'
-import { embedDeck } from './herald-part.ts'
+import { embedDeck } from './bantu-part.ts'
 import { type DrawingSet, drawingSets, planMasters } from './write-masters.ts'
 
 /*
@@ -13,7 +13,7 @@ import { type DrawingSet, drawingSets, planMasters } from './write-masters.ts'
  * backgrounds and notes. The masters' and layouts' drawings are written the same way on slides of
  * their own in a second package, with plain shapes standing for placeholders, and so are kept
  * objects on slides. A finishing pass then writes the masters, layouts and themes, and what
- * PptxGenJS gets wrong or cannot say, and Herald's own copy of the deck goes in for itself.
+ * PptxGenJS gets wrong or cannot say, and Bantu's own copy of the deck goes in for itself.
  */
 
 const inches = (points: number): number => points / 72
@@ -181,8 +181,8 @@ function addSlide(pptx: PptxGenJS, slide: Slide, deck: Deck): void {
 
 function presentation(deck: Deck): PptxGenJS {
   const pptx = new PptxGenJS()
-  pptx.defineLayout({ name: 'HERALD', width: inches(deck.size.width), height: inches(deck.size.height) })
-  pptx.layout = 'HERALD'
+  pptx.defineLayout({ name: 'BANTU', width: inches(deck.size.width), height: inches(deck.size.height) })
+  pptx.layout = 'BANTU'
   pptx.theme = { headFontFace: deck.theme.fonts.heading, bodyFontFace: deck.theme.fonts.body }
   pptx.title = deck.title
   pptx.author = ''
@@ -215,7 +215,7 @@ async function writeDrawings(deck: Deck, sets: readonly DrawingSet[]): Promise<J
 }
 
 export interface PptxOptions {
-  /** Put Herald's own copy of the deck in (the default), so Herald reads the file back exactly. */
+  /** Put Bantu's own copy of the deck in (the default), so Bantu reads the file back exactly. */
   embed?: boolean
   /** How much each shrinking text box's text was shrunk when last drawn. */
   shrink?: ShrinkOf

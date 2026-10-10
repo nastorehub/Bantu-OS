@@ -1,5 +1,5 @@
 /*
- * Univer on Herald's glass. Univer paints its chrome with its own palette (set from Herald's theme
+ * Univer on Bantu's glass. Univer paints its chrome with its own palette (set from Bantu's theme
  * in theme.ts); here its outer layers become transparent so they sit on the window's glass. Its
  * classes carry !important in dark mode, hence the !important here.
  */

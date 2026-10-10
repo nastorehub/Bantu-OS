@@ -10,9 +10,9 @@ import { keepTables, tablePart } from './tables.ts'
 import { finishWorkbook, keepChartSheets, keepDocumentProperties, keepExternalLinks, keepTheme } from './workbook.ts'
 
 /*
- * The parts of the file a workbook was opened from that Herald does not model (pivot tables and
- * their caches, pictures, shapes and charts Herald does not draw, slicers, tables, sparklines, chart
- * sheets and the like), carried into the file Herald saves with their relationships and content
+ * The parts of the file a workbook was opened from that Bantu does not model (pivot tables and
+ * their caches, pictures, shapes and charts Bantu does not draw, slicers, tables, sparklines, chart
+ * sheets and the like), carried into the file Bantu saves with their relationships and content
  * types, where that is safe. A sheet's parts come along while the sheet is there, renamed or moved;
  * the steps run in the order their decisions need (tables before the pivot caches that read them,
  * pivot tables before their slicers, slicers before their anchors).

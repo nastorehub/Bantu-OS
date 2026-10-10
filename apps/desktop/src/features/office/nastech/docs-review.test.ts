@@ -48,7 +48,7 @@ beforeEach(() => {
 })
 
 describe('Review with NasTech', () => {
-  it('is offered while Herald Docs shows, and taken away after', () => {
+  it('is offered while Bantu Docs shows, and taken away after', () => {
     const stop = offerNasTechReview()
 
     expect($reviewProvider.get()).toBe(nastechReview)

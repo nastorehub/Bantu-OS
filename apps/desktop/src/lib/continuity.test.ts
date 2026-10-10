@@ -14,8 +14,8 @@ const evidence = (overrides: Partial<CatchUpEvidence> = {}): CatchUpEvidence => 
   files: [file(`${HOME}/Desktop/demo.mp4`, 0, at(5, 11, 49))],
   projects: [
     {
-      path: `${HOME}/Apps/herald`,
-      name: 'herald',
+      path: `${HOME}/Apps/bantu`,
+      name: 'bantu',
       branch: 'main',
       changed: 3,
       changedFiles: ['src/catch-up.ts', 'README.md'],
@@ -64,7 +64,7 @@ describe('buildCatchUp', () => {
     expect(request.input).toContain('Now: Monday 5 October 2026, 14:30. The user just came back after 2 hours away.')
     expect(request.input).toContain('f1 demo.mp4 (~/Desktop), changed today 11:49')
     expect(request.input).toContain(
-      'p1 herald (~/Apps/herald): git branch main; 3 uncommitted changes, including src/catch-up.ts, README.md; recent commits: "feat: catch up" (yesterday 18:02), "fix: dock" (Saturday 10:00)'
+      'p1 bantu (~/Apps/bantu): git branch main; 3 uncommitted changes, including src/catch-up.ts, README.md; recent commits: "feat: catch up" (yesterday 18:02), "fix: dock" (Saturday 10:00)'
     )
     expect(request.input).toContain('p2 site (~/Projects/site): files changed Saturday 09:15')
     expect(request.input).toContain(
@@ -76,7 +76,7 @@ describe('buildCatchUp', () => {
     expect(request.input).toContain('Apps open: Keynote')
     expect(request.refs).toEqual({
       f1: { kind: 'file', ref: `${HOME}/Desktop/demo.mp4`, label: 'demo.mp4' },
-      p1: { kind: 'project', ref: `${HOME}/Apps/herald`, label: 'herald' },
+      p1: { kind: 'project', ref: `${HOME}/Apps/bantu`, label: 'bantu' },
       p2: { kind: 'project', ref: `${HOME}/Projects/site`, label: 'site' },
       c1: { kind: 'chat', ref: 'stored-1', label: 'Build the coffee site' },
       c2: { kind: 'chat', ref: 'stored-2', label: 'Write the launch post' }
@@ -119,7 +119,7 @@ describe('parseThreads', () => {
       '```json',
       JSON.stringify({
         threads: [
-          { title: 'Herald launch', summary: 'You were finishing the demo.', stopped: 'Video exported, 3 changes uncommitted.', next: 'Draft the launch post', prompt: 'Write a launch post for ~/Desktop/demo.mp4.', items: ['f1', 'p1', 'x9', 'f1'] },
+          { title: 'Bantu launch', summary: 'You were finishing the demo.', stopped: 'Video exported, 3 changes uncommitted.', next: 'Draft the launch post', prompt: 'Write a launch post for ~/Desktop/demo.mp4.', items: ['f1', 'p1', 'x9', 'f1'] },
           { title: 'Coffee site', summary: 'You were building the site.', stopped: 'Menu page next.', next: '', prompt: '', items: ['c1', 'p2'] },
           { title: 'Third', summary: 'You were busy.', items: [] },
           { title: 'Fourth', summary: 'Too many.', items: [] }
@@ -129,10 +129,10 @@ describe('parseThreads', () => {
     ].join('\n')
     const threads = parseThreads(answer, refs)!
 
-    expect(threads.map(t => t.title)).toEqual(['Herald launch', 'Coffee site', 'Third'])
+    expect(threads.map(t => t.title)).toEqual(['Bantu launch', 'Coffee site', 'Third'])
     expect(threads[0]).toEqual({
-      id: 't-herald-launch',
-      title: 'Herald launch',
+      id: 't-bantu-launch',
+      title: 'Bantu launch',
       summary: 'You were finishing the demo.',
       stopped: 'Video exported, 3 changes uncommitted.',
       next: { label: 'Draft the launch post', prompt: 'Write a launch post for ~/Desktop/demo.mp4.' },
@@ -156,14 +156,14 @@ describe('parseThreads', () => {
 })
 
 describe('findThread', () => {
-  const threads = ['Herald OS launch', 'Ember & Oak website', 'Tax return'].map(title => ({ id: threadId(title), title, summary: 'x', stopped: '', items: [] }))
+  const threads = ['Bantu OS launch', 'Ember & Oak website', 'Tax return'].map(title => ({ id: threadId(title), title, summary: 'x', stopped: '', items: [] }))
 
   it('finds by title words or position, and defaults to the first', () => {
     expect(findThread(threads, 'ember')?.title).toBe('Ember & Oak website')
     expect(findThread(threads, 'the coffee website')?.title).toBe('Ember & Oak website')
     expect(findThread(threads, 'second one')?.title).toBe('Ember & Oak website')
     expect(findThread(threads, 'last')?.title).toBe('Tax return')
-    expect(findThread(threads, '')?.title).toBe('Herald OS launch')
+    expect(findThread(threads, '')?.title).toBe('Bantu OS launch')
     expect(findThread(threads, 'garden')).toBeNull()
   })
 })

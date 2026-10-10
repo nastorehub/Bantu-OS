@@ -217,7 +217,7 @@ function arrangeCommands(): OfficeCommand[] {
 
 const zoom = (step: 'in' | 'out' | 'reset') => () => slidesSession.active()?.editor?.zoom?.(step)
 
-/** Herald Slides: decks of slides drawn in the page, edited in place and presented full screen. */
+/** Bantu Slides: decks of slides drawn in the page, edited in place and presented full screen. */
 export function SlidesWindow({ payload }: { payload?: Record<string, unknown> }) {
   const [canOpen, setCanOpen] = useState(true)
 
@@ -290,7 +290,7 @@ export function SlidesWindow({ payload }: { payload?: Record<string, unknown> })
 
         event.preventDefault()
         slides.forEach((file) => {
-          const path = window.heraldOS.fs.pathForFile(file)
+          const path = window.bantuOS.fs.pathForFile(file)
 
           if (path) {
             void open(path)

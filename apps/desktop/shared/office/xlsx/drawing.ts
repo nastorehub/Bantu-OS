@@ -2,7 +2,7 @@ import { parseRelationships, type Relationship, relsPathOf, rootNamespaces } fro
 import type { PackageSheet, XlsxPackage } from './package.ts'
 
 /*
- * A worksheet's drawing part as the anchors it holds, in order: Herald reads charts from some of
+ * A worksheet's drawing part as the anchors it holds, in order: Bantu reads charts from some of
  * them and carries the rest over untouched, and both count anchors the same way, by their place in
  * the part.
  */

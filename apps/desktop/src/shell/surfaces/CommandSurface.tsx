@@ -28,12 +28,12 @@ export interface AskState {
 /**
  * Panels mode: one transparent overlay window (680 wide) niri centres over everything. The inbound
  * command picks what it shows: ask (about the focused window), the command palette, the launcher,
- * the Herald OS menu, power actions, clipboard history or emoji. Escape (or losing focus) closes it.
+ * the Bantu OS menu, power actions, clipboard history or emoji. Escape (or losing focus) closes it.
  */
 export function CommandSurface() {
   const [mode, setMode] = useState<Mode | null>(null)
   const [ask, setAsk] = useState<AskState>({ text: '', context: null, attachments: [] })
-  // `herald-os menu <item>` (and the menu bar's update dot) open the control menu on one item.
+  // `bantu-os menu <item>` (and the menu bar's update dot) open the control menu on one item.
   const [menuItem, setMenuItem] = useState<string | undefined>(undefined)
   const panelRef = useRef<HTMLDivElement>(null)
 
@@ -89,7 +89,7 @@ export function CommandSurface() {
 
       if (height > 0 && height !== lastHeight) {
         lastHeight = height
-        window.heraldOS.shell.resize(WINDOW_WIDTH, height).catch(() => undefined)
+        window.bantuOS.shell.resize(WINDOW_WIDTH, height).catch(() => undefined)
       }
     }
     const observer = new ResizeObserver(fit)

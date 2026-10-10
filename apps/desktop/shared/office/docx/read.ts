@@ -5,7 +5,7 @@ import {
   type DocNode,
   HEADER_KINDS,
   type HeaderKind,
-  HERALD_LOOKS,
+  BANTU_LOOKS,
   joinText,
   type NoteKind,
   type PageHeaders,
@@ -29,7 +29,7 @@ import { NOT_WORD, openPackage, type Relationship, relationshipKind, type WordPa
 import {
   borderSides,
   flag,
-  heraldStyleOf,
+  bantuStyleOf,
   intOf,
   isOn,
   lineMultiple,
@@ -51,11 +51,11 @@ import { measure, pointsToPixels, twipsToPoints } from './units.ts'
 import { attr, child, children, findAll, textOf, type XmlElement } from './xml.ts'
 
 /*
- * Word documents (.docx) as Herald Docs documents. A paragraph in one of Word's styles Herald has
+ * Word documents (.docx) as Bantu Docs documents. A paragraph in one of Word's styles Bantu has
  * (Title, Subtitle, headings, Quote, code, callouts) takes that style, and other styles become the
  * formatting they give; numbering becomes lists, tables keep their spans, header rows and shading,
  * and pictures come in the line. Headers and footers, fields, footnotes and endnotes, tables of
- * contents, sections, text boxes and comments become Herald's own. What Herald Docs cannot show
+ * contents, sections, text boxes and comments become Bantu's own. What Bantu Docs cannot show
  * the way Word does (floating pictures, columns, tracked changes) is shown as near as it can be,
  * and said in the notes.
  */
@@ -65,9 +65,9 @@ interface Field {
   /** Whether the result, what Word last showed for the field, has begun. */
   result: boolean
   link: string | null
-  /** Herald keeps it as a field, which its instruction decides. */
+  /** Bantu keeps it as a field, which its instruction decides. */
   kept: boolean
-  /** Another field begins in its instruction, so the instruction Herald reads is not whole. */
+  /** Another field begins in its instruction, so the instruction Bantu reads is not whole. */
   nested: boolean
   /** It is in another field's instruction, which shows nothing of it. */
   buried: boolean
@@ -97,10 +97,10 @@ interface Comments {
 interface Reader {
   styles: Styles
   numbering: Numbering
-  /** The look the file gives each of Herald's styles. */
+  /** The look the file gives each of Bantu's styles. */
   looks: StyleLooks
   found: Set<NoteKey>
-  /** Styles Herald Docs does not have, in the order the text uses them. */
+  /** Styles Bantu Docs does not have, in the order the text uses them. */
   unknown: string[]
   /** Complex fields open at this point of the text, which can span paragraphs. */
   fields: Field[]
@@ -126,7 +126,7 @@ interface Line {
   boxes: Box[]
   rule: boolean
   code: boolean
-  /** The next text is a note's mark of its own, which Herald numbers instead. */
+  /** The next text is a note's mark of its own, which Bantu numbers instead. */
   skipMark: boolean
   /** Comments with no text of their own, to anchor to the word after where their reference is. */
   anchors: { id: string; at: number }[]
@@ -144,12 +144,12 @@ const remember = (reader: Reader, name: string): void => {
   }
 }
 
-/** The look a paragraph's runs are measured against: its Herald style's, over Normal's. */
+/** The look a paragraph's runs are measured against: its Bantu style's, over Normal's. */
 function lookFor(reader: Reader, name: StyleName, style: ParagraphStyle): StyleLook {
   // A heading in a style of the file's own (with an outline level) gives the look when Word's heading style is missing.
   reader.looks[name] ??= lookOf(style, reader.styles, name)
 
-  return { bold: false, italic: false, ...HERALD_LOOKS.normal, ...reader.looks.normal, ...HERALD_LOOKS[name], ...reader.looks[name] }
+  return { bold: false, italic: false, ...BANTU_LOOKS.normal, ...reader.looks.normal, ...BANTU_LOOKS[name], ...reader.looks[name] }
 }
 
 /** Reads another part of the text (a note, a text box, a header) with its own open fields and comments. */
@@ -274,8 +274,8 @@ function linkOf(instruction: string): { url: string | null; anchor: string | nul
 const inFieldResult = (reader: Reader): boolean => reader.fields.some((field) => field.result)
 
 /**
- * What a field is to Herald, once its instruction is whole: a link, a form field shown as its
- * text, or a field it keeps. A field Herald cannot read whole (one in another's instruction, or a
+ * What a field is to Bantu, once its instruction is whole: a link, a form field shown as its
+ * text, or a field it keeps. A field Bantu cannot read whole (one in another's instruction, or a
  * table of contents it could not read as one) is shown as its last result.
  */
 function interpret(field: Field, reader: Reader): void {
@@ -297,7 +297,7 @@ function interpret(field: Field, reader: Reader): void {
   }
 }
 
-/** A field node for a field Herald keeps, with the notes for what the field has that Herald does not show. */
+/** A field node for a field Bantu keeps, with the notes for what the field has that Bantu does not show. */
 function fieldNode(reader: Reader, instruction: string, text: string | null, marks: DocMark[] | undefined): DocNode {
   const attrs = fieldOf(instruction, text)
 
@@ -313,7 +313,7 @@ function fieldNode(reader: Reader, instruction: string, text: string | null, mar
 }
 
 /**
- * Puts a field Herald keeps in the line in place of its last result, which must be text in one
+ * Puts a field Bantu keeps in the line in place of its last result, which must be text in one
  * paragraph; a result that is not stays as it is.
  */
 function settleField(field: Field, reader: Reader, line: Line): void {
@@ -643,7 +643,7 @@ function readHyperlink(element: XmlElement, reader: Reader, story: Story, inline
   readContent(element, reader, story, href ? { ...inline, href } : inline, line)
 }
 
-/** A simple field: a link, or a field Herald keeps in place of its last result. */
+/** A simple field: a link, or a field Bantu keeps in place of its last result. */
 function readSimpleField(element: XmlElement, reader: Reader, story: Story, inline: Inline, line: Line): void {
   const instruction = attr(element, 'w:instr') ?? ''
 
@@ -754,7 +754,7 @@ function numberingOf(reader: Reader, style: ParagraphStyle, direct: ParaProps): 
 
 const BOX = /^[\u2610\u2611\u2612][ \u00a0\t]$/
 
-/** Whether a paragraph starts with a ballot box and a space, as Herald writes checklists; takes the box away. */
+/** Whether a paragraph starts with a ballot box and a space, as Bantu writes checklists; takes the box away. */
 function taskBox(nodes: (DocNode | null)[]): boolean | null {
   const texts: DocNode[] = []
 
@@ -905,7 +905,7 @@ function listOf(reader: Reader, style: ParagraphStyle, direct: ParaProps, role: 
   const checked = role.kind === 'heading' || role.kind === 'code' ? null : taskBox(line.nodes)
 
   if (checked !== null) {
-    // A checklist item without a number takes its depth from its indent, as Herald writes them.
+    // A checklist item without a number takes its depth from its indent, as Bantu writes them.
     mark = { kind: 'task', depth: mark?.depth ?? Math.max(0, Math.round(indent / 720) - 1), key: 'task', checked }
   }
 
@@ -997,7 +997,7 @@ function readParagraph(p: XmlElement, reader: Reader, story: Story): Entry[] {
 function lookIn(reader: Reader, story: Story, role: StyleRole, style: ParagraphStyle): StyleLook {
   const noteText = (story.kind === 'footnote' || story.kind === 'endnote') && /^(footnote|endnote) text$/i.test(style.name)
 
-  return noteText ? { bold: false, italic: false, ...HERALD_LOOKS.normal, ...reader.looks.normal, ...lookOf(style, reader.styles, 'normal') } : lookFor(reader, heraldStyleOf(role), style)
+  return noteText ? { bold: false, italic: false, ...BANTU_LOOKS.normal, ...reader.looks.normal, ...lookOf(style, reader.styles, 'normal') } : lookFor(reader, bantuStyleOf(role), style)
 }
 
 // Tables.
@@ -1036,7 +1036,7 @@ function unwrapped(parent: XmlElement | undefined, name: string, reader: Reader)
   return out
 }
 
-/** Word ends a cell (and a document) that ends with a table with an empty paragraph Herald Docs does not need. */
+/** Word ends a cell (and a document) that ends with a table with an empty paragraph Bantu Docs does not need. */
 function withoutClosingParagraph(blocks: DocNode[]): DocNode[] {
   const last = blocks[blocks.length - 1]
 
@@ -1383,7 +1383,7 @@ async function readHeaders(pkg: WordPackage, relationships: Map<string, Relation
   return { ...headers, ...(differentFirst ? { differentFirst } : {}), ...(differentOddEven ? { differentOddEven } : {}) }
 }
 
-/** A Herald Docs document from the bytes of a Word file, with what opening it approximated. */
+/** A Bantu Docs document from the bytes of a Word file, with what opening it approximated. */
 export async function documentFromDocx(bytes: Uint8Array): Promise<{ doc: DocJSON; notes: string[] }> {
   const pkg = await openPackage(bytes)
   const [document, relationships] = await Promise.all([pkg.xml(pkg.main), pkg.relationships(pkg.main)])
@@ -1414,7 +1414,7 @@ export async function documentFromDocx(bytes: Uint8Array): Promise<{ doc: DocJSO
   const styles = readStyles(stylesXml, themeXml)
   const looks: StyleLooks = {}
 
-  for (const [name, style] of Object.entries(styles.heraldStyles()) as [StyleName, ParagraphStyle][]) {
+  for (const [name, style] of Object.entries(styles.bantuStyles()) as [StyleName, ParagraphStyle][]) {
     looks[name] = lookOf(style, styles, name)
   }
 

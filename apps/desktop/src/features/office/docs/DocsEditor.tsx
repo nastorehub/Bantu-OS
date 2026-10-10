@@ -174,7 +174,7 @@ export function DocsEditor({ doc, active }: { doc: OfficeDocument<DocJSON>; acti
     return () => {
       cancelAnimationFrame(frameId)
 
-      // The document outlives its view (a closed window keeps it until Herald quits): it keeps what was typed.
+      // The document outlives its view (a closed window keeps it until Bantu quits): it keeps what was typed.
       if (!destroyed) {
         doc.initial = handle.snapshot()
       }

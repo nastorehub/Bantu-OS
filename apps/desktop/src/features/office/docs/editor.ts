@@ -19,7 +19,7 @@ import { DocsTableView, imageView } from './views.ts'
 /*
  * One document's TipTap editor: the document schema with the editor's own views, its pages, the
  * '/' menu, find, Word's keys, spelling, comments, live tables of contents, and pictures pasted or
- * dropped in. A link opens with ⌘-click, in a Herald web window.
+ * dropped in. A link opens with ⌘-click, in a Bantu web window.
  */
 
 export interface EditorEvents {

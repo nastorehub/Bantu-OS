@@ -1,5 +1,5 @@
 import { atom } from 'nanostores'
-import type { BackendState, EnvInfo, HeraldOSPrefs, WindowState } from '../../shared/ipc.ts'
+import type { BackendState, EnvInfo, BantuOSPrefs, WindowState } from '../../shared/ipc.ts'
 import { PALETTE_PROPERTIES, paletteVars, schemeOf } from '../../shared/theme.ts'
 import { VOICE_DEFAULTS } from '../../shared/voice-prefs.ts'
 
@@ -7,7 +7,7 @@ import { VOICE_DEFAULTS } from '../../shared/voice-prefs.ts'
 export const $backend = atom<BackendState>({ phase: 'idle', attempt: 0, logTail: [] })
 export const $windowState = atom<WindowState>({ fullscreen: false, focused: true })
 export const $env = atom<EnvInfo | null>(null)
-export const $prefs = atom<HeraldOSPrefs>({
+export const $prefs = atom<BantuOSPrefs>({
   fullscreenOnLaunch: true,
   reduceMotion: false,
   accent: 'blue',
@@ -24,7 +24,7 @@ export const $prefs = atom<HeraldOSPrefs>({
 /** A font family as a CSS value (quoted unless it is a generic family). */
 const cssFamily = (family: string) => (/^(serif|sans-serif|monospace|system-ui|ui-[a-z-]+)$/.test(family) ? family : JSON.stringify(family.trim()))
 
-export function applyPrefsToDocument(prefs: HeraldOSPrefs): void {
+export function applyPrefsToDocument(prefs: BantuOSPrefs): void {
   const root = document.documentElement
   root.dataset.accent = prefs.accent
   root.dataset.theme = prefs.theme
@@ -36,7 +36,7 @@ export function applyPrefsToDocument(prefs: HeraldOSPrefs): void {
   }
 
   if (prefs.themeColors) {
-    const panels = window.heraldOS?.shell?.mode === 'panels'
+    const panels = window.bantuOS?.shell?.mode === 'panels'
 
     for (const [property, value] of Object.entries(paletteVars(prefs.themeColors, { scheme: prefs.themeScheme, panels }))) {
       root.style.setProperty(property, value)
@@ -57,24 +57,24 @@ export function applyPrefsToDocument(prefs: HeraldOSPrefs): void {
   }
 }
 
-export async function updatePrefs(patch: Partial<HeraldOSPrefs>): Promise<void> {
-  const next = await window.heraldOS.prefs.set(patch)
+export async function updatePrefs(patch: Partial<BantuOSPrefs>): Promise<void> {
+  const next = await window.bantuOS.prefs.set(patch)
   $prefs.set(next)
   applyPrefsToDocument(next)
 }
 
 export function bindBackendStores(): () => void {
-  const offBackend = window.heraldOS.backend.onState(state => $backend.set(state))
-  const offWindow = window.heraldOS.window.onState(state => $windowState.set(state))
-  void window.heraldOS.backend.getState().then(state => $backend.set(state))
-  void window.heraldOS.window.getState().then(state => $windowState.set(state))
-  void window.heraldOS.env().then(info => $env.set(info))
-  void window.heraldOS.prefs.get().then(prefs => {
+  const offBackend = window.bantuOS.backend.onState(state => $backend.set(state))
+  const offWindow = window.bantuOS.window.onState(state => $windowState.set(state))
+  void window.bantuOS.backend.getState().then(state => $backend.set(state))
+  void window.bantuOS.window.getState().then(state => $windowState.set(state))
+  void window.bantuOS.env().then(info => $env.set(info))
+  void window.bantuOS.prefs.get().then(prefs => {
     $prefs.set(prefs)
     applyPrefsToDocument(prefs)
   })
-  // Preferences changed by another surface window or by the `herald-os` CLI (theme, wallpaper).
-  const offPrefs = window.heraldOS.prefs.onChanged?.(prefs => {
+  // Preferences changed by another surface window or by the `bantu-os` CLI (theme, wallpaper).
+  const offPrefs = window.bantuOS.prefs.onChanged?.(prefs => {
     $prefs.set(prefs)
     applyPrefsToDocument(prefs)
   })

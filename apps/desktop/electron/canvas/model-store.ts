@@ -1,5 +1,5 @@
 /*
- * Herald Canvas's downloaded models, in a folder of the Herald data directory: one folder per
+ * Bantu Canvas's downloaded models, in a folder of the Bantu data directory: one folder per
  * model. A file is streamed to a `.part` file while its SHA-256 is worked out, and takes its real
  * name only when both its size and its digest match the manifest; a file is checked again before
  * it is first served in a session, so nothing unverified ever runs.

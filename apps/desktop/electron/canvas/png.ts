@@ -2,7 +2,7 @@ import fs from 'node:fs/promises'
 import zlib from 'node:zlib'
 
 /*
- * PNG for Herald Canvas projects: layers are 8-bit RGBA and masks 8-bit grayscale, exactly as the
+ * PNG for Bantu Canvas projects: layers are 8-bit RGBA and masks 8-bit grayscale, exactly as the
  * format asks (a browser canvas can only write RGBA, and may drop alpha from opaque images). The
  * decoder covers what this encoder writes plus the common 8-bit kinds; anything else is decoded by
  * the renderer, which reads every PNG Chromium does.

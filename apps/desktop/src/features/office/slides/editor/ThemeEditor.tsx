@@ -147,7 +147,7 @@ export function ThemeEditor({ doc, theme: base, fresh, scope: asked, onClose }: 
       },
       (error: unknown) => {
         setSaving(false)
-        commands.notify(`Herald Slides could not save the theme: ${messageOf(error)}`)
+        commands.notify(`Bantu Slides could not save the theme: ${messageOf(error)}`)
       }
     )
   }

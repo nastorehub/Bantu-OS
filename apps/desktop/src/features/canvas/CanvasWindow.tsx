@@ -228,7 +228,7 @@ function ConflictBar() {
   )
 }
 
-const PROPERTIES_HEIGHT_KEY = 'herald-canvas.properties-height'
+const PROPERTIES_HEIGHT_KEY = 'bantu-canvas.properties-height'
 
 const PANEL_TABS: { id: PanelTab; label: string }[] = [
   { id: 'properties', label: 'Properties' },
@@ -295,7 +295,7 @@ function SidePanels({ doc }: { doc: CanvasDocument }) {
 
 function StartScreen() {
   const open = async () => {
-    const file = await window.heraldOS.canvas.pickOpen()
+    const file = await window.bantuOS.canvas.pickOpen()
 
     if (file) {
       openPath(file).catch((error: unknown) => notify(`Could not open ${file.split('/').pop()}: ${describe(error)}`, 'error'))
@@ -305,7 +305,7 @@ function StartScreen() {
   return (
     <div className="flex min-w-0 flex-1 flex-col items-center justify-center gap-5 p-8 text-center">
       <div>
-        <div className="text-[18px] font-medium text-fg">Herald Canvas</div>
+        <div className="text-[18px] font-medium text-fg">Bantu Canvas</div>
         <div className="mt-1 text-[12.5px] text-fg-3">Layers, masks and blend modes, on the GPU. NasTech can edit along with you.</div>
       </div>
       <div className="flex gap-2">
@@ -321,7 +321,7 @@ function StartScreen() {
   )
 }
 
-/** Herald Canvas: a layered image editor in a Herald window. */
+/** Bantu Canvas: a layered image editor in a Bantu window. */
 export function CanvasWindow({ payload }: { payload?: Record<string, unknown> }) {
   const documents = useStore($documents)
   const doc = useActiveDocument()
@@ -331,7 +331,7 @@ export function CanvasWindow({ payload }: { payload?: Record<string, unknown> })
   const requested = typeof payload?.path === 'string' ? payload.path : null
   const requestedAt = payload?.at
 
-  // A file handed over by Herald (Edit in Canvas, NasTech, the launcher), or NasTech's undo and redo.
+  // A file handed over by Bantu (Edit in Canvas, NasTech, the launcher), or NasTech's undo and redo.
   const command = typeof payload?.command === 'string' ? payload.command : null
   const steps = typeof payload?.steps === 'number' ? payload.steps : 1
   useEffect(() => {
@@ -378,7 +378,7 @@ export function CanvasWindow({ payload }: { payload?: Record<string, unknown> })
 
     return () => {
       element?.removeEventListener('focusin', focused)
-      window.heraldOS.canvas.report({ active: null, documents: [] })
+      window.bantuOS.canvas.report({ active: null, documents: [] })
     }
   }, [])
 
@@ -494,7 +494,7 @@ export function CanvasWindow({ payload }: { payload?: Record<string, unknown> })
   }
 
   const onDrop = (event: React.DragEvent) => {
-    const files = [...event.dataTransfer.files].map((file) => window.heraldOS.fs.pathForFile(file)).filter(Boolean)
+    const files = [...event.dataTransfer.files].map((file) => window.bantuOS.fs.pathForFile(file)).filter(Boolean)
 
     if (!files.length) {
       return
@@ -510,7 +510,7 @@ export function CanvasWindow({ payload }: { payload?: Record<string, unknown> })
       } else if (project || canOpenInCanvas(file)) {
         openPath(file).catch((error: unknown) => notify(`Could not open ${file.split('/').pop()}: ${describe(error)}`, 'error'))
       } else {
-        notify(`Herald Canvas does not open ${file.split('/').pop()}`, 'error')
+        notify(`Bantu Canvas does not open ${file.split('/').pop()}`, 'error')
       }
     }
   }

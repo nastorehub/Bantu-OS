@@ -313,7 +313,7 @@ const carriedMark = (mark: Mark): boolean => mark.type.name !== 'link' && mark.t
 export function insertField(choice: FieldChoice, options: FieldOptions = {}, place: Place = 'selection'): Op {
   return (state) => {
     if (!FIELD_CHOICES.includes(choice)) {
-      throw new Error(`Herald Docs has no “${choice}” field: it has ${FIELD_CHOICES.join(', ')}`)
+      throw new Error(`Bantu Docs has no “${choice}” field: it has ${FIELD_CHOICES.join(', ')}`)
     }
 
     const { schema } = state
@@ -495,7 +495,7 @@ export function insertSectionBreak(kind: SectionKind = 'nextPage', place: Place 
   }
 }
 
-/** The smallest and largest page Herald Docs lays out, and the least room for text it leaves each way, in points. */
+/** The smallest and largest page Bantu Docs lays out, and the least room for text it leaves each way, in points. */
 export const PAGE_LIMITS = { smallest: 72, largest: 1584, text: 36 } as const
 
 /** What is wrong with a page, or null when it can be laid out: margins that leave room for text, and sensible sizes. */
@@ -552,7 +552,7 @@ function sizeOf(current: PageSettings, change: PageChange): { width: number; hei
   const named = size ? PAGE_SIZES[size] : null
 
   if (size && !named) {
-    throw new Error(`Herald Docs has no “${size}” page size: it has ${Object.keys(PAGE_SIZES).join(', ')}, or a size of your own`)
+    throw new Error(`Bantu Docs has no “${size}” page size: it has ${Object.keys(PAGE_SIZES).join(', ')}, or a size of your own`)
   }
 
   const short = named ? named.width : Math.min(current.width, current.height)

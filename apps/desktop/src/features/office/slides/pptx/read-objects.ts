@@ -3,7 +3,7 @@ import { base64, byId, type Package, type Relationship } from './read-package.ts
 import { attr, child, childrenNamed, elements, find, serializeXml, xml, type XmlElement, type XmlNode } from './xml.ts'
 
 /*
- * What Herald keeps of the objects it does not edit (charts, SmartArt, embedded objects): the XML
+ * What Bantu keeps of the objects it does not edit (charts, SmartArt, embedded objects): the XML
  * of each one's frame as the file wrote it, with the namespaces it is written in, and the parts it
  * names with the parts those name in turn, so a file saved again holds them as they were.
  */
@@ -128,7 +128,7 @@ const keptPath = (name: string): string => name.replace(/[^\w./-]/g, '_').replac
 /**
  * The parts an object names by the relationship ids it names them by in `relationships`, each with
  * the parts it names in turn; null when one is missing, outside the file, one of the
- * presentation's own or larger than Herald keeps, or when there are more or deeper than a deck
+ * presentation's own or larger than Bantu keeps, or when there are more or deeper than a deck
  * carries, as the object is then not kept.
  */
 export async function keptParts(pkg: Package, relationships: readonly Relationship[], ids: readonly string[], depth = 0, trail: readonly string[] = []): Promise<KeptPart[] | null> {

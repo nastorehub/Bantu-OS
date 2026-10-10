@@ -1,6 +1,6 @@
 /*
- * Photoshop documents in Herald Canvas. Opening one reads the file in parts, parses and maps it in
- * a worker, and then sets each text layer into the box Herald lays its text out in, so editing it
+ * Photoshop documents in Bantu Canvas. Opening one reads the file in parts, parses and maps it in
+ * a worker, and then sets each text layer into the box Bantu lays its text out in, so editing it
  * later keeps it in place (Photoshop's own pixels stay until then). Exporting prepares every layer
  * in the document's pixel grid here, where the GPU is, and has the worker write the file.
  */
@@ -9,7 +9,7 @@ import { defaultTransform, type LayerRecord } from '../../../../shared/canvas/co
 import { baseName } from '../../../../shared/canvas/files.ts'
 import { parseCube } from '../engine/color-table.ts'
 import { CanvasDocument, type CanvasLayer, type DocState } from '../engine/document.ts'
-import { heraldOf, standInFor } from '../engine/herald-adjust.ts'
+import { bantuOf, standInFor } from '../engine/bantu-adjust.ts'
 import { apply, boundsOf, isPixelAligned, tidy } from '../engine/geometry.ts'
 import { flatten } from '../engine/project.ts'
 import { clipRect, Raster, resample } from '../engine/raster.ts'
@@ -18,7 +18,7 @@ import { layoutToDocument } from '../text-layers.ts'
 import type { ImportedPsd, PixelData, PsdSource, PsdSourceLayer } from './psd-map.ts'
 import type { PsdReply, PsdRequest } from './psd-worker.ts'
 
-const api = () => window.heraldOS.canvas
+const api = () => window.bantuOS.canvas
 
 /** Bytes read from or written to the main process at a time. */
 const PART_BYTES = 48 * 1024 * 1024
@@ -46,7 +46,7 @@ async function readBytes(file: string): Promise<ArrayBuffer> {
 }
 
 function inWorker<T extends PsdReply & { ok: true }>(request: PsdRequest, transfer: Transferable[]): Promise<T> {
-  const worker = new Worker(new URL('./psd-worker.ts', import.meta.url), { type: 'module', name: 'herald-canvas-psd' })
+  const worker = new Worker(new URL('./psd-worker.ts', import.meta.url), { type: 'module', name: 'bantu-canvas-psd' })
 
   return new Promise<T>((resolve, reject) => {
     worker.onmessage = (event: MessageEvent<PsdReply>) => {
@@ -79,8 +79,8 @@ export async function readPsd(file: string): Promise<ImportedPsd> {
 }
 
 /**
- * A text layer from Photoshop moved into the box Herald sets its text in: the box is laid out
- * around the anchor, and Photoshop's pixels copied into it. When they do not fit (Herald would set
+ * A text layer from Photoshop moved into the box Bantu sets its text in: the box is laid out
+ * around the anchor, and Photoshop's pixels copied into it. When they do not fit (Bantu would set
  * the text differently, often for want of the font) the layer stays a picture.
  */
 async function settleText(layer: CanvasLayer, anchor: [number, number], notes: string[]): Promise<CanvasLayer> {
@@ -113,10 +113,10 @@ export async function documentFromPsd(file: string): Promise<{ doc: CanvasDocume
   const layers: CanvasLayer[] = []
 
   for (const entry of imported.layers) {
-    const herald = heraldOf(entry.record)
+    const bantu = bantuOf(entry.record)
     let layer: CanvasLayer = {
       ...entry.record,
-      ...(herald ? { adjustment: standInFor(herald) } : {}),
+      ...(bantu ? { adjustment: standInFor(bantu) } : {}),
       pixels: entry.pixels ? rasterOf(entry.pixels) : null,
       mask: entry.mask ? rasterOf(entry.mask) : null,
       ...(entry.table ? { table: parseCube(entry.table) } : {})

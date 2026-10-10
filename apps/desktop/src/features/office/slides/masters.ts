@@ -417,14 +417,14 @@ function changeLayoutItself(deck: Deck, layoutId: LayoutId, label: string, chang
 export const setShowMaster = (deck: Deck, layoutId: LayoutId, show: boolean): DeckChange =>
   changeLayoutItself(deck, layoutId, show ? 'Show Background Graphics' : 'Hide Background Graphics', (layout) => (layout.showMaster === show ? layout : { ...layout, showMaster: show }))
 
-/** A layout's name as PowerPoint shows it; an empty name gives back Herald's. */
+/** A layout's name as PowerPoint shows it; an empty name gives back Bantu's. */
 export function renameLayout(deck: Deck, layoutId: LayoutId, name: string): DeckChange {
   const next = name.trim().slice(0, 200) || LAYOUT_NAMES[layoutId]
 
   return changeLayoutItself(deck, layoutId, 'Rename Layout', (layout) => (layout.name === next ? layout : { ...layout, name: next }))
 }
 
-/** Herald's own master for the deck's size in place of the deck's; slides' placeholders that looked as their layout's had them move to Herald's. */
+/** Bantu's own master for the deck's size in place of the deck's; slides' placeholders that looked as their layout's had them move to Bantu's. */
 export function resetMaster(deck: Deck): DeckChange {
   if (!deck.master) {
     return { deck, label: 'Reset Master' }

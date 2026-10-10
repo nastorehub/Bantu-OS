@@ -1,16 +1,16 @@
 import JSZip from 'jszip'
 import { describe, expect, it } from 'vitest'
 import { type ChartDrawing, type ChartSpec, DRAWING_RESOURCE } from '../../charts.ts'
-import { HERALD_PART, readHeraldPart } from '../herald-part.ts'
+import { BANTU_PART, readBantuPart } from '../bantu-part.ts'
 import { openPackage } from '../package.ts'
 import { workbookFromXlsx } from '../read.ts'
 import { readResource } from '../rules.ts'
 import { xlsxFromWorkbook } from '../write.ts'
 import { chartDrawing, chartWorkbook, EITHER_WAY, EVERY_KIND, range, SALES_SERIES } from './fixtures.ts'
-import { HERALD_SECTION, shownAnchors, withSheets } from './index.ts'
+import { BANTU_SECTION, shownAnchors, withSheets } from './index.ts'
 import { NOTES } from './read.ts'
 
-/* Charts made in Herald written into .xlsx files and read back: from the chart parts alone, and exactly through Herald's part. */
+/* Charts made in Bantu written into .xlsx files and read back: from the chart parts alone, and exactly through Bantu's part. */
 
 type Drawings = Record<string, { data: Record<string, ChartDrawing>; order: string[] }>
 
@@ -19,9 +19,9 @@ const { months, north, south, margin } = SALES_SERIES
 const READ_IDS: Record<string, string> = { s1: 'sheet-1', s2: 'sheet-2' }
 const asRead = (spec: ChartSpec): ChartSpec => withSheets(spec, (sheet) => READ_IDS[sheet] ?? sheet)
 
-async function withoutHeraldPart(bytes: Uint8Array): Promise<Uint8Array> {
+async function withoutBantuPart(bytes: Uint8Array): Promise<Uint8Array> {
   const zip = await JSZip.loadAsync(bytes)
-  zip.remove(HERALD_PART)
+  zip.remove(BANTU_PART)
 
   return zip.generateAsync({ type: 'uint8array' })
 }
@@ -46,7 +46,7 @@ describe('charts written into a file and read back', () => {
   it('gives back every kind from its chart part alone: titles, axes, legend, labels, colours, stacking, hole, secondary axis', async () => {
     const drawings = EVERY_KIND.map((spec, i) => chartDrawing(`c${i}`, spec.kind === 'scatter' ? 's2' : 's1', spec, { at: i }))
     const { bytes, losses } = await xlsxFromWorkbook(chartWorkbook(drawings))
-    const { charts, notes } = await readBack(await withoutHeraldPart(bytes))
+    const { charts, notes } = await readBack(await withoutBantuPart(bytes))
 
     expect(losses).toEqual([])
     expect(notes.filter((note) => (Object.values(NOTES) as string[]).includes(note))).toEqual([])
@@ -59,7 +59,7 @@ describe('charts written into a file and read back', () => {
 
   it('gives back bars, columns and values with their axes either way round, writing each way as Excel reads it', async () => {
     const { bytes } = await xlsxFromWorkbook(chartWorkbook(EITHER_WAY.map((spec, i) => chartDrawing(`c${i}`, 's1', spec, { at: i }))))
-    const { charts, notes } = await readBack(await withoutHeraldPart(bytes))
+    const { charts, notes } = await readBack(await withoutBantuPart(bytes))
 
     expect(charts.map((chart) => chart.data.spec)).toEqual(EITHER_WAY.map(asRead))
     expect(notes).not.toContain(NOTES.axes)
@@ -88,12 +88,12 @@ describe('charts written into a file and read back', () => {
     ])
   })
 
-  it('gives back the exact spec through Herald’s part: its palette, label mode, fields Excel has no place for, and the drawing’s id', async () => {
+  it('gives back the exact spec through Bantu’s part: its palette, label mode, fields Excel has no place for, and the drawing’s id', async () => {
     const spec = { kind: 'column', series: [{ values: north.values, categories: months }, { values: south.values }], legend: 'right', labels: 'percent', palette: ['#111111', '#222222'], axes: { y: { max: 200 } }, later: { field: [1, 2] } } as ChartSpec
     const { bytes, losses } = await xlsxFromWorkbook(chartWorkbook([chartDrawing('mine', 's1', spec)]))
     const { charts, workbook } = await readBack(bytes)
 
-    expect(losses).toEqual(['Excel labels columns, bars, lines and areas with their values where Herald Sheets shows each one’s share of its category.'])
+    expect(losses).toEqual(['Excel labels columns, bars, lines and areas with their values where Bantu Sheets shows each one’s share of its category.'])
     expect(charts).toHaveLength(1)
     expect(charts[0].drawingId).toBe('mine')
     expect(charts[0].data.spec).toEqual(asRead(spec))
@@ -101,10 +101,10 @@ describe('charts written into a file and read back', () => {
     expect(readResource<Drawings>(workbook.resources, DRAWING_RESOURCE)!['sheet-1'].order).toEqual(['mine'])
   })
 
-  it('shows in Excel what Herald draws: the palette in turn, the first categories for every series, values for percentages', async () => {
+  it('shows in Excel what Bantu draws: the palette in turn, the first categories for every series, values for percentages', async () => {
     const spec: ChartSpec = { kind: 'column', series: [{ values: north.values, categories: months }, { values: south.values }], legend: 'right', labels: 'percent', palette: ['#111111', '#222222'] }
     const { bytes } = await xlsxFromWorkbook(chartWorkbook([chartDrawing('mine', 's1', spec)]))
-    const { charts } = await readBack(await withoutHeraldPart(bytes))
+    const { charts } = await readBack(await withoutBantuPart(bytes))
 
     expect(charts[0].data.spec).toEqual(
       asRead({
@@ -120,11 +120,11 @@ describe('charts written into a file and read back', () => {
     )
   })
 
-  it('writes what a spec leaves to Herald’s defaults: Office colours, columns then lines in a combo, markers up to 40 points, a half hole', async () => {
+  it('writes what a spec leaves to Bantu’s defaults: Office colours, columns then lines in a combo, markers up to 40 points, a half hole', async () => {
     const combo: ChartSpec = { kind: 'combo', series: [north, south], legend: 'bottom', labels: 'none' }
     const doughnut: ChartSpec = { kind: 'doughnut', series: [north], legend: 'none', labels: 'none' }
     const { bytes } = await xlsxFromWorkbook(chartWorkbook([chartDrawing('combo', 's1', combo), chartDrawing('ring', 's1', doughnut, { at: 1 })]))
-    const { charts } = await readBack(await withoutHeraldPart(bytes))
+    const { charts } = await readBack(await withoutBantuPart(bytes))
 
     expect(charts[0].data.spec.series).toEqual(
       asRead({
@@ -138,7 +138,7 @@ describe('charts written into a file and read back', () => {
     expect(charts[1].data.spec).toMatchObject({ hole: 50, palette: ['#4472c4', '#ed7d31', '#a5a5a5', '#ffc000'] })
   })
 
-  it('reads a chart another app changed since from its XML, not from Herald’s part', async () => {
+  it('reads a chart another app changed since from its XML, not from Bantu’s part', async () => {
     const spec: ChartSpec = { kind: 'column', title: 'Before', series: [north], legend: 'right', labels: 'none', palette: ['#111111'] }
     const { bytes } = await xlsxFromWorkbook(chartWorkbook([chartDrawing('mine', 's1', spec)]))
     const zip = await JSZip.loadAsync(bytes)
@@ -178,7 +178,7 @@ describe('charts written into a file and read back', () => {
     const quoted = async (name: string) => {
       const { bytes } = await xlsxFromWorkbook(chartWorkbook([chartDrawing('c', 's1', spec)], [name, 'Points']))
       const chart = await (await JSZip.loadAsync(bytes)).file('xl/charts/chart1.xml')!.async('string')
-      const { charts } = await readBack(await withoutHeraldPart(bytes))
+      const { charts } = await readBack(await withoutBantuPart(bytes))
 
       expect(charts[0].data.spec.series[0].values).toEqual(range('sheet-1', 1, 1, 4, 1))
 
@@ -211,13 +211,13 @@ describe('charts written into a file and read back', () => {
 
     expect([...(await shownAnchors(pkg, pkg.sheets[0]))]).toEqual([0, 1, 2])
     expect(charts.map((chart) => chart.data.source?.anchor)).toEqual([0, 1, 2])
-    expect(Object.keys(((await readHeraldPart(pkg))?.[HERALD_SECTION] ?? {}) as object)).toEqual(['Q1 sales'])
+    expect(Object.keys(((await readBantuPart(pkg))?.[BANTU_SECTION] ?? {}) as object)).toEqual(['Q1 sales'])
   })
 
   it('writes the series it can and passes over broken ones', async () => {
     const spec = { kind: 'line', series: [null, { values: { sheet: 's1' } }, north], legend: 'none', labels: 'none' } as unknown as ChartSpec
     const { bytes, losses } = await xlsxFromWorkbook(chartWorkbook([chartDrawing('c', 's1', spec)]))
-    const { charts } = await readBack(await withoutHeraldPart(bytes))
+    const { charts } = await readBack(await withoutBantuPart(bytes))
 
     expect(losses).toEqual([])
     expect(charts[0].data.spec.series.map((series) => series.values)).toEqual([range('sheet-1', 1, 1, 4, 1)])

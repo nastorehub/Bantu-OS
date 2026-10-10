@@ -2,13 +2,13 @@ import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { heraldOsDataDir } from './paths.ts'
+import { bantuOsDataDir } from './paths.ts'
 import { readPrefs, writePrefs } from './prefs.ts'
 
 describe('the name on comments in the prefs', () => {
   const saved = process.env.NASTECH_HOME
   let root = ''
-  const file = () => path.join(root, 'herald-os', 'prefs.json')
+  const file = () => path.join(root, 'bantu-os', 'prefs.json')
   const onDisk = () => JSON.parse(fs.readFileSync(file(), 'utf8')) as Record<string, unknown>
 
   function store(prefs: Record<string, unknown>) {
@@ -17,9 +17,9 @@ describe('the name on comments in the prefs', () => {
   }
 
   beforeEach(() => {
-    root = fs.mkdtempSync(path.join(os.tmpdir(), 'herald-prefs-'))
+    root = fs.mkdtempSync(path.join(os.tmpdir(), 'bantu-prefs-'))
     process.env.NASTECH_HOME = root
-    expect(heraldOsDataDir()).toBe(path.join(root, 'herald-os'))
+    expect(bantuOsDataDir()).toBe(path.join(root, 'bantu-os'))
   })
 
   afterEach(() => {

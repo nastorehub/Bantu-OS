@@ -14,7 +14,7 @@ export interface DesktopNotificationRef {
   actions: Array<[string, string]>
 }
 
-/** A button on one of Herald OS's own notifications: an OS command, so it survives being saved. */
+/** A button on one of Bantu OS's own notifications: an OS command, so it survives being saved. */
 export interface NotificationAction {
   label: string
   command: string
@@ -86,7 +86,7 @@ export function notify(input: NotifyInput): NasTechNotification {
   }
 
   if (input.native && !quiet && !$windowState.get().focused) {
-    void window.heraldOS.notifications.native(item.title, item.body ?? '')
+    void window.bantuOS.notifications.native(item.title, item.body ?? '')
   }
 
   return item
@@ -100,7 +100,7 @@ let historyBound = false
  * app that sent them can no longer be told what was clicked.
  */
 export function bindNotificationHistory(): () => void {
-  const history = window.heraldOS?.notificationHistory
+  const history = window.bantuOS?.notificationHistory
 
   if (historyBound || !history) {
     return () => undefined
@@ -173,7 +173,7 @@ export function dismissNotification(id: string): void {
 
 /** Tell the sending app which action (or 'default' for a click, 'dismissed' for close) the user chose. */
 export function reportDesktopAction(ref: DesktopNotificationRef, actionKey: string): void {
-  window.heraldOS?.desktopNotifications?.action(ref.id, actionKey).catch(() => undefined)
+  window.bantuOS?.desktopNotifications?.action(ref.id, actionKey).catch(() => undefined)
 }
 
 /** The user activated a desktop notification: report the chosen key and drop it from the list. */
@@ -209,7 +209,7 @@ export function notifyFromDesktop(incoming: IncomingNotification): NasTechNotifi
 
 /** Subscribe to desktop notifications when the bridge offers them (panels mode); no-op elsewhere. */
 export function bindDesktopNotifications(): () => void {
-  const bridge = window.heraldOS?.desktopNotifications
+  const bridge = window.bantuOS?.desktopNotifications
 
   if (!bridge || typeof bridge.onIncoming !== 'function') {
     return () => undefined

@@ -5,7 +5,7 @@ import { bulletFor, numberingFor, paragraphIndent } from '../text.ts'
 import { xml, type XmlElement, type XmlNode } from './xml.ts'
 
 /*
- * DrawingML as Herald writes it: colours, fills (gradients too), lines, text settings, run looks,
+ * DrawingML as Bantu writes it: colours, fills (gradients too), lines, text settings, run looks,
  * backgrounds and geometry (presets with their adjust values, and freeforms), and where each goes in
  * a shape's properties, whose children the schema keeps in order.
  */

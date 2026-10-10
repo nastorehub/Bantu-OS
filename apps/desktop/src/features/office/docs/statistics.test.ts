@@ -106,11 +106,11 @@ describe('readability', () => {
 
 describe('documentStatistics', () => {
   it('counts words as the status bar does, characters with and without spaces, paragraphs and sentences', () => {
-    const stats = documentStatistics(prose('Herald Docs counts words.\n\nIt counts what is on the page:\ttabs, too. Isn’t that well-known?'))
+    const stats = documentStatistics(prose('Bantu Docs counts words.\n\nIt counts what is on the page:\ttabs, too. Isn’t that well-known?'))
 
     expect(stats).toMatchObject({ words: 16, paragraphs: 2, sentences: 3, wordsPerSentence: 5.3 })
-    expect(stats.words).toBe(countWords('Herald Docs counts words.\n\nIt counts what is on the page:\ttabs, too. Isn’t that well-known?'))
-    expect(stats.characters).toBe(25 + 64)
+    expect(stats.words).toBe(countWords('Bantu Docs counts words.\n\nIt counts what is on the page:\ttabs, too. Isn’t that well-known?'))
+    expect(stats.characters).toBe(25 + 63)
     expect(stats.charactersNoSpaces).toBe(stats.characters - 14)
   })
 

@@ -68,7 +68,7 @@ function server(options: { tamper?: string; stall?: string } = {}): Fetcher & { 
 let root = ''
 
 beforeEach(async () => {
-  root = await fs.mkdtemp(path.join(os.tmpdir(), 'herald-models-'))
+  root = await fs.mkdtemp(path.join(os.tmpdir(), 'bantu-models-'))
 })
 
 afterEach(async () => {

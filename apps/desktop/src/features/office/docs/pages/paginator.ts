@@ -13,7 +13,7 @@ import { type PageEntry, type PageMap, pageAt, pagesOf } from './map.ts'
 import { lineStart, measureFlow, type Ref } from './measure.ts'
 
 /*
- * Herald Docs' pages on screen, in the one editor: the text runs down a single column, and a
+ * Bantu Docs' pages on screen, in the one editor: the text runs down a single column, and a
  * spacer where each page starts (before a block, in a paragraph before a line, or before a table
  * row) moves what follows down to the next page's text area. A run measures the column with the
  * spacers hidden, works out the pages, then sets the spacers (in place when only their heights
@@ -844,7 +844,7 @@ export class Paginator {
   }
 }
 
-/** Pages for a Herald Docs editor: where they end, their paper, headers, footers and notes, and their map. */
+/** Pages for a Bantu Docs editor: where they end, their paper, headers, footers and notes, and their map. */
 export const Pages = Extension.create<PagesOptions>({
   name: 'pages',
   addOptions() {

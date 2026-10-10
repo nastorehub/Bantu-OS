@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { baseName, canOpenInCanvas, CONVERTED_IMAGE_EXTENSIONS, isLayeredImage, isProjectPath, projectContaining } from './files.ts'
 
-describe('what Herald Canvas opens', () => {
+describe('what Bantu Canvas opens', () => {
   it('opens projects, images, converted formats and Photoshop documents', () => {
     expect(isProjectPath('/a/Poster.comp/')).toBe(true)
     expect(canOpenInCanvas('/a/photo.JPG')).toBe(true)

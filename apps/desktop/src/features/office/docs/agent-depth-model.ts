@@ -59,7 +59,7 @@ import { documentFromTemplate, TEMPLATES, type TemplateInfo } from './templates/
 import type { SavedTemplate } from './templates/saved.ts'
 
 /*
- * Herald Docs' page and review for NasTech, without a window: headers and footers, fields, notes,
+ * Bantu Docs' page and review for NasTech, without a window: headers and footers, fields, notes,
  * sections and the page, comments, tables of contents, templates and statistics. Each command's
  * change is read from its arguments and built on the document as it is when it lands, with the
  * answer it gives after; agent-depth.ts runs them where the document lives. Tested directly.
@@ -114,7 +114,7 @@ export interface Changed {
 
 /**
  * A command's change: its operation, built on the document as it is when the change lands (with
- * the text Herald marked for NasTech, and whether it is open, where it has a selection), and the
+ * the text Bantu marked for NasTech, and whether it is open, where it has a selection), and the
  * answer it gives once it has landed.
  */
 export interface Change {
@@ -142,7 +142,7 @@ function andThen(state: EditorState, tr: Transaction, then: (next: EditorState) 
   return tr
 }
 
-/** Who comments and replies are by: NasTech when NasTech adds them, else the name the person gave Herald (the model's own choice). */
+/** Who comments and replies are by: NasTech when NasTech adds them, else the name the person gave Bantu (the model's own choice). */
 export const commentAuthor = (context?: Pick<CommandContext, 'source'>): string | undefined => (context?.source === 'agent' ? 'NasTech' : undefined)
 
 // Places.
@@ -1324,7 +1324,7 @@ export function removeTocChange(args: Args): Change {
 
 // Templates.
 
-/** A template a new document starts from: one of Herald Docs' own, or one the person saved. */
+/** A template a new document starts from: one of Bantu Docs' own, or one the person saved. */
 export type TemplateChoice = { saved: false; id: string; name: string } | { saved: true; id: string; name: string; doc: DocJSON }
 
 /** Names besides their own that the built-in templates answer to, by id. */
@@ -1366,7 +1366,7 @@ export function templateChoice(value: unknown, saved: readonly SavedTemplate[]):
   const own = saved.find((entry) => entry.id === text(value)) ?? saved.find((entry) => templateKey(entry.name) === key)
 
   if (!own) {
-    throw new Error(`Herald Docs has no template “${text(value)}”: its own are ${TEMPLATES.map((entry) => entry.id).join(', ')}${saved.length ? `, and the person’s ${saved.map((entry) => `“${entry.name}”`).join(', ')}` : ''} (docs.listTemplates says what each holds)`)
+    throw new Error(`Bantu Docs has no template “${text(value)}”: its own are ${TEMPLATES.map((entry) => entry.id).join(', ')}${saved.length ? `, and the person’s ${saved.map((entry) => `“${entry.name}”`).join(', ')}` : ''} (docs.listTemplates says what each holds)`)
   }
 
   return { saved: true, id: own.id, name: own.name, doc: own.doc }
@@ -1401,10 +1401,10 @@ export function withBody(model: DocJSON, blocks: readonly DocNode[]): DocJSON {
   return blocks.length ? { ...model, attrs: { ...model.attrs, comments: null }, content: [...blocks] } : model
 }
 
-/** Herald Docs' templates and the person's, as NasTech reads them. */
+/** Bantu Docs' templates and the person's, as NasTech reads them. */
 export function templatesOutcome(saved: readonly SavedTemplate[]): Outcome {
   return {
-    summary: `Herald Docs has ${many(TEMPLATES.length, 'template')} (${TEMPLATES.map((entry) => entry.id).join(', ')})${saved.length ? `, and the person saved ${many(saved.length, 'more', 'more')}: ${saved.map((entry) => `“${entry.name}”`).join(', ')}` : ''}`,
+    summary: `Bantu Docs has ${many(TEMPLATES.length, 'template')} (${TEMPLATES.map((entry) => entry.id).join(', ')})${saved.length ? `, and the person saved ${many(saved.length, 'more', 'more')}: ${saved.map((entry) => `“${entry.name}”`).join(', ')}` : ''}`,
     data: { builtIn: TEMPLATES.map(({ id, name, description }) => ({ id, name, description })), saved: saved.map(({ id, name, savedAt }) => ({ id, name, savedAt })) }
   }
 }
@@ -1419,7 +1419,7 @@ export function statisticsOutcome(state: EditorState, args: Args, live: boolean,
 
   if (flag(args.selection, false)) {
     if (!live) {
-      throw new Error('Only a document open in Herald Docs has a selection: open it first (docs.open)')
+      throw new Error('Only a document open in Bantu Docs has a selection: open it first (docs.open)')
     }
 
     if (state.selection.empty) {

@@ -4,9 +4,9 @@ import { parseRelationships, relsPathOf } from './opc.ts'
 import type { XlsxPackage } from './package.ts'
 
 /*
- * What an .xlsx file holds that Herald Sheets drops, found by looking at the package's parts
+ * What an .xlsx file holds that Bantu Sheets drops, found by looking at the package's parts
  * rather than at what ExcelJS happened to read: macros, protection, print settings, form controls,
- * data connections and the rest. What Herald shows or carries into the file it saves (charts,
+ * data connections and the rest. What Bantu shows or carries into the file it saves (charts,
  * pictures, shapes, pivot tables, slicers, tables, sparklines, chart sheets, links to other
  * workbooks) has no note, but for the kinds fed by a data connection, which go with it. Each note
  * says what happens to the thing, for the fidelity report before the first save.
@@ -25,7 +25,7 @@ export interface PackageReport {
   macros: boolean
 }
 
-/** The pivot tables, tables, and slicer and timeline caches fed by a data connection or the data model, which Herald does not keep. */
+/** The pivot tables, tables, and slicer and timeline caches fed by a data connection or the data model, which Bantu does not keep. */
 async function fedFromElsewhere(pkg: XlsxPackage): Promise<{ pivotTables: number; tables: number; slicers: number }> {
   const relationships = async (part: string) => parseRelationships(part, await pkg.read(relsPathOf(part)))
   const worksheets = pkg.sheets.filter((sheet) => sheet.kind === 'worksheet')
@@ -76,7 +76,7 @@ export async function inspectPackage(pkg: XlsxPackage, extension = '.xlsx'): Pro
   const macros = files.some((file) => /(^|\/)vbaProject\.bin$/i.test(file)) || extension === '.xlsm'
 
   if (macros) {
-    notes.push('Macros (VBA) are not kept: Herald Sheets does not run them, and a copy it saves has none.')
+    notes.push('Macros (VBA) are not kept: Bantu Sheets does not run them, and a copy it saves has none.')
   }
 
   const otherSheets = pkg.sheets.filter((sheet) => sheet.kind === 'dialogsheet' || sheet.kind === 'macrosheet' || sheet.kind === 'other').length

@@ -30,7 +30,7 @@ export function AppearanceSection() {
 
   const chooseWallpaper = async () => {
     try {
-      const [path] = await window.heraldOS.fs.pickFiles({ directory: false, multiple: false })
+      const [path] = await window.bantuOS.fs.pickFiles({ directory: false, multiple: false })
 
       if (path) {
         await save({ wallpaper: `file://${path}` })
@@ -105,7 +105,7 @@ export function AppearanceSection() {
 function ThemeGallery() {
   const themes = useStore($themes)
   const prefs = useStore($prefs)
-  const current = prefs.themeName ?? `herald-${prefs.theme}`
+  const current = prefs.themeName ?? `bantu-${prefs.theme}`
   const [busy, setBusy] = useState<string | null>(null)
 
   useEffect(() => {
@@ -183,7 +183,7 @@ function ThemeTools() {
     setError(null)
 
     try {
-      const source = image ?? (await window.heraldOS.fs.pickFiles({ directory: false, multiple: false }))[0]
+      const source = image ?? (await window.bantuOS.fs.pickFiles({ directory: false, multiple: false }))[0]
 
       if (!source) {
         return
@@ -220,7 +220,7 @@ function ThemeTools() {
       <SettingsRow
         icon={<IconWand />}
         label="Make a theme from an image"
-        description="Herald OS takes the colours of a photo or artwork, makes a complete theme from them, and uses the image as the wallpaper. You can also ask NasTech for one: “make me a calm green theme”."
+        description="Bantu OS takes the colours of a photo or artwork, makes a complete theme from them, and uses the image as the wallpaper. You can also ask NasTech for one: “make me a calm green theme”."
         keywords="generate create custom wallpaper colours"
         below={error ? <InlineNote tone="danger">{error}</InlineNote> : undefined}
       >
@@ -246,7 +246,7 @@ function ThemeTools() {
           {working === 'install' ? 'Installing…' : 'Install'}
         </GlassButton>
       </SettingsRow>
-      <SettingsRow icon={<IconSparkles />} label="Follow NasTech skins" description="When you change NasTech's skin with /skin, Herald OS takes on its colours too. Herald's own themes always restyle NasTech." keywords="skin nastech cli tui sync">
+      <SettingsRow icon={<IconSparkles />} label="Follow NasTech skins" description="When you change NasTech's skin with /skin, Bantu OS takes on its colours too. Bantu's own themes always restyle NasTech." keywords="skin nastech cli tui sync">
         <Toggle
           checked={Boolean(prefs.followNasTechSkin)}
           onChange={next => {
@@ -265,7 +265,7 @@ function FontSettings() {
 
   const loadFamilies = () => {
     if (families.length === 0) {
-      void window.heraldOS.fonts
+      void window.bantuOS.fonts
         .list()
         .then(setFamilies)
         .catch(() => undefined)
@@ -280,7 +280,7 @@ function FontSettings() {
     <input
       key={`${kind}:${prefs.fonts?.[kind] ?? ''}`}
       defaultValue={prefs.fonts?.[kind] ?? ''}
-      list="herald-font-families"
+      list="bantu-font-families"
       onFocus={loadFamilies}
       onBlur={event => event.target.value.trim() !== (prefs.fonts?.[kind] ?? '') && set(kind, event.target.value)}
       onKeyDown={event => event.key === 'Enter' && event.currentTarget.blur()}
@@ -292,7 +292,7 @@ function FontSettings() {
 
   return (
     <SettingsGroup title="Fonts">
-      <datalist id="herald-font-families">
+      <datalist id="bantu-font-families">
         {families.map(family => (
           <option key={family} value={family} />
         ))}

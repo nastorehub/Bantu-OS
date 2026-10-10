@@ -1,4 +1,4 @@
-# Herald OS shell: design and engineering brief
+# Bantu OS shell: design and engineering brief
 
 Read this before adding or changing a page. It is the contract between pages, the shell, the
 stores and the Electron bridge. The target look is "deep-blue glass on a living wallpaper": one
@@ -11,7 +11,7 @@ secondary apps, a dock, a menu bar. For where files live, see [README.md](README
 - `src/store/windows.ts` is the window manager. `showPage(pageId)` switches the main window's page;
   `openApp(appId)` opens floating apps (`terminal`, `system`, `chat-popout`, `web`, `studio` via `openStudio(sessionId)`). Never navigate any
   other way. `$page` is the current page id.
-- Web pages open inside Herald OS, never in the system browser: `openWebWindow(url, { title })` in
+- Web pages open inside Bantu OS, never in the system browser: `openWebWindow(url, { title })` in
   `src/store/web-windows.ts` opens a `web` floating window (`src/features/web/WebWindow.tsx`: title bar,
   read-only address bar) and main layers a locked-down `WebContentsView` over its content rect. The
   view paints above every DOM layer, so it hides while the command bar, launcher, notifications panel
@@ -81,7 +81,7 @@ Stores (nanostores; subscribe with `useStore`):
 - `store/continuity.ts`: `$threads`, `$catchUp`, `refreshThreads`, `continueThread`, `startNextStep`, `dismissThread`, `setExclusions` (Pick up where you left off; pure evidence and parsing in `lib/continuity.ts`, see `docs/ARCHITECTURE.md`).
 - `store/voice.ts`: `$voice` (state, engine, captions, live meter), `$voiceActive`, `startVoice`, `endConversation`, `toggleVoice`, `toggleMute`; `store/wake.ts`: `$wake`, `setWakeWordEnabled`. Voice UI lives in `src/features/voice/` (`VoiceOrb`, `MicButton`, `VoiceIndicator`); see `docs/VOICE.md`.
 
-Electron bridge `window.heraldOS` (typed in `preload/index.ts`):
+Electron bridge `window.bantuOS` (typed in `preload/index.ts`):
 `backend.{getState,onState,restart,rest,logTail}`, `system.{info,stats,processes,network,subscribeStats}`,
 `apps.{list,launch,icon}`, `fs.{home,readDir,readFile,reveal,openPath,openIn,recent,thumbnail,imageInfo,writeText,mkdir,rename,trash,exportPdf,pickFiles,dirSize}`,
 `calendar.today()`, `context.{snapshot,onReturned}`, `terminal.*`, `notifications.native`, `window.*`, `shell.openExternal`,

@@ -11,7 +11,7 @@ import { AuditRow } from './AgentsSection.tsx'
 import { errorText, markSaved, SectionTitle, SettingsBlock, SettingsGroup, SettingsRow } from './shared.tsx'
 
 /*
- * Privacy: what "Pick up where you left off" may look at, the raw permission policy the Herald OS
+ * Privacy: what "Pick up where you left off" may look at, the raw permission policy the Bantu OS
  * bridge plugin enforces, and the audit trail. The textarea is the source of truth; the "Ask
  * before sending" toggle in NasTech & agents edits the same file line by line.
  */
@@ -24,7 +24,7 @@ function ContinuitySettings() {
   const isFolder = (entry: string) => entry.startsWith('/') || entry.startsWith('~')
 
   const pickFolders = async () => {
-    const picked = await window.heraldOS.fs.pickFiles({ directory: true, multiple: true })
+    const picked = await window.bantuOS.fs.pickFiles({ directory: true, multiple: true })
     add(picked.map(target => (home && target.startsWith(`${home}/`) ? `~${target.slice(home.length)}` : target)))
   }
 
@@ -33,7 +33,7 @@ function ContinuitySettings() {
       <SettingsRow
         icon={<IconBrain />}
         label="Pick up where you left off"
-        description="When you open Herald OS or come back after a break, NasTech reads the names and dates of your recent documents, project folders (with their git state), conversations, open apps and today's calendar, then suggests where to continue. Never file contents, window titles or the screen. Your NasTech model provider writes the suggestions."
+        description="When you open Bantu OS or come back after a break, NasTech reads the names and dates of your recent documents, project folders (with their git state), conversations, open apps and today's calendar, then suggests where to continue. Never file contents, window titles or the screen. Your NasTech model provider writes the suggestions."
         keywords="continuity resume catch up brain context recent work suggestions welcome back"
       >
         <Toggle checked={continuity.enabled === true} onChange={enabled => void setContinuityEnabled(enabled)} label="Pick up where you left off" />
@@ -41,7 +41,7 @@ function ContinuitySettings() {
       <SettingsRow
         icon={<IconEyeOff />}
         label="Never look at"
-        description="Folders and words Herald OS leaves out. A word hides every file, project, chat or event whose name contains it, such as a client's name."
+        description="Folders and words Bantu OS leaves out. A word hides every file, project, chat or event whose name contains it, such as a client's name."
         keywords="exclude hide private confidential folders words clients"
         below={
           <div className="flex flex-col gap-2.5">
@@ -92,7 +92,7 @@ function ContinuitySettings() {
           Add folder…
         </GlassButton>
       </SettingsRow>
-      <SettingsRow icon={<IconTrash />} label="Forget suggestions" description="Clear the threads NasTech found. Herald OS keeps nothing else from a catch-up." keywords="clear delete reset threads">
+      <SettingsRow icon={<IconTrash />} label="Forget suggestions" description="Clear the threads NasTech found. Bantu OS keeps nothing else from a catch-up." keywords="clear delete reset threads">
         <GlassButton size="sm" variant="ghost" disabled={!continuity.threads?.length} onClick={() => void forgetThreads()}>
           Forget
         </GlassButton>
@@ -102,11 +102,11 @@ function ContinuitySettings() {
 }
 
 export function PrivacySection() {
-  const policy = useLocalData(() => window.heraldOS.bridge.readPolicy())
+  const policy = useLocalData(() => window.bantuOS.bridge.readPolicy())
   const [draft, setDraft] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [showAudit, setShowAudit] = useState(false)
-  const audit = useLocalData(() => (showAudit ? window.heraldOS.bridge.readAudit(200) : Promise.resolve([])), [showAudit])
+  const audit = useLocalData(() => (showAudit ? window.bantuOS.bridge.readAudit(200) : Promise.resolve([])), [showAudit])
   const text = draft ?? policy.data ?? ''
   const dirty = draft !== null && draft !== policy.data
 
@@ -118,7 +118,7 @@ export function PrivacySection() {
     setSaving(true)
 
     try {
-      await window.heraldOS.bridge.writePolicy(text)
+      await window.bantuOS.bridge.writePolicy(text)
       markSaved()
       notify({ title: 'Permissions saved', body: 'The system bridge reads the policy on its next action.', level: 'success' })
       policy.reload()

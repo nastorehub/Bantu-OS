@@ -8,20 +8,20 @@ import { log } from '../log.ts'
 
 /*
  * OS control: how anything outside the renderer (the agent's `os_ui` tool through the bridge
- * plugin, the `herald-os` CLI) runs a command from the renderer's registry and gets the result.
+ * plugin, the `bantu-os` CLI) runs a command from the renderer's registry and gets the result.
  *
  * - `OsCommandBridge` is the main <-> renderer half: it posts an `OsControlRequest` to the NasTech
  *   window and resolves when the window replies (or times out).
  * - `OsControlServer` is a JSON-lines Unix socket shared by both shell modes. In panels mode the
  *   existing `ControlSocket` hands `ui*` requests to `handleUiRequest`; in desktop mode the server
- *   runs on its own under the Herald OS data dir.
+ *   runs on its own under the Bantu OS data dir.
  *
- * Requests carry a per-launch token that main also gives the backend (HERALD_OS_CONTROL_TOKEN), so a
+ * Requests carry a per-launch token that main also gives the backend (BANTU_OS_CONTROL_TOKEN), so a
  * stray local process cannot drive the UI even though the socket is user-only (0600).
  */
 
 const REPLY_TIMEOUT_MS = 8_000
-/** Herald Canvas and Herald Office commands load, render and save whole images and documents. */
+/** Bantu Canvas and Bantu Office commands load, render and save whole images and documents. */
 const CANVAS_TIMEOUT_MS = 90_000
 const LONG_COMMAND = /^(canvas|docs|sheets|slides|office)\./
 

@@ -93,7 +93,7 @@ async function word({ body, styles, settings, parts = [], files = {}, packageRel
 
 const schema = docsSchema()
 
-/** Checks a document, its headers' and notes' blocks too, against Herald Docs' schema. */
+/** Checks a document, its headers' and notes' blocks too, against Bantu Docs' schema. */
 function check(doc: DocJSON): void {
   schema.nodeFromJSON(doc).check()
   const headers = doc.attrs?.headers
@@ -135,7 +135,7 @@ async function roundTrip(doc: DocJSON) {
   return { bytes, losses, doc: back, notes }
 }
 
-/** A document as the editor keeps it: Herald's schema puts marks in order and fills in attrs. */
+/** A document as the editor keeps it: Bantu's schema puts marks in order and fills in attrs. */
 const normalized = (doc: DocJSON) => schema.nodeFromJSON(doc).toJSON()
 
 async function partsOf(bytes: Uint8Array) {
@@ -407,7 +407,7 @@ describe('Word files: tables of contents', () => {
 
     expect(doc.content).toEqual([paragraph('Figure 1: Growth\t2'), paragraph(), { type: 'tableOfContents', attrs: { levels: 3, title: null, pages: [1] } }])
     expect(notes).toEqual([
-      'Styles Herald Docs does not have (Table of figures) are kept as the formatting they give the text.',
+      'Styles Bantu Docs does not have (Table of figures) are kept as the formatting they give the text.',
       'Fields whose result runs over several paragraphs or holds pictures are shown as their last result and no longer update.',
       "Tables of contents list the document's headings by level; their other options (such as other styles) are not kept."
     ])
@@ -773,7 +773,7 @@ describe('Word files: text boxes', () => {
   })
 })
 
-describe('Word files: what Herald keeps without showing it', () => {
+describe('Word files: what Bantu keeps without showing it', () => {
   const ITEM = '<?xml version="1.0" encoding="UTF-8"?><b:Sources xmlns:b="http://schemas.openxmlformats.org/officeDocument/2006/bibliography" SelectedStyle="APA"/>'
   const ITEM_PROPS = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><ds:datastoreItem ds:itemID="{0A1B2C3D-0000-4000-8000-000000000001}" xmlns:ds="http://schemas.openxmlformats.org/officeDocument/2006/customXml"><ds:schemaRefs/></ds:datastoreItem>'
   const CUSTOM =
@@ -822,7 +822,7 @@ describe('Word files: what Herald keeps without showing it', () => {
     }
   })
 
-  it('never writes a kept part over one Herald writes, nor one outside the package', async () => {
+  it('never writes a kept part over one Bantu writes, nor one outside the package', async () => {
     const forged = { parts: [{ path: 'word/document.xml', type: null, data: 'AA==' }, { path: '../evil.xml', type: null, data: 'AA==' }], relationships: [], properties: { title: 'Plan', extra: 'x' } }
     const { bytes, doc } = await roundTrip({ type: 'doc', attrs: { page: LETTER, styles: null, kept: forged }, content: [paragraph('Safe')] })
     const { names } = await partsOf(bytes)

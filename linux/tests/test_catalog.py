@@ -1,4 +1,4 @@
-"""The install catalog (linux/catalog/*.json) and herald-os-catalog's method choice."""
+"""The install catalog (linux/catalog/*.json) and bantu-os-catalog's method choice."""
 
 import importlib.machinery
 import importlib.util
@@ -7,8 +7,8 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
-_LOADER = importlib.machinery.SourceFileLoader("herald_os_catalog", str(ROOT / "linux" / "bin" / "herald-os-catalog"))
-_SPEC = importlib.util.spec_from_loader("herald_os_catalog", _LOADER)
+_LOADER = importlib.machinery.SourceFileLoader("bantu_os_catalog", str(ROOT / "linux" / "bin" / "bantu-os-catalog"))
+_SPEC = importlib.util.spec_from_loader("bantu_os_catalog", _LOADER)
 cat = importlib.util.module_from_spec(_SPEC)
 _LOADER.exec_module(cat)
 

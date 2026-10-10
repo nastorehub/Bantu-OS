@@ -44,7 +44,7 @@ export interface AskRequest {
   docKey: string
   words: string
   action?: NasTechAction
-  /** Herald Docs: mark the selection (or the caret's place) for the request first. */
+  /** Bantu Docs: mark the selection (or the caret's place) for the request first. */
   mark?: boolean
 }
 
@@ -53,7 +53,7 @@ export interface LiveDoc {
   name: string
   path: string | null
   selection: PromptSelection | null
-  /** What is on screen, when the app says so (Herald Slides' slide). */
+  /** What is on screen, when the app says so (Bantu Slides' slide). */
   detail?: string
   /** How many steps its history holds; null when it cannot say. */
   depth: () => number | null

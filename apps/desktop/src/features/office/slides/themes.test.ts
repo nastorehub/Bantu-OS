@@ -25,7 +25,7 @@ describe('built-in themes', () => {
   it('keeps every theme there was and adds more, some with gradient backgrounds', () => {
     const ids = THEMES.map((theme) => theme.id)
 
-    expect(ids.slice(0, 8)).toEqual(['herald', 'midnight', 'paper', 'graphite', 'forest', 'coral', 'mono', 'ocean'])
+    expect(ids.slice(0, 8)).toEqual(['bantu', 'midnight', 'paper', 'graphite', 'forest', 'coral', 'mono', 'ocean'])
     expect(ids.length).toBeGreaterThanOrEqual(12)
     expect(new Set(ids).size).toBe(ids.length)
     expect(THEMES.filter((theme) => theme.background?.kind === 'gradient').length).toBeGreaterThanOrEqual(2)
@@ -132,7 +132,7 @@ describe('custom themes', () => {
     reads = 0
     $env.set({ platform: 'darwin', nastechHome: '/home/me/.nastech/', homeDir: '/home/me', version: '0.0.0', isDev: false, shellMode: 'panels' })
     ;(globalThis as unknown as { window: unknown }).window = {
-      heraldOS: {
+      bantuOS: {
         canvas: {
           exists: async (path: string) => (files.has(path) ? 'file' : null)
         },
@@ -142,7 +142,7 @@ describe('custom themes', () => {
             const content = files.get(path)
 
             if (content === undefined) {
-              throw new Error(`Error invoking remote method 'herald-os:fs:readFile': Error: ENOENT: no such file or directory, stat '${path}'`)
+              throw new Error(`Error invoking remote method 'bantu-os:fs:readFile': Error: ENOENT: no such file or directory, stat '${path}'`)
             }
 
             return { path, kind: 'text', size: content.length, content }
@@ -162,22 +162,22 @@ describe('custom themes', () => {
     $customThemes.set([])
   })
 
-  const path = '/home/me/.nastech/herald-os/office/slide-themes.json'
+  const path = '/home/me/.nastech/bantu-os/office/slide-themes.json'
 
-  it('keeps custom themes in Herald’s data folder under ids of their own', async () => {
+  it('keeps custom themes in Bantu’s data folder under ids of their own', async () => {
     expect(customThemesPath('/home/me/.nastech/')).toBe(path)
     expect(await loadCustomThemes()).toEqual([])
     expect(writes).toBe(0)
     // Main logs a read that fails, so a file not written yet is never read.
     expect(reads).toBe(0)
 
-    const acme = await saveCustomTheme(editTheme(themeById('herald')!, { name: 'Acme Café', colors: { accent1: '#ff0066' }, background: GRADIENT }))
+    const acme = await saveCustomTheme(editTheme(themeById('bantu')!, { name: 'Acme Café', colors: { accent1: '#ff0066' }, background: GRADIENT }))
     const second = await saveCustomTheme(editTheme(themeById('mono')!, { name: 'Acme Café' }))
     const file = JSON.parse(files.get(path)!)
 
     expect(acme.id).toBe('custom-acme-cafe')
     expect(second.id).toBe('custom-acme-cafe-2')
-    expect(file).toMatchObject({ format: 'herald-slide-themes', version: 1 })
+    expect(file).toMatchObject({ format: 'bantu-slide-themes', version: 1 })
     expect(file.themes.map((theme: Theme) => theme.id)).toEqual(['custom-acme-cafe', 'custom-acme-cafe-2'])
     expect(file.themes[0]).toMatchObject({ name: 'Acme Café', colors: { accent1: '#ff0066' }, background: GRADIENT })
     expect($customThemes.get().map((theme) => theme.id)).toEqual(['custom-acme-cafe', 'custom-acme-cafe-2'])
@@ -198,7 +198,7 @@ describe('custom themes', () => {
   })
 
   it('checks what it reads, and says what went wrong', async () => {
-    files.set(path, JSON.stringify({ format: 'herald-slide-themes', version: 1, themes: [{ id: 'herald', name: 'Odd', colors: { bg1: 'nope' } }, 'junk'] }))
+    files.set(path, JSON.stringify({ format: 'bantu-slide-themes', version: 1, themes: [{ id: 'bantu', name: 'Odd', colors: { bg1: 'nope' } }, 'junk'] }))
     const [odd, junk] = await loadCustomThemes()
 
     expect(odd).toMatchObject({ id: 'custom-odd', name: 'Odd' })
@@ -210,8 +210,8 @@ describe('custom themes', () => {
     await expect(saveCustomTheme(DEFAULT_THEME)).rejects.toThrow(/damaged/)
     expect(files.get(path)).toBe('{ not json')
 
-    files.set(path, JSON.stringify({ format: 'herald-slide-themes', version: 2, themes: [] }))
-    await expect(loadCustomThemes()).rejects.toThrow(/newer Herald/)
+    files.set(path, JSON.stringify({ format: 'bantu-slide-themes', version: 2, themes: [] }))
+    await expect(loadCustomThemes()).rejects.toThrow(/newer Bantu/)
 
     $env.set(null)
     await expect(loadCustomThemes()).rejects.toThrow(/NasTech home/)

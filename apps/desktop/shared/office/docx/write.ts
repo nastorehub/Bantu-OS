@@ -82,12 +82,12 @@ import { tocControl, tocParagraphs, tocStyles } from './toc-write.ts'
 import { pixelsToTwips, pointsToTwips, TWIPS_PER_PIXEL } from './units.ts'
 
 /*
- * Herald Docs documents as Word documents (.docx), written with the docx package. Herald's styles
+ * Bantu Docs documents as Word documents (.docx), written with the docx package. Bantu's styles
  * become Word's built-in ones (Normal, Title, Subtitle, Heading 1 to 6, Quote) with the document's
  * looks, plus Source Code, Verbatim Char and a style for each kind of callout; lists get real
  * numbering, tables their spans, header rows and shading, and pictures are embedded. Headers and
  * footers, fields, footnotes and endnotes, tables of contents, sections, text boxes and comments
- * are written as Word writes them, and what Herald kept of the file it opened goes back in. What a
+ * are written as Word writes them, and what Bantu kept of the file it opened goes back in. What a
  * Word document cannot hold is left out or written another way, and said in the losses.
  */
 
@@ -184,7 +184,7 @@ const capitalised = (word: string): string => word.charAt(0).toUpperCase() + wor
 
 const calloutKind = (kind: unknown): CalloutKind => (CALLOUT_KINDS.includes(kind as CalloutKind) ? (kind as CalloutKind) : 'info')
 
-const calloutStyle = (kind: unknown): string => `HeraldCallout${capitalised(calloutKind(kind))}`
+const calloutStyle = (kind: unknown): string => `BantuCallout${capitalised(calloutKind(kind))}`
 
 // Numbering.
 
@@ -326,7 +326,7 @@ function imageRun(writer: Writer, node: DocNode): ImageRun | null {
   })
 }
 
-/** A field as Word writes it, with the result Herald shows as its last; a field Herald has no instruction for is its text. */
+/** A field as Word writes it, with the result Bantu shows as its last; a field Bantu has no instruction for is its text. */
 function field(node: DocNode, options: IRunOptions): ParagraphChild[] {
   const attrs = fieldAttrs(node.attrs)
   const instruction = instructionOf(attrs)
@@ -500,7 +500,7 @@ function paragraph(writer: Writer, node: DocNode, place: Place, options: { style
   })
 }
 
-/** A block Herald Docs nests that Word can only write after the list item, quote or callout it is in. */
+/** A block Bantu Docs nests that Word can only write after the list item, quote or callout it is in. */
 function flattened(writer: Writer, place: Place): void {
   if (place.depth >= 0) {
     writer.losses.add('nestedInLists')
@@ -1004,7 +1004,7 @@ function commentsFor(writer: Writer): ICommentOptions[] {
   return out.some((comment) => comment.resolved) && !out.some((comment) => comment.parentId !== undefined) ? out.map((comment) => ({ ...comment, durableId: commentIdToParaId(comment.id) })) : out
 }
 
-/** What the docx package cannot write: resolved threads without replies, notes' separators without note marks, and the parts Herald kept. */
+/** What the docx package cannot write: resolved threads without replies, notes' separators without note marks, and the parts Bantu kept. */
 async function repacked(bytes: Uint8Array, comments: readonly ICommentOptions[], doc: DocJSON): Promise<Uint8Array> {
   const repack = await Repack.open(bytes)
   const main = 'word/document.xml'
@@ -1033,7 +1033,7 @@ async function repacked(bytes: Uint8Array, comments: readonly ICommentOptions[],
   return repack.bytes()
 }
 
-/** A Word file of a Herald Docs document, with what the file cannot keep of it. */
+/** A Word file of a Bantu Docs document, with what the file cannot keep of it. */
 export async function docxFromDocument(doc: DocJSON): Promise<{ bytes: Uint8Array; losses: string[] }> {
   const content = doc.content ?? []
   const parts = sectionsOf({ ...doc, content })

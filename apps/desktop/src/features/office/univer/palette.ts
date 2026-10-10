@@ -1,12 +1,12 @@
 import { fromHsl, isHexColor, mix, parseHex, toHex, toHsl } from '../../../../shared/theme.ts'
 
 /*
- * Univer's palette in Herald's colours. Univer reads one palette for its React chrome (as CSS
+ * Univer's palette in Bantu's colours. Univer reads one palette for its React chrome (as CSS
  * variables, the same for every instance on the page) and for the canvas it draws cells on. Its
  * ramps run light to dark (gray 0 is the lightest) in both schemes: in dark mode the chrome uses the
  * dark shades as they are, and the canvas draws with the light shades put through a fixed colour
- * matrix that turns light into dark. So for a dark Herald theme the light shades are worked out
- * backwards, as the colours the matrix turns into Herald's navy.
+ * matrix that turns light into dark. So for a dark Bantu theme the light shades are worked out
+ * backwards, as the colours the matrix turns into Bantu's navy.
  */
 
 export type Shade = 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900
@@ -91,13 +91,13 @@ export function darkGrayRamp(background: string): GrayRamp {
   return ramp
 }
 
-export interface HeraldTokens {
+export interface BantuTokens {
   accent: string
   background: string
   dark: boolean
 }
 
-/** The parts of Univer's palette Herald sets; the rest (reds, greens and so on) keep Univer's values. */
-export function heraldPalette(tokens: HeraldTokens): { primary: Ramp; gray: GrayRamp } {
+/** The parts of Univer's palette Bantu sets; the rest (reds, greens and so on) keep Univer's values. */
+export function bantuPalette(tokens: BantuTokens): { primary: Ramp; gray: GrayRamp } {
   return { primary: rampOf(tokens.accent), gray: tokens.dark ? darkGrayRamp(tokens.background) : lightGrayRamp(tokens.background) }
 }

@@ -8,11 +8,11 @@ import { type MenuExtensions, parseMenuExtensions } from '../../shared/menu-exte
 import { log } from '../log.ts'
 
 /*
- * The person's control-menu entries (~/.config/herald-os/menu.json). The menu shows them; main
+ * The person's control-menu entries (~/.config/bantu-os/menu.json). The menu shows them; main
  * starts their programs, and only ever the program the file names for the entry it is asked about.
  */
 
-export const menuFile = (): string => path.join(os.homedir(), '.config', 'herald-os', 'menu.json')
+export const menuFile = (): string => path.join(os.homedir(), '.config', 'bantu-os', 'menu.json')
 
 export function readMenuExtensions(): MenuExtensions {
   let text: string

@@ -2,12 +2,12 @@ import { fromHsl, isHexColor, toHsl } from '../../../../../shared/theme.ts'
 import { hexOf } from './cells.ts'
 import type { ChartTheme } from './option.ts'
 
-/* Herald's theme as charts draw in it, read from the page's CSS variables as Univer's palette is (../../univer/theme.ts). */
+/* Bantu's theme as charts draw in it, read from the page's CSS variables as Univer's palette is (../../univer/theme.ts). */
 
 const token = (style: CSSStyleDeclaration, name: string, fallback: string): string => style.getPropertyValue(name).trim() || fallback
 
-/** The colours and font charts take from Herald's current theme; on a dark theme a chart sits a little above the navy of the cells. */
-export function heraldChartTheme(): ChartTheme {
+/** The colours and font charts take from Bantu's current theme; on a dark theme a chart sits a little above the navy of the cells. */
+export function bantuChartTheme(): ChartTheme {
   const style = getComputedStyle(document.documentElement)
   const dark = !(style.colorScheme || token(style, 'color-scheme', 'dark')).includes('light')
   const background = token(style, '--color-bg', '#050f33')
@@ -22,8 +22,8 @@ export function heraldChartTheme(): ChartTheme {
   }
 }
 
-/** Herald's own colours for a chart's series: the theme's accent, then its signal colours. */
-export function heraldPalette(): string[] {
+/** Bantu's own colours for a chart's series: the theme's accent, then its signal colours. */
+export function bantuPalette(): string[] {
   const style = getComputedStyle(document.documentElement)
 
   return ['--color-accent', '--color-progress', '--color-ok', '--color-warn', '--color-danger', '--color-info'].map((name) => token(style, name, '')).filter(isHexColor).map(hexOf)

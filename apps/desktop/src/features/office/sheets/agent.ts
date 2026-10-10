@@ -16,10 +16,10 @@ import { addSheet, cellFor, type CellInput, describeWorkbook, filterRange, forma
 import { sheetsSession as session } from './store.ts'
 
 /*
- * What NasTech (and voice, the command bar and `herald-os sheets`) does in Herald Sheets. A command
+ * What NasTech (and voice, the command bar and `bantu-os sheets`) does in Bantu Sheets. A command
  * works on the workbook it names or the one in front. Open in a window, each change is one step to
  * undo there and saves the way the person's own edits do; a file that is not open is changed with
- * nothing drawn and written back, unless that would lose something Herald Sheets cannot keep.
+ * nothing drawn and written back, unless that would lose something Bantu Sheets cannot keep.
  */
 
 type Args = Record<string, unknown>
@@ -28,13 +28,13 @@ const text = (value: unknown): string => (typeof value === 'string' ? value.trim
 
 const where = (file: string | null): string => (file ? tildePath(file, homeDir()) : 'not saved yet')
 
-const io = { read: (file: string) => window.heraldOS.office.read(file), write: (file: string, bytes: Uint8Array) => window.heraldOS.office.write(file, bytes) }
+const io = { read: (file: string) => window.bantuOS.office.read(file), write: (file: string, bytes: Uint8Array) => window.bantuOS.office.write(file, bytes) }
 
 async function located(ref: unknown): Promise<Local<WorkbookSnapshot>> {
   const found = await locate('sheets', session, ref)
 
   if (found.kind === 'remote') {
-    throw new Error(`${found.entry.name} is open in another Herald Sheets window: ask there`)
+    throw new Error(`${found.entry.name} is open in another Bantu Sheets window: ask there`)
   }
 
   return found
@@ -109,7 +109,7 @@ function rangeArg(value: unknown, docKey: string | null): string {
   const selection = docKey ? selectionIn(docKey) : null
 
   if (!selection) {
-    throw new Error('Only a workbook open in Herald Sheets has a selection: give a range like B2:D9')
+    throw new Error('Only a workbook open in Bantu Sheets has a selection: give a range like B2:D9')
   }
 
   return `${quoteSheet(selection.sheet)}!${selection.range}`
@@ -149,7 +149,7 @@ export async function open(args: Args): Promise<Outcome> {
   if (!text(args.path)) {
     openInOffice('sheets')
 
-    return { summary: 'Opened Herald Sheets' }
+    return { summary: 'Opened Bantu Sheets' }
   }
 
   const file = resolve(text(args.path))
@@ -159,13 +159,13 @@ export async function open(args: Args): Promise<Outcome> {
   }
 
   if (officeAppFor(file, { libreOffice: false }) !== 'sheets') {
-    throw new Error(`Herald Sheets opens Excel workbooks (.xlsx) and CSV files, not ${fileName(file)}`)
+    throw new Error(`Bantu Sheets opens Excel workbooks (.xlsx) and CSV files, not ${fileName(file)}`)
   }
 
   if (isPanels) {
     openInOffice('sheets', { file })
 
-    return { summary: `Opened ${fileName(file)} in Herald Sheets`, data: { path: file } }
+    return { summary: `Opened ${fileName(file)} in Bantu Sheets`, data: { path: file } }
   }
 
   openApp('sheets')
@@ -175,7 +175,7 @@ export async function open(args: Args): Promise<Outcome> {
   const book = live ? describeWorkbook(live) : null
 
   return {
-    summary: `Opened ${doc.name} in Herald Sheets${doc.notes.length ? ` (shown differently: ${doc.notes.join('; ')})` : ''}`,
+    summary: `Opened ${doc.name} in Bantu Sheets${doc.notes.length ? ` (shown differently: ${doc.notes.join('; ')})` : ''}`,
     data: { name: doc.name, path: doc.path, ...(book ?? {}), ...(doc.notes.length ? { notes: doc.notes } : {}) }
   }
 }
@@ -224,7 +224,7 @@ export async function create(args: Args): Promise<Outcome> {
   if (isPanels) {
     openInOffice('sheets', { blank: true })
 
-    return { summary: 'Started a new workbook in Herald Sheets; write into it with sheets.write', data: { name: name || 'Untitled' } }
+    return { summary: 'Started a new workbook in Bantu Sheets; write into it with sheets.write', data: { name: name || 'Untitled' } }
   }
 
   const doc = session.create({ name: name || undefined, model })
@@ -242,7 +242,7 @@ export async function list(): Promise<Outcome> {
   const current = books.find((entry) => entry.active) ?? books[0]
 
   return {
-    summary: books.length ? `${books.length} workbook${books.length === 1 ? '' : 's'} open${current ? `; in front: ${current.name}${current.selection ? ` (${current.selection})` : ''}` : ''}` : 'Nothing is open in Herald Sheets',
+    summary: books.length ? `${books.length} workbook${books.length === 1 ? '' : 's'} open${current ? `; in front: ${current.name}${current.selection ? ` (${current.selection})` : ''}` : ''}` : 'Nothing is open in Bantu Sheets',
     data: { workbooks: books.map(({ key: _key, app: _app, front: _front, ...entry }) => entry), current: current ? (current.path ?? current.name) : null }
   }
 }
@@ -490,13 +490,13 @@ export async function depth(command: DepthCommand, args: Args, context: Pick<Com
 
   if (work.view) {
     if (target.kind === 'file') {
-      throw new Error(`${fileName(target.path)} is not open in Herald Sheets: open it (sheets.open) first`)
+      throw new Error(`${fileName(target.path)} is not open in Bantu Sheets: open it (sheets.open) first`)
     }
 
     const live = (await showDocument('sheets', session, target.doc)) ? liveTarget(target.doc.key) : null
 
     if (!live) {
-      throw new Error(`${target.doc.name} is not showing in Herald Sheets`)
+      throw new Error(`${target.doc.name} is not showing in Bantu Sheets`)
     }
 
     const { said, data } = await work.run(live, given, context.source)
@@ -652,7 +652,7 @@ export async function exportPdf(args: Args): Promise<Outcome> {
   if (target.kind === 'file') {
     const read = await sheetsAdapter.read((await io.read(target.path)).bytes, extensionOf(target.path), name)
     const view = await sheetsAdapter.print(read.model, name)
-    await window.heraldOS.office.exportPdf({ html: view.html, suggestedName: name, landscape: view.landscape, path: file })
+    await window.bantuOS.office.exportPdf({ html: view.html, suggestedName: name, landscape: view.landscape, path: file })
   } else if (!(await session.exportPdf(target.doc, file))) {
     throw new Error(`Could not export ${name} as a PDF`)
   }
@@ -664,14 +664,14 @@ export async function step(direction: 'undo' | 'redo', args: Args): Promise<Outc
   const target = await located(args.workbook)
 
   if (target.kind === 'file') {
-    throw new Error(`Undo works in the open Herald Sheets window: ${fileName(target.path)} is not open`)
+    throw new Error(`Undo works in the open Bantu Sheets window: ${fileName(target.path)} is not open`)
   }
 
   const { doc } = target
   await withEditor('sheets', doc)
 
   if (!doc.editor) {
-    throw new Error(`${doc.name} is not showing in Herald Sheets`)
+    throw new Error(`${doc.name} is not showing in Bantu Sheets`)
   }
 
   const count = stepCount(args.steps)

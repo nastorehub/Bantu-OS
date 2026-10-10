@@ -7,7 +7,7 @@ let known: OfficeAbilities = { libreOffice: false }
 
 /** What the machine adds to the formats (LibreOffice for OpenDocument files), asked once. */
 export function officeAbilities(): Promise<OfficeAbilities> {
-  abilities ??= window.heraldOS.office
+  abilities ??= window.bantuOS.office
     .abilities()
     .catch(() => known)
     .then((found) => (known = found))

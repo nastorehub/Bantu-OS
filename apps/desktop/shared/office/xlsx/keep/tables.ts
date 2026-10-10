@@ -60,7 +60,7 @@ function textOf(cell: CellSnapshot | undefined): string | null {
 
 const overlaps = (a: CellRange, b: CellRange): boolean => a.startRow <= b.endRow && b.startRow <= a.endRow && a.startColumn <= b.endColumn && b.startColumn <= a.endColumn
 
-/** What Herald writes on a sheet that a kept table or pivot table may not overlap: its filter, merged cells (unless asked to let them be), the tables kept. */
+/** What Bantu writes on a sheet that a kept table or pivot table may not overlap: its filter, merged cells (unless asked to let them be), the tables kept. */
 export function overlapping(keep: Keep, sheet: KeptSheet, range: CellRange, options: { merges: boolean }): string | null {
   const snapshot = keep.ctx.workbook.sheets[sheet.written.id]
   const filter = readResource<Record<string, UAutoFilter>>(keep.ctx.workbook.resources, RESOURCES.filter)?.[sheet.written.id]?.ref
@@ -76,7 +76,7 @@ export function overlapping(keep: Keep, sheet: KeptSheet, range: CellRange, opti
   return (keep.tableRanges.get(sheet.written.id) ?? []).some((table) => overlaps(table, range)) ? 'a table overlaps it' : null
 }
 
-/** Why a table cannot be kept on its sheet as Herald writes it; null when it can. */
+/** Why a table cannot be kept on its sheet as Bantu writes it; null when it can. */
 function whyNot(keep: Keep, sheet: KeptSheet, table: SourceTable, range: CellRange): string | null {
   const snapshot = keep.ctx.workbook.sheets[sheet.written.id]
 

@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Boot Herald OS Linux with Apple's Virtualization framework via vfkit: GPU-accelerated virtio-gpu
+# Boot Bantu OS Linux with Apple's Virtualization framework via vfkit: GPU-accelerated virtio-gpu
 # (what niri needs), virtio-fs share, NAT networking, EFI. Same disk lineage as run-qemu.sh (the
 # qcow2 is converted to a raw image on first use; both runners must not use the disk at once).
 #
 #   bash linux/vm/run-vf.sh                 # window on the Mac, SSH via the VM's NAT address
-#   bash linux/vm/run-vf.sh --image herald-os-<v>-aarch64.qcow2   # a built Herald OS image instead
+#   bash linux/vm/run-vf.sh --image bantu-os-<v>-aarch64.qcow2   # a built Bantu OS image instead
 #   bash linux/vm/run-vf.sh stop|status|console|ip|ssh
 #
 # Guest resolution: GUEST_W x GUEST_H (default 2048x1280). vfkit is downloaded to
@@ -16,8 +16,8 @@ ROOT="$(cd "$HERE/../.." && pwd)"
 BUILD="$HERE/build"
 VFKIT="$BUILD/bin/vfkit"
 VFKIT_VERSION="${VFKIT_VERSION:-v0.6.4}"
-QCOW="$BUILD/herald-os.qcow2"
-RAW="$BUILD/herald-os.raw"
+QCOW="$BUILD/bantu-os.qcow2"
+RAW="$BUILD/bantu-os.raw"
 SEED_DIR="$BUILD/seed"
 EFI_STORE="$BUILD/efistore.nvram"
 PIDFILE="$BUILD/vfkit.pid"
@@ -28,13 +28,13 @@ MEM="${MEM:-8192}"
 GUEST_W="${GUEST_W:-2048}"
 GUEST_H="${GUEST_H:-1280}"
 KEY="$BUILD/id_nastech"
-# --image: a Herald OS disk from bootc-image-builder; it sets itself up on the first boot (no cloud-init).
+# --image: a Bantu OS disk from bootc-image-builder; it sets itself up on the first boot (no cloud-init).
 IMAGE=""
 if [[ "${1:-}" == "--image" ]]; then
   IMAGE="$(cd "$(dirname "${2:?--image needs a qcow2}")" && pwd)/$(basename "$2")"
   shift 2
   QCOW="$IMAGE"
-  RAW="$BUILD/herald-os-image.raw"
+  RAW="$BUILD/bantu-os-image.raw"
   EFI_STORE="$BUILD/efistore-image.nvram"
 fi
 
@@ -136,7 +136,7 @@ perl -e 'use POSIX qw(setsid); setsid(); exec @ARGV or die "exec: $!"' -- "$VFKI
   --device virtio-input,pointing \
   --device virtio-rng \
   --device "virtio-serial,logFilePath=$SERIAL" \
-  --device "virtio-fs,sharedDir=$ROOT,mountTag=herald-os" \
+  --device "virtio-fs,sharedDir=$ROOT,mountTag=bantu-os" \
   --restful-uri "$REST" \
   --gui \
   >"$BUILD/vfkit.log" 2>&1 &

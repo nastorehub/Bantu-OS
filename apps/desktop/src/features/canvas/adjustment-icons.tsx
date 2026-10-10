@@ -25,14 +25,14 @@ import {
   IconSunHigh,
   IconWind
 } from '@tabler/icons-react'
-import type { AdjustmentKind, EffectKind, HeraldAdjustmentKind } from '../../../shared/canvas/comp-format.ts'
+import type { AdjustmentKind, EffectKind, BantuAdjustmentKind } from '../../../shared/canvas/comp-format.ts'
 import type { CanvasLayer } from './engine/document.ts'
-import { heraldOf } from './engine/herald-adjust.ts'
+import { bantuOf } from './engine/bantu-adjust.ts'
 
 type Icon = typeof IconBlur
 
 /** An icon for each adjustment kind, shared by the Layers panel, the Properties panel and the menus. */
-export const ADJUSTMENT_ICONS: Record<AdjustmentKind | HeraldAdjustmentKind, Icon> = {
+export const ADJUSTMENT_ICONS: Record<AdjustmentKind | BantuAdjustmentKind, Icon> = {
   'Hue/Saturation': IconDropletHalf2,
   Levels: IconAdjustmentsHorizontal,
   Curves: IconChartLine,
@@ -55,8 +55,8 @@ export const ADJUSTMENT_ICONS: Record<AdjustmentKind | HeraldAdjustmentKind, Ico
   'Color Lookup': IconCube3dSphere
 }
 
-/** The adjustments a new layer can be, Compositor's and Herald's own together, in groups as photo editors list them. */
-export const ADJUSTMENT_MENU: { kind: AdjustmentKind | HeraldAdjustmentKind; dividerBefore?: boolean }[] = [
+/** The adjustments a new layer can be, Compositor's and Bantu's own together, in groups as photo editors list them. */
+export const ADJUSTMENT_MENU: { kind: AdjustmentKind | BantuAdjustmentKind; dividerBefore?: boolean }[] = [
   { kind: 'Brightness/Contrast' },
   { kind: 'Levels' },
   { kind: 'Curves' },
@@ -79,8 +79,8 @@ export const ADJUSTMENT_MENU: { kind: AdjustmentKind | HeraldAdjustmentKind; div
   { kind: 'Add Noise' }
 ]
 
-/** What an adjustment layer is, as the panels name it: its Herald-only kind when it has one this version knows. */
-export const adjustmentKindOf = (layer: CanvasLayer): AdjustmentKind | HeraldAdjustmentKind | null => heraldOf(layer)?.kind ?? layer.adjustment?.kind ?? null
+/** What an adjustment layer is, as the panels name it: its Bantu-only kind when it has one this version knows. */
+export const adjustmentKindOf = (layer: CanvasLayer): AdjustmentKind | BantuAdjustmentKind | null => bantuOf(layer)?.kind ?? layer.adjustment?.kind ?? null
 
 export const EFFECT_ICONS: Record<EffectKind, Icon> = {
   stroke: IconBorderOuter,

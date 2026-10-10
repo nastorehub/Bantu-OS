@@ -6,12 +6,12 @@ import DesignEnUS from '@univerjs/design/locale/en-US'
 import { UniverRenderEnginePlugin } from '@univerjs/engine-render'
 import UIEnUS from '@univerjs/ui/locale/en-US'
 import { UniverUIPlugin } from '@univerjs/ui'
-import { heraldUniverTheme } from './theme.ts'
+import { bantuUniverTheme } from './theme.ts'
 
 /*
- * One Univer instance with its chrome in a Herald window. Univer keeps one palette and one
+ * One Univer instance with its chrome in a Bantu window. Univer keeps one palette and one
  * light-or-dark flag for the whole page (its theme is a style sheet on :root), so every Office
- * window takes Herald's current theme when it opens.
+ * window takes Bantu's current theme when it opens.
  */
 
 export type Locales = Parameters<typeof mergeLocales>[0]
@@ -24,7 +24,7 @@ export interface EngineOptions {
 }
 
 export function createUniver(options: EngineOptions): { univer: Univer; api: FUniver } {
-  const { theme, darkMode } = heraldUniverTheme()
+  const { theme, darkMode } = bantuUniverTheme()
   const univer = new Univer({
     theme,
     darkMode,

@@ -6,8 +6,8 @@ import type { Op } from './docs/model.ts'
 import type { TextSession } from './slides/editor/active.ts'
 
 /*
- * Dictation into the Office document in front in this window, without the clipboard: Herald Docs
- * takes the words at the caret, Herald Sheets in the active cell and on down the column, Herald
+ * Dictation into the Office document in front in this window, without the clipboard: Bantu Docs
+ * takes the words at the caret, Bantu Sheets in the active cell and on down the column, Bantu
  * Slides in the text box being edited or selected, else in a new one; each lands as one step to
  * undo. Anything else (another window in front, a field outside the document with the focus, a
  * cell being edited) is left to the caller, which types the usual way.

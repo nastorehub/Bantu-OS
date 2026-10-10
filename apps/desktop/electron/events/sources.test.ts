@@ -43,7 +43,7 @@ describe('networkKey', () => {
 
 describe('hookScripts', () => {
   it('runs executable scripts in name order, skipping samples and dotfiles', () => {
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'herald-hooks-'))
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'bantu-hooks-'))
     const write = (name: string, mode: number) => fs.writeFileSync(path.join(dir, name), '#!/bin/sh\n', { mode })
 
     write('20-second', 0o755)

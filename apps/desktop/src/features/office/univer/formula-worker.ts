@@ -5,7 +5,7 @@ import { UniverSheetsPlugin } from '@univerjs/sheets'
 import { UniverSheetsFilterPlugin } from '@univerjs/sheets-filter'
 import { UniverRemoteSheetsFormulaPlugin } from '@univerjs/sheets-formula'
 
-/* Herald Sheets' formulas, worked out off the window's thread: the window sends its edits here and gets results back. */
+/* Bantu Sheets' formulas, worked out off the window's thread: the window sends its edits here and gets results back. */
 
 const univer = new Univer({ locale: LocaleType.EN_US, logLevel: LogLevel.WARN })
 univer.registerPlugin(UniverSheetsPlugin, { onlyRegisterFormulaRelatedMutations: true })

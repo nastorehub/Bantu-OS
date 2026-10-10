@@ -1,5 +1,5 @@
 /*
- * The image maths around Herald Canvas's segmentation models, kept free of the window so a worker
+ * The image maths around Bantu Canvas's segmentation models, kept free of the window so a worker
  * runs it and tests check it: pixels into a model's input, its low-resolution answer back up to
  * the layer's size with edges that follow the picture, and the threshold and feather the person
  * picks.

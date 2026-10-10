@@ -71,8 +71,8 @@ describe('xlsx import', () => {
     expect(sheet).toMatchObject({ tabColor: '#00b050', zoomRatio: 1.25, defaultColumnWidth: 64, defaultRowHeight: 20, hidden: 0 })
     expect(workbook.sheetOrder.map((id) => [workbook.sheets[id].name, workbook.sheets[id].hidden])).toEqual([['Data', 0], ['Other Sheet', 0], ['Hidden', 1], ['Secret', 2]])
     expect(workbook.activeSheetId).toBe('sheet-1')
-    expect(sheetNamed(workbook, 'Other Sheet').custom).toEqual({ herald: { page: { pageSetup: { fitToPage: true, paperSize: 9, orientation: 'landscape', fitToHeight: 0 }, headerFooter: { oddFooter: '&LConfidential&RPage &P' } } } })
-    expect(workbook.custom).toMatchObject({ herald: { properties: { creator: 'Fixture', title: 'Features' } } })
+    expect(sheetNamed(workbook, 'Other Sheet').custom).toEqual({ bantu: { page: { pageSetup: { fitToPage: true, paperSize: 9, orientation: 'landscape', fitToHeight: 0 }, headerFooter: { oddFooter: '&LConfidential&RPage &P' } } } })
+    expect(workbook.custom).toMatchObject({ bantu: { properties: { creator: 'Fixture', title: 'Features' } } })
   })
 
   it('reads rich text and links to the web and into the workbook', async () => {
@@ -148,7 +148,7 @@ describe('xlsx round trips', () => {
     expect(normalized(second.workbook)).toEqual(normalized(first.workbook))
   })
 
-  it('reads back a workbook made in Herald, in Univer’s own font', async () => {
+  it('reads back a workbook made in Bantu, in Univer’s own font', async () => {
     const sheet = newSheet('s1', 'Budget', { 0: { 0: { v: 'Rent' }, 1: { v: 1200, t: CELL_TYPE.number } }, 1: { 1: { f: '=B1*12' } } })
     const workbook = { ...newWorkbook('new', 'Budget', [sheet]), styles: { bold: { bl: 1 } } }
     workbook.sheets.s1.cellData[0][0].s = 'bold'

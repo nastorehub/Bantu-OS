@@ -4,7 +4,7 @@ import { attr, children, parseXml, type XmlElement } from './xml.ts'
 /*
  * A Word file as the package it is: a zip of XML parts tied together by relationships. This opens
  * one, finds its main document through the package's relationships, and reads parts (with the
- * prefixes Herald matches on, whatever prefixes the file declared) and their relationships.
+ * prefixes Bantu matches on, whatever prefixes the file declared) and their relationships.
  */
 
 export const NOT_WORD = 'This is not a Word document'
@@ -12,7 +12,7 @@ export const NOT_WORD = 'This is not a Word document'
 const TRANSITIONAL = 'http://schemas.openxmlformats.org'
 const STRICT = 'http://purl.oclc.org/ooxml'
 
-/** The prefix Herald reads each namespace with, transitional and strict. */
+/** The prefix Bantu reads each namespace with, transitional and strict. */
 const PREFIXES: Readonly<Record<string, string>> = {
   [`${TRANSITIONAL}/wordprocessingml/2006/main`]: 'w',
   [`${STRICT}/wordprocessingml/main`]: 'w',

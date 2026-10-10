@@ -7,26 +7,26 @@ import type { Deck, Theme } from '../deck.ts'
 import { addSlideFromSheet, addTableFromSheet, deckFromDocument, type DeckChange, sheetRange, slidesFromDocument } from '../model.ts'
 
 /*
- * Slides from other Office files: documents picked in Herald Docs' open dialog become a deck or
- * slides of one, and a range of a spreadsheet picked in Herald Sheets' becomes a table. Files are
+ * Slides from other Office files: documents picked in Bantu Docs' open dialog become a deck or
+ * slides of one, and a range of a spreadsheet picked in Bantu Sheets' becomes a table. Files are
  * read as their own apps read them, the converters loaded only when one is needed. The dialog and
- * the reading come in as `FileAccess`, so all of this runs without Herald around it.
+ * the reading come in as `FileAccess`, so all of this runs without Bantu around it.
  */
 
-/** Picking and reading Office files: Herald's open dialog and its file reading, or stand-ins for them. */
+/** Picking and reading Office files: Bantu's open dialog and its file reading, or stand-ins for them. */
 export interface FileAccess {
   pickOpen: (app: 'docs' | 'sheets') => Promise<string[]>
   read: (file: string) => Promise<{ bytes: Uint8Array }>
 }
 
-export const officeFiles = (): FileAccess => window.heraldOS.office
+export const officeFiles = (): FileAccess => window.bantuOS.office
 
 type Report = (message: string) => void
 
 /** A file's name with its extension, as messages give it. */
 const nameOf = (file: string): string => file.split(/[/\\]/).pop() || file
 
-/** A document file as Herald Docs reads it: Word documents, Markdown and plain text. */
+/** A document file as Bantu Docs reads it: Word documents, Markdown and plain text. */
 export async function documentFromFile(file: string, bytes: Uint8Array): Promise<DocJSON> {
   const extension = extensionOf(file)
 
@@ -43,10 +43,10 @@ export async function documentFromFile(file: string, bytes: Uint8Array): Promise
     return (extension === '.txt' ? documentFromText(text) : documentFromMarkdown(text)).document
   }
 
-  throw new Error(`Herald Slides cannot make slides from ${extension || 'these'} files`)
+  throw new Error(`Bantu Slides cannot make slides from ${extension || 'these'} files`)
 }
 
-/** A spreadsheet file as Herald Sheets reads it: Excel workbooks and CSV. */
+/** A spreadsheet file as Bantu Sheets reads it: Excel workbooks and CSV. */
 export async function workbookFromFile(file: string, bytes: Uint8Array): Promise<WorkbookSnapshot> {
   const extension = extensionOf(file)
   const name = baseName(file)
@@ -63,7 +63,7 @@ export async function workbookFromFile(file: string, bytes: Uint8Array): Promise
     return workbookFromCsv(decodeCsv(bytes).text, { id: unitId('book'), name }).workbook
   }
 
-  throw new Error(`Herald Slides cannot take tables from ${extension || 'these'} files`)
+  throw new Error(`Bantu Slides cannot take tables from ${extension || 'these'} files`)
 }
 
 export interface PickedDocument {
@@ -74,7 +74,7 @@ export interface PickedDocument {
   doc: DocJSON
 }
 
-/** Documents picked in Herald Docs' open dialog, each read; one that cannot be read is reported by its name and left out. */
+/** Documents picked in Bantu Docs' open dialog, each read; one that cannot be read is reported by its name and left out. */
 export async function pickDocuments(access: FileAccess, report: Report): Promise<PickedDocument[]> {
   const picked: PickedDocument[] = []
 
@@ -122,7 +122,7 @@ export interface PickedWorkbook {
   workbook: WorkbookSnapshot
 }
 
-/** The spreadsheet picked first in Herald Sheets' open dialog, read; null when none is picked or it cannot be read (which is reported by its name). */
+/** The spreadsheet picked first in Bantu Sheets' open dialog, read; null when none is picked or it cannot be read (which is reported by its name). */
 export async function pickWorkbook(access: FileAccess, report: Report): Promise<PickedWorkbook | null> {
   const [file] = await access.pickOpen('sheets')
 

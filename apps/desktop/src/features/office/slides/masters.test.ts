@@ -46,7 +46,7 @@ describe('the master’s deck', () => {
     expect(model.slideLayoutId('master')).toBeNull()
   })
 
-  it('takes the edited master back as the deck’s own, even from Herald’s default', () => {
+  it('takes the edited master back as the deck’s own, even from Bantu’s default', () => {
     const deck = model.newDeck('Pitch')
     const pseudo = model.masterDeck(deck)
     const edited = model.setBackground(pseudo, ['master', 'layout-section'], { kind: 'solid', color: 'accent2' }).deck
@@ -200,7 +200,7 @@ describe('master operations', () => {
     expect(layoutOf(model.renameLayout(renamed.deck, 'section', ' ').deck.master!, 'section').name).toBe('Section Header')
   })
 
-  it('resets the master to Herald’s, moving slides that followed their layouts back too', () => {
+  it('resets the master to Bantu’s, moving slides that followed their layouts back too', () => {
     const { deck, plain, custom } = deckWithSlides()
     const moved = model.setPlaceholderBox(deck, 'title-content', 'title', { x: 72, y: 30, width: 816, height: 96 }).deck
     const reset = model.resetMaster(moved)
@@ -214,16 +214,16 @@ describe('master operations', () => {
 
   it('sets what the header and footer show', () => {
     const deck = model.newDeck('Pitch')
-    const change = model.setHeaderFooter(deck, { footer: true, footerText: 'Herald', number: true, skipTitle: false })
+    const change = model.setHeaderFooter(deck, { footer: true, footerText: 'Bantu', number: true, skipTitle: false })
     const next = model.addSlide(change.deck, { layout: 'title-content' }).deck
 
     expect(change.label).toBe('Header and Footer')
-    expect(change.deck.headerFooter).toMatchObject({ footer: true, footerText: 'Herald', number: true, date: false })
+    expect(change.deck.headerFooter).toMatchObject({ footer: true, footerText: 'Bantu', number: true, date: false })
     expect(footersOf(next, next.slides[1], 1).map((footer) => [footer.role, footer.text])).toEqual([
-      ['footer', 'Herald'],
+      ['footer', 'Bantu'],
       ['number', '2']
     ])
-    expect(model.setHeaderFooter(change.deck, { footerText: 'Herald' }).deck).toBe(change.deck)
+    expect(model.setHeaderFooter(change.deck, { footerText: 'Bantu' }).deck).toBe(change.deck)
     expect(model.setHeaderFooter(change.deck, { dateText: '  ' }).deck.headerFooter?.dateText).toBeUndefined()
     expect(model.setHeaderFooter(deck, {}).deck).toBe(deck)
   })

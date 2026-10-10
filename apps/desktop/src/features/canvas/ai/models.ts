@@ -36,7 +36,7 @@ function listen(): void {
   }
 
   listening = true
-  window.heraldOS.canvas.models.onProgress((progress) => {
+  window.bantuOS.canvas.models.onProgress((progress) => {
     $downloads.set({ ...$downloads.get(), [progress.id]: progress })
 
     if (progress.outcome) {
@@ -47,7 +47,7 @@ function listen(): void {
 
 export async function refreshModels(): Promise<Partial<Record<ModelId, ModelStatus>>> {
   listen()
-  const list = await window.heraldOS.canvas.models.list()
+  const list = await window.bantuOS.canvas.models.list()
   const next = Object.fromEntries(list.map((status) => [status.id, status])) as Partial<Record<ModelId, ModelStatus>>
   $models.set(next)
 
@@ -62,7 +62,7 @@ export async function modelReady(id: ModelId): Promise<boolean> {
 export function missingModelMessage(id: ModelId, feature: string): string {
   const model = modelInfo(id)
 
-  return `${feature} needs the ${model.name} model (${sizeLabel(modelBytes(model))}, ${model.licence} licence), which is not downloaded yet. Ask the person to allow the download in Herald Canvas (${ASKED_IN[id]}), then try again; it is never downloaded without them.`
+  return `${feature} needs the ${model.name} model (${sizeLabel(modelBytes(model))}, ${model.licence} licence), which is not downloaded yet. Ask the person to allow the download in Bantu Canvas (${ASKED_IN[id]}), then try again; it is never downloaded without them.`
 }
 
 /** For commands: an error naming the model when it is missing. */
@@ -99,7 +99,7 @@ export async function download(id: ModelId): Promise<boolean> {
   $downloads.set({ ...$downloads.get(), [id]: { id, received: 0, total: modelBytes(modelInfo(id)) } })
 
   try {
-    await window.heraldOS.canvas.models.download(id)
+    await window.bantuOS.canvas.models.download(id)
 
     return true
   } catch {
@@ -109,10 +109,10 @@ export async function download(id: ModelId): Promise<boolean> {
   }
 }
 
-export const cancelDownload = (id: ModelId): Promise<void> => window.heraldOS.canvas.models.cancel(id)
+export const cancelDownload = (id: ModelId): Promise<void> => window.bantuOS.canvas.models.cancel(id)
 
 export async function removeModel(id: ModelId): Promise<void> {
-  await window.heraldOS.canvas.models.remove(id)
+  await window.bantuOS.canvas.models.remove(id)
   await refreshModels()
 }
 

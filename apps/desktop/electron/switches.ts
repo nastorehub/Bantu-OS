@@ -2,28 +2,28 @@ import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 import { type BrowserWindow, ipcMain, powerMonitor, powerSaveBlocker } from 'electron'
-import { type HeraldOSPrefs, type IdleTimings, IPC, type SwitchName, type SwitchState } from '../shared/ipc.ts'
+import { type BantuOSPrefs, type IdleTimings, IPC, type SwitchName, type SwitchState } from '../shared/ipc.ts'
 import { log } from './log.ts'
 import { run } from './platform/exec.ts'
 import { readPrefs, writePrefs } from './prefs.ts'
 
-const STAY_AWAKE_MARKER = path.join(os.homedir(), '.local', 'state', 'herald-os', 'stay-awake')
-const IDLE_CONF = path.join(os.homedir(), '.config', 'herald-os', 'idle.conf')
+const STAY_AWAKE_MARKER = path.join(os.homedir(), '.local', 'state', 'bantu-os', 'stay-awake')
+const IDLE_CONF = path.join(os.homedir(), '.config', 'bantu-os', 'idle.conf')
 export const IDLE_DEFAULTS: IdleTimings = { lockAfter: 10, screenOffAfter: 15, suspendAfter: 0 }
 const SCREENSAVER_DEFAULT_MINUTES = 5
 const IDLE_POLL_MS = 10_000
 
-/** idle.conf for linux/bin/herald-os-idle: seconds, 0 for never. */
-export function renderIdleConf(prefs: Pick<HeraldOSPrefs, 'idle' | 'screensaver'>): string {
+/** idle.conf for linux/bin/bantu-os-idle: seconds, 0 for never. */
+export function renderIdleConf(prefs: Pick<BantuOSPrefs, 'idle' | 'screensaver'>): string {
   const idle = { ...IDLE_DEFAULTS, ...prefs.idle }
   const seconds = (minutes: number) => Math.max(0, Math.round(minutes * 60))
   const screensaver = prefs.screensaver?.enabled ? seconds(prefs.screensaver.afterMinutes || SCREENSAVER_DEFAULT_MINUTES) : 0
 
-  return ['# Written by Herald OS from Settings; seconds of inactivity, 0 for never.', `screensaver=${screensaver}`, `lock=${seconds(idle.lockAfter)}`, `screen_off=${seconds(idle.screenOffAfter)}`, `suspend=${seconds(idle.suspendAfter)}`, ''].join('\n')
+  return ['# Written by Bantu OS from Settings; seconds of inactivity, 0 for never.', `screensaver=${screensaver}`, `lock=${seconds(idle.lockAfter)}`, `screen_off=${seconds(idle.screenOffAfter)}`, `suspend=${seconds(idle.suspendAfter)}`, ''].join('\n')
 }
 
 /**
- * The quick switches. In the Herald OS Linux session the `herald-os` CLI owns the system side
+ * The quick switches. In the Bantu OS Linux session the `bantu-os` CLI owns the system side
  * (wlsunset for night light, the swayidle unit for staying awake), so the menu bar, the hotkeys and
  * a terminal all agree; elsewhere staying awake is Electron's power-save blocker, which macOS and
  * the D-Bus idle inhibitor (hypridle on Omarchy) honour. Do not disturb and the screensaver are the
@@ -35,11 +35,11 @@ export class SwitchService {
 
   constructor(
     private readonly options: {
-      /** The Herald OS Linux session (niri, the herald-os CLI). */
+      /** The Bantu OS Linux session (niri, the bantu-os CLI). */
       session: boolean
       getWindows: () => BrowserWindow[]
       /** Preferences changed here (do not disturb, the screensaver): every window follows. */
-      onPrefs: (prefs: HeraldOSPrefs) => void
+      onPrefs: (prefs: BantuOSPrefs) => void
       /** Desktop mode: show the screensaver over the shell. */
       showScreensaver: () => void
     }
@@ -52,14 +52,14 @@ export class SwitchService {
     if (this.options.session) {
       this.writeIdleConf(readPrefs())
     } else {
-      // The session's swayidle runs the screensaver on Herald OS Linux; elsewhere the shell watches.
+      // The session's swayidle runs the screensaver on Bantu OS Linux; elsewhere the shell watches.
       setInterval(() => this.checkIdle(), IDLE_POLL_MS).unref()
     }
   }
 
   async state(): Promise<SwitchState> {
     const prefs = readPrefs()
-    const nightLight = this.options.session ? (await run('systemctl', ['--user', 'is-active', '--quiet', 'herald-os-nightlight'], 5000)).code === 0 : null
+    const nightLight = this.options.session ? (await run('systemctl', ['--user', 'is-active', '--quiet', 'bantu-os-nightlight'], 5000)).code === 0 : null
 
     return {
       nightLight,
@@ -105,7 +105,7 @@ export class SwitchService {
   }
 
   /** Settings changed the idle timings or the screensaver delay. */
-  async applyIdle(prefs: HeraldOSPrefs): Promise<void> {
+  async applyIdle(prefs: BantuOSPrefs): Promise<void> {
     if (!this.options.session) {
       return
     }
@@ -114,7 +114,7 @@ export class SwitchService {
 
     // Staying awake means the idle unit is stopped on purpose; it picks the file up when it restarts.
     if (!fs.existsSync(STAY_AWAKE_MARKER)) {
-      await run('herald-os-idle', ['restart'], 10_000)
+      await run('bantu-os-idle', ['restart'], 10_000)
     }
   }
 
@@ -131,7 +131,7 @@ export class SwitchService {
     return state
   }
 
-  private writeIdleConf(prefs: HeraldOSPrefs): void {
+  private writeIdleConf(prefs: BantuOSPrefs): void {
     try {
       fs.mkdirSync(path.dirname(IDLE_CONF), { recursive: true })
       fs.writeFileSync(IDLE_CONF, renderIdleConf(prefs))
@@ -141,10 +141,10 @@ export class SwitchService {
   }
 
   private async cli(args: string[]): Promise<void> {
-    const result = await run('herald-os', args, 20_000)
+    const result = await run('bantu-os', args, 20_000)
 
     if (result.code !== 0) {
-      throw new Error(result.stderr.trim() || result.stdout.trim() || `herald-os ${args.join(' ')} failed`)
+      throw new Error(result.stderr.trim() || result.stdout.trim() || `bantu-os ${args.join(' ')} failed`)
     }
   }
 

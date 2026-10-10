@@ -118,7 +118,7 @@ function UseWithNasTech({ kind, label }: { kind: 'ollama' | 'lmstudio'; label: s
     setLoading(true)
 
     try {
-      setModels(await window.heraldOS.catalog.localModels(kind))
+      setModels(await window.bantuOS.catalog.localModels(kind))
     } catch (error) {
       notify({ title: `${label} is not ready`, body: errorText(error), level: 'warn' })
     } finally {

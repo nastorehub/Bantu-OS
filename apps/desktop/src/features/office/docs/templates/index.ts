@@ -6,7 +6,7 @@ import { letter, memo, thankYouNote } from './letters.ts'
 import { essay, meetingNotes, proposal, report } from './reports.ts'
 
 /*
- * Herald Docs' built-in templates: each a pure function from the paper and the locale to a new
+ * Bantu Docs' built-in templates: each a pure function from the paper and the locale to a new
  * document with its own look, page setup, and headers and footers where they fit. The gallery
  * shows them when the person makes a document; NasTech makes documents from them by id.
  */
@@ -34,7 +34,7 @@ const BUILT_IN: readonly Template[] = [
   {
     id: 'blank',
     name: 'Blank document',
-    description: 'An empty page in Herald’s own styles.',
+    description: 'An empty page in Bantu’s own styles.',
     build: ({ paper }) => blankDocument({ ...paper, margins: { top: DEFAULT_MARGIN, right: DEFAULT_MARGIN, bottom: DEFAULT_MARGIN, left: DEFAULT_MARGIN } })
   },
   { id: 'letter', name: 'Letter', description: 'A formal letter with a letterhead and today’s date.', build: letter },
@@ -59,7 +59,7 @@ function contextFor(options: TemplateOptions): TemplateContext {
   const size = options.size?.toLowerCase()
 
   if (size !== undefined && !(size in PAGE_SIZES)) {
-    throw new Error(`“${options.size}” is not a paper size Herald Docs has; it has ${Object.keys(PAGE_SIZES).join(', ')}`)
+    throw new Error(`“${options.size}” is not a paper size Bantu Docs has; it has ${Object.keys(PAGE_SIZES).join(', ')}`)
   }
 
   const named = size === undefined ? null : PAGE_SIZES[size as PageSizeName]
@@ -75,7 +75,7 @@ export function documentFromTemplate(id: string, options: TemplateOptions = {}):
   const template = BUILT_IN.find((entry) => entry.id === id)
 
   if (!template) {
-    throw new Error(`Herald Docs has no template “${id}”; its templates are ${TEMPLATES.map((entry) => entry.id).join(', ')}`)
+    throw new Error(`Bantu Docs has no template “${id}”; its templates are ${TEMPLATES.map((entry) => entry.id).join(', ')}`)
   }
 
   return template.build(contextFor(options))

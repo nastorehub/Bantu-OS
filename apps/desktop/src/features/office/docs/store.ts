@@ -5,7 +5,7 @@ import { createSession } from '../session.ts'
 import { docsAdapter } from './adapter.ts'
 import type { PageMap } from './pages/map.ts'
 
-/** Herald Docs' open documents in this window. */
+/** Bantu Docs' open documents in this window. */
 export const docsSession = createSession(docsAdapter)
 
 /** The live editor of each open document, by its key, while its view is mounted. */
@@ -45,7 +45,7 @@ export const $partEdit = atom<{ docKey: string; part: 'header' | 'footer'; kind:
 /** A request to edit a footnote or endnote, made by a double click on its reference or its text: the document, the note, where its reference is in the document, and where it was on screen. */
 export const $noteEdit = atom<{ docKey: string; kind: NoteKind; number: number; pos: number; rect: ScreenRect } | null>(null)
 
-/** Whether the template gallery is open over Herald Docs. */
+/** Whether the template gallery is open over Bantu Docs. */
 export const $templateGallery = atom(false)
 
 export const openTemplateGallery = (): void => $templateGallery.set(true)

@@ -1,16 +1,16 @@
 # Voice ("Jarvis mode")
 
-Talk to NasTech and hear it answer, from anywhere in Herald OS. NasTech stays the brain in every
+Talk to NasTech and hear it answer, from anywhere in Bantu OS. NasTech stays the brain in every
 mode: the same sessions, tools, memory and approval cards; only the audio path changes.
 
 ## Starting a conversation
 
 | How | Where |
 | --- | --- |
-| Global hotkey (`Alt+Space` by default) | Any app, while Herald OS runs |
+| Global hotkey (`Alt+Space` by default) | Any app, while Bantu OS runs |
 | "Hey NasTech" wake word | Anywhere, when enabled in Settings > Voice |
 | Microphone button | Menu bar, Overview composer, NasTech composer, Applications overlay |
-| `herald-os voice [toggle\|start\|stop\|mute]`, `Mod+V` | Linux session |
+| `bantu-os voice [toggle\|start\|stop\|mute]`, `Mod+V` | Linux session |
 
 While a conversation runs the orb sits at the bottom of the NasTech window: state (listening,
 thinking, speaking), captions, mute, "stop talking" and end. Say "stop", "that's all" or
@@ -38,7 +38,7 @@ conversation closes on its own.
 | NeuTTS / KittenTTS / Piper | Free, local | Install the matching extra in the NasTech venv |
 
 If the configured provider cannot run (no API key, a managed gateway your account is not entitled
-to, a missing package), Herald OS switches that setting to the free provider (`local` for speech
+to, a missing package), Bantu OS switches that setting to the free provider (`local` for speech
 to text, `edge` for speech), tells you once, and retries. Pick a different provider in Settings
 whenever you want it back.
 
@@ -58,7 +58,7 @@ to NasTech. Replies start in under a second and interruptions feel natural.
 
 ## Controlling the OS by voice
 
-Every user-visible action in Herald OS is a command in one registry (`apps/desktop/src/store/os-commands.ts`,
+Every user-visible action in Bantu OS is a command in one registry (`apps/desktop/src/store/os-commands.ts`,
 catalogue under `apps/desktop/src/commands/`). Three things call it:
 
 1. **The voice fast path.** Simple utterances match a command locally in under 100 ms and cost no
@@ -70,7 +70,7 @@ catalogue under `apps/desktop/src/commands/`). Three things call it:
    screen `state`, `run` a command. NasTech uses it whenever you ask it to open, show, add, find or
    change something in the OS, and to show its work after its own memory / automation / file tools.
    Results (page, highlighted item, list data) flow back so it can answer precisely.
-3. **The command bar** (Cmd+K, group "Do") and the `herald-os os <id> [json]` CLI on Linux.
+3. **The command bar** (Cmd+K, group "Do") and the `bantu-os os <id> [json]` CLI on Linux.
 
 You watch it happen: a caption at the top of the NasTech window names each action ("Remembered:
 …", "Paused Daily digest") with its origin (voice / NasTech), the page switches, and the touched
@@ -82,7 +82,7 @@ field you were in before clicking the mic is remembered): "type how are you ques
 "type ls -la and press enter", "new line", "press escape", "select all", "select the last word",
 "copy", "cut", "paste", "undo", "redo", "delete that", "delete the last word", "clear the field",
 "scroll down", "go to the top". Say "comma", "period", "question mark", "new line" for punctuation.
-With Herald Docs, Sheets or Slides in front in the one-window desktop shell (macOS), dictation
+With Bantu Docs, Sheets or Slides in front in the one-window desktop shell (macOS), dictation
 (`Cmd+Ctrl+X`, or "start dictation") and "type …" go into the document itself, as one step to undo
 and without the clipboard: at the caret in a Docs page (each "new line" starts a paragraph, or a
 list's next item), into the active Sheets cell and on down the column (a number becomes a number,
@@ -93,14 +93,14 @@ it. A cell being edited, the find bar, the speaker notes or any other field take
 before; so does another app in front. In the Linux panels session the Office apps are windows of
 their own and get dictation as typed keys.
 
-**Files and apps stay inside Herald OS.** "Open hello.pdf" (or "open hello dot pdf", "open the file
+**Files and apps stay inside Bantu OS.** "Open hello.pdf" (or "open hello dot pdf", "open the file
 report") finds the file by name in your home folder (Spotlight on macOS, a bounded `find` on Linux;
 exact names beat partial ones, user folders beat caches) and shows PDFs, images, text and media in a
-Herald OS viewer window (Chromium's PDF viewer, no network, no downloads). Other file types open in
+Bantu OS viewer window (Chromium's PDF viewer, no network, no downloads). Other file types open in
 Files with the file selected; say "open it in its app" to hand one to macOS. "Open Apps" is the
-Herald OS app launcher. A transcript that looks like a web address but ends in a file extension
+Bantu OS app launcher. A transcript that looks like a web address but ends in a file extension
 ("www.openhello.pdf") is treated as a file. When NasTech calls `system_open` while the shell is
-running, web pages open in a Herald OS window, files in the viewer and folders in Files; only a
+running, web pages open in a Bantu OS window, files in the viewer and folders in Files; only a
 named Mac app ("open it in Preview") leaves the OS.
 
 **Documents go to NasTech whole.** "Find the invoice from Acme in my Downloads, rename it properly and
@@ -115,16 +115,16 @@ Moving or renaming files shows the approval card (see below). Right after NasTec
 something, "undo that" (or "take that back") goes to NasTech, which reverses its own change; at
 other times it is the text field's undo.
 
-**Herald Office work goes to NasTech too.** Asking to make or change a document, a sheet or a deck
+**Bantu Office work goes to NasTech too.** Asking to make or change a document, a sheet or a deck
 sends the sentence to NasTech as said; it never fills a command's slot or starts a build: "make a
 budget for my trip", "write a cover letter", "draft a report on our Q3 numbers", "create a
 presentation about volcanoes", "turn this into slides", "make this a table", "add a total row", "add
 a column for tax", "fill in the rest of this column", "sum the March sales", "sort this by date",
 "translate this paragraph into Spanish", "make the heading bold", "make slide 3 a two-column
 comparison", "hide column C". The app commands stay instant: "new document", "new spreadsheet",
-"new presentation", "new slide", "open Herald Docs", "open Sheets", "open Slides", "save the
+"new presentation", "new slide", "open Bantu Docs", "open Sheets", "open Slides", "save the
 document", "save the presentation", "undo"; "open budget.xlsx" finds the file and shows it in
-Files, where Edit in Herald Sheets opens it. Every spoken request also carries what Herald Office
+Files, where Edit in Bantu Sheets opens it. Every spoken request also carries what Bantu Office
 has open, for the model only and before the screen line: the document in front with its file, its
 sheet and selection (or the selected text, or the slide), and the other open documents, so "this
 sheet", "this paragraph" and "the selection" mean what you are looking at.
@@ -181,32 +181,32 @@ Settings > Voice: enable, microphone permission, engine, wake word, hotkey (Elec
 syntax), follow-up window, speak notifications aloud, speech providers, Live limits, and two test
 buttons ("Say hello", "Start talking").
 
-Preferences live in Herald OS's `prefs.json` (`voice.*`). Speech providers and the wake word's
+Preferences live in Bantu OS's `prefs.json` (`voice.*`). Speech providers and the wake word's
 enabled flag are written to the NasTech runtime's `config.yaml` (`stt.provider`, `tts.provider`,
 `wake_word.enabled`) so `nastech tools` and the CLI see the same choice.
 
 Local transcription accuracy: NasTech's default local model (`base`) mishears short commands. Once,
-when voice is on and `stt.provider` is `local`, Herald OS sets `stt.local.model: small.en` (about
-0.8 s per sentence on a laptop CPU) unless you chose another model, and writes a Herald OS
+when voice is on and `stt.provider` is `local`, Bantu OS sets `stt.local.model: small.en` (about
+0.8 s per sentence on a laptop CPU) unless you chose another model, and writes a Bantu OS
 vocabulary to `stt.local.initial_prompt` unless you wrote your own. Settings > Voice > Transcription
 model switches between fast, accurate, multilingual and most-accurate models.
 
 ## Requirements and troubleshooting
 
 - macOS asks for microphone access on the first conversation. If it was denied: System Settings >
-  Privacy & Security > Microphone > Herald OS.
+  Privacy & Security > Microphone > Bantu OS.
 - `npm run bootstrap` reports the runtime version and whether `openwakeword`, `faster_whisper` and
   `edge_tts` import in the NasTech venv (`pip install 'nastech-agent[voice]'` inside the venv adds them).
   Today's NasTech installs keep no venv in the checkout; there
   `nastech pm install --extra voice --extra edge-tts --extra wake-openwakeword` adds them, and
-  `nastech update` keeps them. The Herald OS image adds them at its first boot either way.
-- When the model provider is signed out (expired or revoked login), Herald OS shows its sign-in
-  card: one click opens the provider's page with a one-time code inside Herald OS, as a Herald OS
+  `nastech update` keeps them. The Bantu OS image adds them at its first boot either way.
+- When the model provider is signed out (expired or revoked login), Bantu OS shows its sign-in
+  card: one click opens the provider's page with a one-time code inside Bantu OS, as a Bantu OS
   window beside the card (never the system browser), and both the page and the card close
   themselves once the sign-in is approved. The voice says so too instead of failing silently.
   Settings > NasTech & agents > Account shows the current state and a Sign in button.
 - The wake word runs inside the NasTech runtime (openWakeWord, on-device). On runtimes older than
-  0.21.3 the runtime opens the host mic itself; newer ones take audio from Herald OS. Only one
+  0.21.3 the runtime opens the host mic itself; newer ones take audio from Bantu OS. Only one
   NasTech client can own the detector at a time.
 
 ## Architecture

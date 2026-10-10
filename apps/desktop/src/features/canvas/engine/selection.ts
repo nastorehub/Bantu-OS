@@ -1,5 +1,5 @@
 /*
- * Selections in Herald Canvas: a one-channel raster the size of the document, 255 where selected
+ * Selections in Bantu Canvas: a one-channel raster the size of the document, 255 where selected
  * and in between on soft edges (null in the document state means nothing is selected). Shapes are
  * drawn with antialiased edges and put together with what was selected; feather, expand and
  * contract refine a selection; its outline is traced once per change for the marching ants.

@@ -5,12 +5,12 @@ import { cn } from '../../../../lib/cn.ts'
 import type { ChartValues } from './data.ts'
 import { loadECharts } from './load.ts'
 import { chartOption } from './option.ts'
-import { heraldChartTheme } from './theme.ts'
+import { bantuChartTheme } from './theme.ts'
 
 /** A small picture of a chart, for choosing one: no title, legend or labels. */
 export function ChartPreview({ spec, values, className }: { spec: ChartSpec; values: ChartValues; className?: string }) {
   const box = useRef<HTMLDivElement>(null)
-  const theme = useMemo(heraldChartTheme, [])
+  const theme = useMemo(bantuChartTheme, [])
 
   useEffect(() => {
     let chart: ECharts | null = null

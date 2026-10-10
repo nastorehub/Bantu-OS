@@ -85,7 +85,7 @@ export function BackgroundPanel({ doc, onDone }: { doc: SlidesDocument; onDone: 
           if (picked) {
             void commands.readPicture(picked).then(
               (picture) => apply({ kind: 'image', src: picture.src, natural: picture.natural }),
-              () => commands.notify('Herald Slides could not read that picture')
+              () => commands.notify('Bantu Slides could not read that picture')
             )
           }
         }}

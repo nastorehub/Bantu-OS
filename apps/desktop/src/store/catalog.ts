@@ -7,7 +7,7 @@ import { gatewayRequest } from './gateway.ts'
 import { notify } from './notifications.ts'
 
 /*
- * The install catalog (linux/catalog/*.json): on Herald OS Linux everything in it, on macOS the
+ * The install catalog (linux/catalog/*.json): on Bantu OS Linux everything in it, on macOS the
  * coding agents and local model apps that install there. Main does the installing; this keeps the
  * listing and which entries are busy.
  */
@@ -25,7 +25,7 @@ export const $catalog = atom<CatalogState>({ groups: [], loaded: false, error: n
 let loading: Promise<void> | null = null
 
 export function loadCatalog(): Promise<void> {
-  loading ??= window.heraldOS.catalog
+  loading ??= window.bantuOS.catalog
     .list()
     .then(groups => $catalog.set({ ...$catalog.get(), groups, loaded: true, error: null }))
     .catch((error: unknown) => $catalog.set({ ...$catalog.get(), loaded: true, error: error instanceof Error ? error.message : String(error) }))
@@ -66,11 +66,11 @@ export async function runCatalog(id: string, action: 'install' | 'remove'): Prom
   setBusy(id, action)
 
   try {
-    const result = await (action === 'install' ? window.heraldOS.catalog.install(id) : window.heraldOS.catalog.remove(id))
+    const result = await (action === 'install' ? window.bantuOS.catalog.install(id) : window.bantuOS.catalog.remove(id))
 
     if (result.ok) {
       const opened = entry?.method === 'link' && action === 'install'
-      notify({ title: opened ? `${label}: download page open` : `${label} ${action === 'install' ? 'installed' : 'removed'}`, body: opened ? 'Install it from there; Herald OS sees it when it is done.' : result.output.split('\n').pop() || undefined, level: 'success' })
+      notify({ title: opened ? `${label}: download page open` : `${label} ${action === 'install' ? 'installed' : 'removed'}`, body: opened ? 'Install it from there; Bantu OS sees it when it is done.' : result.output.split('\n').pop() || undefined, level: 'success' })
     } else {
       notify({ title: `Could not ${action} ${label}`, body: result.output || undefined, level: 'error' })
     }

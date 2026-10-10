@@ -25,7 +25,7 @@ export function MenuBarSurface() {
     <header className="flex h-full w-full items-center justify-between px-3 text-[12.5px] text-fg select-none" style={{ background: 'linear-gradient(180deg, var(--menubar-from, rgba(3,10,40,.72)), var(--menubar-to, rgba(3,10,40,.42)))' }}>
       <div className="flex min-w-0 items-center gap-2.5">
         <NasTechLogo height={12} />
-        <span className="font-semibold">Herald OS</span>
+        <span className="font-semibold">Bantu OS</span>
         {title && (
           <>
             <span className="text-fg-4">·</span>
@@ -51,10 +51,10 @@ function openNotifications(): void {
   openSurface('main')
 }
 
-const UPDATE_KEY = 'herald-os.update-available'
+const UPDATE_KEY = 'bantu-os.update-available'
 
 interface UpdateAvailable {
-  /** What is pending, e.g. "Herald OS, 192 packages, 3 apps". */
+  /** What is pending, e.g. "Bantu OS, 192 packages, 3 apps". */
   summary: string
   checkedAt: number
 }
@@ -76,7 +76,7 @@ function readUpdateAvailable(): UpdateAvailable | null {
   }
 }
 
-/** A circular-arrows glyph with an accent dot while an update is pending; clicking runs `herald-os update` through the control menu. */
+/** A circular-arrows glyph with an accent dot while an update is pending; clicking runs `bantu-os update` through the control menu. */
 function UpdateIndicator() {
   const [update, setUpdate] = useState<UpdateAvailable | null>(() => readUpdateAvailable())
 
@@ -90,7 +90,7 @@ function UpdateIndicator() {
     // Other windows fire `storage`; the same window (or a non-DOM writer) is covered by a slow poll.
     window.addEventListener('storage', onStorage)
     const timer = window.setInterval(refresh, 60_000)
-    // `herald-os-update --check` reports through the control socket: [pendingCount, summary].
+    // `bantu-os-update --check` reports through the control socket: [pendingCount, summary].
     const offCommand = onShellCommand(command => {
       if (command.type !== 'update-available') {
         return
@@ -123,7 +123,7 @@ function UpdateIndicator() {
       type="button"
       aria-label={`Updates available: ${update.summary}`}
       title={`Updates available: ${update.summary}`}
-      onClick={() => openSurface('command', { type: 'menu', args: ['update-herald-os'] })}
+      onClick={() => openSurface('command', { type: 'menu', args: ['update-bantu-os'] })}
       className="relative flex size-6 items-center justify-center rounded-md hover:bg-white/10"
     >
       <IconRefresh size={15} />

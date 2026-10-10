@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { luminance, parseHex, toHsl } from '../../../../shared/theme.ts'
-import { beforeDarkMode, darkGrayRamp, heraldPalette, invertForDarkMode, lightGrayRamp, rampOf } from './palette.ts'
+import { beforeDarkMode, darkGrayRamp, bantuPalette, invertForDarkMode, lightGrayRamp, rampOf } from './palette.ts'
 
 const distance = (a: string, b: string) => {
   const x = parseHex(a)!
@@ -19,7 +19,7 @@ describe('rampOf', () => {
     expect(luminance(ramp[600])).toBeGreaterThan(luminance(ramp[900]))
   })
 
-  it('falls back to Herald blue for a colour it cannot read', () => {
+  it('falls back to Bantu blue for a colour it cannot read', () => {
     expect(rampOf('var(--color-accent)')[600]).toBe('#2f7dff')
   })
 })
@@ -58,7 +58,7 @@ describe('gray ramps', () => {
   })
 
   it('picks the ramp for the scheme and leaves the other colours alone', () => {
-    expect(Object.keys(heraldPalette({ accent: '#e6b84a', background: '#07080a', dark: true }))).toEqual(['primary', 'gray'])
-    expect(heraldPalette({ accent: '#336699', background: '#ffffff', dark: false }).gray[0]).toBe('#ffffff')
+    expect(Object.keys(bantuPalette({ accent: '#e6b84a', background: '#07080a', dark: true }))).toEqual(['primary', 'gray'])
+    expect(bantuPalette({ accent: '#336699', background: '#ffffff', dark: false }).gray[0]).toBe('#ffffff')
   })
 })

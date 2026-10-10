@@ -4,7 +4,7 @@ import type { Keep } from './context.ts'
 import { type Refusal, refused } from './parts.ts'
 
 /*
- * Charts Herald does not draw, kept in drawings and chart sheets: their formulas name sheets by
+ * Charts Bantu does not draw, kept in drawings and chart sheets: their formulas name sheets by
  * their names now, the hidden names newer charts read their ranges through come along, and a chart
  * of a pivot table that is not kept becomes a chart of the cells it shows. A chart whose data is on
  * a sheet that is gone is not kept, since its formulas would point at nothing.

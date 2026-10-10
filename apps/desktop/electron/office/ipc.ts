@@ -7,7 +7,7 @@ import { dialogFilters, extensionOf, OFFICE_APP_NAMES, OFFICE_APPS, OFFICE_NOUNS
 import { IPC, type OfficeChangedEvent, type OfficeFileData, type OfficePdfRequest, type OfficePresence, type OfficePrintRequest, type OfficePrintResult, type OfficeRunReply, type OfficeRunRequest, type OfficeSaveTarget, type OfficeWriteResult } from '../../shared/ipc.ts'
 import { assertWritable } from '../ipc/fs.ts'
 import { log } from '../log.ts'
-import { heraldOsDataDir } from '../paths.ts'
+import { bantuOsDataDir } from '../paths.ts'
 import { OfficeBackups } from './backups.ts'
 import { convertWithLibreOffice, findSoffice } from './convert.ts'
 import { digestOfBytes, FileWatcher, stampOf } from './file-watch.ts'
@@ -16,12 +16,12 @@ import { registerSpellingMenus } from './spelling.ts'
 import { OfficeTemplates } from './templates.ts'
 import { OfficeWatches } from './watches.ts'
 
-/** The largest Office file Herald opens or writes. */
+/** The largest Office file Bantu opens or writes. */
 const MAX_OFFICE_BYTES = 512 * 1024 * 1024
 
 const isApp = (value: unknown): value is OfficeApp => OFFICE_APPS.includes(value as OfficeApp)
 
-/** An Office file Herald may read and write: in the home folder (or /tmp), outside protected places. */
+/** An Office file Bantu may read and write: in the home folder (or /tmp), outside protected places. */
 function officePath(target: unknown): string {
   return assertWritable(String(target))
 }
@@ -98,14 +98,14 @@ async function writePdf(target: string, render: () => Promise<Uint8Array>): Prom
 }
 
 export function registerOfficeIpc(getWindow: () => BrowserWindow | null): void {
-  const backups = new OfficeBackups(path.join(heraldOsDataDir(), 'office-backups'))
+  const backups = new OfficeBackups(path.join(bantuOsDataDir(), 'office-backups'))
   registerSpellingMenus()
 
   ipcMain.handle(IPC.officeAbilities, () => abilities())
 
   ipcMain.handle(IPC.officePickOpen, async (event, app: OfficeApp): Promise<string[]> => {
     if (!isApp(app)) {
-      throw new Error(`${String(app)} is not a Herald Office app`)
+      throw new Error(`${String(app)} is not a Bantu Office app`)
     }
 
     const formats = openFormats(app, await abilities())
@@ -123,14 +123,14 @@ export function registerOfficeIpc(getWindow: () => BrowserWindow | null): void {
 
   ipcMain.handle(IPC.officePickSave, async (event, app: OfficeApp, suggestedName: string, preferred?: string): Promise<OfficeSaveTarget | null> => {
     if (!isApp(app)) {
-      throw new Error(`${String(app)} is not a Herald Office app`)
+      throw new Error(`${String(app)} is not a Bantu Office app`)
     }
 
     const formats = saveFormats(app, await abilities())
     const first = formats.find((format) => format.extension === preferred) ?? formats[0]
 
     if (!first) {
-      throw new Error(`Herald Office cannot save ${OFFICE_NOUNS[app]}s yet`)
+      throw new Error(`Bantu Office cannot save ${OFFICE_NOUNS[app]}s yet`)
     }
 
     const ordered = [first, ...formats.filter((format) => format !== first)]
@@ -157,7 +157,7 @@ export function registerOfficeIpc(getWindow: () => BrowserWindow | null): void {
     }
 
     if (stat.size > MAX_OFFICE_BYTES) {
-      throw new Error(`${path.basename(file)} is larger than ${MAX_OFFICE_BYTES / 1024 / 1024} MB, more than Herald Office opens`)
+      throw new Error(`${path.basename(file)} is larger than ${MAX_OFFICE_BYTES / 1024 / 1024} MB, more than Bantu Office opens`)
     }
 
     const bytes = new Uint8Array(await fs.readFile(file))
@@ -265,7 +265,7 @@ export function registerOfficeIpc(getWindow: () => BrowserWindow | null): void {
     const owner = isApp(target?.app) ? ownerOf(target.app, String(target.key)) : null
 
     if (!owner || owner === event.sender) {
-      throw new Error('That document is no longer open in a Herald Office window')
+      throw new Error('That document is no longer open in a Bantu Office window')
     }
 
     const requestId = `office-run-${++runCounter}`
@@ -303,7 +303,7 @@ export function registerOfficeIpc(getWindow: () => BrowserWindow | null): void {
 
   ipcMain.handle(IPC.officeConvert, async (_event, target: string, to: string) => convertWithLibreOffice(officePath(target), String(to)))
 
-  const templates = new OfficeTemplates(path.join(heraldOsDataDir(), 'office-templates'))
+  const templates = new OfficeTemplates(path.join(bantuOsDataDir(), 'office-templates'))
   ipcMain.handle(IPC.officeTemplates, (_event, app: OfficeApp) => templates.list(app))
   ipcMain.handle(IPC.officeTemplateSave, (_event, app: OfficeApp, name: unknown, model: unknown, id?: unknown) => templates.save(app, name, model, id))
   ipcMain.handle(IPC.officeTemplateRename, (_event, app: OfficeApp, id: unknown, name: unknown) => templates.rename(app, id, name))

@@ -8,7 +8,7 @@
 export const NOTE_RESOURCE = 'SHEET_NOTE_PLUGIN'
 export const THREAD_RESOURCE = 'SHEET_UNIVER_THREAD_COMMENT_PLUGIN'
 
-/** A note as Univer keeps it; Herald adds who wrote it. */
+/** A note as Univer keeps it; Bantu adds who wrote it. */
 export interface UNote {
   id: string
   row: number
@@ -55,9 +55,9 @@ export type ThreadsResource = Record<string, UComment[]>
 const NAMED = 'Owner_'
 
 /**
- * The Univer user id of a person known by their name: Herald's own user, and the people of Excel
+ * The Univer user id of a person known by their name: Bantu's own user, and the people of Excel
  * files who have no account behind their name. Univer's local permissions take a user's role from
- * the start of the id, so the one using Herald stays the workbook's owner.
+ * the start of the id, so the one using Bantu stays the workbook's owner.
  */
 export const personIdOf = (name: string): string => `${NAMED}${name}`
 

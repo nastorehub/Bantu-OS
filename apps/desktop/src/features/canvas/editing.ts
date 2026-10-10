@@ -1,5 +1,5 @@
 /*
- * The Edit, Select and Image menus' work on a Herald Canvas document: selections, fills, clearing,
+ * The Edit, Select and Image menus' work on a Bantu Canvas document: selections, fills, clearing,
  * copy and paste (within the app, and images from other apps through the system clipboard), and
  * the canvas's size, crop, trim, turns and flips. Each change is one undoable step.
  */
@@ -196,9 +196,9 @@ export function copySelection(doc: CanvasDocument, merged = false): boolean {
   }
 
   clip = copied
-  // Other apps get it too; very large copies stay in Herald only.
+  // Other apps get it too; very large copies stay in Bantu only.
   if (copied.pixels.width * copied.pixels.height <= 40_000_000) {
-    window.heraldOS.canvas.copyImage(rawOf(copied.pixels)).catch(() => {})
+    window.bantuOS.canvas.copyImage(rawOf(copied.pixels)).catch(() => {})
   }
 
   return true
@@ -223,10 +223,10 @@ function pasteLayer(doc: CanvasDocument, pixels: Raster, at: Vec2, label: string
 
 /** Paste (⌘V): what was copied here goes back where it was; an image from another app comes in centred (shrunk to fit). */
 export async function paste(doc: CanvasDocument): Promise<void> {
-  let pasted: Awaited<ReturnType<typeof window.heraldOS.canvas.pasteImage>> = null
+  let pasted: Awaited<ReturnType<typeof window.bantuOS.canvas.pasteImage>> = null
 
   try {
-    pasted = await window.heraldOS.canvas.pasteImage()
+    pasted = await window.bantuOS.canvas.pasteImage()
   } catch {
     pasted = null
   }

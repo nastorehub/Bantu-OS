@@ -4,7 +4,7 @@ import { pathToFileURL } from 'node:url'
 import { MODEL_SCHEME, type ModelId, MODELS, type ModelProgress } from '../../shared/canvas/models.ts'
 import { IPC } from '../../shared/ipc.ts'
 import { log } from '../log.ts'
-import { heraldOsDataDir } from '../paths.ts'
+import { bantuOsDataDir } from '../paths.ts'
 import { ModelStore } from './model-store.ts'
 
 const known = (id: unknown): ModelId => {
@@ -30,10 +30,10 @@ function broadcast(progress: ModelProgress): void {
 
 /**
  * Downloads, lists and removes models for the windows, and serves the verified files on
- * herald-model://<model>/<file> to their workers (which load them straight into the runtime).
+ * bantu-model://<model>/<file> to their workers (which load them straight into the runtime).
  */
 export function registerModelIpc(): void {
-  const store = new ModelStore(path.join(heraldOsDataDir(), 'models'), (url, init) => net.fetch(url, { ...init, redirect: 'follow' }), broadcast)
+  const store = new ModelStore(path.join(bantuOsDataDir(), 'models'), (url, init) => net.fetch(url, { ...init, redirect: 'follow' }), broadcast)
 
   ipcMain.handle(IPC.canvasModels, () => store.status())
   ipcMain.handle(IPC.canvasModelDownload, (_event, id: unknown) => store.download(known(id)))

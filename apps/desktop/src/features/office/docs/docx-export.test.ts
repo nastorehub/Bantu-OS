@@ -171,7 +171,7 @@ describe('docxFromDocument: the package', () => {
     expect(names.some((name) => name.startsWith('word/media/'))).toBe(true)
   })
 
-  it('writes Word’s heading styles with outline levels, Herald’s other styles, and numbering for each list', async () => {
+  it('writes Word’s heading styles with outline levels, Bantu’s other styles, and numbering for each list', async () => {
     const { bytes } = await docxFromDocument(ROUND_TRIP)
     const { xml } = await partsOf(bytes)
     const styles = await xml('word/styles.xml')
@@ -184,7 +184,7 @@ describe('docxFromDocument: the package', () => {
       expect(attr(child(child(heading, 'w:pPr'), 'w:outlineLvl'), 'w:val')).toBe(String(level - 1))
     }
 
-    for (const id of ['Normal', 'Title', 'Subtitle', 'Quote', 'SourceCode', 'HeraldCalloutInfo', 'HeraldCalloutNote', 'HeraldCalloutSuccess', 'HeraldCalloutWarning', 'HeraldCalloutError', 'VerbatimChar', 'Hyperlink']) {
+    for (const id of ['Normal', 'Title', 'Subtitle', 'Quote', 'SourceCode', 'BantuCalloutInfo', 'BantuCalloutNote', 'BantuCalloutSuccess', 'BantuCalloutWarning', 'BantuCalloutError', 'VerbatimChar', 'Hyperlink']) {
       expect(style(id), id).toBeDefined()
     }
 

@@ -23,7 +23,7 @@ export type ErrorStyle = 'stop' | 'warning' | 'information'
 export interface ValidationSettings {
   /** The cells the rule covers, as "B2:B9" (several areas with commas). */
   range: string
-  /** A rule Herald Sheets reads but does not make ("time", "checkbox") keeps its own type. */
+  /** A rule Bantu Sheets reads but does not make ("time", "checkbox") keeps its own type. */
   rule: ValidationRule | { type: 'time' | 'checkbox'; operator?: Operator; value?: Bound; min?: Bound; max?: Bound }
   allowBlank: boolean
   /** Lists only: whether the cell shows the list's arrow. */
@@ -231,7 +231,7 @@ function boundShown(formula: string | undefined, type: string, date1904: boolean
 
 const rangesText = (ranges: CellRange[]): string => ranges.map(rangeName).join(',')
 
-/** A Univer rule as Herald's settings. */
+/** A Univer rule as Bantu's settings. */
 function settingsOf(rule: IDataValidationRule, unitId: string, date1904: boolean): ValidationSettings {
   const type = String(rule.type)
   const range = rangesText(rule.ranges as CellRange[])

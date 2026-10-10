@@ -75,7 +75,7 @@ let worker: Worker | null = null
 /** Refine in a worker (one at a time: a newer request ends the one under way). */
 function refine(request: RefineRequest): Promise<Extract<RefineReply, { ok: true }>> {
   worker?.terminate()
-  const running = new Worker(new URL('./refine-worker.ts', import.meta.url), { type: 'module', name: 'herald-canvas-refine' })
+  const running = new Worker(new URL('./refine-worker.ts', import.meta.url), { type: 'module', name: 'bantu-canvas-refine' })
   worker = running
 
   return new Promise((resolve, reject) => {

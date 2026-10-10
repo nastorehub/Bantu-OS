@@ -1,7 +1,7 @@
 /*
  * One Office app's open documents in this window: opening, saving, watching and closing them. An
  * Office file is never replaced silently with less than it had. Before the first save over a file,
- * the person sees what Herald could not keep of it (and main backs the original up); Herald saves a
+ * the person sees what Bantu could not keep of it (and main backs the original up); Bantu saves a
  * document by itself only after the person has saved it once, and stops when a save would lose
  * something new. A file changed on disk comes in when there are no unsaved edits here, and is a
  * question when there are.
@@ -55,7 +55,7 @@ export function createSession<Model>(adapter: OfficeAdapter<Model>) {
   }
 
   function report(focused = false): void {
-    window.heraldOS.office.report({ app: adapter.app, focused, active: $activeKey.get(), documents: summaries() })
+    window.bantuOS.office.report({ app: adapter.app, focused, active: $activeKey.get(), documents: summaries() })
   }
 
   async function watch(doc: OfficeDocument<Model>): Promise<void> {
@@ -66,14 +66,14 @@ export function createSession<Model>(adapter: OfficeAdapter<Model>) {
     }
 
     if (entry.watchId) {
-      void window.heraldOS.office.unwatch(entry.watchId)
+      void window.bantuOS.office.unwatch(entry.watchId)
       entry.watchId = null
     }
 
     try {
-      entry.watchId = await window.heraldOS.office.watch(doc.path, doc.digest)
+      entry.watchId = await window.bantuOS.office.watch(doc.path, doc.digest)
     } catch (error) {
-      notify(`Herald will not see outside changes to ${doc.name}: ${messageOf(error)}`, 'error')
+      notify(`Bantu will not see outside changes to ${doc.name}: ${messageOf(error)}`, 'error')
     }
   }
 
@@ -117,7 +117,7 @@ export function createSession<Model>(adapter: OfficeAdapter<Model>) {
   }
 
   async function readInto(file: string): Promise<OfficeDocument<Model>> {
-    const data = await window.heraldOS.office.read(file)
+    const data = await window.bantuOS.office.read(file)
     const name = baseName(file)
     const result = await adapter.read(data.bytes, extensionOf(file), name)
     const doc = blankDocument(name, result.model, data.path, extensionOf(file))
@@ -126,14 +126,14 @@ export function createSession<Model>(adapter: OfficeAdapter<Model>) {
     doc.layout = result.layout
 
     if (result.notes.length) {
-      notify(`Opened ${name}: ${result.notes.length === 1 ? 'one thing is' : `${result.notes.length} things are`} shown differently. See File > What Herald changed.`)
+      notify(`Opened ${name}: ${result.notes.length === 1 ? 'one thing is' : `${result.notes.length} things are`} shown differently. See File > What Bantu changed.`)
     }
 
     return add(doc)
   }
 
   async function openPicked(): Promise<void> {
-    for (const file of await window.heraldOS.office.pickOpen(adapter.app)) {
+    for (const file of await window.bantuOS.office.pickOpen(adapter.app)) {
       await open(file).catch((error: unknown) => notify(`Could not open ${baseName(file)}: ${messageOf(error)}`, 'error'))
     }
   }
@@ -250,7 +250,7 @@ export function createSession<Model>(adapter: OfficeAdapter<Model>) {
         return false
       }
 
-      target = await window.heraldOS.office.pickSave(adapter.app, doc.name, savable.includes(doc.format) ? doc.format : adapter.defaultFormat)
+      target = await window.bantuOS.office.pickSave(adapter.app, doc.name, savable.includes(doc.format) ? doc.format : adapter.defaultFormat)
 
       if (!target) {
         return false
@@ -266,7 +266,7 @@ export function createSession<Model>(adapter: OfficeAdapter<Model>) {
     const { bytes, losses } = await adapter.write(model, target.extension, target.extension === doc.format ? doc.layout : undefined)
 
     if (sameFile) {
-      // The first save over a file shows what Herald could not keep of it; later ones only what is new.
+      // The first save over a file shows what Bantu could not keep of it; later ones only what is new.
       const first = doc.accepted === null
       const fresh = losses.filter((loss) => !doc.accepted?.has(loss))
       const notes = first ? doc.notes : []
@@ -275,7 +275,7 @@ export function createSession<Model>(adapter: OfficeAdapter<Model>) {
         if (options.auto) {
           doc.autosave = false
           touch(doc)
-          notify(`Herald stopped saving ${doc.name} by itself: ${fresh[0] ?? notes[0]} Save it to go on.`, 'error')
+          notify(`Bantu stopped saving ${doc.name} by itself: ${fresh[0] ?? notes[0]} Save it to go on.`, 'error')
 
           return false
         }
@@ -295,7 +295,7 @@ export function createSession<Model>(adapter: OfficeAdapter<Model>) {
     let result
 
     try {
-      result = await window.heraldOS.office.write(target.path, bytes)
+      result = await window.bantuOS.office.write(target.path, bytes)
     } catch (error) {
       notify(`Could not save ${doc.name}: ${messageOf(error)}`, 'error')
       throw error
@@ -319,7 +319,7 @@ export function createSession<Model>(adapter: OfficeAdapter<Model>) {
     if (!sameFile && losses.length && !options.auto) {
       $dialog.set({ kind: 'notes', title: `Saved ${doc.name}`, notes: losses })
     } else if (result.backup) {
-      notify(`Saved ${doc.name}. The file as it was is in Herald's Office backups.`)
+      notify(`Saved ${doc.name}. The file as it was is in Bantu's Office backups.`)
     } else if (!options.auto) {
       notify(`Saved ${doc.name}`)
     }
@@ -334,14 +334,14 @@ export function createSession<Model>(adapter: OfficeAdapter<Model>) {
       return
     }
 
-    const data = await window.heraldOS.office.read(doc.path)
+    const data = await window.bantuOS.office.read(doc.path)
     const result = await adapter.read(data.bytes, extensionOf(doc.path), doc.name)
     doc.digest = data.digest
     doc.layout = result.layout
     doc.initial = result.model
     doc.modified = false
 
-    // A version with things Herald shows differently is agreed to again before it is saved over.
+    // A version with things Bantu shows differently is agreed to again before it is saved over.
     if (result.notes.length) {
       doc.notes = result.notes
       doc.accepted = null
@@ -396,7 +396,7 @@ export function createSession<Model>(adapter: OfficeAdapter<Model>) {
 
     if (entry) {
       if (entry.watchId) {
-        void window.heraldOS.office.unwatch(entry.watchId)
+        void window.bantuOS.office.unwatch(entry.watchId)
       }
 
       if (entry.timer) {
@@ -448,7 +448,7 @@ export function createSession<Model>(adapter: OfficeAdapter<Model>) {
 
     try {
       const view = await printViewOf(doc)
-      const file = await window.heraldOS.office.exportPdf({ html: view.html, suggestedName: doc.name, landscape: view.landscape, path })
+      const file = await window.bantuOS.office.exportPdf({ html: view.html, suggestedName: doc.name, landscape: view.landscape, path })
 
       if (file) {
         notify(`Exported ${baseName(file)}.pdf`)
@@ -474,7 +474,7 @@ export function createSession<Model>(adapter: OfficeAdapter<Model>) {
     printing ??= (async () => {
       try {
         const view = await printViewOf(doc)
-        const result = await window.heraldOS.office.print({ html: view.html, name: doc.name, landscape: view.landscape })
+        const result = await window.bantuOS.office.print({ html: view.html, name: doc.name, landscape: view.landscape })
 
         if (result.error) {
           notify(`Could not print ${doc.name}: ${result.error}`, 'error')
@@ -493,7 +493,7 @@ export function createSession<Model>(adapter: OfficeAdapter<Model>) {
     return printing
   }
 
-  window.heraldOS.office.onChanged((event) => void onChanged(event))
+  window.bantuOS.office.onChanged((event) => void onChanged(event))
   loadedSessions.set(adapter.app, { active: () => $activeKey.get(), summaries, wake })
 
   return { adapter, $documents, $activeKey, $notice, $conflict, $dialog, $awake, active, find, notify, report, summaries, create, open, openPicked, activate, wake, attach, changed, refresh: touch, save, close, resolveConflict, exportPdf, print }

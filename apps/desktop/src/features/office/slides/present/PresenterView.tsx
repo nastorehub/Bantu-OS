@@ -15,7 +15,7 @@ import { blank, counterText, durationText, elapsed, frameOf, goTo, next, type Pr
  */
 
 const NOTE_SIZES = [14, 16, 18, 20, 24, 28, 32, 40]
-const NOTE_SIZE_KEY = 'herald-slides.notes-size'
+const NOTE_SIZE_KEY = 'bantu-slides.notes-size'
 
 function savedNoteSize(): number {
   try {
@@ -144,7 +144,7 @@ function SlideGrid({ deck, state, onClose }: { deck: Deck; state: Presentation; 
   )
 }
 
-/** The presenter view, over everything in Herald's window. */
+/** The presenter view, over everything in Bantu's window. */
 export function PresenterView({ deck, state }: { deck: Deck; state: Presentation }) {
   const [grid, setGrid] = useState(false)
   const [noteSize, setNoteSize] = useState(savedNoteSize)

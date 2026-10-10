@@ -1,5 +1,5 @@
 /*
- * Opening, saving and exporting Herald Canvas documents. Layer images come from the main process
+ * Opening, saving and exporting Bantu Canvas documents. Layer images come from the main process
  * as exact pixels where it can decode them; anything else is decoded here through WebGL, which
  * (unlike a 2D canvas) keeps semi-transparent colours exact. Saves send only the images that
  * changed since the last save. Flattening and exports render in tiles, so neither the GPU's
@@ -23,11 +23,11 @@ import type { CanvasProject, CanvasRawImage } from '../../../../shared/ipc.ts'
 import { type ColorTable, parseCube } from './color-table.ts'
 import { blankLayer, CanvasDocument, type CanvasLayer, type DocState, pixelLayer } from './document.ts'
 import { type Compositor, headlessCompositor, type RenderOptions } from './gpu/compositor.ts'
-import { heraldOf, standInFor, tableSizeOf } from './herald-adjust.ts'
+import { bantuOf, standInFor, tableSizeOf } from './bantu-adjust.ts'
 import { clipRect, Raster, type Rect } from './raster.ts'
 import { frameSize, strips } from './tiles.ts'
 
-const api = () => window.heraldOS.canvas
+const api = () => window.bantuOS.canvas
 
 /** The name a project or image shows: its file name without the extension. */
 export const projectName = (file: string): string => baseName(file)
@@ -182,10 +182,10 @@ async function loadProject(project: CanvasProject): Promise<Loaded> {
     const pixels = imageFile ? await toRaster(await api().readAsset(project.path, imageFile), 4) : null
     const mask = maskFile ? await toRaster(await api().readAsset(project.path, maskFile), 1) : null
     const table = tableSizeOf(record) ? await readTable(project.path, record) : null
-    const herald = heraldOf(record)
+    const bantu = bantuOf(record)
 
-    // The stand-in is made again from the Herald settings, so the two always agree.
-    return { ...rest, ...(herald ? { adjustment: standInFor(herald) } : {}), pixels, mask, ...(table ? { table } : {}) }
+    // The stand-in is made again from the Bantu settings, so the two always agree.
+    return { ...rest, ...(bantu ? { adjustment: standInFor(bantu) } : {}), pixels, mask, ...(table ? { table } : {}) }
   })
   const { format: _format, version: _version, colorSpace: _colorSpace, resolution, documentID, width, height, activeLayerID, layers: _layers, guides, ...extra } = manifest
   const active = activeLayerID && layers.some((layer) => layer.id === activeLayerID) ? activeLayerID : (layers.at(-1)?.id ?? null)
@@ -222,7 +222,7 @@ export async function openProject(file: string): Promise<CanvasDocument> {
 }
 
 /** Take a project's state from disk into an open document, as one undoable step. */
-export async function reloadProject(doc: CanvasDocument, project: CanvasProject, label = 'Changed outside Herald Canvas'): Promise<void> {
+export async function reloadProject(doc: CanvasDocument, project: CanvasProject, label = 'Changed outside Bantu Canvas'): Promise<void> {
   const loaded = await loadProject(project)
   const keep = loaded.state.layers.some((layer) => layer.id === doc.state.activeLayerId) ? doc.state.activeLayerId : loaded.state.activeLayerId
   doc.extra = loaded.extra

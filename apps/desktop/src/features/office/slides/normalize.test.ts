@@ -6,7 +6,7 @@ const PNG = 'data:image/png;base64,iVBORw0KGgo='
 
 describe('normalizeDeck', () => {
   it('refuses what is not a deck at all', () => {
-    expect(() => normalizeDeck(null)).toThrow(/not a Herald Slides deck/)
+    expect(() => normalizeDeck(null)).toThrow(/not a Bantu Slides deck/)
     expect(() => normalizeDeck({ slides: 'many' })).toThrow()
   })
 

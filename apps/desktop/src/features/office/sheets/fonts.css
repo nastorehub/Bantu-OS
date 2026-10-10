@@ -1,5 +1,5 @@
 /*
- * Office's fonts as Herald Sheets draws them: the real font where it is installed, else the one made
+ * Office's fonts as Bantu Sheets draws them: the real font where it is installed, else the one made
  * to its measurements (Carlito for Calibri, Caladea for Cambria), else the nearest system font. A
  * canvas without the font falls back to a serif, so a workbook from Excel would look like a letter.
  * Only drawing changes: cells keep their font's name, and saved files say Calibri as they did.

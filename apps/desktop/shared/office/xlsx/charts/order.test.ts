@@ -9,10 +9,10 @@ import { parsePart } from './drawingml.ts'
 import { chartDrawing, chartWorkbook, everyKindWorkbook, excelWorkbook, range, SALES_SERIES } from './fixtures.ts'
 
 /*
- * The chart and drawing parts Herald writes, their elements in the order ECMA-376 gives them (Excel
+ * The chart and drawing parts Bantu writes, their elements in the order ECMA-376 gives them (Excel
  * repairs a file whose elements are out of order). Each type lists its children's places in turn,
  * the elements that may fill one place joined by "|", and the type of each child that has children
- * of its own Herald writes.
+ * of its own Bantu writes.
  */
 
 const ORDER: Record<string, string> = {
@@ -104,7 +104,7 @@ function misplaced(element: XmlElement, type: string, path = element.name): stri
   return problems
 }
 
-/** The order problems of every chart and drawing part of a package Herald wrote. */
+/** The order problems of every chart and drawing part of a package Bantu wrote. */
 async function problemsIn(bytes: Uint8Array): Promise<string[]> {
   const zip = await JSZip.loadAsync(bytes)
   const problems: string[] = []
@@ -124,7 +124,7 @@ async function problemsIn(bytes: Uint8Array): Promise<string[]> {
 
 const { north, south, margin, months } = SALES_SERIES
 
-/** Charts that leave things to Herald's defaults, or reach the corners of what is written. */
+/** Charts that leave things to Bantu's defaults, or reach the corners of what is written. */
 const VARIANTS: ChartSpec[] = [
   { kind: 'column', series: [north, south], legend: 'right', labels: 'percent' },
   { kind: 'column', series: [{ values: north.values }], legend: 'none', labels: 'value', stacking: 'percent', axes: { x: { hidden: true, format: '0.0', title: 'x' }, y: { hidden: true, gridlines: false } } },
@@ -145,7 +145,7 @@ const VARIANTS: ChartSpec[] = [
   { kind: 'column', series: [{ values: range('s1', 1, 0, 1, 16383), categories: months }], legend: 'none', labels: 'none' }
 ]
 
-describe('the order of what Herald writes', () => {
+describe('the order of what Bantu writes', () => {
   it('finds an element out of the schema’s order, or where it has no place', () => {
     const chart = (inner: string) => parsePart(`<c:chartSpace xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart"><c:chart>${inner}</c:chart></c:chartSpace>`)!
 
@@ -160,7 +160,7 @@ describe('the order of what Herald writes', () => {
     expect(await problemsIn((await xlsxFromWorkbook(everyKindWorkbook())).bytes)).toEqual([])
   })
 
-  it('writes charts left to Herald’s defaults in the schema’s order, anchored each way', async () => {
+  it('writes charts left to Bantu’s defaults in the schema’s order, anchored each way', async () => {
     const drawings = VARIANTS.map((spec, i) => chartDrawing(`v${i}`, 's1', spec, { at: i, anchorType: (['0', '1', '2'] as const)[i % 3] }))
 
     expect(await problemsIn((await xlsxFromWorkbook(chartWorkbook(drawings))).bytes)).toEqual([])

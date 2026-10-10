@@ -62,7 +62,7 @@ describe('macOS', () => {
 })
 
 describe('parseCliListing', () => {
-  it('reads herald-os catalog list --json', () => {
+  it('reads bantu-os catalog list --json', () => {
     const stdout = JSON.stringify({ machine: { arch: 'x86_64' }, groups: [{ id: 'ai', label: 'AI', entries: [{ id: 'codex', label: 'Codex', installed: true }] }] })
     expect(parseCliListing(stdout)).toEqual([{ id: 'ai', label: 'AI', description: '', entries: [{ id: 'codex', label: 'Codex', installed: true }] }])
   })

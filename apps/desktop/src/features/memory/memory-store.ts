@@ -1,4 +1,4 @@
-import type { SessionListRow } from '@herald-os/client'
+import type { SessionListRow } from '@bantu-os/client'
 import { atom } from 'nanostores'
 import type { DirEntry } from '../../../shared/ipc.ts'
 
@@ -255,7 +255,7 @@ async function readMemoryFile(nastechHome: string, file: MemoryFile, listing: re
     return { file, path, exists: false, modifiedAt: 0, truncated: false, texts: [] }
   }
 
-  const preview = await window.heraldOS.fs.readFile(path)
+  const preview = await window.bantuOS.fs.readFile(path)
 
   if (preview.kind !== 'text') {
     // Binary or too large to preview: show nothing rather than a garbled list, and never write back.
@@ -281,7 +281,7 @@ export async function loadMemory(nastechHome: string): Promise<void> {
     let listing: DirEntry[] = []
 
     try {
-      listing = await window.heraldOS.fs.readDir(memoriesDir(nastechHome))
+      listing = await window.bantuOS.fs.readDir(memoriesDir(nastechHome))
     } catch {
       // No memories folder yet: both files are simply absent.
     }
@@ -321,13 +321,13 @@ async function commitFile(nastechHome: string, file: MemoryFile, texts: string[]
   try {
     if (!current?.exists) {
       try {
-        await window.heraldOS.fs.mkdir(memoriesDir(nastechHome))
+        await window.bantuOS.fs.mkdir(memoriesDir(nastechHome))
       } catch {
         // Folder probably exists already; the write below reports real failures.
       }
     }
 
-    await window.heraldOS.fs.writeText(memoryPath(nastechHome, file), serialize(texts))
+    await window.bantuOS.fs.writeText(memoryPath(nastechHome, file), serialize(texts))
   } finally {
     await loadMemory(nastechHome)
   }

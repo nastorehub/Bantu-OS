@@ -9,8 +9,8 @@ import {
   defaultAdjustment,
   defaultEffect,
   type EffectKind,
-  HERALD_RANGES,
-  type HeraldAdjustment,
+  BANTU_RANGES,
+  type BantuAdjustment,
   type Inks,
   type LayerEffects,
   type LevelRange,
@@ -32,7 +32,7 @@ import { ColorPicker } from './ColorPicker.tsx'
 import { curveTable, resolved } from './engine/adjust-math.ts'
 import { parseCube } from './engine/color-table.ts'
 import { type CanvasDocument, type CanvasLayer, type DocState, findLayer, withLayer } from './engine/document.ts'
-import { heraldOf, withHerald } from './engine/herald-adjust.ts'
+import { bantuOf, withBantu } from './engine/bantu-adjust.ts'
 import { EFFECT_NAMES, EFFECT_ORDER, takesEffects, withEffect } from './engine/layer-effects.ts'
 import { useRevision } from './hooks.ts'
 import { $dialog } from './menus.ts'
@@ -663,31 +663,31 @@ function NoiseControls({ adjustment, edit, set }: AdjustmentProps) {
   )
 }
 
-// Herald's own adjustments: each change sets the settings and their stand-in together.
+// Bantu's own adjustments: each change sets the settings and their stand-in together.
 
-interface HeraldProps<K extends HeraldAdjustment['kind']> {
-  settings: Extract<HeraldAdjustment, { kind: K }>
+interface BantuProps<K extends BantuAdjustment['kind']> {
+  settings: Extract<BantuAdjustment, { kind: K }>
   edit: Edit
   /** Change the settings as they were when the hold began. */
-  set: (change: (settings: Extract<HeraldAdjustment, { kind: K }>) => Partial<Extract<HeraldAdjustment, { kind: K }>>) => void
+  set: (change: (settings: Extract<BantuAdjustment, { kind: K }>) => Partial<Extract<BantuAdjustment, { kind: K }>>) => void
 }
 
 const GRAYS = 'linear-gradient(to right, #000, #fff)'
 
-function BrightnessContrastControls({ settings, edit, set }: HeraldProps<'Brightness/Contrast'>) {
+function BrightnessContrastControls({ settings, edit, set }: BantuProps<'Brightness/Contrast'>) {
   return (
     <>
-      <Slider label="Brightness" value={settings.brightness} min={HERALD_RANGES.brightness[0]} max={HERALD_RANGES.brightness[1]} track={GRAYS} edit={edit} onChange={(brightness) => set(() => ({ brightness }))} />
-      <Slider label="Contrast" value={settings.contrast} min={HERALD_RANGES.contrast[0]} max={HERALD_RANGES.contrast[1]} edit={edit} onChange={(contrast) => set(() => ({ contrast }))} />
+      <Slider label="Brightness" value={settings.brightness} min={BANTU_RANGES.brightness[0]} max={BANTU_RANGES.brightness[1]} track={GRAYS} edit={edit} onChange={(brightness) => set(() => ({ brightness }))} />
+      <Slider label="Contrast" value={settings.contrast} min={BANTU_RANGES.contrast[0]} max={BANTU_RANGES.contrast[1]} edit={edit} onChange={(contrast) => set(() => ({ contrast }))} />
     </>
   )
 }
 
-function VibranceControls({ settings, edit, set }: HeraldProps<'Vibrance'>) {
+function VibranceControls({ settings, edit, set }: BantuProps<'Vibrance'>) {
   return (
     <>
-      <Slider label="Vibrance" value={settings.vibrance} min={HERALD_RANGES.vibrance[0]} max={HERALD_RANGES.vibrance[1]} track="linear-gradient(to right, #8a8a8a, #c96, #36f)" edit={edit} onChange={(vibrance) => set(() => ({ vibrance }))} />
-      <Slider label="Saturation" value={settings.saturation} min={HERALD_RANGES.saturation[0]} max={HERALD_RANGES.saturation[1]} track="linear-gradient(to right, #888, #f33)" edit={edit} onChange={(saturation) => set(() => ({ saturation }))} />
+      <Slider label="Vibrance" value={settings.vibrance} min={BANTU_RANGES.vibrance[0]} max={BANTU_RANGES.vibrance[1]} track="linear-gradient(to right, #8a8a8a, #c96, #36f)" edit={edit} onChange={(vibrance) => set(() => ({ vibrance }))} />
+      <Slider label="Saturation" value={settings.saturation} min={BANTU_RANGES.saturation[0]} max={BANTU_RANGES.saturation[1]} track="linear-gradient(to right, #888, #f33)" edit={edit} onChange={(saturation) => set(() => ({ saturation }))} />
     </>
   )
 }
@@ -708,7 +708,7 @@ const FILTERS: { label: string; colour: Bytes }[] = [
   { label: 'Magenta', colour: [227, 24, 227] }
 ]
 
-function PhotoFilterControls({ settings, edit, set }: HeraldProps<'Photo Filter'>) {
+function PhotoFilterControls({ settings, edit, set }: BantuProps<'Photo Filter'>) {
   const bytes = toBytes(settings.color)
   const preset = FILTERS.findIndex((filter) => filter.colour.every((value, i) => value === bytes[i]))
 
@@ -737,7 +737,7 @@ function PhotoFilterControls({ settings, edit, set }: HeraldProps<'Photo Filter'
         </select>
         <Swatch label="Filter colour" colour={settings.color} edit={edit} onChange={(color) => set(() => ({ color }))} />
       </Row>
-      <Slider label="Density" value={settings.density} min={HERALD_RANGES.density[0]} max={HERALD_RANGES.density[1]} unit="%" edit={edit} onChange={(density) => set(() => ({ density }))} />
+      <Slider label="Density" value={settings.density} min={BANTU_RANGES.density[0]} max={BANTU_RANGES.density[1]} unit="%" edit={edit} onChange={(density) => set(() => ({ density }))} />
       <Check label="Preserve luminosity" checked={settings.preserveLuminosity} onChange={(preserveLuminosity) => set(() => ({ preserveLuminosity }))} />
     </>
   )
@@ -745,7 +745,7 @@ function PhotoFilterControls({ settings, edit, set }: HeraldProps<'Photo Filter'
 
 type MixerOutput = 'red' | 'green' | 'blue'
 
-function ChannelMixerControls({ settings, edit, set }: HeraldProps<'Channel Mixer'>) {
+function ChannelMixerControls({ settings, edit, set }: BantuProps<'Channel Mixer'>) {
   const [output, setOutput] = useState<MixerOutput>('red')
   const key = settings.monochrome ? 'gray' : output
   const row = settings[key]
@@ -771,15 +771,15 @@ function ChannelMixerControls({ settings, edit, set }: HeraldProps<'Channel Mixe
           key={source}
           label={source[0].toUpperCase() + source.slice(1)}
           value={row[source]}
-          min={HERALD_RANGES.mixer[0]}
-          max={HERALD_RANGES.mixer[1]}
+          min={BANTU_RANGES.mixer[0]}
+          max={BANTU_RANGES.mixer[1]}
           unit="%"
           track={`linear-gradient(to right, #000, ${source === 'red' ? '#f33' : source === 'green' ? '#3c3' : '#36f'})`}
           edit={edit}
           onChange={(value) => put({ [source]: value })}
         />
       ))}
-      <Slider label="Constant" value={row.constant} min={HERALD_RANGES.mixer[0]} max={HERALD_RANGES.mixer[1]} unit="%" track={GRAYS} edit={edit} onChange={(constant) => put({ constant })} />
+      <Slider label="Constant" value={row.constant} min={BANTU_RANGES.mixer[0]} max={BANTU_RANGES.mixer[1]} unit="%" track={GRAYS} edit={edit} onChange={(constant) => put({ constant })} />
       <div className={cn('px-3 pb-1 text-[11px]', total > 100 ? 'text-amber-300/90' : 'text-fg-3')}>Total {total}%{total > 100 ? ': brighter than the original, and may clip' : ''}</div>
       <Check label="Monochrome" checked={settings.monochrome} onChange={(monochrome) => set(() => ({ monochrome }))} />
     </>
@@ -805,7 +805,7 @@ const INKS: { key: keyof Inks; label: string; track: string }[] = [
   { key: 'black', label: 'Black', track: 'linear-gradient(to right, #fff, #888, #000)' }
 ]
 
-function SelectiveColorControls({ settings, edit, set }: HeraldProps<'Selective Color'>) {
+function SelectiveColorControls({ settings, edit, set }: BantuProps<'Selective Color'>) {
   const [range, setRange] = useState<SelectiveRange>('reds')
   const inks = settings[range]
 
@@ -825,8 +825,8 @@ function SelectiveColorControls({ settings, edit, set }: HeraldProps<'Selective 
           key={ink.key}
           label={ink.label}
           value={inks[ink.key]}
-          min={HERALD_RANGES.inks[0]}
-          max={HERALD_RANGES.inks[1]}
+          min={BANTU_RANGES.inks[0]}
+          max={BANTU_RANGES.inks[1]}
           unit="%"
           track={ink.track}
           edit={edit}
@@ -846,29 +846,29 @@ function SelectiveColorControls({ settings, edit, set }: HeraldProps<'Selective 
   )
 }
 
-function PosterizeControls({ settings, edit, set }: HeraldProps<'Posterize'>) {
-  return <Slider label="Levels" value={settings.levels} min={HERALD_RANGES.posterize[0]} max={HERALD_RANGES.posterize[1]} curve="log" edit={edit} onChange={(levels) => set(() => ({ levels: Math.round(levels) }))} />
+function PosterizeControls({ settings, edit, set }: BantuProps<'Posterize'>) {
+  return <Slider label="Levels" value={settings.levels} min={BANTU_RANGES.posterize[0]} max={BANTU_RANGES.posterize[1]} curve="log" edit={edit} onChange={(levels) => set(() => ({ levels: Math.round(levels) }))} />
 }
 
-function ThresholdControls({ settings, edit, set }: HeraldProps<'Threshold'>) {
-  return <Slider label="Threshold level" value={settings.level} min={HERALD_RANGES.threshold[0]} max={HERALD_RANGES.threshold[1]} track={GRAYS} edit={edit} onChange={(level) => set(() => ({ level: Math.round(level) }))} />
+function ThresholdControls({ settings, edit, set }: BantuProps<'Threshold'>) {
+  return <Slider label="Threshold level" value={settings.level} min={BANTU_RANGES.threshold[0]} max={BANTU_RANGES.threshold[1]} track={GRAYS} edit={edit} onChange={(level) => set(() => ({ level: Math.round(level) }))} />
 }
 
-function ColorLookupControls({ layer, settings, edit }: { layer: CanvasLayer; settings: Extract<HeraldAdjustment, { kind: 'Color Lookup' }>; edit: Edit }) {
+function ColorLookupControls({ layer, settings, edit }: { layer: CanvasLayer; settings: Extract<BantuAdjustment, { kind: 'Color Lookup' }>; edit: Edit }) {
   const [error, setError] = useState<string | null>(null)
 
   const load = async () => {
-    const [file] = await window.heraldOS.fs.pickFiles({})
+    const [file] = await window.bantuOS.fs.pickFiles({})
 
     if (!file) {
       return
     }
 
     try {
-      const table = parseCube(await window.heraldOS.canvas.readTable(file))
+      const table = parseCube(await window.bantuOS.canvas.readTable(file))
       const name = file.split('/').pop() ?? file
       setError(null)
-      edit.change('Color Lookup', () => ({ table, ...withHerald({ ...settings, name, size: table.size }) }))
+      edit.change('Color Lookup', () => ({ table, ...withBantu({ ...settings, name, size: table.size }) }))
     } catch (failure) {
       setError(failure instanceof Error ? failure.message.replace(/^Error invoking remote method '[^']+': (Error: )?/, '') : String(failure))
     }
@@ -898,19 +898,19 @@ function ColorLookupControls({ layer, settings, edit }: { layer: CanvasLayer; se
   )
 }
 
-/** The controls of a Herald-only adjustment; a kind from a newer Herald Canvas only says what it is. */
-function HeraldControls({ layer, edit }: { layer: CanvasLayer; edit: Edit }) {
-  const settings = heraldOf(layer)
+/** The controls of a Bantu-only adjustment; a kind from a newer Bantu Canvas only says what it is. */
+function BantuControls({ layer, edit }: { layer: CanvasLayer; edit: Edit }) {
+  const settings = bantuOf(layer)
 
   if (!settings) {
-    return <div className="px-3 py-2 text-[12px] text-fg-3">{String(layer.heraldAdjustment?.kind)} comes from a newer Herald Canvas: it shows as its stand-in here, and keeps its settings for that version.</div>
+    return <div className="px-3 py-2 text-[12px] text-fg-3">{String(layer.bantuAdjustment?.kind)} comes from a newer Bantu Canvas: it shows as its stand-in here, and keeps its settings for that version.</div>
   }
 
-  const set = (change: (settings: HeraldAdjustment) => Partial<HeraldAdjustment>) =>
+  const set = (change: (settings: BantuAdjustment) => Partial<BantuAdjustment>) =>
     edit.change(settings.kind, (current) => {
-      const now = heraldOf(current) ?? settings
+      const now = bantuOf(current) ?? settings
 
-      return withHerald({ ...now, ...change(now) } as HeraldAdjustment)
+      return withBantu({ ...now, ...change(now) } as BantuAdjustment)
     })
   const props = { edit, set: set as never }
 
@@ -949,8 +949,8 @@ const CONTROLS: Partial<Record<Adjustment['kind'], (props: AdjustmentProps) => R
 }
 
 function AdjustmentControls({ layer, edit }: { layer: CanvasLayer; edit: Edit }) {
-  if (layer.heraldAdjustment) {
-    return <HeraldControls layer={layer} edit={edit} />
+  if (layer.bantuAdjustment) {
+    return <BantuControls layer={layer} edit={edit} />
   }
 
   const adjustment = layer.adjustment!

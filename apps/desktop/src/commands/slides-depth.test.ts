@@ -48,7 +48,7 @@ const command = (id: string) => slidesCommands.find((entry) => entry.id === id)!
 
 const argOf = (id: string, name: string): string => command(id).args.find((arg) => arg.name === name)?.description ?? ''
 
-const read = (path: string): string => readFileSync(fileURLToPath(new URL(`../../../../plugins/herald-os-bridge/${path}`, import.meta.url)), 'utf8')
+const read = (path: string): string => readFileSync(fileURLToPath(new URL(`../../../../plugins/bantu-os-bridge/${path}`, import.meta.url)), 'utf8')
 
 /** The themes a description lists before what follows its first semicolon: each name before its words in brackets. */
 const themesIn = (description: string): string[] => [...description.replace(/\([^)]*\)/g, '()').split(';')[0].matchAll(/([a-z]+) \(\)/g)].map((match) => match[1])
@@ -68,7 +68,7 @@ function bridgeProperty(name: string): string {
   return found ? found[1] : ''
 }
 
-describe('Herald Slides’ depth commands', () => {
+describe('Bantu Slides’ depth commands', () => {
   it('each read, change or take away what the person made at their tier, once each', () => {
     const ids = slidesCommands.map((entry) => entry.id)
 
@@ -132,7 +132,7 @@ describe('Herald Slides’ depth commands', () => {
   })
 
   it('are described the same way by the bridge and the skill', () => {
-    const skill = read('skills/herald-slides/SKILL.md').replace(/\s+/g, ' ')
+    const skill = read('skills/bantu-slides/SKILL.md').replace(/\s+/g, ' ')
     const kinds = bridgeProperty('kind')
 
     expect(themesIn(bridgeProperty('theme'))).toEqual(THEMES.map((theme) => theme.id))

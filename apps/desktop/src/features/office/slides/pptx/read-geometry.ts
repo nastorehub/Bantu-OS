@@ -2,7 +2,7 @@ import type { CustomPath } from '../deck.ts'
 import { attr, child, childrenNamed, elements, flagAttr, numberAttr, type XmlElement } from './xml.ts'
 
 /*
- * DrawingML's custom geometry (`a:custGeom`) as Herald's freeform paths: each path's points worked
+ * DrawingML's custom geometry (`a:custGeom`) as Bantu's freeform paths: each path's points worked
  * out from its guides, and written as SVG path data with absolute moves, lines, curves and closes
  * only, its arcs turned into cubic curves of at most a quarter turn each.
  */

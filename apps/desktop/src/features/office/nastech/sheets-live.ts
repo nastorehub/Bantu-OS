@@ -54,7 +54,7 @@ function selectionOf(target: SheetsTarget): CellSelection | null {
   }
 }
 
-/** A Herald Sheets workbook open in this window, for a request to NasTech: its selection and its history. */
+/** A Bantu Sheets workbook open in this window, for a request to NasTech: its selection and its history. */
 export function sheetsLive(docKey: string): LiveDoc | null {
   const doc = sheetsSession.find(docKey)
   const target = liveTarget(docKey)

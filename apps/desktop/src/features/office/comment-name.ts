@@ -7,7 +7,7 @@ import type { CommandSource } from '../../store/os-commands.ts'
 import { $systemInfo } from '../../store/system.ts'
 
 /*
- * The name on the comments, replies and notes the person adds in Herald Docs, Sheets and Slides,
+ * The name on the comments, replies and notes the person adds in Bantu Docs, Sheets and Slides,
  * the same in every Office window: theirs once they confirmed it (it is kept in the prefs), asked
  * for the first time they add one, in a question that proposes the account's name. Nothing uses
  * the account's name before they confirm it, and a cancelled question adds nothing: each app
@@ -16,12 +16,12 @@ import { $systemInfo } from '../../store/system.ts'
  */
 
 /** The name on comments a command adds before the person confirmed theirs. */
-export const NEUTRAL_NAME = 'Herald user'
+export const NEUTRAL_NAME = 'Bantu user'
 
 export const NASTECH_NAME = 'NasTech'
 
-/** Where Herald Docs kept the name before the Office apps shared one. */
-const DOCS_NAME_KEY = 'herald.docs.author'
+/** Where Bantu Docs kept the name before the Office apps shared one. */
+const DOCS_NAME_KEY = 'bantu.docs.author'
 
 /** The name the person confirmed for their comments; empty until they do. */
 export const $commentName = atom(normalizeCommentName($prefs.get().commentName))
@@ -54,7 +54,7 @@ $commentName.listen((name) => {
   }
 })
 
-const prefsBridge = () => (typeof window === 'undefined' ? undefined : window.heraldOS?.prefs)
+const prefsBridge = () => (typeof window === 'undefined' ? undefined : window.bantuOS?.prefs)
 
 function docsName(): string {
   try {
@@ -94,7 +94,7 @@ export const commentNameFor = (source?: CommandSource): string => (source === 'a
 
 /**
  * The confirmed name as the prefs file has it (a window's copy may not have arrived yet), after
- * moving Herald Docs' own name into it, once, when it has none: the person confirmed that one in
+ * moving Bantu Docs' own name into it, once, when it has none: the person confirmed that one in
  * Docs' comments. Empty when there is none.
  */
 export async function loadCommentName(): Promise<string> {

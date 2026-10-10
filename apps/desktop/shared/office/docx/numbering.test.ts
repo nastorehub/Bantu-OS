@@ -63,7 +63,7 @@ describe('readNumbering', () => {
 })
 
 describe('listKind and formatNumber', () => {
-  it('tells bullets, numbers Herald shows as they are, and numbers it shows plainly', () => {
+  it('tells bullets, numbers Bantu shows as they are, and numbers it shows plainly', () => {
     expect(listKind({ format: 'bullet', text: '\u2022', start: 1, legal: false })).toEqual({ kind: 'bullet' })
     expect(listKind({ format: 'lowerRoman', text: '%1.', start: 1, legal: false })).toEqual({ kind: 'ordered', type: 'i', approximate: false })
     expect(listKind({ format: 'decimalZero', text: '%1.', start: 1, legal: false })).toEqual({ kind: 'ordered', type: '1', approximate: true })

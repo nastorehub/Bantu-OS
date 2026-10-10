@@ -3,8 +3,8 @@ import { type DocJSON, hexColor, STYLE_NAMES, type StyleLook, type StyleLooks, t
 import { docsSchema } from '../schema.ts'
 
 /*
- * The templates the person saves from Herald Docs (File > Save as Template…), kept by main in
- * Herald's data folder: one file each, with its name, when it was saved and the document. A file
+ * The templates the person saves from Bantu Docs (File > Save as Template…), kept by main in
+ * Bantu's data folder: one file each, with its name, when it was saved and the document. A file
  * read back is checked against the schema, and its styles are made safe to become CSS.
  */
 
@@ -15,7 +15,7 @@ export interface SavedTemplate {
   doc: DocJSON
 }
 
-/** What a template keeps of a document: everything but what Herald holds of the Word file it came from. */
+/** What a template keeps of a document: everything but what Bantu holds of the Word file it came from. */
 export const templateModel = (doc: DocJSON): DocJSON => ({ ...doc, attrs: { ...doc.attrs, kept: null } })
 
 /** A style's look with a font name of letters only, a colour in hex, and numbers that are numbers. */
@@ -50,7 +50,7 @@ function safeLook(value: unknown): StyleLook {
   return out
 }
 
-/** A saved template's document, if it is one Herald Docs can open. */
+/** A saved template's document, if it is one Bantu Docs can open. */
 export function savedDocument(model: unknown): DocJSON | null {
   if (!model || typeof model !== 'object' || (model as DocJSON).type !== 'doc') {
     return null
@@ -69,7 +69,7 @@ export function savedDocument(model: unknown): DocJSON | null {
   }
 }
 
-const office = () => window.heraldOS.office
+const office = () => window.bantuOS.office
 
 /** The person's templates by name; none where main cannot list them (a window started before it could). */
 export async function savedTemplates(): Promise<SavedTemplate[]> {

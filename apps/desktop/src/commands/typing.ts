@@ -44,25 +44,25 @@ export const typingCommands: readonly OsCommand[] = [
   {
     id: 'keymap.set',
     title: 'Keyboard layout',
-    description: "Herald OS Linux: Herald's keys, or the Omarchy keymap where Super+C, X and V copy, cut and paste in every app (voice moves to Super+Shift+V).",
+    description: "Bantu OS Linux: Bantu's keys, or the Omarchy keymap where Super+C, X and V copy, cut and paste in every app (voice moves to Super+Shift+V).",
     tier: 'mutate',
-    args: [{ name: 'keymap', type: 'string', description: 'herald or omarchy', required: true, enum: ['herald', 'omarchy'] }],
+    args: [{ name: 'keymap', type: 'string', description: 'bantu or omarchy', required: true, enum: ['bantu', 'omarchy'] }],
     phrases: [
       { phrase: 'use the omarchy keymap', args: { keymap: 'omarchy' } },
-      { phrase: 'use the herald keymap', args: { keymap: 'herald' } }
+      { phrase: 'use the bantu keymap', args: { keymap: 'bantu' } }
     ],
     run: async ({ keymap }) => {
       if (hostPlatform() !== 'linux') {
-        return fail('The keymap applies to Herald OS Linux; macOS keeps its own shortcuts.')
+        return fail('The keymap applies to Bantu OS Linux; macOS keeps its own shortcuts.')
       }
 
-      const next = keymap === 'omarchy' ? 'omarchy' : 'herald'
+      const next = keymap === 'omarchy' ? 'omarchy' : 'bantu'
 
-      if (($prefs.get().keymap ?? 'herald') !== next) {
+      if (($prefs.get().keymap ?? 'bantu') !== next) {
         await updatePrefs({ keymap: next })
       }
 
-      return ok(next === 'omarchy' ? 'Omarchy keymap: Super+C, X and V copy, cut and paste; voice is Super+Shift+V' : "Herald's keymap is back", { highlight: { kind: 'setting', id: 'general' } })
+      return ok(next === 'omarchy' ? 'Omarchy keymap: Super+C, X and V copy, cut and paste; voice is Super+Shift+V' : "Bantu's keymap is back", { highlight: { kind: 'setting', id: 'general' } })
     }
   }
 ]

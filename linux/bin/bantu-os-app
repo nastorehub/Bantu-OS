@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Bantu OS as an app inside another Wayland compositor (Hyprland, Omarchy): the single-window shell,
+# fullscreen as on macOS, with the compositor's own bar and keys around it. The full Bantu OS session
+# (niri, menu bar and dock) starts from the login screen through bantu-os-session instead.
+set -u
+
+flags=(--class=bantu-os --ozone-platform=wayland)
+
+for app in "${BANTU_OS_APP:-}" /opt/bantu-os /usr/share/bantu-os/app; do
+  if [[ -n "$app" && -x "$app/bantu-os" && -f "$app/resources/app.asar" ]]; then
+    exec "$app/bantu-os" "${flags[@]}" "$@"
+  fi
+done
+
+# A source checkout (development): npm workspaces hoist Electron to the repo root.
+repo="${BANTU_OS_REPO:-$HOME/Bantu-OS}"
+if [[ -x "$repo/node_modules/.bin/electron" && -f "$repo/apps/desktop/dist/electron/main.mjs" ]]; then
+  exec "$repo/node_modules/.bin/electron" "$repo/apps/desktop" "${flags[@]}" "$@"
+fi
+
+echo "bantu-os-app: Bantu OS is not installed (no /opt/bantu-os); see docs/LINUX.md" >&2
+exit 1

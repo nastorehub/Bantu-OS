@@ -16,7 +16,7 @@ const pending = new Map<number, { resolve: (reply: MlReply) => void; reject: (er
 
 function start(): Worker {
   if (!worker) {
-    worker = new Worker(new URL('./ml-worker.ts', import.meta.url), { type: 'module', name: 'herald-canvas-models' })
+    worker = new Worker(new URL('./ml-worker.ts', import.meta.url), { type: 'module', name: 'bantu-canvas-models' })
     worker.onmessage = (event: MessageEvent<MlReply>) => {
       const reply = event.data
       const waiting = pending.get(reply.id)

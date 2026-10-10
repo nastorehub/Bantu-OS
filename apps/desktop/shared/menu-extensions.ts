@@ -1,11 +1,11 @@
 /*
- * ~/.config/herald-os/menu.json: the person's own control-menu entries. Each runs a `herald-os`
- * command, a program, a Herald OS command or opens a web address. Parsed by main (which runs the
+ * ~/.config/bantu-os/menu.json: the person's own control-menu entries. Each runs a `bantu-os`
+ * command, a program, a Bantu OS command or opens a web address. Parsed by main (which runs the
  * programs) and shown by the control menu; pure and tested.
  */
 
 export type MenuExtensionAction =
-  | { kind: 'herald-os'; argv: string[] }
+  | { kind: 'bantu-os'; argv: string[] }
   | { kind: 'exec'; argv: string[] }
   | { kind: 'url'; url: string }
   | { kind: 'command'; command: string; args: Record<string, unknown> }
@@ -36,7 +36,7 @@ export const MENU_GROUPS = ['install', 'remove', 'update', 'style', 'trigger', '
 const MAX_ENTRIES = 50
 const MAX_ARGS = 64
 const COMMAND = /^[a-z][a-z0-9]*(\.[a-z][a-zA-Z0-9]*)+$/
-const ACTION_KEYS = ['herald-os', 'exec', 'url', 'command'] as const
+const ACTION_KEYS = ['bantu-os', 'exec', 'url', 'command'] as const
 
 const slug = (text: string) =>
   text
@@ -85,7 +85,7 @@ export function parseMenuExtensions(value: unknown): MenuExtensions {
     const keys = ACTION_KEYS.filter(key => entry[key] !== undefined)
 
     if (keys.length !== 1) {
-      errors.push(`"${label}" needs exactly one of "herald-os", "exec", "url" or "command"`)
+      errors.push(`"${label}" needs exactly one of "bantu-os", "exec", "url" or "command"`)
 
       return
     }
@@ -93,7 +93,7 @@ export function parseMenuExtensions(value: unknown): MenuExtensions {
     let action: MenuExtensionAction | null = null
     const key = keys[0]
 
-    if (key === 'herald-os' || key === 'exec') {
+    if (key === 'bantu-os' || key === 'exec') {
       const argv = argvOf(entry[key])
       action = argv ? { kind: key, argv } : null
 
@@ -113,7 +113,7 @@ export function parseMenuExtensions(value: unknown): MenuExtensions {
       action = COMMAND.test(command) ? { kind: 'command', command, args } : null
 
       if (!action) {
-        errors.push(`"${label}": "command" is a Herald OS command id, like "page.open"`)
+        errors.push(`"${label}": "command" is a Bantu OS command id, like "page.open"`)
       }
     }
 

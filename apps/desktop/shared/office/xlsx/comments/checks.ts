@@ -5,12 +5,12 @@ import { join } from 'node:path'
 import JSZip from 'jszip'
 
 /*
- * For tests: what other tools make of a file Herald wrote. openpyxl opens it as Excel's own format
+ * For tests: what other tools make of a file Bantu wrote. openpyxl opens it as Excel's own format
  * (it reads notes as each cell's comment), and xmllint checks that every XML part is well formed.
  * Either is passed over where it is not installed.
  */
 
-const PYTHON = process.env.HERALD_TEST_PYTHON ?? '/tmp/sheets-depth-venv/bin/python'
+const PYTHON = process.env.BANTU_TEST_PYTHON ?? '/tmp/sheets-depth-venv/bin/python'
 
 export const hasOpenpyxl = (): boolean => existsSync(PYTHON)
 
@@ -26,7 +26,7 @@ export const hasXmllint = (): boolean => {
 
 /** Run a Python script with `book` opened by openpyxl from the file; gives what it prints. */
 export function openpyxl(bytes: Uint8Array, script: string): string {
-  const folder = mkdtempSync(join(tmpdir(), 'herald-openpyxl-'))
+  const folder = mkdtempSync(join(tmpdir(), 'bantu-openpyxl-'))
 
   try {
     const file = join(folder, 'book.xlsx')
@@ -41,7 +41,7 @@ export function openpyxl(bytes: Uint8Array, script: string): string {
 /** The parts of a package xmllint finds not well formed, with what it says. */
 export async function malformedParts(bytes: Uint8Array): Promise<string[]> {
   const zip = await JSZip.loadAsync(bytes)
-  const folder = mkdtempSync(join(tmpdir(), 'herald-xmllint-'))
+  const folder = mkdtempSync(join(tmpdir(), 'bantu-xmllint-'))
   const problems: string[] = []
 
   try {

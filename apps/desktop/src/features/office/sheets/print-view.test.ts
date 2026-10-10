@@ -57,9 +57,9 @@ describe('the print view', () => {
 
   it('prints on the paper and the way round the sheet’s page setup says', () => {
     const letter = report()
-    letter.sheets.s.custom = { herald: { page: { pageSetup: { orientation: 'landscape', paperSize: 1 } } } }
+    letter.sheets.s.custom = { bantu: { page: { pageSetup: { orientation: 'landscape', paperSize: 1 } } } }
     const unknown = report()
-    unknown.sheets.s.custom = { herald: { page: { pageSetup: { paperSize: 70 } } } }
+    unknown.sheets.s.custom = { bantu: { page: { pageSetup: { paperSize: 70 } } } }
 
     expect(printHtml(letter, 'Book')).toMatchObject({ landscape: true, html: expect.stringContaining('@page { size: letter landscape;') })
     expect(printHtml(unknown, 'Book')).toMatchObject({ landscape: false, html: expect.stringContaining('@page { size: A4 portrait;') })
@@ -68,10 +68,10 @@ describe('the print view', () => {
   it('follows the rest of the page setup: its margins, fitting to a page across, scaling and centring', () => {
     const fitted = report()
     fitted.sheets.s.columnData = { 0: { w: 120 }, 1: { w: 2000 }, 2: { hd: 1 } }
-    fitted.sheets.s.custom = { herald: { page: { pageSetup: { fitToPage: true, fitToHeight: 0, horizontalCentered: true }, margins: { left: 0.25, right: 0.25, top: 1, bottom: 1, header: 0.5, footer: 0.5 } } } }
+    fitted.sheets.s.custom = { bantu: { page: { pageSetup: { fitToPage: true, fitToHeight: 0, horizontalCentered: true }, margins: { left: 0.25, right: 0.25, top: 1, bottom: 1, header: 0.5, footer: 0.5 } } } }
     const scaled = report()
     scaled.sheets.s.columnData = { 0: { w: 120 }, 1: { w: 2000 }, 2: { hd: 1 } }
-    scaled.sheets.s.custom = { herald: { page: { pageSetup: { scale: 75 } } } }
+    scaled.sheets.s.custom = { bantu: { page: { pageSetup: { scale: 75 } } } }
     const fittedView = printHtml(fitted, 'Book')
 
     // A4 is 8.27in across; less the margins that is 745.92px, for a table 2,120px wide.
@@ -85,7 +85,7 @@ describe('the print view', () => {
 
   it('prints the header and footer the file gives the page, page numbers and all, in place of the heading', () => {
     const workbook = report()
-    workbook.sheets.s.custom = { herald: { page: { headerFooter: { oddHeader: '&L&"Arial,Bold"&14Quarterly&RPrinted &D', oddFooter: '&LConfidential && <internal>&CPage &P of &N&R&F, &A' } } } }
+    workbook.sheets.s.custom = { bantu: { page: { headerFooter: { oddHeader: '&L&"Arial,Bold"&14Quarterly&RPrinted &D', oddFooter: '&LConfidential && <internal>&CPage &P of &N&R&F, &A' } } } }
     const { html } = printSheet(workbook, 'Book.xlsx', undefined, new Date(2026, 9, 10, 9, 30))
 
     expect(html).toContain('@top-left { content: "Quarterly"; text-align: left; vertical-align: top; padding-top: 0.3in;')

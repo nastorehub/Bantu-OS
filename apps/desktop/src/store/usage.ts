@@ -1,4 +1,4 @@
-import type { BillingStateResult, UsageModel } from '@herald-os/client'
+import type { BillingStateResult, UsageModel } from '@bantu-os/client'
 import { atom } from 'nanostores'
 import { type AnalyticsResponse, limitAlertKey, planPercent, summariseUsage, type UsageSummary } from '../lib/usage.ts'
 import { rest } from '../lib/rest.ts'
@@ -39,7 +39,7 @@ export async function loadUsage(): Promise<UsageSnapshot> {
 }
 
 const ALERT_AT = 90
-const ALERT_KEY = 'herald-os.usage.alerted'
+const ALERT_KEY = 'bantu-os.usage.alerted'
 const CHECK_MS = 15 * 60_000
 
 /** One notification per billing period once the plan passes 90%; it offers, it never stops anything. */

@@ -9,7 +9,7 @@ import { loadedSessions, type OfficeSession } from './session.ts'
 import type { OfficeDocument } from './types.ts'
 
 /*
- * Where NasTech's Office commands find their document, for Herald Docs, Sheets and Slides alike:
+ * Where NasTech's Office commands find their document, for Bantu Docs, Sheets and Slides alike:
  * open in this window (the change goes into it as one step to undo, and saves as the person's own
  * edits do), open in another Office window (panels mode, where each app is its own window: the
  * command runs there), or a file on disk that is not open.
@@ -31,18 +31,18 @@ export const homeDir = (): string => $env.get()?.homeDir ?? ''
 export const resolve = (input: string): string => resolvePath(input, homeDir())
 
 export async function exists(file: string): Promise<boolean> {
-  return (await window.heraldOS.canvas.exists(file)) === 'file'
+  return (await window.bantuOS.canvas.exists(file)) === 'file'
 }
 
 /** Every open Office document, the one in front first among its window's; this window's own are read live. */
 export async function openEntries(): Promise<OfficeEntry[]> {
-  const presence = await window.heraldOS.office.presence().catch(() => [])
+  const presence = await window.bantuOS.office.presence().catch(() => [])
   const local = [...loadedSessions].map(([app, view]) => ({ app, active: view.active(), documents: view.summaries() }))
 
   return officeEntries(presence, local)
 }
 
-/** One line for NasTech about what is open in Herald Office and what is in front, or null. */
+/** One line for NasTech about what is open in Bantu Office and what is in front, or null. */
 export async function officeContextLine(): Promise<string | null> {
   return describeOffice(await openEntries(), homeDir())
 }
@@ -102,7 +102,7 @@ export async function showDocument<Model>(app: OfficeApp, session: OfficeSession
 }
 
 /**
- * A document closed with its window (desktop mode keeps it until Herald quits), or one its window
+ * A document closed with its window (desktop mode keeps it until Bantu quits), or one its window
  * has not shown yet, gets its editor before a change, so the change is one step to undo there.
  */
 export async function withEditor<Model>(app: OfficeApp, doc: OfficeDocument<Model>): Promise<boolean> {
@@ -133,14 +133,14 @@ export async function done(work: Promise<Outcome>): Promise<CommandResult> {
  * lands live there as one step to undo. Everywhere else it runs here.
  */
 export async function inOwnWindow(app: OfficeApp, command: string, args: Record<string, unknown>, ref: string, context: CommandContext, here: () => Promise<Outcome>): Promise<CommandResult> {
-  if (isPanels && isMainSurface && typeof window.heraldOS?.office?.run === 'function') {
+  if (isPanels && isMainSurface && typeof window.bantuOS?.office?.run === 'function') {
     const text = typeof args[ref] === 'string' ? String(args[ref]).trim() : ''
     const entries = await openEntries()
     const entry = text ? findEntry(entries, app, text, isPathLike(text) ? resolve(text) : null) : (entries.find((candidate) => candidate.app === app && candidate.active) ?? null)
 
     if (entry && !loadedSessions.get(app)?.summaries().some((doc) => doc.key === entry.key)) {
       try {
-        const result = (await window.heraldOS.office.run({ app, key: entry.key }, command, args, context.source)) as CommandResult
+        const result = (await window.bantuOS.office.run({ app, key: entry.key }, command, args, context.source)) as CommandResult
 
         return result && typeof result === 'object' && 'ok' in result ? result : ok(`Ran ${command} in ${OFFICE_APP_NAMES[app]}`)
       } catch (error) {
@@ -156,7 +156,7 @@ let relayBound = false
 
 /** An Office window of its own (panels mode) runs the commands main hands it for its documents. */
 export function bindOfficeRelay(): void {
-  const office = window.heraldOS?.office
+  const office = window.bantuOS?.office
 
   if (relayBound || isMainSurface || typeof office?.onRunRequest !== 'function') {
     return

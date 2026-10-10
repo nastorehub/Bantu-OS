@@ -37,7 +37,7 @@ export function askAbout(file: string, question = ''): void {
 let bound = false
 
 export function bindRecording(): () => void {
-  const capture = window.heraldOS?.capture
+  const capture = window.bantuOS?.capture
 
   if (bound || !capture?.onRecordChanged) {
     return () => undefined

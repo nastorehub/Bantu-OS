@@ -5,7 +5,7 @@ import type { SheetNames } from './formulas.ts'
 import { carried, childNamed, extensionsOf, placeChild, uriOf, withExtensions, withNamespace, WORKSHEET_ORDER } from './markup.ts'
 
 /*
- * What a worksheet of the source holds in its own XML that Herald keeps: sparklines (an extension
+ * What a worksheet of the source holds in its own XML that Bantu keeps: sparklines (an extension
  * of the sheet, their formulas naming sheets by their names now) and the sheet's background picture.
  * Then each written sheet gets what the steps gave it, in the schema's order.
  */

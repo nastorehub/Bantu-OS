@@ -1,9 +1,9 @@
 {
-  "name": "@herald-os/desktop",
-  "productName": "Herald OS",
+  "name": "@bantu-os/desktop",
+  "productName": "Bantu OS",
   "version": "0.1.0-alpha.3",
   "private": true,
-  "description": "The Herald OS shell: menu bar, dock, windows and apps for an agent-native operating system.",
+  "description": "The Bantu OS shell: menu bar, dock, windows and apps for an agent-native operating system.",
   "author": "nastorehub",
   "license": "MIT",
   "type": "module",
@@ -14,7 +14,7 @@
   "scripts": {
     "dev": "concurrently -k -n renderer,electron -c cyan,yellow \"npm:dev:renderer\" \"npm:dev:electron\"",
     "dev:renderer": "vite --host 127.0.0.1 --port 5180 --strictPort",
-    "dev:electron": "wait-on http://127.0.0.1:5180 && node scripts/bundle-electron.mjs --dev && cross-env HERALD_OS_DEV_SERVER=http://127.0.0.1:5180 electron .",
+    "dev:electron": "wait-on http://127.0.0.1:5180 && node scripts/bundle-electron.mjs --dev && cross-env BANTU_OS_DEV_SERVER=http://127.0.0.1:5180 electron .",
     "build": "vite build && node scripts/bundle-electron.mjs",
     "start": "npm run build && electron .",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.electron.json --noEmit",
@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@floating-ui/dom": "1.8.0",
-    "@herald-os/client": "*",
+    "@bantu-os/client": "*",
     "@nanostores/react": "1.1.0",
     "@tabler/icons-react": "3.46.0",
     "@tiptap/core": "3.31.4",
@@ -133,10 +133,10 @@
     "wait-on": "9.1.0"
   },
   "build": {
-    "appId": "dev.iamluke.heraldos",
-    "productName": "Herald OS",
-    "executableName": "Herald OS",
-    "artifactName": "HeraldOS-${version}-${os}-${arch}.${ext}",
+    "appId": "dev.iamluke.bantuos",
+    "productName": "Bantu OS",
+    "executableName": "Bantu OS",
+    "artifactName": "BantuOS-${version}-${os}-${arch}.${ext}",
     "directories": {
       "output": "release"
     },
@@ -202,8 +202,8 @@
       "entitlementsInherit": "build/entitlements.mac.plist",
       "extraResources": [
         {
-          "from": "../../plugins/herald-os-bridge",
-          "to": "herald-os-bridge",
+          "from": "../../plugins/bantu-os-bridge",
+          "to": "bantu-os-bridge",
           "filter": [
             "**/*",
             "!tests/**",
@@ -213,11 +213,11 @@
         }
       ],
       "extendInfo": {
-        "NSAppleEventsUsageDescription": "Herald OS controls applications on your behalf when you ask it to.",
-        "NSMicrophoneUsageDescription": "Herald OS uses the microphone for voice input.",
-        "NSCameraUsageDescription": "Herald OS shows your camera in a bubble while you record the screen, when you turn it on.",
-        "NSCalendarsFullAccessUsageDescription": "Herald OS shows today's events on the Overview, and gives their titles and times to NasTech when you turn on Pick up where you left off.",
-        "NSCalendarsUsageDescription": "Herald OS shows today's events on the Overview, and gives their titles and times to NasTech when you turn on Pick up where you left off."
+        "NSAppleEventsUsageDescription": "Bantu OS controls applications on your behalf when you ask it to.",
+        "NSMicrophoneUsageDescription": "Bantu OS uses the microphone for voice input.",
+        "NSCameraUsageDescription": "Bantu OS shows your camera in a bubble while you record the screen, when you turn it on.",
+        "NSCalendarsFullAccessUsageDescription": "Bantu OS shows today's events on the Overview, and gives their titles and times to NasTech when you turn on Pick up where you left off.",
+        "NSCalendarsUsageDescription": "Bantu OS shows today's events on the Overview, and gives their titles and times to NasTech when you turn on Pick up where you left off."
       }
     },
     "dmg": {
@@ -226,15 +226,15 @@
     "linux": {
       "category": "System",
       "icon": "build/icon.png",
-      "executableName": "herald-os",
-      "artifactName": "herald-os-${version}-linux-${arch}.${ext}",
+      "executableName": "bantu-os",
+      "artifactName": "bantu-os-${version}-linux-${arch}.${ext}",
       "target": [
         "tar.gz"
       ],
       "extraResources": [
         {
           "from": "../../linux",
-          "to": "herald-os-linux",
+          "to": "bantu-os-linux",
           "filter": [
             "bin/**",
             "session/**",
@@ -247,11 +247,11 @@
         },
         {
           "from": "build/icon.png",
-          "to": "icons/herald-os.png"
+          "to": "icons/bantu-os.png"
         },
         {
-          "from": "../../plugins/herald-os-bridge",
-          "to": "herald-os-bridge",
+          "from": "../../plugins/bantu-os-bridge",
+          "to": "bantu-os-bridge",
           "filter": [
             "**/*",
             "!tests/**",
@@ -262,7 +262,7 @@
       ],
       "desktop": {
         "entry": {
-          "Name": "Herald OS",
+          "Name": "Bantu OS",
           "Comment": "Agent-native desktop powered by NasTech Agent",
           "Categories": "System;"
         }

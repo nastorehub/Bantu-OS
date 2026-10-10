@@ -1,0 +1,65 @@
+# Maintainer: nastorehub <nastorehub@users.noreply.github.com>
+#
+# Bantu OS built from the main branch. Not on the AUR yet: build it from the repository with makepkg -si.
+
+pkgname=bantu-os-git
+pkgver=0.1.0alpha.3.r0.g0000000
+pkgrel=1
+pkgdesc='An AI-native desktop built around NasTech Agent (development build from git)'
+arch=('x86_64' 'aarch64')
+url='https://github.com/nastorehub/Bantu-OS'
+license=('MIT')
+depends=('gtk3' 'nss' 'alsa-lib' 'libsecret' 'libnotify' 'python' 'curl' 'wl-clipboard' 'wtype' 'grim' 'slurp')
+makedepends=('git' 'nodejs' 'npm' 'python' 'base-devel')
+optdepends=(
+  'niri: the full Bantu OS session (menu bar, dock, tiling)'
+  'greetd: a login screen that starts the session'
+  'swaybg: the wallpaper in the session'
+  'swaylock: locking the session'
+  'swayidle: locking and screens off when idle'
+  'cliphist: clipboard history'
+  'brightnessctl: the brightness keys and the display panel'
+  'playerctl: the media keys'
+  'networkmanager: the Wi-Fi panel'
+  'bluez-utils: the Bluetooth panel'
+  'libpulse: the sound panel (pactl)'
+  'power-profiles-daemon: power modes in the battery panel'
+  'upower: the battery panel'
+  'wlsunset: night light'
+  'wf-recorder: screen recording'
+  'ffmpeg: converting recordings'
+  'zbar: reading QR codes from the screen'
+  'tesseract: copying text from the screen'
+  'libheif: opening HEIC photos in Bantu Canvas'
+  'imagemagick: opening TIFF and camera RAW files in Bantu Canvas'
+  'flatpak: installing apps from the catalog'
+  'podman: the Windows VM and containers'
+  'yay: AUR installs from the catalog'
+)
+provides=('bantu-os')
+conflicts=('bantu-os' 'bantu-os-bin')
+options=('!strip' '!debug')
+install=bantu-os.install
+source=("bantu-os::git+${BANTU_OS_GIT_URL:-$url.git}" 'bantu-os-package.sh')
+sha256sums=('SKIP' '120a3b0922a8677c6790af4a93b04109030b5d7201bc85125b62031b152c247c')
+
+pkgver() {
+  cd bantu-os
+  local version
+  version="$(node -p "require('./package.json').version" | tr -d '-')"
+  printf '%s.r%s.g%s' "$version" "$(git rev-list --count HEAD)" "$(git rev-parse --short=7 HEAD)"
+}
+
+build() {
+  cd bantu-os
+  # The pinned NasTech Agent snapshot supplies the gateway's types.
+  npm run sync-upstream
+  npm ci
+  npm run build --workspace apps/desktop
+  (cd apps/desktop && npx electron-builder --linux dir)
+}
+
+package() {
+  source "$srcdir/bantu-os-package.sh"
+  _bantu_os_package "$(_bantu_os_appdir "$srcdir/bantu-os/apps/desktop/release")"
+}

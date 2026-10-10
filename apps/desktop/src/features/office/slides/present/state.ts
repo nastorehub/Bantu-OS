@@ -10,8 +10,8 @@ import { transitionOf } from '../transitions.ts'
 export type Blank = 'black' | 'white'
 
 /**
- * How the slides show: alone over Herald's window, beside the presenter view in it, or in a window
- * of their own on another display while the presenter view fills Herald's.
+ * How the slides show: alone over Bantu's window, beside the presenter view in it, or in a window
+ * of their own on another display while the presenter view fills Bantu's.
  */
 export type PresentMode = 'slides' | 'split' | 'displays'
 

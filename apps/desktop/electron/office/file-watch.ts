@@ -8,7 +8,7 @@ import path from 'node:path'
  * The folder is watched rather than the file: apps save by writing a new file and renaming it over
  * the old one, which ends a watch on the file itself. A poll of the file's size and time covers file
  * systems that report nothing. Only a change of content counts, compared by digest with the version
- * the window has, and Herald's own saves are not reported back to the window that made them.
+ * the window has, and Bantu's own saves are not reported back to the window that made them.
  */
 
 export interface FileStamp {
@@ -80,7 +80,7 @@ export class FileWatcher {
     }
   }
 
-  /** Herald's own save: checks wait while it writes, and what it wrote is the version the window has. */
+  /** Bantu's own save: checks wait while it writes, and what it wrote is the version the window has. */
   async ownWrite(write: () => Promise<string>): Promise<string> {
     this.writing++
 

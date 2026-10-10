@@ -6,7 +6,7 @@ import { attr, children, findAll, textOf, type XmlElement } from './xml.ts'
 /*
  * Review comments in Word files. comments.xml holds each comment: its author, initials, date and
  * text; commentsExtended.xml says which comments answer which (by the id of each comment's last
- * paragraph) and which threads are resolved. Herald keeps a thread for each comment that answers
+ * paragraph) and which threads are resolved. Bantu keeps a thread for each comment that answers
  * none, with the comments that answer it, directly or not, as its replies in order.
  */
 

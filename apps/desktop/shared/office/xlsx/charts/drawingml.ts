@@ -5,7 +5,7 @@ import { encodeXml } from '../xml.ts'
 /*
  * The DrawingML a chart part and its anchor are written in: the namespaces, parts read as trees
  * whose names carry the usual prefixes whatever a file declared, and colours and fills as the
- * plain colour Herald draws.
+ * plain colour Bantu draws.
  */
 
 export const NS = {

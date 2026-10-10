@@ -2,7 +2,7 @@ import { workbookFromXlsx } from '../../../../shared/office/xlsx/read.ts'
 import { xlsxFromWorkbook } from '../../../../shared/office/xlsx/write.ts'
 import type { XlsxRequest, XlsxResponse } from './xlsx.ts'
 
-/* Herald Sheets' .xlsx reading and writing, off the window's thread: ExcelJS takes a while over a big workbook. */
+/* Bantu Sheets' .xlsx reading and writing, off the window's thread: ExcelJS takes a while over a big workbook. */
 
 const post = (response: XlsxResponse, transfer: Transferable[] = []) => (self as unknown as Worker).postMessage(response, transfer)
 

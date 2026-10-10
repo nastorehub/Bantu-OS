@@ -68,17 +68,17 @@ def _dialog_titles():
 
 def test_the_shell_s_dialogs_float_in_a_checkout_and_packaged():
     titles = _dialog_titles()
-    assert {"Open a document", "Open a spreadsheet", "Open a presentation", "Save as", "Export as PDF", "Print to File", "Open in Herald Canvas"} <= titles
+    assert {"Open a document", "Open a spreadsheet", "Open a presentation", "Save as", "Export as PDF", "Print to File", "Open in Bantu Canvas"} <= titles
     # GTK titles its own print dialog.
     for title in titles | {"Print"}:
-        for app_id in ("electron", "herald-os"):
+        for app_id in ("electron", "bantu-os"):
             assert FLOATS in props(app_id, title), (app_id, title)
             assert "open-focused true" in props(app_id, title), (app_id, title)
 
 
 def test_the_shell_s_own_windows_are_not_taken_for_dialogs():
-    for title in ("Herald OS", "Herald OS · Docs", "Herald OS · Sheets", "Herald OS · Slides", "Herald OS · Canvas", "Herald OS · Studio", "Preview", "YouTube"):
-        assert FLOATS not in props("herald-os", title), title
+    for title in ("Bantu OS", "Bantu OS · Docs", "Bantu OS · Sheets", "Bantu OS · Slides", "Bantu OS · Canvas", "Bantu OS · Studio", "Preview", "YouTube"):
+        assert FLOATS not in props("bantu-os", title), title
 
 
 def test_office_windows_tile_at_three_quarters_of_the_screen():
@@ -86,14 +86,14 @@ def test_office_windows_tile_at_three_quarters_of_the_screen():
     titles = re.findall(r"(?:docs|sheets|slides): \{ title: '([^']+)'", mode)
     assert len(titles) == 3
     for title in titles:
-        rules = props("herald-os", title)
+        rules = props("bantu-os", title)
         assert "default-column-width { proportion 0.75; }" in rules, title
         assert FLOATS not in rules, title
 
 
 def test_the_audience_window_opens_full_screen_and_leaves_the_keys_to_the_presenter_view():
     title = re.search(r"const AUDIENCE_TITLE = '([^']+)'", (DESKTOP / "electron" / "office" / "presenter.ts").read_text()).group(1)
-    rules = props("herald-os", title)
+    rules = props("bantu-os", title)
     assert "open-fullscreen true" in rules
     assert "open-focused false" in rules
     assert FLOATS not in rules

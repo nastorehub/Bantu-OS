@@ -35,7 +35,7 @@ export interface MenuSource<Model> {
   /** Whether the app opens and saves any format here (Slides does neither until .pptx). */
   canOpen?: boolean
   canSave: boolean
-  /** What File > New does instead of making a blank document (Herald Docs' template gallery). */
+  /** What File > New does instead of making a blank document (Bantu Docs' template gallery). */
   onNew?: () => void
 }
 
@@ -58,7 +58,7 @@ export function officeMenus<Model>(source: MenuSource<Model>): OfficeMenu[] {
         ...(source.file ?? []),
         {
           id: 'notes',
-          label: 'What Herald changed…',
+          label: 'What Bantu changed…',
           enabled: () => Boolean(doc()?.notes.length),
           run: () => {
             const active = doc()

@@ -8,7 +8,7 @@ import { openNameManager } from './NameManager.tsx'
 vi.mock('./NameManager.tsx', () => ({ openNameManager: vi.fn() }))
 
 describe('the name box’s names', () => {
-  it('opens Herald’s Name manager where Univer would open its own sidebar, until stopped', async () => {
+  it('opens Bantu’s Name manager where Univer would open its own sidebar, until stopped', async () => {
     const { result } = await withHeadlessSheets(newWorkbook('book', 'Book'), async ({ univer }) => {
       const commands = univer.__getInjector().get(ICommandService)
       const ran: string[] = []

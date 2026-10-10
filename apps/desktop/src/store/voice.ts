@@ -605,7 +605,7 @@ let bound = false
 
 let tuningStt = false
 
-/** Once per install: switch local transcription to the accurate model and teach it Herald OS words. */
+/** Once per install: switch local transcription to the accurate model and teach it Bantu OS words. */
 async function tuneLocalStt(): Promise<void> {
   const voice = $prefs.get().voice
 
@@ -656,7 +656,7 @@ export function bindVoice(): () => void {
       void tuneLocalStt()
     }
   })
-  const offHotkey = window.heraldOS.voice?.onHotkey?.(() => handleVoiceCommand('toggle', 'hotkey')) ?? (() => undefined)
+  const offHotkey = window.bantuOS.voice?.onHotkey?.(() => handleVoiceCommand('toggle', 'hotkey')) ?? (() => undefined)
   const offCommand = onShellCommand(command => {
     if (command.type === 'voice') {
       handleVoiceCommand(command.args?.[0] ?? 'toggle', 'command')

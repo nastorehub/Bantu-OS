@@ -2,7 +2,7 @@
  * Text as the data tools read it, with no workbook involved: numbers written with separators,
  * currency symbols, percent signs and accountants' negatives; dates in a given order of day, month
  * and year; parts split at a delimiter; and text cleaned or put in another case. Numbers and dates
- * are read as Herald Sheets' locale writes them (en-US: 1,234.50).
+ * are read as Bantu Sheets' locale writes them (en-US: 1,234.50).
  */
 
 /** Spaces that look like one: tabs, line breaks, non-breaking and thin spaces. */

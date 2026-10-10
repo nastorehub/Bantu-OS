@@ -1,5 +1,5 @@
 /*
- * GLSL for the Herald Canvas compositor (WebGL2). Targets hold premultiplied colour with row 0 at
+ * GLSL for the Bantu Canvas compositor (WebGL2). Targets hold premultiplied colour with row 0 at
  * the top of the document, so a texture coordinate is a document position divided by its size.
  * Blend modes follow the W3C Compositing and Blending formulas, plus the photo-editing modes
  * that list leaves out (linear and vivid light, pin light, hard mix, subtract, divide).

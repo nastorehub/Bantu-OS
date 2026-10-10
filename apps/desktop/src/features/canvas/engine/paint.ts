@@ -1,5 +1,5 @@
 /*
- * Brush strokes for Herald Canvas. Pointer points are smoothed into a curve, dabs are placed along
+ * Brush strokes for Bantu Canvas. Pointer points are smoothed into a curve, dabs are placed along
  * it every `spacing` of the brush's size, and each dab is stamped into the raster on the CPU inside
  * the area it touches only, so a 4K layer uploads just that part. Flow builds up within a stroke
  * while opacity caps it: a stroke never gets darker than its opacity however often it crosses itself.

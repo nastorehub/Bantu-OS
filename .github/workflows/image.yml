@@ -1,4 +1,4 @@
-name: Herald OS image
+name: Bantu OS image
 
 # The Fedora bootc image (ADR-018) per architecture on matching runners, pushed to the repository's
 # GHCR package, joined into one multi-arch tag; then the installer ISO
@@ -24,7 +24,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  IMAGE: ghcr.io/${{ github.repository_owner }}/herald-os
+  IMAGE: ghcr.io/${{ github.repository_owner }}/bantu-os
   # Tags are releases (stable); manual runs are edge.
   CHANNEL: ${{ startsWith(github.ref, 'refs/tags/v') && 'stable' || 'edge' }}
   # Signing waits for the key (cosign generate-key-pair; the public half goes in linux/image/cosign.pub).
@@ -56,10 +56,10 @@ jobs:
           npm run sync-upstream
           npm ci
           npm run dist:linux --workspace apps/desktop -- --${{ matrix.shell }}
-          cp apps/desktop/release/herald-os-*-linux-${{ matrix.shell }}.tar.gz herald-os-linux.tar.gz
+          cp apps/desktop/release/bantu-os-*-linux-${{ matrix.shell }}.tar.gz bantu-os-linux.tar.gz
       - name: Build the image
         run: |
-          sudo podman build -f linux/image/Containerfile --build-arg SHELL_TARBALL=herald-os-linux.tar.gz \
+          sudo podman build -f linux/image/Containerfile --build-arg SHELL_TARBALL=bantu-os-linux.tar.gz \
             -t "$IMAGE:$CHANNEL-${{ matrix.arch }}" .
       - name: Push it
         run: |
@@ -136,10 +136,10 @@ jobs:
           [[ "$GITHUB_REF" == refs/tags/v* ]] || version="edge-$(git rev-parse --short HEAD)"
           sudo chown -R "$(id -u)" output
           if [[ "${{ matrix.type }}" == "anaconda-iso" ]]; then
-            file="herald-os-$version-x86_64.iso"
+            file="bantu-os-$version-x86_64.iso"
             mv output/bootiso/install.iso "$file"
           else
-            file="herald-os-$version-aarch64.qcow2.zst"
+            file="bantu-os-$version-aarch64.qcow2.zst"
             zstd -T0 -19 -q output/qcow2/disk.qcow2 -o "$file"
           fi
           sha256sum "$file" >"$file.sha256"
@@ -155,7 +155,7 @@ jobs:
           echo "DISK=$file" >>"$GITHUB_ENV"
       - uses: actions/upload-artifact@v4
         with:
-          name: herald-os-${{ matrix.type }}-${{ matrix.arch }}
+          name: bantu-os-${{ matrix.type }}-${{ matrix.arch }}
           path: ${{ env.DISK }}*
           if-no-files-found: error
       - name: Attach to the draft release
@@ -163,5 +163,5 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1 || gh release create "$GITHUB_REF_NAME" --draft --title "Herald OS $GITHUB_REF_NAME" --notes "Draft written by the release workflow."
+          gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1 || gh release create "$GITHUB_REF_NAME" --draft --title "Bantu OS $GITHUB_REF_NAME" --notes "Draft written by the release workflow."
           gh release upload "$GITHUB_REF_NAME" "$DISK"* --clobber

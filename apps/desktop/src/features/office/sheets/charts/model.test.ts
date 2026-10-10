@@ -19,7 +19,7 @@ function sales(): WorkbookSnapshot {
     newSheet('s2', 'Q1 sales', cells([['Channel', 'Share'], ['Shop', 45], ['Online', 35], ['Phone', 20], [null, null], ['Notes', 'none']]))
   ])
 
-  return { ...book, custom: { herald: { theme: { accents: ACCENTS } } } }
+  return { ...book, custom: { bantu: { theme: { accents: ACCENTS } } } }
 }
 
 const drawingsOf = (snapshot: { resources?: { name: string; data: string }[] }) => JSON.parse(snapshot.resources?.find((resource) => resource.name === DRAWING_RESOURCE)?.data || '{}') as Record<string, { data: Record<string, ChartDrawing>; order: string[] }>
@@ -63,7 +63,7 @@ describe('inserting a chart', () => {
     })
     expect(drawing).toMatchObject({ unitId: 'book', subUnitId: 's1', drawingType: CHART_DRAWING_TYPE, componentKey: CHART_COMPONENT, anchorType: '1', allowTransform: true, sheetTransform: { from: { column: 4, row: 0, columnOffset: 0, rowOffset: 0 } }, transform: { width: 480, height: 288 } })
     expect(drawing.data).toEqual({
-      herald: 'chart',
+      bantu: 'chart',
       version: 1,
       spec: {
         kind: 'column',

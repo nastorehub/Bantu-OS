@@ -43,7 +43,7 @@ describe('where a write goes', () => {
   })
 
   it('needs an open document for the selection and the marked text', () => {
-    expect(() => placeFor(null, { at: 'selection' }, null)).toThrow(/open in Herald Docs/)
+    expect(() => placeFor(null, { at: 'selection' }, null)).toThrow(/open in Bantu Docs/)
     const state = stateFrom(REPORT)
 
     expect(() => placeFor(state, { at: 'marked' }, null)).toThrow(/Nothing is marked/)
@@ -99,7 +99,7 @@ describe('where a write goes', () => {
     expect(targetFor(null, { heading: 'Results' }, null)).toEqual({ heading: 'Results', part: 'all' })
     expect(targetFor(null, { at: 'heading', heading: 1 }, null)).toEqual({ heading: 0, part: 'heading' })
     expect(targetFor(state, {}, null)).toBe('selection')
-    expect(() => targetFor(null, {}, null)).toThrow(/open in Herald Docs/)
+    expect(() => targetFor(null, {}, null)).toThrow(/open in Bantu Docs/)
     expect(() => targetFor(state, { at: 'marked' }, null)).toThrow(/Nothing is marked/)
   })
 })

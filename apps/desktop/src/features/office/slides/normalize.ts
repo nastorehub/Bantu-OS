@@ -52,7 +52,7 @@ import { DEFAULT_INSET, MAX_LEVEL } from './text.ts'
 /*
  * A deck as read from a file, made safe and whole: every field is checked and given its default
  * when it is missing or wrong, unknown kinds are dropped, and pictures may only be image data. A
- * file is never trusted to be what Herald wrote; what fails here is left out, never shown broken.
+ * file is never trusted to be what Bantu wrote; what fails here is left out, never shown broken.
  */
 
 type Raw = Record<string, unknown>
@@ -89,7 +89,7 @@ function font(value: unknown, fallback: FontRef): FontRef {
 
 const IMAGE_DATA = /^data:image\/(png|jpeg|gif|webp|bmp|svg\+xml);base64,[A-Za-z0-9+/=\r\n]*$/
 
-/** A picture source Herald shows: image data, nothing else. */
+/** A picture source Bantu shows: image data, nothing else. */
 export const imageSource = (value: unknown): string => {
   const text = str(value, '', 400_000_000)
 
@@ -520,7 +520,7 @@ function slide(value: unknown): Slide | null {
   }
 }
 
-/** A master whole: its background and drawings, and a layout for each of Herald's layouts (Herald's own where one is missing). */
+/** A master whole: its background and drawings, and a layout for each of Bantu's layouts (Bantu's own where one is missing). */
 function master(value: unknown, size: SlideSize): Master | undefined {
   if (!isObject(value)) {
     return undefined
@@ -562,7 +562,7 @@ function headerFooter(value: unknown): HeaderFooter | undefined {
 /** A deck from untrusted data, whole and safe; throws when it is not a deck at all. */
 export function normalizeDeck(value: unknown, title?: string): Deck {
   if (!isObject(value) || !Array.isArray(value.slides)) {
-    throw new Error('This is not a Herald Slides deck')
+    throw new Error('This is not a Bantu Slides deck')
   }
 
   const raw = isObject(value.size) ? value.size : {}

@@ -1,5 +1,5 @@
 /*
- * A Herald Sheets chart: what it shows (series of cells on the workbook's sheets), how (columns,
+ * A Bantu Sheets chart: what it shows (series of cells on the workbook's sheets), how (columns,
  * bars, lines, areas, a pie or doughnut, scattered points, or columns and lines together), and its
  * title, axes, legend and labels. A chart lives in the data of the object floating over the grid
  * that draws it (Univer's sheet drawings keep that data in the workbook), it is drawn with ECharts,
@@ -7,7 +7,7 @@
  */
 
 /** The Univer component that draws a chart in its floating object. */
-export const CHART_COMPONENT = 'herald-chart'
+export const CHART_COMPONENT = 'bantu-chart'
 
 /** The kind of sheet drawing a chart's floating object is: Univer's DrawingTypeEnum.DRAWING_DOM. */
 export const CHART_DRAWING_TYPE = 8
@@ -50,7 +50,7 @@ export interface ChartAxis {
   format?: string
   hidden?: boolean
   /**
-   * The axis runs the other way from Herald's usual direction: on a category axis, bars from the bottom
+   * The axis runs the other way from Bantu's usual direction: on a category axis, bars from the bottom
    * up and columns from right to left; on a value axis, values that decrease along it.
    */
   reverse?: boolean
@@ -75,7 +75,7 @@ export interface ChartSpec {
 
 /** What a chart's floating object keeps: the chart, and the part of the file it was read from. */
 export interface ChartData {
-  herald: 'chart'
+  bantu: 'chart'
   version: 1
   spec: ChartSpec
   /**
@@ -116,4 +116,4 @@ export interface ChartDrawing {
   allowTransform?: boolean
 }
 
-export const isChartData = (data: unknown): data is ChartData => Boolean(data) && typeof data === 'object' && (data as ChartData).herald === 'chart' && typeof (data as ChartData).spec === 'object'
+export const isChartData = (data: unknown): data is ChartData => Boolean(data) && typeof data === 'object' && (data as ChartData).bantu === 'chart' && typeof (data as ChartData).spec === 'object'

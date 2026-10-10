@@ -7,18 +7,18 @@ import { settleSpans, withCell } from '../tables.ts'
 import { themeById } from '../themes.ts'
 import { plainText } from '../text.ts'
 import { writePptx } from './export.ts'
-import { HERALD_CONTENT_TYPE, HERALD_PART, HERALD_RELATIONSHIP } from './herald-part.ts'
+import { BANTU_CONTENT_TYPE, BANTU_PART, BANTU_RELATIONSHIP } from './bantu-part.ts'
 import { readPresentation } from './read.ts'
 import { attr, child, childrenNamed, descendants, elements, find, parseXml, textOf, type XmlElement } from './xml.ts'
 
 const PNG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
 
-/** A deck with a little of everything Herald makes. */
+/** A deck with a little of everything Bantu makes. */
 function sampleDeck(): Deck {
   let deck = model.newDeck('Sample', { theme: themeById('forest') })
   const first = deck.slides[0].id
   deck = model.setTitle(deck, first, 'Quarterly review').deck
-  deck = model.setBody(deck, first, 'Herald OS').deck
+  deck = model.setBody(deck, first, 'Bantu OS').deck
   deck = model.updateElements(deck, first, [placeholderFor(deck.slides[0], 'title')!.id], (element) => (element.kind === 'text' ? { ...element, body: { ...element.body, paragraphs: [{ align: 'center', runs: [{ text: 'Quarterly ' }, { text: 'review', bold: true, color: 'accent2' }] }] } } : element), 'Style').deck
   deck = model.setNotes(deck, first, 'Welcome everyone\n\nThen the agenda').deck
 
@@ -118,7 +118,7 @@ describe('writing PowerPoint files', () => {
     expect(layouts.map((layout) => attr(find(layout, 'p:cSld'), 'name')).sort()).toEqual(Object.values(LAYOUT_NAMES).sort())
     expect(descendants(title, 'a:t').map(textOf).join('')).toBe('Quarterly review')
     expect(attr(find(title, 'p:nvSpPr/p:cNvPr'), 'name')).toBe('Title 1')
-    expect(descendants(typed('subTitle')!, 'a:t').map(textOf).join('')).toBe('Herald OS')
+    expect(descendants(typed('subTitle')!, 'a:t').map(textOf).join('')).toBe('Bantu OS')
     expect(typed('title')).toBeUndefined()
     expect(attr(titleLayout, 'type')).toBe('title')
     expect(descendants(titleLayout, 'p:ph').map((ph) => ph.attrs.type)).toEqual(expect.arrayContaining(['ctrTitle', 'subTitle']))
@@ -252,15 +252,15 @@ describe('writing PowerPoint files', () => {
     expect(descendants(notesBody, 'a:p').map(textOf)).toEqual(['Welcome everyone', '', 'Then the agenda'])
   })
 
-  it('puts Herald’s own copy of the deck in with its content type and relationship', async () => {
+  it('puts Bantu’s own copy of the deck in with its content type and relationship', async () => {
     const { zip, read } = await unzip(await writePptx(sampleDeck()))
     const types = await read('[Content_Types].xml')
     const rels = await read('_rels/.rels')
-    const copy = JSON.parse((await zip.file(HERALD_PART)?.async('string')) ?? '{}')
+    const copy = JSON.parse((await zip.file(BANTU_PART)?.async('string')) ?? '{}')
 
-    expect(descendants(types, 'Override').some((entry) => attr(entry, 'PartName') === `/${HERALD_PART}` && attr(entry, 'ContentType') === HERALD_CONTENT_TYPE)).toBe(true)
-    expect(descendants(rels, 'Relationship').some((entry) => attr(entry, 'Type') === HERALD_RELATIONSHIP && attr(entry, 'Target') === HERALD_PART)).toBe(true)
-    expect(copy.format).toBe('herald-slides')
+    expect(descendants(types, 'Override').some((entry) => attr(entry, 'PartName') === `/${BANTU_PART}` && attr(entry, 'ContentType') === BANTU_CONTENT_TYPE)).toBe(true)
+    expect(descendants(rels, 'Relationship').some((entry) => attr(entry, 'Type') === BANTU_RELATIONSHIP && attr(entry, 'Target') === BANTU_PART)).toBe(true)
+    expect(copy.format).toBe('bantu-slides')
     expect(JSON.stringify(copy.deck)).not.toContain('base64')
     expect(JSON.stringify(copy.deck)).toContain('part:/ppt/media/')
   })
@@ -340,7 +340,7 @@ describe('writing PowerPoint files', () => {
   })
 })
 
-describe('reading Herald’s files without its own copy', () => {
+describe('reading Bantu’s files without its own copy', () => {
   it('gets back the slides, text, lists, shapes, lines, pictures and backgrounds from the slides themselves', async () => {
     const deck = sampleDeck()
     const read = await readPresentation(await writePptx(deck, { embed: false }), deck.title)

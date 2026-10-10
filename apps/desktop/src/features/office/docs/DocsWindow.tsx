@@ -141,7 +141,7 @@ function docsMenus(): OfficeMenu[] {
   })
 }
 
-/** Herald Docs: Word documents, Markdown and plain text on real pages, in a Herald window. */
+/** Bantu Docs: Word documents, Markdown and plain text on real pages, in a Bantu window. */
 export function DocsWindow({ payload }: { payload?: Record<string, unknown> }) {
   const [canOpen, setCanOpen] = useState(true)
   const gallery = useStore($templateGallery)
@@ -171,7 +171,7 @@ export function DocsWindow({ payload }: { payload?: Record<string, unknown> }) {
       if (officeAppFor(file, abilities) === 'docs') {
         docsSession.open(file).catch((error: unknown) => docsSession.notify(`Could not open ${file.split('/').pop()}: ${messageOf(error)}`, 'error'))
       } else {
-        docsSession.notify(`Herald Docs does not open ${file.split('/').pop()}`, 'error')
+        docsSession.notify(`Bantu Docs does not open ${file.split('/').pop()}`, 'error')
       }
     })
   }

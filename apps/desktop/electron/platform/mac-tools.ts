@@ -4,7 +4,7 @@ import path from 'node:path'
 import { run } from './exec.ts'
 
 /*
- * macOS halves of the capture tools Herald OS Linux runs through its CLI: the colour picker (the
+ * macOS halves of the capture tools Bantu OS Linux runs through its CLI: the colour picker (the
  * system eyedropper), and reading text or a QR code in an image (the Vision framework). All three
  * are small JavaScript-for-Automation scripts, so nothing extra is installed.
  */
@@ -62,7 +62,7 @@ function run(argv) {
 `
 
 function scriptFile(name: string, source: string): string {
-  const dir = path.join(os.tmpdir(), 'herald-os-scripts')
+  const dir = path.join(os.tmpdir(), 'bantu-os-scripts')
   const file = path.join(dir, `${name}.js`)
 
   if (!fs.existsSync(file) || fs.readFileSync(file, 'utf8') !== source) {

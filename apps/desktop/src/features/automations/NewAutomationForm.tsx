@@ -1,6 +1,6 @@
 import { IconMessageChatbot, IconPlus, IconSparkles, IconX } from '@tabler/icons-react'
 import { useState } from 'react'
-import { HERALD_EVENTS, type HeraldEventName } from '../../../shared/events.ts'
+import { BANTU_EVENTS, type BantuEventName } from '../../../shared/events.ts'
 import { Chips, GlassButton, GlassCard } from '../../components/ui/glass.tsx'
 import { sendPrompt } from '../../store/chat.ts'
 import { showPage } from '../../store/windows.ts'
@@ -12,7 +12,7 @@ const DESCRIBE_PROMPT = 'Help me set up a new scheduled automation. Ask me what 
 
 /** Runs on an event instead of a schedule; the page turns it into a paused job plus a rule. */
 export interface EventTrigger {
-  event: HeraldEventName
+  event: BantuEventName
   match?: Record<string, string>
 }
 
@@ -21,10 +21,10 @@ const TRIGGER_MODES = [
   { id: 'event', label: 'When something happens' }
 ] as const
 
-const EVENT_CHOICES = HERALD_EVENTS.filter(event => event.automation)
+const EVENT_CHOICES = BANTU_EVENTS.filter(event => event.automation)
 
 /** Events that can be narrowed down, and the detail they match on. */
-const MATCHES: Partial<Record<HeraldEventName, { key: string; label: string; placeholder: string }>> = {
+const MATCHES: Partial<Record<BantuEventName, { key: string; label: string; placeholder: string }>> = {
   crash: { key: 'app', label: 'Which program (optional)', placeholder: 'Any program' },
   'network-change': { key: 'wifi', label: 'Wi-Fi network (optional)', placeholder: 'Any network' }
 }
@@ -34,7 +34,7 @@ export function NewAutomationForm({ targets, creating, onCreate, onCancel }: { t
   const [name, setName] = useState('')
   const [mode, setMode] = useState<'schedule' | 'event'>('schedule')
   const [schedule, setSchedule] = useState('')
-  const [event, setEvent] = useState<HeraldEventName>('login')
+  const [event, setEvent] = useState<BantuEventName>('login')
   const [matchValue, setMatchValue] = useState('')
   const [prompt, setPrompt] = useState('')
   const [deliver, setDeliver] = useState('local')
@@ -96,7 +96,7 @@ export function NewAutomationForm({ targets, creating, onCreate, onCancel }: { t
             </>
           ) : (
             <>
-              <SelectInput id="new-automation-schedule" value={event} onChange={e => setEvent(e.target.value as HeraldEventName)}>
+              <SelectInput id="new-automation-schedule" value={event} onChange={e => setEvent(e.target.value as BantuEventName)}>
                 {EVENT_CHOICES.map(choice => (
                   <option key={choice.name} value={choice.name}>
                     {choice.label}
@@ -104,7 +104,7 @@ export function NewAutomationForm({ targets, creating, onCreate, onCancel }: { t
                 ))}
               </SelectInput>
               {matcher && <TextInput aria-label={matcher.label} value={matchValue} onChange={e => setMatchValue(e.target.value)} placeholder={matcher.placeholder} />}
-              <Hint>NasTech runs it each time this happens on this computer while Herald OS is open.</Hint>
+              <Hint>NasTech runs it each time this happens on this computer while Bantu OS is open.</Hint>
             </>
           )}
         </div>

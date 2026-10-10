@@ -274,7 +274,7 @@ export function FillPanel({ theme, value, onColor, onGradient, noneLabel }: { th
 let systemFonts: Promise<string[]> | null = null
 
 const loadSystemFonts = (): Promise<string[]> => {
-  systemFonts ??= window.heraldOS.fonts
+  systemFonts ??= window.bantuOS.fonts
     .list()
     .then((fonts) => [...new Set(fonts)].sort((a, b) => a.localeCompare(b)))
     .catch(() => [])

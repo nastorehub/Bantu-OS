@@ -1,10 +1,10 @@
 import type { CommandArg, CommandContext } from '../store/os-commands.ts'
 
-/* What Herald Slides' commands share: the arguments that name a presentation, a slide and what is on it, the theme and shape words, and where they run. */
+/* What Bantu Slides' commands share: the arguments that name a presentation, a slide and what is on it, the theme and shape words, and where they run. */
 
 export const office = () => import('../features/office/agent.ts')
 
-export const presentation: CommandArg = { name: 'presentation', type: 'string', description: 'The presentation: a .pptx file (full path or ~/…) or the name of an open presentation as its tab shows it; the one in front in Herald Slides when left out' }
+export const presentation: CommandArg = { name: 'presentation', type: 'string', description: 'The presentation: a .pptx file (full path or ~/…) or the name of an open presentation as its tab shows it; the one in front in Bantu Slides when left out' }
 
 export const slide: CommandArg = { name: 'slide', type: 'string', description: 'A slide: its number (1 is the first), its id, or its title; the slide in front when left out' }
 
@@ -15,7 +15,7 @@ export const theme: CommandArg = {
   name: 'theme',
   type: 'string',
   description:
-    'herald (white with navy text and blue accents; the default), midnight (dark navy with light text), paper (warm cream with serif type), graphite (dark grey with yellow accents), forest (pale with green accents), coral (warm peach and coral), mono (black and white with a red accent), ocean (pale blue and teal), aurora (deep blue with a soft glow and bright accents), dune (a cream-to-sand gradient with serif headings and rust accents), slate (cool off-white with blue accents and serif headings), blossom (a pale pink gradient with pink and violet accents) or ember (dark warm brown with orange and amber accents); or a custom theme’s id or name (slides.listThemes)'
+    'bantu (white with navy text and blue accents; the default), midnight (dark navy with light text), paper (warm cream with serif type), graphite (dark grey with yellow accents), forest (pale with green accents), coral (warm peach and coral), mono (black and white with a red accent), ocean (pale blue and teal), aurora (deep blue with a soft glow and bright accents), dune (a cream-to-sand gradient with serif headings and rust accents), slate (cool off-white with blue accents and serif headings), blossom (a pale pink gradient with pink and violet accents) or ember (dark warm brown with orange and amber accents); or a custom theme’s id or name (slides.listThemes)'
 }
 
 export const x: CommandArg = { name: 'x', type: 'number', description: 'Left edge in points from the slide’s left (a wide slide is 960 by 540 points, a standard one 720 by 540); centred when left out' }
@@ -46,7 +46,7 @@ export const masterLayout = (what: string): CommandArg => ({ name: 'layout', typ
 
 /** The workbook, range and sheet a table comes from. */
 export const sheetArgs: readonly CommandArg[] = [
-  { name: 'workbook', type: 'string', description: 'The workbook: a file (full path or ~/…) or an open workbook’s name; the one in front in Herald Sheets when left out' },
+  { name: 'workbook', type: 'string', description: 'The workbook: a file (full path or ~/…) or an open workbook’s name; the one in front in Bantu Sheets when left out' },
   { name: 'range', type: 'string', description: 'The cells, like A1:D12 or \'Q1 sales\'!B2:F9, or selection for what is selected in an open workbook; the cells that hold something on the sheet when left out' },
   { name: 'sheet', type: 'string', description: 'The sheet, when the range does not name it; the one in front when left out' }
 ]

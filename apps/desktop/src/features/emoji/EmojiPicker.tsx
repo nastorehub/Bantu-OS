@@ -8,7 +8,7 @@ import { $emojiPicker, insertEmoji, recentEmoji } from '../../store/emoji.ts'
 
 const COLUMNS = 12
 
-/** Desktop mode: the picker over the Herald window (panels mode uses the command overlay window). */
+/** Desktop mode: the picker over the Bantu window (panels mode uses the command overlay window). */
 export function EmojiOverlay() {
   const open = useStore($emojiPicker)
   const close = () => $emojiPicker.set(false)

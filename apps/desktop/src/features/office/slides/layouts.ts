@@ -4,7 +4,7 @@ import { imageElement, textElement } from './elements.ts'
 import { isBlank, textBody } from './text.ts'
 
 /*
- * The slide master and its layouts: where each placeholder sits and how its text looks. Herald's
+ * The slide master and its layouts: where each placeholder sits and how its text looks. Bantu's
  * own master is laid out on a 16:9 slide of 960 by 540 points and stretched across for other
  * widths; a deck may have a master of its own (edited, or read from a PowerPoint file), whose
  * layouts' placeholders are elements like a slide's. A slide keeps the layout it was made from, so
@@ -129,7 +129,7 @@ const layoutFrom = (id: LayoutId, specs: readonly PlaceholderSpec[]): SlideLayou
 
 const defaults = new Map<string, Master>()
 
-/** Herald's own master for a slide size: the placeholders above, no drawings, the theme's background. */
+/** Bantu's own master for a slide size: the placeholders above, no drawings, the theme's background. */
 export function defaultMaster(size: SlideSize = BASE): Master {
   const key = `${size.width}x${size.height}`
   let master = defaults.get(key)
@@ -142,10 +142,10 @@ export function defaultMaster(size: SlideSize = BASE): Master {
   return master
 }
 
-/** A deck's master: its own, or Herald's for its size. */
+/** A deck's master: its own, or Bantu's for its size. */
 export const masterOf = (deck: Pick<Deck, 'master' | 'size'>): Master => deck.master ?? defaultMaster(deck.size)
 
-/** One of a master's layouts (Herald's own when the master has none of that id). */
+/** One of a master's layouts (Bantu's own when the master has none of that id). */
 export const layoutOf = (master: Master, id: LayoutId): SlideLayout => master.layouts.find((layout) => layout.id === id) ?? layoutFrom(id, SPECS[id])
 
 /** The master's placeholder of a role (its title, text, date, footer or slide number). */
@@ -155,7 +155,7 @@ export const masterPlaceholder = (master: Master, role: PlaceholderRole): SlideE
 export const footerPlace = (master: Master, layout: LayoutId, role: FooterRole): SlideElement | undefined =>
   layoutOf(master, layout).elements.find((element) => element.placeholder?.role === role) ?? masterPlaceholder(master, role)
 
-/** A layout's placeholders on a slide of `size`: the master's, when given, or Herald's own stretched to the size. */
+/** A layout's placeholders on a slide of `size`: the master's, when given, or Bantu's own stretched to the size. */
 export function layoutPlaceholders(layout: LayoutId, size: SlideSize = BASE, master?: Master): PlaceholderSpec[] {
   if (master) {
     return layoutOf(master, layout)

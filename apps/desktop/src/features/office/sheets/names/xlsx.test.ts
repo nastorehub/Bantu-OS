@@ -66,7 +66,7 @@ describe('named ranges in .xlsx files', () => {
     }
   })
 
-  it('writes the names made in Herald so that Excel’s readers see them', async () => {
+  it('writes the names made in Bantu so that Excel’s readers see them', async () => {
     const book = newWorkbook('made', 'Made', [newSheet('s1', 'Data', { 0: { 0: { v: 4, t: CELL_TYPE.number } } }), newSheet('s2', 'Q1 sales')])
     const { snapshot } = await withHeadlessSheets(book, async ({ univer, workbook }) => {
       const target = { univer, workbook }

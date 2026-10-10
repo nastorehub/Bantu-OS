@@ -26,7 +26,7 @@ export interface XlsxWriteResult {
   losses: string[]
 }
 
-/** Univer's own default font, for a workbook made in Herald without a Normal font of its own. */
+/** Univer's own default font, for a workbook made in Bantu without a Normal font of its own. */
 export const UNIVER_BASE: BaseFont = { name: 'Arial', size: 11, color: null }
 
 /** Text as a file holds it: control characters as `_xHHHH_`, and text that reads like such an escape escaped itself, so Excel reads back what was written. */
@@ -186,7 +186,7 @@ function writeSheet(book: ExcelJS.Workbook, workbook: WorkbookSnapshot, sheet: S
     Object.assign(ws.properties, { defaultColWidth: columnWidth(sheet.defaultColumnWidth) })
   }
 
-  const extras = (sheet.custom as { herald?: SheetExtras } | undefined)?.herald
+  const extras = (sheet.custom as { bantu?: SheetExtras } | undefined)?.bantu
 
   if (extras?.page?.pageSetup || extras?.page?.margins) {
     ws.pageSetup = { ...(extras.page.pageSetup ?? {}), ...(extras.page.margins ? { margins: extras.page.margins } : {}) } as Partial<ExcelJS.PageSetup>
@@ -409,7 +409,7 @@ async function patchPackage(zip: JSZip, base: BaseFont, patches: SheetPatch[], d
   }
 }
 
-/** The workbook as an .xlsx file; with the file it was opened from, the parts of that file Herald does not model come along. */
+/** The workbook as an .xlsx file; with the file it was opened from, the parts of that file Bantu does not model come along. */
 export async function xlsxFromWorkbook(workbook: WorkbookSnapshot, options: { original?: Uint8Array } = {}): Promise<XlsxWriteResult> {
   const book = new ExcelJS.Workbook()
   const losses = new Set<string>()
@@ -419,7 +419,7 @@ export async function xlsxFromWorkbook(workbook: WorkbookSnapshot, options: { or
     losses.add('Cells with different diagonal borders each way are saved with one diagonal style, as Excel has one.')
   }
 
-  const properties = (workbook.custom as { herald?: { properties?: Record<string, string> } } | undefined)?.herald?.properties ?? {}
+  const properties = (workbook.custom as { bantu?: { properties?: Record<string, string> } } | undefined)?.bantu?.properties ?? {}
 
   for (const key of ['creator', 'title', 'subject', 'keywords', 'category', 'description', 'company', 'manager'] as const) {
     if (properties[key]) {

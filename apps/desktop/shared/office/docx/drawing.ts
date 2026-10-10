@@ -358,7 +358,7 @@ const readable = (element: XmlElement | undefined): boolean => pictured(element)
 
 /**
  * Which side of mc:AlternateContent to read: Word's choice, never both, unless the choice is
- * something Herald cannot show (a chart, ink) and the fallback has a picture of it.
+ * something Bantu cannot show (a chart, ink) and the fallback has a picture of it.
  */
 export function alternative(element: XmlElement): XmlElement | undefined {
   const choice = child(element, 'mc:Choice')

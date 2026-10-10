@@ -131,7 +131,7 @@ export function MemoryPage() {
       return
     }
 
-    void window.heraldOS.fs.openPath(memoryPath(nastechHome, file)).catch(err => notify({ title: `Could not open ${file}`, body: errorMessage(err), level: 'error' }))
+    void window.bantuOS.fs.openPath(memoryPath(nastechHome, file)).catch(err => notify({ title: `Could not open ${file}`, body: errorMessage(err), level: 'error' }))
   }
 
   const count = filtered.length

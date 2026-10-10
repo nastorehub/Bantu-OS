@@ -220,7 +220,7 @@ export async function insertChart(target: SheetsTarget, args: { range: unknown; 
     componentKey: CHART_COMPONENT,
     ...placeAt(target, sheet, corner, where.size),
     anchorType: '1',
-    data: { herald: 'chart', version: 1, spec },
+    data: { bantu: 'chart', version: 1, spec },
     allowTransform: true
   }
 

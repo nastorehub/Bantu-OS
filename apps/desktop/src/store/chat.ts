@@ -1,4 +1,4 @@
-import type { GatewayEvent, SessionCreateResult, SessionResumeResult } from '@herald-os/client'
+import type { GatewayEvent, SessionCreateResult, SessionResumeResult } from '@bantu-os/client'
 import { atom, computed, map } from 'nanostores'
 import { appendSystem, appendUser, type ChatState, emptyChat, fromTranscript, reduceChatEvent } from '../lib/chat-model.ts'
 import { $env, $prefs } from './backend.ts'
@@ -6,7 +6,7 @@ import { gatewayRequest, onAnyGatewayEvent } from './gateway.ts'
 import { notify } from './notifications.ts'
 import { refreshSessions, rememberRuntimeId } from './sessions.ts'
 
-export const SESSION_SOURCE = 'herald_os'
+export const SESSION_SOURCE = 'bantu_os'
 /** Sessions this shell lists: its own (including those saved before the rename) and other interactive clients. */
 export const LISTED_SESSION_SOURCES: ReadonlySet<string> = new Set([SESSION_SOURCE, 'nastech_os', 'desktop', 'cli', 'tui'])
 

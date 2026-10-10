@@ -1,5 +1,5 @@
 /*
- * The colour maths of Herald Canvas's adjustment layers, written once in plain TypeScript. The GPU
+ * The colour maths of Bantu Canvas's adjustment layers, written once in plain TypeScript. The GPU
  * shaders (gpu/adjust-shaders.ts) transliterate it line by line and the tests check it here, so
  * the two stay in step. Colours are straight (not premultiplied) RGB from 0 to 1; noise and grain
  * are placed by document position, so their pattern holds still between renders and scales.

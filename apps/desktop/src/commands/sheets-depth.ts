@@ -3,8 +3,8 @@ import type { CommandArg, OsCommand } from '../store/os-commands.ts'
 import { range, run, sheet, workbook } from './sheets-shared.ts'
 
 /*
- * Herald Sheets' charts, summaries, data tools, named ranges, validation, comments and notes for
- * NasTech, voice, the command bar and `herald-os sheets`, on the workbook named or the one in front
+ * Bantu Sheets' charts, summaries, data tools, named ranges, validation, comments and notes for
+ * NasTech, voice, the command bar and `bantu-os sheets`, on the workbook named or the one in front
  * as the other sheets.* commands are. Each change is one step to undo in an open workbook, but
  * comment threads change outside the undo history, as Univer keeps them.
  */
@@ -298,7 +298,7 @@ export const sheetsDepthCommands: readonly OsCommand[] = [
   {
     id: 'sheets.goToName',
     title: 'Go to a named range',
-    description: 'Select the cells a name stands for in a workbook open in Herald Sheets, bringing their sheet to the front, so the person sees them.',
+    description: 'Select the cells a name stands for in a workbook open in Bantu Sheets, bringing their sheet to the front, so the person sees them.',
     tier: 'act',
     args: [workbook, name('The name'), scope],
     run: depth('goToName')

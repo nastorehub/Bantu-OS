@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # From the Mac: push this repo into the VM over SSH, build it there, restart the shell.
 # Works with the QEMU runner (linux/vm/run-qemu.sh) and with UTM (forward guest port 22 to 2222,
-# or set HERALD_VM_HOST to the VM's IP).
+# or set BANTU_VM_HOST to the VM's IP).
 #
 #   bash linux/dev/push.sh                      # sync + build + restart
 #   bash linux/dev/push.sh --with-nastech-config # also copy ~/.nastech/{config.yaml,.env} (model choice, API keys)
@@ -11,15 +11,15 @@
 #
 # OAuth providers (NasTech Portal, Codex, Copilot) use rotating refresh tokens: whichever machine
 # refreshes second is logged out. Copying auth.json therefore works only until the next refresh and
-# can log the Mac out. Prefer signing the VM in on its own (Herald OS's sign-in card, or `nastech
+# can log the Mac out. Prefer signing the VM in on its own (Bantu OS's sign-in card, or `nastech
 # setup` over SSH), or sharing the Mac's login through `nastech proxy` (docs/LINUX.md).
 set -euo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$HERE/../.." && pwd)"
 KEY="$ROOT/linux/vm/build/id_nastech"
-HOST="${HERALD_VM_HOST:-${NASTECH_VM_HOST:-127.0.0.1}}"
-PORT="${HERALD_VM_PORT:-${NASTECH_VM_PORT:-2222}}"
+HOST="${BANTU_VM_HOST:-${NASTECH_VM_HOST:-127.0.0.1}}"
+PORT="${BANTU_VM_PORT:-${NASTECH_VM_PORT:-2222}}"
 SSH=(ssh -i "$KEY" -p "$PORT" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR nastech@"$HOST")
 
 [[ -f "$KEY" ]] || { echo "missing $KEY: run bash linux/vm/make-seed.sh first" >&2; exit 1; }
@@ -44,13 +44,13 @@ for _ in $(seq 1 60); do
 done
 "${SSH[@]}" -o ConnectTimeout=3 true
 
-echo "==> syncing repo -> nastech@$HOST:~/Herald-OS"
-"${SSH[@]}" 'mkdir -p ~/Herald-OS'
+echo "==> syncing repo -> nastech@$HOST:~/Bantu-OS"
+"${SSH[@]}" 'mkdir -p ~/Bantu-OS'
 rsync -az --delete \
   --exclude node_modules --exclude dist --exclude release --exclude .git \
   --exclude 'upstream/nastech-agent' --exclude 'linux/vm/build' --exclude '.DS_Store' \
   -e "ssh -i $KEY -p $PORT -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR" \
-  "$ROOT/" nastech@"$HOST":Herald-OS/
+  "$ROOT/" nastech@"$HOST":Bantu-OS/
 
 if [[ -n "$WITH_CONFIG" ]]; then
   FILES=(config.yaml .env)
@@ -68,6 +68,6 @@ if [[ -n "$WITH_CONFIG" ]]; then
 fi
 
 if [[ -n "$BUILD" ]]; then
-  "${SSH[@]}" 'export PATH="$HOME/.local/bin:$PATH"; bash ~/Herald-OS/linux/dev/build.sh && bash ~/Herald-OS/linux/dev/restart-shell.sh'
+  "${SSH[@]}" 'export PATH="$HOME/.local/bin:$PATH"; bash ~/Bantu-OS/linux/dev/build.sh && bash ~/Bantu-OS/linux/dev/restart-shell.sh'
 fi
 echo "==> done"

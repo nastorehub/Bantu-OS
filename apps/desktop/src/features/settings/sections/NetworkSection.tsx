@@ -33,7 +33,7 @@ export function NetworkSection() {
           <Pill tone={phaseTone(backend.phase)} dot>
             {backend.phase}
           </Pill>
-          <GlassButton size="sm" variant="ghost" onClick={() => void window.heraldOS.backend.restart()} aria-label="Restart NasTech">
+          <GlassButton size="sm" variant="ghost" onClick={() => void window.bantuOS.backend.restart()} aria-label="Restart NasTech">
             Restart
           </GlassButton>
         </SettingsRow>
@@ -45,7 +45,7 @@ export function NetworkSection() {
         <SettingsRow
           icon={<IconTerminal2 />}
           label="Runtime command"
-          description={<span className="selectable font-mono text-[11.5px]">{backend.runtime?.kind === 'attached' ? `Using ${backend.runtime.label} (HERALD_OS_BACKEND_URL)` : backend.runtime ? backend.runtime.command.join(' ') : '—'}</span>}
+          description={<span className="selectable font-mono text-[11.5px]">{backend.runtime?.kind === 'attached' ? `Using ${backend.runtime.label} (BANTU_OS_BACKEND_URL)` : backend.runtime ? backend.runtime.command.join(' ') : '—'}</span>}
           keywords="nastech command path managed attached shared"
         >
           {backend.runtime && <Pill>{backend.runtime.kind}</Pill>}
@@ -53,7 +53,7 @@ export function NetworkSection() {
         {backend.sharedGateway && (
           <InlineNote tone="info">
             Another app (NasTech Desktop, say) runs a NasTech gateway on this NasTech home (pid {backend.sharedGateway}). That is fine: NasTech runs each scheduled job once and keeps one messaging gateway. To share its backend
-            too, start Herald OS with HERALD_OS_BACKEND_URL and HERALD_OS_BACKEND_TOKEN.
+            too, start Bantu OS with BANTU_OS_BACKEND_URL and BANTU_OS_BACKEND_TOKEN.
           </InlineNote>
         )}
       </SettingsGroup>

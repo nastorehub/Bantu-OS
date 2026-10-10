@@ -1,4 +1,4 @@
-import { type CalloutKind, HERALD_LOOKS, hexColor, HIGHLIGHT_COLORS, round, type StyleLook, type StyleName } from '../document.ts'
+import { type CalloutKind, BANTU_LOOKS, hexColor, HIGHLIGHT_COLORS, round, type StyleLook, type StyleName } from '../document.ts'
 import { halfPointsToPoints, twipsToPoints } from './units.ts'
 import { attr, child, children, find, type XmlElement } from './xml.ts'
 
@@ -6,7 +6,7 @@ import { attr, child, children, find, type XmlElement } from './xml.ts'
  * Word's styles as the formatting they give text: the document defaults, paragraph and character
  * styles inherited through their basedOn chains, and the theme's fonts, resolved in Word's order
  * (defaults, the paragraph style, the character style, then the run's own formatting). Also which
- * of Herald's styles a Word style is, and the look each of Herald's styles has in a file.
+ * of Bantu's styles a Word style is, and the look each of Bantu's styles has in a file.
  */
 
 export interface RunProps {
@@ -53,7 +53,7 @@ export interface ThemeFonts {
   minor?: string
 }
 
-/** What one of a file's styles is in Herald Docs. */
+/** What one of a file's styles is in Bantu Docs. */
 export type StyleRole =
   | { kind: 'normal' }
   | { kind: 'custom' }
@@ -91,8 +91,8 @@ export interface Styles {
   tableBorders: (id: string | undefined) => Record<string, boolean>
   /** The numbering a numbering style (as abstractNum's numStyleLink names it) uses. */
   numberingOf: (id: string) => string | undefined
-  /** The style each of Herald's styles takes its look from in this file. */
-  heraldStyles: () => Partial<Record<StyleName, ParagraphStyle>>
+  /** The style each of Bantu's styles takes its look from in this file. */
+  bantuStyles: () => Partial<Record<StyleName, ParagraphStyle>>
 }
 
 const OFF = new Set(['0', 'false', 'off'])
@@ -364,7 +364,7 @@ const QUIET_PARAGRAPHS = /^(normal|list paragraph|list|list \d|list (bullet|numb
 
 const QUIET_CHARACTERS = /^(default paragraph font|hyperlink|followedhyperlink|followed hyperlink|footnote reference|endnote reference|annotation reference|page number|line number|placeholder text)$/
 
-const CALLOUT = /^(?:callout |heraldcallout)(info|note|success|warning|error)$/
+const CALLOUT = /^(?:callout |bantucallout)(info|note|success|warning|error)$/
 
 function paragraphRole(id: string, name: string, para: ParaProps, isDefault: boolean): StyleRole {
   const plain = plainName(name)
@@ -564,9 +564,9 @@ export function readStyles(stylesXml: XmlElement | null, themeXml: XmlElement | 
     return def?.type === 'numbering' ? attr(child(child(child(def.element, 'w:pPr'), 'w:numPr'), 'w:numId'), 'w:val') : undefined
   }
 
-  const heraldStyles = (): Partial<Record<StyleName, ParagraphStyle>> => {
+  const bantuStyles = (): Partial<Record<StyleName, ParagraphStyle>> => {
     const out: Partial<Record<StyleName, ParagraphStyle>> = { normal: resolveParagraph(defaultParagraph) }
-    // Of two Word styles for one of Herald's, the plainer one gives the look: Quote over Intense Quote.
+    // Of two Word styles for one of Bantu's, the plainer one gives the look: Quote over Intense Quote.
     const preferred = (name: StyleName, style: ParagraphStyle, plain: string): void => {
       if (!out[name] || (name === 'quote' && plain === 'quote') || (name === 'code' && plain === 'source code')) {
         out[name] = style
@@ -592,11 +592,11 @@ export function readStyles(stylesXml: XmlElement | null, themeXml: XmlElement | 
     return out
   }
 
-  return { defaults, theme, paragraph, character, tableBorders, numberingOf, heraldStyles }
+  return { defaults, theme, paragraph, character, tableBorders, numberingOf, bantuStyles }
 }
 
-/** Herald's style for a paragraph in a style with this role. */
-export function heraldStyleOf(role: StyleRole): StyleName {
+/** Bantu's style for a paragraph in a style with this role. */
+export function bantuStyleOf(role: StyleRole): StyleName {
   switch (role.kind) {
     case 'title':
     case 'subtitle':
@@ -611,7 +611,7 @@ export function heraldStyleOf(role: StyleRole): StyleName {
 }
 
 /**
- * The whole look a style gives in a file, so none of Herald's own looks leak into the document:
+ * The whole look a style gives in a file, so none of Bantu's own looks leak into the document:
  * fonts, sizes and spacing resolved through the defaults, and bold and italic set either way.
  */
 export function lookOf(style: ParagraphStyle, styles: Styles, name: StyleName): StyleLook {
@@ -628,8 +628,8 @@ export function lookOf(style: ParagraphStyle, styles: Styles, name: StyleName): 
     lineHeight: lineMultiple(para.line, size) ?? 1
   }
 
-  // Herald's Subtitle and Quote are grey; a style in Word's automatic colour is black on the page.
-  const color = run.color ?? (HERALD_LOOKS[name].color ? '#000000' : null)
+  // Bantu's Subtitle and Quote are grey; a style in Word's automatic colour is black on the page.
+  const color = run.color ?? (BANTU_LOOKS[name].color ? '#000000' : null)
 
   if (color) {
     look.color = color

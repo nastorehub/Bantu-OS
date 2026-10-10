@@ -2,14 +2,14 @@ import { spawn } from 'node:child_process'
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
-import { type HeraldEvent, hookEnv } from '../../shared/events.ts'
+import { type BantuEvent, hookEnv } from '../../shared/events.ts'
 import { log } from '../log.ts'
 
 /** A hook that runs longer than this is stopped: hooks are for quick chores, not services. */
 const HOOK_TIMEOUT_MS = 120_000
 
 export function hooksDir(): string {
-  return path.join(os.homedir(), '.config', 'herald-os', 'hooks')
+  return path.join(os.homedir(), '.config', 'bantu-os', 'hooks')
 }
 
 /** The scripts that run for an event: executable files in `<event>.d`, in name order (`.sample` files and dotfiles skipped). */
@@ -37,7 +37,7 @@ export function hookScripts(dir: string): string[] {
 }
 
 /** Run the person's hook scripts for an event, each with the event in its environment. Never waits on them. */
-export function runHooks(event: HeraldEvent): void {
+export function runHooks(event: BantuEvent): void {
   for (const script of hookScripts(path.join(hooksDir(), `${event.name}.d`))) {
     const child = spawn(script, [event.name], { env: { ...process.env, ...hookEnv(event) }, stdio: ['ignore', 'pipe', 'pipe'] })
     let output = ''

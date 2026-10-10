@@ -1,7 +1,7 @@
 """linux/image/firstboot.sh and NasTech Agent: found in any layout, given its voice extras the way that
 layout takes them, and installed once the network is back when the first boot had none. Its
 functions run in bash against a home folder in a temporary directory, with stand-ins for git, curl,
-sleep, NasTech's installer and the parts of herald-os that change things; the real herald-os finds
+sleep, NasTech's installer and the parts of bantu-os that change things; the real bantu-os finds
 NasTech."""
 
 import re
@@ -12,7 +12,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 FIRSTBOOT = ROOT / "linux" / "image" / "firstboot.sh"
-PENDING = "/var/lib/herald-os/nastech-pending"
+PENDING = "/var/lib/bantu-os/nastech-pending"
 
 
 def functions(*names: str) -> str:
@@ -39,7 +39,7 @@ class Machine:
         self.root = tmp_path
         self.home = tmp_path / "home"
         self.state = tmp_path / "state"
-        self.unit = tmp_path / "herald-os-nastech.service"
+        self.unit = tmp_path / "bantu-os-nastech.service"
         self.agent = self.home / ".nastech" / "nastech-agent"
         self.calls = tmp_path / "calls"
         for folder in (self.home, self.state, tmp_path / "bridge"):
@@ -53,8 +53,8 @@ class Machine:
         executable(bin_dir / "sleep", 'echo "sleep $1: $(cat "$PENDING" 2>/dev/null || echo no note)" >>"$CALLS"')
         executable(bin_dir / "getent", 'echo "me:x:1000:1000::$HOME_FOR_TEST:/bin/bash"')
         executable(bin_dir / "uv", 'echo "uv $*" >>"$CALLS"')
-        # The real herald-os finds NasTech; what it would change is only written down.
-        executable(bin_dir / "herald-os", '[ "$1" = nastech-command ] && exec "$PYTHON" "$CLI" "$@"; echo "herald-os $*" >>"$CALLS"')
+        # The real bantu-os finds NasTech; what it would change is only written down.
+        executable(bin_dir / "bantu-os", '[ "$1" = nastech-command ] && exec "$PYTHON" "$CLI" "$@"; echo "bantu-os $*" >>"$CALLS"')
         # A clone that finishes has a HEAD; the checkout carries today's installer.
         executable(
             bin_dir / "git",
@@ -81,7 +81,7 @@ class Machine:
             "PENDING": str(self.state / "nastech-pending"),
             "HOME_FOR_TEST": str(self.home),
             "PYTHON": sys.executable,
-            "CLI": str(ROOT / "linux" / "bin" / "herald-os"),
+            "CLI": str(ROOT / "linux" / "bin" / "bantu-os"),
             "HOME": str(self.home),
         }
 
@@ -123,7 +123,7 @@ def test_a_fresh_install_in_today_s_layout_gets_the_voice_extras_through_nastech
     log = machine.log()
     assert f"git clone --filter=blob:none https://github.com/nastechresearch/nastech-agent {machine.agent}" in log and "setup-nastech.sh" in log
     assert "nastech pm install --extra voice --extra edge-tts --extra wake-openwakeword" in log
-    assert "uv pip" not in log and "herald-os setup --yes" in log
+    assert "uv pip" not in log and "bantu-os setup --yes" in log
 
 
 def test_an_earlier_installer_s_venv_still_gets_its_voice_extras_through_uv(tmp_path):
@@ -134,7 +134,7 @@ def test_an_earlier_installer_s_venv_still_gets_its_voice_extras_through_uv(tmp_
     assert f"already installed: {agent}/venv/bin/nastech" in result.stdout
     log = machine.log()
     assert "git clone" not in log and "uv pip install --python venv/bin/python -q -e .[voice,edge-tts,wake-openwakeword]" in log
-    assert "herald-os setup --yes" in log
+    assert "bantu-os setup --yes" in log
 
 
 def test_today_s_launcher_wins_over_the_venv_an_update_left_behind(tmp_path):
@@ -153,7 +153,7 @@ def test_a_nastech_from_another_installer_is_set_up_and_not_installed_again(tmp_
     assert "came from another installer" in result.stdout and "voice extras failed" not in result.stdout
     log = machine.log()
     assert "git clone" not in log and "pm install" not in log and "uv pip" not in log
-    assert "herald-os setup --yes" in log
+    assert "bantu-os setup --yes" in log
 
 
 def test_a_clone_the_network_cut_off_starts_over(tmp_path):
@@ -170,8 +170,8 @@ def test_offline_the_first_boot_leaves_nastech_to_the_service_and_says_so(tmp_pa
     result = machine.run("nastech_step || nastech_later")
     assert result.returncode == 0, result.stderr
     assert machine.note() == "offline\n"
-    assert "herald-os-nastech.service installs it once this computer is online, and Herald OS starts it then" in result.stdout
-    assert "herald-os setup" not in machine.log()
+    assert "bantu-os-nastech.service installs it once this computer is online, and Bantu OS starts it then" in result.stdout
+    assert "bantu-os setup" not in machine.log()
 
 
 def test_the_development_vm_has_no_service_so_it_says_how_to_finish(tmp_path):
@@ -190,19 +190,19 @@ def test_the_service_waits_for_the_network_tries_again_and_clears_the_note(tmp_p
     log = machine.log()
     # It waited for the network saying so, then after the failed install saying it would try again.
     assert log.index("sleep 0: offline") < log.index("git clone") < log.index("sleep 0: retrying")
-    assert log.count("git clone") == 2 and log.count("herald-os setup --yes") == 1
+    assert log.count("git clone") == 2 and log.count("bantu-os setup --yes") == 1
     assert "waiting for the network" in result.stdout and "trying again in 0 minutes" in result.stdout
 
 
 def test_the_note_is_one_path_for_firstboot_the_service_the_cli_and_the_shell():
-    unit = (ROOT / "linux" / "image" / "herald-os-nastech.service").read_text()
+    unit = (ROOT / "linux" / "image" / "bantu-os-nastech.service").read_text()
     script = FIRSTBOOT.read_text()
-    assert f"ConditionPathExists={PENDING}" in unit and "ExecStart=/usr/libexec/herald-os/firstboot.sh nastech" in unit
-    assert "STATE=/var/lib/herald-os" in script and 'PENDING="$STATE/nastech-pending"' in script
-    assert "NASTECH_UNIT=/usr/lib/systemd/system/herald-os-nastech.service" in script
-    assert f'NASTECH_PENDING = Path("{PENDING}")' in (ROOT / "linux" / "bin" / "herald-os").read_text()
+    assert f"ConditionPathExists={PENDING}" in unit and "ExecStart=/usr/libexec/bantu-os/firstboot.sh nastech" in unit
+    assert "STATE=/var/lib/bantu-os" in script and 'PENDING="$STATE/nastech-pending"' in script
+    assert "NASTECH_UNIT=/usr/lib/systemd/system/bantu-os-nastech.service" in script
+    assert f'NASTECH_PENDING = Path("{PENDING}")' in (ROOT / "linux" / "bin" / "bantu-os").read_text()
     assert f"NASTECH_PENDING = '{PENDING}'" in (ROOT / "apps" / "desktop" / "electron" / "backend" / "resolve.ts").read_text()
     packages = (ROOT / "linux" / "image" / "packages.sh").read_text()
-    assert "/usr/lib/systemd/system/herald-os-nastech.service" in packages
-    assert re.search(r"^  systemctl enable .*herald-os-nastech\.service", packages, re.M)
+    assert "/usr/lib/systemd/system/bantu-os-nastech.service" in packages
+    assert re.search(r"^  systemctl enable .*bantu-os-nastech\.service", packages, re.M)
     assert '"$STATE/nastech-pending"' in (ROOT / "linux" / "image" / "reset-helper").read_text()

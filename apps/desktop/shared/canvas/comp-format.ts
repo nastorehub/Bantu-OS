@@ -1,5 +1,5 @@
 /*
- * Herald Canvas projects: the `.comp` package, a folder holding `manifest.json` and an `images/`
+ * Bantu Canvas projects: the `.comp` package, a folder holding `manifest.json` and an `images/`
  * folder of 8-bit PNGs (RGBA layers, grayscale masks). The same format is read by Compositor on the
  * Mac, so a project moves between the two. Readers there decode records strictly, so every record
  * this module writes is complete, and fields it does not know are kept as they were.
@@ -120,20 +120,20 @@ export const ADJUSTMENT_KINDS = [
 export type AdjustmentKind = (typeof ADJUSTMENT_KINDS)[number]
 
 /**
- * Adjustments only Herald Canvas makes. Compositor reads `adjustment.kind` from its own closed list
+ * Adjustments only Bantu Canvas makes. Compositor reads `adjustment.kind` from its own closed list
  * and refuses a whole project over a kind it does not know, so these never go there: a layer keeps
- * one in `heraldAdjustment`, which Compositor skips like any field it does not know, while
+ * one in `bantuAdjustment`, which Compositor skips like any field it does not know, while
  * `adjustment` holds one of Compositor's kinds, the very same change where one exists, otherwise
  * none (see ADR-020).
  */
-export const HERALD_ADJUSTMENT_KINDS = ['Brightness/Contrast', 'Vibrance', 'Photo Filter', 'Channel Mixer', 'Selective Color', 'Posterize', 'Threshold', 'Color Lookup'] as const
+export const BANTU_ADJUSTMENT_KINDS = ['Brightness/Contrast', 'Vibrance', 'Photo Filter', 'Channel Mixer', 'Selective Color', 'Posterize', 'Threshold', 'Color Lookup'] as const
 
-export type HeraldAdjustmentKind = (typeof HERALD_ADJUSTMENT_KINDS)[number]
+export type BantuAdjustmentKind = (typeof BANTU_ADJUSTMENT_KINDS)[number]
 
-export const isHeraldKind = (kind: unknown): kind is HeraldAdjustmentKind => (HERALD_ADJUSTMENT_KINDS as readonly unknown[]).includes(kind)
+export const isBantuKind = (kind: unknown): kind is BantuAdjustmentKind => (BANTU_ADJUSTMENT_KINDS as readonly unknown[]).includes(kind)
 
-/** Bounds of the Herald-only settings: Herald's own, since Compositor never reads them. */
-export const HERALD_RANGES = {
+/** Bounds of the Bantu-only settings: Bantu's own, since Compositor never reads them. */
+export const BANTU_RANGES = {
   brightness: [-150, 150],
   contrast: [-50, 100],
   vibrance: [-100, 100],
@@ -224,7 +224,7 @@ export interface ColorLookupSettings extends OpenRecord {
   size: number
 }
 
-export type HeraldAdjustment =
+export type BantuAdjustment =
   | BrightnessContrastSettings
   | VibranceSettings
   | PhotoFilterSettings
@@ -448,8 +448,8 @@ export interface LayerRecord {
   maskPlacement?: LayerTransform
   maskLinked?: boolean
   adjustment?: Adjustment
-  /** An adjustment only Herald Canvas has; `adjustment` then holds its stand-in. A kind from a newer Herald is kept as it was. */
-  heraldAdjustment?: HeraldAdjustment
+  /** An adjustment only Bantu Canvas has; `adjustment` then holds its stand-in. A kind from a newer Bantu is kept as it was. */
+  bantuAdjustment?: BantuAdjustment
   text?: TextStyle
   shape?: ShapeStyle
   effects?: LayerEffects
@@ -560,8 +560,8 @@ export function defaultAdjustment(kind: AdjustmentKind): Adjustment {
 
 const noInks = (): Inks => ({ cyan: 0, magenta: 0, yellow: 0, black: 0 })
 
-/** Settings each Herald-only kind starts with: no change, except a Photo Filter's warming tint. */
-export function defaultHeraldAdjustment(kind: HeraldAdjustmentKind): HeraldAdjustment {
+/** Settings each Bantu-only kind starts with: no change, except a Photo Filter's warming tint. */
+export function defaultBantuAdjustment(kind: BantuAdjustmentKind): BantuAdjustment {
   switch (kind) {
     case 'Brightness/Contrast':
       return { kind, brightness: 0, contrast: 0 }
@@ -891,24 +891,24 @@ function parseAdjustment(value: unknown, field: string): Adjustment {
   return adjustment
 }
 
-type HeraldRangeName = keyof typeof HERALD_RANGES
+type BantuRangeName = keyof typeof BANTU_RANGES
 
 /**
- * A Herald-only adjustment's settings, held to Herald's bounds with its defaults filled in. A kind
- * this version does not know (from a newer Herald Canvas) is kept as it was: the layer then shows
+ * A Bantu-only adjustment's settings, held to Bantu's bounds with its defaults filled in. A kind
+ * this version does not know (from a newer Bantu Canvas) is kept as it was: the layer then shows
  * its stand-in, as Compositor does.
  */
-function parseHeraldAdjustment(value: unknown, field: string): HeraldAdjustment {
+function parseBantuAdjustment(value: unknown, field: string): BantuAdjustment {
   if (!isObject(value) || typeof value.kind !== 'string' || !value.kind) {
-    fail(`${field} is not a Herald Canvas adjustment`, field)
+    fail(`${field} is not a Bantu Canvas adjustment`, field)
   }
 
-  if (!isHeraldKind(value.kind)) {
-    return value as unknown as HeraldAdjustment
+  if (!isBantuKind(value.kind)) {
+    return value as unknown as BantuAdjustment
   }
 
   const kind = value.kind
-  const number = (record: Json, key: string, at: string, range: HeraldRangeName, fallback: number) => finite(record[key], `${at}.${key}`, HERALD_RANGES[range][0], HERALD_RANGES[range][1], fallback)
+  const number = (record: Json, key: string, at: string, range: BantuRangeName, fallback: number) => finite(record[key], `${at}.${key}`, BANTU_RANGES[range][0], BANTU_RANGES[range][1], fallback)
   const part = (key: string): Json => (isObject(value[key]) ? value[key] : {})
 
   switch (kind) {
@@ -917,7 +917,7 @@ function parseHeraldAdjustment(value: unknown, field: string): HeraldAdjustment 
     case 'Vibrance':
       return { ...value, kind, vibrance: number(value, 'vibrance', field, 'vibrance', 0), saturation: number(value, 'saturation', field, 'saturation', 0) }
     case 'Photo Filter': {
-      const defaults = defaultHeraldAdjustment(kind) as PhotoFilterSettings
+      const defaults = defaultBantuAdjustment(kind) as PhotoFilterSettings
 
       return {
         ...value,
@@ -928,7 +928,7 @@ function parseHeraldAdjustment(value: unknown, field: string): HeraldAdjustment 
       }
     }
     case 'Channel Mixer': {
-      const defaults = defaultHeraldAdjustment(kind) as ChannelMixerSettings
+      const defaults = defaultBantuAdjustment(kind) as ChannelMixerSettings
       const row = (key: 'red' | 'green' | 'blue' | 'gray'): MixerRow => {
         const at = `${field}.${key}`
         const entry = part(key)
@@ -954,14 +954,14 @@ function parseHeraldAdjustment(value: unknown, field: string): HeraldAdjustment 
       return { ...value, kind, absolute: bool(value.absolute, `${field}.absolute`, false), ...(Object.fromEntries(SELECTIVE_RANGES.map((range) => [range, inks(range)])) as Record<SelectiveRange, Inks>) }
     }
     case 'Posterize':
-      return { ...value, kind, levels: integer(value.levels ?? 4, `${field}.levels`, ...HERALD_RANGES.posterize) }
+      return { ...value, kind, levels: integer(value.levels ?? 4, `${field}.levels`, ...BANTU_RANGES.posterize) }
     case 'Threshold':
-      return { ...value, kind, level: integer(value.level ?? 128, `${field}.level`, ...HERALD_RANGES.threshold) }
+      return { ...value, kind, level: integer(value.level ?? 128, `${field}.level`, ...BANTU_RANGES.threshold) }
     case 'Color Lookup': {
-      const size = integer(value.size ?? 0, `${field}.size`, 0, HERALD_RANGES.tableSize[1])
+      const size = integer(value.size ?? 0, `${field}.size`, 0, BANTU_RANGES.tableSize[1])
 
-      if (size > 0 && size < HERALD_RANGES.tableSize[0]) {
-        fail(`${field}.size must be 0 (no table) or from ${HERALD_RANGES.tableSize[0]} to ${HERALD_RANGES.tableSize[1]}`, `${field}.size`)
+      if (size > 0 && size < BANTU_RANGES.tableSize[0]) {
+        fail(`${field}.size must be 0 (no table) or from ${BANTU_RANGES.tableSize[0]} to ${BANTU_RANGES.tableSize[1]}`, `${field}.size`)
       }
 
       return { ...value, kind, name: typeof value.name === 'string' ? value.name : '', size }
@@ -1267,14 +1267,14 @@ function parseLayer(value: unknown, index: number): LayerRecord {
     delete layer.adjustment
   }
 
-  if (value.heraldAdjustment !== undefined && value.heraldAdjustment !== null) {
+  if (value.bantuAdjustment !== undefined && value.bantuAdjustment !== null) {
     if (!layer.adjustment) {
-      fail(`${field} has Herald Canvas adjustment settings but is not an adjustment layer`, `${field}.heraldAdjustment`)
+      fail(`${field} has Bantu Canvas adjustment settings but is not an adjustment layer`, `${field}.bantuAdjustment`)
     }
 
-    layer.heraldAdjustment = parseHeraldAdjustment(value.heraldAdjustment, `${field}.heraldAdjustment`)
+    layer.bantuAdjustment = parseBantuAdjustment(value.bantuAdjustment, `${field}.bantuAdjustment`)
   } else {
-    delete layer.heraldAdjustment
+    delete layer.bantuAdjustment
   }
 
   if (value.text !== undefined && value.text !== null) {
@@ -1301,8 +1301,8 @@ function parseLayer(value: unknown, index: number): LayerRecord {
 /** An adjustment record checked as strictly as a project file's, with its defaults filled in. */
 export const checkAdjustment = (value: unknown): Adjustment => parseAdjustment(value, 'adjustment')
 
-/** Herald-only adjustment settings checked as strictly as a project file's, with their defaults filled in. */
-export const checkHeraldAdjustment = (value: unknown): HeraldAdjustment => parseHeraldAdjustment(value, 'heraldAdjustment')
+/** Bantu-only adjustment settings checked as strictly as a project file's, with their defaults filled in. */
+export const checkBantuAdjustment = (value: unknown): BantuAdjustment => parseBantuAdjustment(value, 'bantuAdjustment')
 
 /** A layer's effects checked as strictly as a project file's, with each effect's defaults filled in. */
 export const checkEffects = (value: unknown): LayerEffects => parseEffects(value, 'effects')
@@ -1366,7 +1366,7 @@ export function parseManifest(value: unknown): CompManifest {
   }
 
   if (value.format !== FORMAT_ID) {
-    fail('This is not a Herald Canvas or Compositor project', 'format')
+    fail('This is not a Bantu Canvas or Compositor project', 'format')
   }
 
   const version = integer(value.version, 'version', 1, 1_000)
@@ -1474,7 +1474,7 @@ export function referencedAssets(manifest: CompManifest): Set<string> {
       files.add(layer.maskFile)
     }
 
-    if (layer.heraldAdjustment?.kind === 'Color Lookup' && (layer.heraldAdjustment as ColorLookupSettings).size > 0) {
+    if (layer.bantuAdjustment?.kind === 'Color Lookup' && (layer.bantuAdjustment as ColorLookupSettings).size > 0) {
       files.add(tableFileFor(layer.id))
     }
   }

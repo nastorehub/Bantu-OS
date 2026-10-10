@@ -31,7 +31,7 @@ export function BootScreen({ state, leaving = false }: { state: BackendState; le
       <div className={cn('no-drag glass flex w-[440px] flex-col items-center gap-6 rounded-2xl px-8 py-10 text-center', leaving && 'boot-card-leave')}>
         <NasTechLogo height={44} />
         <div className="flex flex-col gap-1.5">
-          <div className="text-[22px] font-medium tracking-tight">Herald OS</div>
+          <div className="text-[22px] font-medium tracking-tight">Bantu OS</div>
           <div className="flex items-center justify-center gap-2 text-[13px] text-fg-2">
             {!failed && <Spinner />}
             <span>{PHASE_COPY[state.phase]}</span>
@@ -43,13 +43,13 @@ export function BootScreen({ state, leaving = false }: { state: BackendState; le
           <div className="flex w-full flex-col gap-3">
             <div className="selectable rounded-md bg-danger/10 px-3 py-2 text-left text-[12px] text-danger">{state.error}</div>
             <div className="flex justify-center gap-2">
-              <Button variant="primary" onClick={() => void window.heraldOS.backend.restart()}>
+              <Button variant="primary" onClick={() => void window.bantuOS.backend.restart()}>
                 Try again
               </Button>
               <Button variant="ghost" onClick={() => setShowLog(v => !v)}>
                 {showLog ? 'Hide log' : 'Show log'}
               </Button>
-              <Button variant="ghost" onClick={() => void window.heraldOS.window.quit()}>
+              <Button variant="ghost" onClick={() => void window.bantuOS.window.quit()}>
                 Quit
               </Button>
             </div>
@@ -69,7 +69,7 @@ export function BootScreen({ state, leaving = false }: { state: BackendState; le
               <Button variant="ghost" onClick={() => setShowLog(v => !v)}>
                 {showLog ? 'Hide log' : 'Show log'}
               </Button>
-              <Button variant="ghost" onClick={() => void window.heraldOS.window.quit()}>
+              <Button variant="ghost" onClick={() => void window.bantuOS.window.quit()}>
                 Quit
               </Button>
             </div>

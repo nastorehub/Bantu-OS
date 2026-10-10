@@ -2,7 +2,7 @@ import { type BrowserWindow, ipcMain } from 'electron'
 import { IPC, type ShellCommand, type ShellSurface, type WmAction } from '../../shared/ipc.ts'
 import type { Compositor } from '../wm/compositor.ts'
 
-/** What the `herald-os` CLI socket drives: the panels session (niri) or the one Herald window. */
+/** What the `bantu-os` CLI socket drives: the panels session (niri) or the one Bantu window. */
 export interface ShellHost {
   /** The compositor's mirror, when there is one to talk to. */
   readonly wm: Compositor | null
@@ -13,7 +13,7 @@ export interface ShellHost {
 }
 
 /**
- * The single-window shell on Linux: Herald as an app inside Hyprland or Omarchy, or the cage kiosk.
+ * The single-window shell on Linux: Bantu as an app inside Hyprland or Omarchy, or the cage kiosk.
  * Every surface is the one window, so overlays and panels become commands its renderer handles.
  */
 export class DesktopHost implements ShellHost {

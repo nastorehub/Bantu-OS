@@ -573,13 +573,13 @@ export class LinuxPlatform implements HostPlatform {
   /** The name first-boot setup saved, else the GECOS field of the account (`getent` is glibc). */
   private async fullName(): Promise<string | undefined> {
     try {
-      const saved = (await fs.readFile(path.join(os.homedir(), '.config', 'herald-os', 'name'), 'utf8')).trim()
+      const saved = (await fs.readFile(path.join(os.homedir(), '.config', 'bantu-os', 'name'), 'utf8')).trim()
 
       if (saved) {
         return saved
       }
     } catch {
-      // Not set up through Herald OS's setup.
+      // Not set up through Bantu OS's setup.
     }
 
     const result = await run('getent', ['passwd', os.userInfo().username], 3000)
@@ -807,7 +807,7 @@ export class LinuxPlatform implements HostPlatform {
         return
       }
       case 'terminal':
-        // Herald OS ships its own terminal; there is no portable "the" terminal on Linux to hand off to.
+        // Bantu OS ships its own terminal; there is no portable "the" terminal on Linux to hand off to.
         throw new HostNotSupported('external terminal')
     }
   }

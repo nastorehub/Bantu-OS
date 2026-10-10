@@ -27,7 +27,7 @@ import { decodePng, encodePng, PngStream, toChannels } from './png.ts'
 
 const MAX_IMAGE_BYTES = 512 * 1024 * 1024
 
-/** The largest layered file (PSD, PSB) Herald Canvas opens: what its reader can hold in memory. */
+/** The largest layered file (PSD, PSB) Bantu Canvas opens: what its reader can hold in memory. */
 const MAX_LAYERED_BYTES = 2 * 1024 * 1024 * 1024
 
 /** The most one part of a file read or written in parts may hold (a message must stay well under Chromium's limit). */
@@ -54,23 +54,23 @@ function pixelsOrBytes(bytes: Uint8Array, channels: 1 | 4): CanvasRawImage | Uin
   }
 }
 
-/** A project Herald may read and write: a `.comp` folder in the home folder (or /tmp), outside protected places. */
+/** A project Bantu may read and write: a `.comp` folder in the home folder (or /tmp), outside protected places. */
 export function projectPath(target: string): string {
   const dir = assertWritable(String(target)).replace(/[/\\]+$/, '')
 
   if (!isProjectPath(dir)) {
-    throw new Error(`A Herald Canvas project is a folder whose name ends in ${PROJECT_EXTENSION}`)
+    throw new Error(`A Bantu Canvas project is a folder whose name ends in ${PROJECT_EXTENSION}`)
   }
 
   return dir
 }
 
-/** An image Herald may open as a new project. */
+/** An image Bantu may open as a new project. */
 function imagePath(target: string): string {
   const file = assertWritable(String(target))
 
   if (!CANVAS_IMAGE_EXTENSIONS.has(path.extname(file).toLowerCase())) {
-    throw new Error(`Herald Canvas does not open ${path.extname(file) || 'this kind of file'}`)
+    throw new Error(`Bantu Canvas does not open ${path.extname(file) || 'this kind of file'}`)
   }
 
   return file
@@ -78,7 +78,7 @@ function imagePath(target: string): string {
 
 const toProject = (dir: string, contents: PackageContents): CanvasProject => ({ path: dir, manifest: contents.manifest, assets: contents.assets, digest: contents.digest })
 
-/** A layered file Herald may read (a PSD or PSB in the home folder or /tmp). */
+/** A layered file Bantu may read (a PSD or PSB in the home folder or /tmp). */
 function layeredPath(target: string): string {
   const file = assertWritable(String(target))
 
@@ -120,7 +120,7 @@ interface Watch {
 const watches = new WindowWatches<Watch>()
 
 const SAVE_FILTERS: Record<CanvasSaveKind, Electron.FileFilter[]> = {
-  project: [{ name: 'Herald Canvas project', extensions: ['comp'] }],
+  project: [{ name: 'Bantu Canvas project', extensions: ['comp'] }],
   png: [{ name: 'PNG image', extensions: ['png'] }],
   jpeg: [{ name: 'JPEG image', extensions: ['jpg', 'jpeg'] }],
   webp: [{ name: 'WebP image', extensions: ['webp'] }],
@@ -137,7 +137,7 @@ export function registerCanvasIpc(getWindow: () => BrowserWindow | null): void {
   ipcMain.handle(IPC.canvasPickOpen, async event => {
     const parent = windowFor(event.sender, getWindow)
     const options: Electron.OpenDialogOptions = {
-      title: 'Open in Herald Canvas',
+      title: 'Open in Bantu Canvas',
       defaultPath: path.join(os.homedir(), 'Pictures'),
       // On Linux a dialog picks files or folders, not both: pick a file inside a project to open it.
       properties: process.platform === 'darwin' ? ['openFile', 'openDirectory'] : ['openFile'],
@@ -226,7 +226,7 @@ export function registerCanvasIpc(getWindow: () => BrowserWindow | null): void {
       const { size } = await handle.stat()
 
       if (size > MAX_LAYERED_BYTES) {
-        throw new Error(`${path.basename(file)} is larger than ${MAX_LAYERED_BYTES / 1024 ** 3} GB, more than Herald Canvas opens`)
+        throw new Error(`${path.basename(file)} is larger than ${MAX_LAYERED_BYTES / 1024 ** 3} GB, more than Bantu Canvas opens`)
       }
 
       const start = Math.max(0, Math.min(size, Math.floor(Number(offset) || 0)))
@@ -387,7 +387,7 @@ export function registerCanvasIpc(getWindow: () => BrowserWindow | null): void {
   })
 }
 
-/** A digest of what Herald Canvas last put on the clipboard, to tell its own copies from other apps'. */
+/** A digest of what Bantu Canvas last put on the clipboard, to tell its own copies from other apps'. */
 let ownCopy: string | null = null
 
 const digestOf = (bytes: Uint8Array | null): string | null => (bytes ? crypto.createHash('sha256').update(bytes).digest('hex') : null)

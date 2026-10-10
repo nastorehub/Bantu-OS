@@ -17,22 +17,22 @@ function memoryStorage(entries: Record<string, string>) {
 }
 
 describe('migrateLegacyStorage', () => {
-  it('moves nastech-os. keys to herald-os. and leaves other keys alone', () => {
+  it('moves nastech-os. keys to bantu-os. and leaves other keys alone', () => {
     const storage = memoryStorage({ 'nastech-os.panels': '{"today":true}', 'nastech-os.a11y.text-size': 'large', other: '1' })
 
     expect(migrateLegacyStorage(storage)).toBe(2)
-    expect(Object.fromEntries(storage.data)).toEqual({ other: '1', 'herald-os.panels': '{"today":true}', 'herald-os.a11y.text-size': 'large' })
+    expect(Object.fromEntries(storage.data)).toEqual({ other: '1', 'bantu-os.panels': '{"today":true}', 'bantu-os.a11y.text-size': 'large' })
   })
 
   it('keeps a value already saved under the new name', () => {
-    const storage = memoryStorage({ 'nastech-os.panels': 'old', 'herald-os.panels': 'new' })
+    const storage = memoryStorage({ 'nastech-os.panels': 'old', 'bantu-os.panels': 'new' })
 
     migrateLegacyStorage(storage)
 
-    expect(Object.fromEntries(storage.data)).toEqual({ 'herald-os.panels': 'new' })
+    expect(Object.fromEntries(storage.data)).toEqual({ 'bantu-os.panels': 'new' })
   })
 
   it('does nothing when there is nothing to move', () => {
-    expect(migrateLegacyStorage(memoryStorage({ 'herald-os.panels': 'x' }))).toBe(0)
+    expect(migrateLegacyStorage(memoryStorage({ 'bantu-os.panels': 'x' }))).toBe(0)
   })
 })

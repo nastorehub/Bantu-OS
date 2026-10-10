@@ -242,7 +242,7 @@ export class PackageWatcher {
     }
   }
 
-  /** Herald's own save: checks wait while it writes, and its result is not an outside change. */
+  /** Bantu's own save: checks wait while it writes, and its result is not an outside change. */
   async ownWrite(write: () => Promise<string>): Promise<string> {
     this.writing++
 

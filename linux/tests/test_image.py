@@ -1,4 +1,4 @@
-"""Telling the Herald OS image from other bootc and ostree systems (Silverblue, Bazzite, Bluefin)."""
+"""Telling the Bantu OS image from other bootc and ostree systems (Silverblue, Bazzite, Bluefin)."""
 
 import importlib.machinery
 import importlib.util
@@ -9,24 +9,24 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
-_LOADER = importlib.machinery.SourceFileLoader("herald_os_image_cli", str(ROOT / "linux" / "bin" / "herald-os"))
-_SPEC = importlib.util.spec_from_loader("herald_os_image_cli", _LOADER)
+_LOADER = importlib.machinery.SourceFileLoader("bantu_os_image_cli", str(ROOT / "linux" / "bin" / "bantu-os"))
+_SPEC = importlib.util.spec_from_loader("bantu_os_image_cli", _LOADER)
 cli = importlib.util.module_from_spec(_SPEC)
 _LOADER.exec_module(cli)
 
 FEDORA = 'NAME="Fedora Linux"\nVERSION_ID=44\nID=fedora\n'
 SILVERBLUE = FEDORA + 'VARIANT="Silverblue"\nVARIANT_ID=silverblue\n'
-HERALD = FEDORA + "IMAGE_ID=herald-os\n"
+BANTU = FEDORA + "IMAGE_ID=bantu-os\n"
 # Each machine: whether it booted from an image, its /usr/lib/os-release and whether the shell is in
-# /usr/share/herald-os/app, then whether it is the Herald OS image.
+# /usr/share/bantu-os/app, then whether it is the Bantu OS image.
 MACHINES = {
-    "herald-os": ((True, HERALD, False), True),
-    "herald-os, quoted": ((True, FEDORA + 'IMAGE_ID="herald-os"\n', False), True),
-    "herald-os before IMAGE_ID": ((True, FEDORA, True), True),
+    "bantu-os": ((True, BANTU, False), True),
+    "bantu-os, quoted": ((True, FEDORA + 'IMAGE_ID="bantu-os"\n', False), True),
+    "bantu-os before IMAGE_ID": ((True, FEDORA, True), True),
     "silverblue": ((True, SILVERBLUE, False), False),
     "bazzite": ((True, FEDORA + "IMAGE_ID=bazzite\n", False), False),
     "fedora workstation": ((False, FEDORA, False), False),
-    "herald-os as a container": ((False, HERALD, True), False),
+    "bantu-os as a container": ((False, BANTU, True), False),
 }
 
 
@@ -49,7 +49,7 @@ def use(monkeypatch, paths: dict[str, Path]) -> None:
 
 
 @pytest.mark.parametrize("name", MACHINES)
-def test_only_the_herald_os_image_is_the_image(name, tmp_path, monkeypatch):
+def test_only_the_bantu_os_image_is_the_image(name, tmp_path, monkeypatch):
     setup, expected = MACHINES[name]
     use(monkeypatch, machine(tmp_path, *setup))
     assert cli.is_image() is expected
@@ -59,10 +59,10 @@ def test_only_the_herald_os_image_is_the_image(name, tmp_path, monkeypatch):
 def test_the_updater_agrees(name, tmp_path):
     setup, expected = MACHINES[name]
     paths = machine(tmp_path, *setup)
-    script = (ROOT / "linux" / "bin" / "herald-os-update").read_text()
-    function = re.search(r"^is_herald_image\(\) \{\n.*?^\}\n", script, re.M | re.S).group(0)
+    script = (ROOT / "linux" / "bin" / "bantu-os-update").read_text()
+    function = re.search(r"^is_bantu_image\(\) \{\n.*?^\}\n", script, re.M | re.S).group(0)
     found = subprocess.run(
-        ["bash", "-c", f'OSTREE_BOOTED="{paths["booted"]}"\nOS_RELEASE=("{tmp_path / "etc-os-release"}" "{paths["release"]}")\nIMAGE_SHELL="{paths["shell"]}"\n{function}is_herald_image'],
+        ["bash", "-c", f'OSTREE_BOOTED="{paths["booted"]}"\nOS_RELEASE=("{tmp_path / "etc-os-release"}" "{paths["release"]}")\nIMAGE_SHELL="{paths["shell"]}"\n{function}is_bantu_image'],
         check=False,
     )
     assert (found.returncode == 0) is expected
@@ -85,4 +85,4 @@ def test_on_silverblue_rollback_and_channel_never_run_bootc(tmp_path, monkeypatc
 
 def test_the_image_build_names_the_image_in_os_release():
     packages = (ROOT / "linux" / "image" / "packages.sh").read_text()
-    assert "echo 'IMAGE_ID=herald-os' >>/usr/lib/os-release" in packages
+    assert "echo 'IMAGE_ID=bantu-os' >>/usr/lib/os-release" in packages

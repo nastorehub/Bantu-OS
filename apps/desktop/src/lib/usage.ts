@@ -1,6 +1,6 @@
-import type { UsageModel } from '@herald-os/client'
+import type { UsageModel } from '@bantu-os/client'
 
-/** The parts of `GET /api/analytics/usage` Herald OS shows (NasTech's own token accounting per session). */
+/** The parts of `GET /api/analytics/usage` Bantu OS shows (NasTech's own token accounting per session). */
 export interface AnalyticsResponse {
   daily?: { day?: string; input_tokens?: number | null; output_tokens?: number | null; sessions?: number | null; estimated_cost?: number | null }[]
   by_model?: { model?: string | null; input_tokens?: number | null; output_tokens?: number | null; sessions?: number | null }[]

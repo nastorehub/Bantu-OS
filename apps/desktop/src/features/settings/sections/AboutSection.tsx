@@ -14,7 +14,7 @@ export function AboutSection() {
   const backend = useStore($backend)
   const status = useBackendData(() => rest.get<NasTechStatusPayload>('/api/status'))
   const [showLog, setShowLog] = useState(false)
-  const log = useLocalData(() => (showLog ? window.heraldOS.backend.logTail(300) : Promise.resolve<string[]>([])), [showLog, backend.phase])
+  const log = useLocalData(() => (showLog ? window.bantuOS.backend.logTail(300) : Promise.resolve<string[]>([])), [showLog, backend.phase])
 
   return (
     <>
@@ -23,7 +23,7 @@ export function AboutSection() {
       <AboutIdentity />
 
       <SettingsGroup title="Versions">
-        <SettingsRow icon={<IconInfoCircle />} label="Herald OS" description={env?.isDev ? 'Development build.' : 'Agent-native operating system.'} keywords="version build shell">
+        <SettingsRow icon={<IconInfoCircle />} label="Bantu OS" description={env?.isDev ? 'Development build.' : 'Agent-native operating system.'} keywords="version build shell">
           <Pill tone="accent">{env?.version ?? '—'}</Pill>
         </SettingsRow>
         <SettingsRow icon={<IconServer />} label="NasTech runtime" description={<span className="selectable">{backend.runtime?.label ?? 'Not resolved yet.'}</span>} keywords="nastech agent version runtime">
@@ -35,7 +35,7 @@ export function AboutSection() {
       <BrandingSettings />
 
       <SettingsGroup title="Maintenance">
-        <SettingsRow icon={<IconDownload />} label="Check for updates" description="Herald OS runs whatever NasTech is installed. Run “nastech update” in Terminal, then restart NasTech from Network." keywords="upgrade update nastech update terminal">
+        <SettingsRow icon={<IconDownload />} label="Check for updates" description="Bantu OS runs whatever NasTech is installed. Run “nastech update” in Terminal, then restart NasTech from Network." keywords="upgrade update nastech update terminal">
           <GlassButton size="sm" onClick={() => openApp('terminal')} aria-label="Open Terminal">
             Open Terminal
           </GlassButton>

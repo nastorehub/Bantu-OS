@@ -1,5 +1,5 @@
 /*
- * Small WebGL2 helpers for Herald Canvas: programs with cached uniforms, render targets, and a
+ * Small WebGL2 helpers for Bantu Canvas: programs with cached uniforms, render targets, and a
  * texture cache that uploads a raster once and afterwards only the part that changed. A raster
  * larger than the GPU's largest texture is held in pieces, uploaded as they come into view, with a
  * reduced copy of the whole for drawing it small.
@@ -139,7 +139,7 @@ function compile(gl: WebGL2RenderingContext, type: number, source: string): WebG
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS) && !gl.isContextLost()) {
     const message = gl.getShaderInfoLog(shader)
     gl.deleteShader(shader)
-    throw new Error(`Herald Canvas shader did not compile: ${message}`)
+    throw new Error(`Bantu Canvas shader did not compile: ${message}`)
   }
 
   return shader
@@ -191,7 +191,7 @@ export class Gpu {
       gl.linkProgram(handle)
 
       if (!gl.getProgramParameter(handle, gl.LINK_STATUS) && !gl.isContextLost()) {
-        throw new Error(`Herald Canvas shaders did not link: ${gl.getProgramInfoLog(handle)}`)
+        throw new Error(`Bantu Canvas shaders did not link: ${gl.getProgramInfoLog(handle)}`)
       }
 
       program = new Program(gl, handle)

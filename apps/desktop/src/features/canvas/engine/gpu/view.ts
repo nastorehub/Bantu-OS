@@ -130,7 +130,7 @@ export class ScreenRenderer {
     const gl = canvas.getContext('webgl2', { alpha: true, antialias: false, premultipliedAlpha: true, preserveDrawingBuffer: false, powerPreference: 'high-performance' })
 
     if (!gl) {
-      throw new Error('Herald Canvas needs WebGL2, which this system does not provide')
+      throw new Error('Bantu Canvas needs WebGL2, which this system does not provide')
     }
 
     this.gpu = new Gpu(gl)

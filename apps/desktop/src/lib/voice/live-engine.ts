@@ -1,5 +1,5 @@
 // The Live engine: OpenAI `gpt-live-1` owns the microphone and speaker over WebRTC (full duplex,
-// natural interruptions) and DELEGATES every real request to NasTech. Herald OS turns each
+// natural interruptions) and DELEGATES every real request to NasTech. Bantu OS turns each
 // `session.delegation.created` into a normal NasTech turn and streams the reply back over the
 // `oai-events` data channel as `session.commentary.append`, which the voice paraphrases aloud.
 //
@@ -291,7 +291,7 @@ export class LiveEngine implements ConversationEngine {
   }
 
   private seedHistory(): LiveHistoryMessage[] {
-    // Herald OS starts each spoken conversation fresh; NasTech itself carries memory across sessions.
+    // Bantu OS starts each spoken conversation fresh; NasTech itself carries memory across sessions.
     return []
   }
 

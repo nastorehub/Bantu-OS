@@ -1,23 +1,23 @@
-# Herald Office
+# Bantu Office
 
-Herald Office is three apps built into Herald OS: Herald Docs for documents, Herald Sheets for
-spreadsheets and Herald Slides for presentations. They open and save Word, Excel and PowerPoint
+Bantu Office is three apps built into Bantu OS: Bantu Docs for documents, Bantu Sheets for
+spreadsheets and Bantu Slides for presentations. They open and save Word, Excel and PowerPoint
 files, and NasTech can work in them with you: ask for a cover letter, "remove the duplicate rows" or
 "turn my report into slides", and watch each change land in the open window as a step you can undo.
 
-Open them from the Dock's Herald Office tile, from Applications (`Cmd+Shift+A`, `Super+A` on Linux),
-from Files ("Edit in Herald Docs" on a Word file, and likewise for workbooks and presentations), by
+Open them from the Dock's Bantu Office tile, from Applications (`Cmd+Shift+A`, `Super+A` on Linux),
+from Files ("Edit in Bantu Docs" on a Word file, and likewise for workbooks and presentations), by
 dropping a file on an app's window, or by asking NasTech. On a Mac the Dock tile offers the three
-apps. On Herald OS Linux it brings back the ones that are open (or opens Applications), and each app
+apps. On Bantu OS Linux it brings back the ones that are open (or opens Applications), and each app
 opens in its own window, three quarters of the screen wide.
 
 Each app keeps its open documents in tabs beside its menus. The status bar at the bottom says
 whether the document is saved and holds the Ask NasTech field. In the shortcuts below, `Cmd` on a
-Mac is `Ctrl` on Herald OS Linux, and `Alt` is `Option` on a Mac.
+Mac is `Ctrl` on Bantu OS Linux, and `Alt` is `Option` on a Mac.
 
-## Herald Docs
+## Bantu Docs
 
-Herald Docs writes on real pages: what you see is how the document prints, page breaks, headers and
+Bantu Docs writes on real pages: what you see is how the document prints, page breaks, headers and
 footers included.
 
 - **Pages.** The pages are the paper the document is set up for. View > Zoom In, Zoom Out and Actual
@@ -82,9 +82,9 @@ footers included.
   on exact passages, each starting Clarity, Grammar or Tone and suggesting a fix. It never changes
   the text, and the whole review is one step to undo.
 
-## Herald Sheets
+## Bantu Sheets
 
-Herald Sheets is a spreadsheet: formulas are worked out as you type, and Excel workbooks keep their
+Bantu Sheets is a spreadsheet: formulas are worked out as you type, and Excel workbooks keep their
 formats, charts and comments. The toolbar over the grid has the font, colours, borders, alignment
 and merging, and the tabs along the bottom are the workbook's sheets.
 
@@ -121,9 +121,9 @@ and merging, and the tabs along the bottom are the workbook's sheets.
   empty cells of a column, following the filled ones), Clean data (remove duplicate rows, fix dates,
   split a column, trim spaces, numbers stored as text) and What stands out in this sheet?.
 
-## Herald Slides
+## Bantu Slides
 
-Herald Slides makes presentations: the slides down the side, the slide in front with its speaker
+Bantu Slides makes presentations: the slides down the side, the slide in front with its speaker
 notes under it, and a toolbar for text, shapes, pictures, tables, the background and the theme.
 
 - **Slides.** Slide > New Slide (`Cmd+Shift+N`) or New Slide with Layout, Duplicate Slide, Delete
@@ -148,8 +148,8 @@ notes under it, and a toolbar for text, shapes, pictures, tables, the background
   (`Cmd+D`) copies what is selected.
 - **Connectors.** Insert > Connector (Straight, Elbow or Curved), then drag from one shape to
   another: each end sticks to the nearest connection point and follows the shape when it moves.
-- **Themes and backgrounds.** Slide > Theme gives every slide one of Herald's thirteen themes
-  (Herald, Midnight, Paper, Graphite, Forest, Coral, Mono, Ocean, Aurora, Dune, Slate, Blossom and
+- **Themes and backgrounds.** Slide > Theme gives every slide one of Bantu's thirteen themes
+  (Bantu, Midnight, Paper, Graphite, Forest, Coral, Mono, Ocean, Aurora, Dune, Slate, Blossom and
   Ember), the theme the file came with, or one of yours: New Theme… makes one from ten colours, the
   fonts and an optional gradient, and Edit Theme… changes it. Theme for Selected Slides gives the
   picked slides their own. The toolbar's Background is the theme's, a colour, a gradient or a
@@ -157,7 +157,7 @@ notes under it, and a toolbar for text, shapes, pictures, tables, the background
   Standard (4:3).
 - **Master and layouts.** View > Slide Master edits what the slides share. On the master: a logo
   (Insert Logo…), the background, the header and footer, and the theme; on a layout: its background,
-  whether it shows the master's drawings, and its name. Reset Master puts Herald's master back, and
+  whether it shows the master's drawings, and its name. Reset Master puts Bantu's master back, and
   Close Master View returns to the slides. Slide > Hide Background Graphics hides the master's
   drawings on the picked slides.
 - **Header and footer.** Insert > Header & Footer…: the date (kept up to date in a format you pick,
@@ -185,45 +185,45 @@ notes under it, and a toolbar for text, shapes, pictures, tables, the background
   after it (a long table goes on over several, its header row on each).
 - **The NasTech menu.** Speaker Notes for This Slide or for Every Slide, Tighten This Slide, Choose
   Layouts for the Content, A Deck from a Topic…, and slides from documents and workbooks open in
-  Herald Docs and Sheets: Add Slides from a Document, New Deck from a Document, and Add Slides from
+  Bantu Docs and Sheets: Add Slides from a Document, New Deck from a Document, and Add Slides from
   a Sheet (a table, and a slide after it that sums it up).
 
 ## Opening and saving
 
 | App | Opens | Saves |
 | --- | --- | --- |
-| Herald Docs | Word (`.docx`, and `.docm` without its macros), Markdown (`.md`, `.markdown`), plain text (`.txt`) | `.docx`, `.md`, `.txt` |
-| Herald Sheets | Excel (`.xlsx`, and `.xlsm` without its macros), CSV (`.csv`) | `.xlsx`, `.csv` |
-| Herald Slides | PowerPoint (`.pptx`) | `.pptx` |
+| Bantu Docs | Word (`.docx`, and `.docm` without its macros), Markdown (`.md`, `.markdown`), plain text (`.txt`) | `.docx`, `.md`, `.txt` |
+| Bantu Sheets | Excel (`.xlsx`, and `.xlsm` without its macros), CSV (`.csv`) | `.xlsx`, `.csv` |
+| Bantu Slides | PowerPoint (`.pptx`) | `.pptx` |
 
-- **Where files live.** Herald Office opens and saves files in your home folder, up to 512 MB each.
+- **Where files live.** Bantu Office opens and saves files in your home folder, up to 512 MB each.
   Save As… and Export as PDF… start in Documents. A `.docm` or `.xlsm` file opens without its
   macros, and saving it asks for a new `.docx` or `.xlsx` file. OpenDocument files (`.odt`, `.ods`,
   `.odp`) do not open yet: save them from LibreOffice as Word, Excel or PowerPoint files first.
-- **What Herald changed.** When a file holds something Herald shows differently or leaves out,
-  opening it says so, and File > What Herald changed… (or Shown differently in the status bar)
+- **What Bantu changed.** When a file holds something Bantu shows differently or leaves out,
+  opening it says so, and File > What Bantu changed… (or Shown differently in the status bar)
   lists each thing.
-- **The first save over a file.** Before Herald first writes over a file it opened, it asks
+- **The first save over a file.** Before Bantu first writes over a file it opened, it asks
   "Replace …?" and lists what it showed differently and what the format will not keep. Replace saves
-  over the file, Save a copy… saves to a new file instead, and Cancel goes back. A file Herald keeps
+  over the file, Save a copy… saves to a new file instead, and Cancel goes back. A file Bantu keeps
   whole saves without the question, and later saves ask again only about something new. Saving to
   another format (a workbook as CSV, say) lists what that format did not keep once it is saved.
-- **Backups.** The first time Herald writes over a file after Herald OS starts, your save or
-  NasTech's, the file as it was is copied into `~/.nastech/herald-os/office-backups`, in a folder for
+- **Backups.** The first time Bantu writes over a file after Bantu OS starts, your save or
+  NasTech's, the file as it was is copied into `~/.nastech/bantu-os/office-backups`, in a folder for
   the day (`2026-10-09/Report.docx`). Backups are kept for 30 days and up to 2 GB in all, the oldest
   going first; files over 256 MB are not copied.
 - **Saving by itself.** Once you have saved a document, it saves itself about a second and a half
   after each change, NasTech's included; a new or just-opened document waits for your first save.
   The status bar says Not saved yet, Edited, Saving soon or Saved. When a save would lose something
-  you have not agreed to, Herald stops saving by itself and says why: save it yourself to go on.
+  you have not agreed to, Bantu stops saving by itself and says why: save it yourself to go on.
 - **Changes from elsewhere.** An open document follows its file. When another app or a sync client
-  changes it and you have no unsaved edits, the new version comes in (Herald asks again before the
+  changes it and you have no unsaved edits, the new version comes in (Bantu asks again before the
   next save over it if the new version has things it shows differently). With unsaved edits, a bar
   asks: Keep mine saves yours over theirs, Load theirs takes the new version and drops your unsaved
   edits. When the file is moved or deleted, the status bar says so, and saving puts it back.
 - **Closing.** File > Close (`Cmd+W`) asks first when there are unsaved edits.
 
-| Command | macOS | Herald OS Linux |
+| Command | macOS | Bantu OS Linux |
 | --- | --- | --- |
 | New, Open, Save, Save As | `Cmd+N`, `Cmd+O`, `Cmd+S`, `Cmd+Shift+S` | `Ctrl` with the same keys |
 | Print, Close | `Cmd+P`, `Cmd+W` | `Ctrl+P`, `Ctrl+W` |
@@ -234,17 +234,17 @@ notes under it, and a toolbar for text, shapes, pictures, tables, the background
 File > Print… (`Cmd+P`, `Ctrl+P` on Linux) opens the system's print dialog with the same pages
 that File > Export as PDF… writes; Export as PDF has no shortcut.
 
-- **Herald Docs** prints the pages as the page view lays them out, with their headers, footers and
+- **Bantu Docs** prints the pages as the page view lays them out, with their headers, footers and
   footnotes.
-- **Herald Sheets** prints the sheet in front as it shows, hidden rows and columns left out, and
+- **Bantu Sheets** prints the sheet in front as it shows, hidden rows and columns left out, and
   follows the page setup the sheet brought from its Excel file: the paper, which way it turns, the
   margins, the scale or fitting to so many pages, centring across the page, and the header and
-  footer with their page numbers. Herald Sheets has no page setup of its own yet; without one from
+  footer with their page numbers. Bantu Sheets has no page setup of its own yet; without one from
   the file, a sheet wider than the page prints landscape, under its name.
-- **Herald Slides** prints one slide on each page, at the slide's size; hidden slides are left out.
+- **Bantu Slides** prints one slide on each page, at the slide's size; hidden slides are left out.
 
 The pages are laid out at the document's own size and scaled to the paper the printer has. On
-Herald OS Linux, which comes without a print server, the system has no print dialog to show, so
+Bantu OS Linux, which comes without a print server, the system has no print dialog to show, so
 Print asks where to save a PDF of the same pages instead (Print to File).
 
 ## Working with NasTech
@@ -271,33 +271,33 @@ well:
 
 NasTech can also change a file you do not have open, named by its path ("add page numbers to the
 footer of ~/Documents/Report.docx"): it reads the file, changes it and writes it back, asking you
-first every time, and the original is backed up as above. When the file holds something Herald
-would not keep, NasTech has to open it in the app instead, so you see what Herald changed before
+first every time, and the original is backed up as above. When the file holds something Bantu
+would not keep, NasTech has to open it in the app instead, so you see what Bantu changed before
 anything is saved. NasTech saves only when you ask (a document you have saved before still saves
 itself), and saving over a file asks first. Its comments are signed NasTech.
 
 NasTech works through its `docs`, `sheets` and `slides` tools, the same commands the command bar and
-voice reach. On Herald OS Linux, `herald-os docs`, `herald-os sheets` and `herald-os slides` do the
-same from a terminal (`herald-os docs write "## Next steps" --at end`, `herald-os sheets read
-A1:D20`, `herald-os sheets write B7 "=SUM(B2:B6)"`, `herald-os slides from-doc
-~/Documents/Report.docx --notes`, `herald-os slides pdf`); `herald-os commands` lists every form.
+voice reach. On Bantu OS Linux, `bantu-os docs`, `bantu-os sheets` and `bantu-os slides` do the
+same from a terminal (`bantu-os docs write "## Next steps" --at end`, `bantu-os sheets read
+A1:D20`, `bantu-os sheets write B7 "=SUM(B2:B6)"`, `bantu-os slides from-doc
+~/Documents/Report.docx --notes`, `bantu-os slides pdf`); `bantu-os commands` lists every form.
 
 ## Voice
 
 - **Talking to NasTech.** Press the voice key (`Alt+Space` on a Mac, `Super+V` on Linux), or say
   "hey NasTech" when the wake word is on, and ask: "add a column for tax", "translate this paragraph
   into Spanish", "make the heading bold", "fill in the rest of this column". Requests like these go
-  to NasTech as you said them, with what Herald Office has open, so "this paragraph", "these cells"
+  to NasTech as you said them, with what Bantu Office has open, so "this paragraph", "these cells"
   and "this slide" mean what you are looking at. Short commands run at once: "new document", "new
-  spreadsheet", "new presentation", "new slide", "open Herald Docs", "save the document", "save the
+  spreadsheet", "new presentation", "new slide", "open Bantu Docs", "save the document", "save the
   presentation".
 - **Dictation.** Press `Cmd+Ctrl+X` (`Super+Ctrl+X` on Linux), or say "start dictation", and speak;
-  a pause ends it. In Herald Docs the words go in at the caret; in Herald Sheets into the selected
+  a pause ends it. In Bantu Docs the words go in at the caret; in Bantu Sheets into the selected
   cell and on down the column (a number becomes a number, and the selection moves down so you can
-  carry on); in Herald Slides into the text box you are editing, at the end of the selected text
+  carry on); in Bantu Slides into the text box you are editing, at the end of the selected text
   box, shape or table, or else in a new text box, selected so more dictation carries on in it. Each
   dictation is one step to undo. Pressing the voice key and saying "type" with the words does the
-  same. On a Mac the words go straight into the document; on Herald OS Linux they are typed as keys
+  same. On a Mac the words go straight into the document; on Bantu OS Linux they are typed as keys
   into the window in front.
 - **Spoken punctuation.** Say "comma", "period" (or "full stop"), "question mark", "exclamation
   mark", "colon", "semicolon", "new line" (a new paragraph, or the next item of a list, in Docs; the
@@ -306,69 +306,69 @@ A1:D20`, `herald-os sheets write B7 "=SUM(B2:B6)"`, `herald-os slides from-doc
 
 ## The name on your comments
 
-The first time you add a comment or a note in Herald Docs or Herald Sheets, Herald asks for the name
+The first time you add a comment or a note in Bantu Docs or Bantu Sheets, Bantu asks for the name
 to put on it, starting from your account's name. The same name goes on your comments in every
 Office app and is saved in the files you comment on; cancelling the question leaves the comment
-unposted. Change it in Settings > General > Herald Office > Name on comments (clear it to be asked
-again), or with Change under Herald Docs' comments. Comments NasTech adds are signed NasTech; one
-added from the command bar or by voice carries your name, or "Herald user" until you have chosen
+unposted. Change it in Settings > General > Bantu Office > Name on comments (clear it to be asked
+again), or with Change under Bantu Docs' comments. Comments NasTech adds are signed NasTech; one
+added from the command bar or by voice carries your name, or "Bantu user" until you have chosen
 one.
 
 ## Limits
 
-For a file you open, File > What Herald changed… lists most of these that apply to it.
+For a file you open, File > What Bantu changed… lists most of these that apply to it.
 
 - **Files.** Old Office files (`.doc`, `.xls`, `.ppt`), OpenDocument files and PowerPoint files with
   macros (`.pptm`) do not open, and macros in `.docm` and `.xlsm` files are not kept.
-- **Herald Docs.** Text in columns becomes one column. Text boxes come after the paragraph they are
+- **Bantu Docs.** Text in columns becomes one column. Text boxes come after the paragraph they are
   anchored to, equations become plain text, and other shapes are left out. Pictures placed beside
   the text go in line with it; EMF, WMF and TIFF pictures and pictures linked from outside the file
   are left out; charts and SmartArt become pictures. Tracked changes are shown accepted. Only the
   first section's headers and footers are used, and pages are numbered on from the first in plain
   numbers, whatever a section asks. Content controls become their text, and embedded objects are
-  not kept. A Word document Herald saves holds PNG, JPEG, GIF and BMP pictures only (SVG and WebP
+  not kept. A Word document Bantu saves holds PNG, JPEG, GIF and BMP pictures only (SVG and WebP
   are left out). Markdown and plain text keep no headers, footers, comments or page setup.
-- **Herald Sheets.** Macros, protection, form controls, embedded objects, data connections and
+- **Bantu Sheets.** Macros, protection, form controls, embedded objects, data connections and
   queries (their last results stay as values), custom views, what-if scenarios, a shared workbook's
   history and digital signatures are not kept, nor are print areas, print titles and page breaks.
   Grouped rows and columns show ungrouped. Formulas that use a table's column names or another
   workbook keep their last values, and formulas that spill are saved as fixed-size arrays. Pictures,
-  shapes, pivot tables, slicers and charts Herald does not draw are not shown, but go back into the
-  file when it saves; Herald Sheets cannot add pictures yet. A CSV file holds the sheet in front,
+  shapes, pivot tables, slicers and charts Bantu does not draw are not shown, but go back into the
+  file when it saves; Bantu Sheets cannot add pictures yet. A CSV file holds the sheet in front,
   saved as its cells show (formulas as their results, no formatting). Comments stay out of undo:
   adding, answering, resolving or deleting one cannot be undone (notes can).
-- **Herald Slides.** Animations, automatic slide timings, transition sounds, embedded fonts, macros,
+- **Bantu Slides.** Animations, automatic slide timings, transition sounds, embedded fonts, macros,
   comments, sections, custom shows and slide masters other than the one most slides use are not
   kept. Videos show as a still picture and sounds are left out. Charts, SmartArt and embedded
   objects show as their picture (or a box) and go back into the file as they were, but cannot be
   edited; Arrange's Convert to Shapes turns SmartArt that has a drawing into shapes. Shadows and
   other effects are left out, and WordArt and vertical text are shown as plain, upright text.
-- **Printing.** Herald Sheets prints the cells of the sheet in front, without its charts.
+- **Printing.** Bantu Sheets prints the cells of the sheet in front, without its charts.
 - **NasTech.** Its commands do not reach the master view, transitions or presenting yet, and it
   exports PDFs rather than printing.
 
 ## Linux notes
 
-- **Windows.** Each app is a window of its own, three quarters of the screen wide; the Dock's Herald
+- **Windows.** Each app is a window of its own, three quarters of the screen wide; the Dock's Bantu
   Office tile brings back the open ones, or opens Applications when none is.
-- **OpenDocument files.** LibreOffice Writer, Calc and Impress come with Herald OS Linux: open an
+- **OpenDocument files.** LibreOffice Writer, Calc and Impress come with Bantu OS Linux: open an
   `.odt`, `.ods` or `.odp` file there and save it as a Word, Excel or PowerPoint file to work on it
-  in Herald Office.
-- **Fonts.** Office files often use Calibri and Cambria, which Herald OS Linux does not include.
-  Herald Docs and Sheets draw them with Carlito and Caladea, which take the same room, when those
-  are installed; otherwise, and in Herald Slides, the nearest font stands in, so lines can break in
+  in Bantu Office.
+- **Fonts.** Office files often use Calibri and Cambria, which Bantu OS Linux does not include.
+  Bantu Docs and Sheets draw them with Carlito and Caladea, which take the same room, when those
+  are installed; otherwise, and in Bantu Slides, the nearest font stands in, so lines can break in
   other places. The file keeps its fonts' names.
 
 ## Troubleshooting
 
-- **Herald stopped saving a document by itself.** A change would lose something the format cannot
+- **Bantu stopped saving a document by itself.** A change would lose something the format cannot
   keep, and the status bar said which. Save it yourself to agree, or use Save As… for a format that
   keeps it.
 - **A file changed on disk while I had unsaved edits.** Choose Keep mine (saved over theirs) or Load
   theirs (your unsaved edits go).
-- **I want the file as it was before Herald saved it.** Look in
-  `~/.nastech/herald-os/office-backups`, in the folder of the day it was first saved over.
-- **NasTech says a file has things Herald shows differently.** It will not rewrite that file unseen.
-  Open it, check File > What Herald changed…, and ask again with the document open.
+- **I want the file as it was before Bantu saved it.** Look in
+  `~/.nastech/bantu-os/office-backups`, in the folder of the day it was first saved over.
+- **NasTech says a file has things Bantu shows differently.** It will not rewrite that file unseen.
+  Open it, check File > What Bantu changed…, and ask again with the document open.
 - **The Ask NasTech field says NasTech is offline or starting.** It takes requests once NasTech is
   running; if NasTech does not come back, see [Troubleshooting](troubleshooting.md).

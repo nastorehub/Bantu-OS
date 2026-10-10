@@ -6,7 +6,7 @@ const { renderIdleConf } = await import('./switches.ts')
 const { keepRecent } = await import('./notifications-history.ts')
 
 describe('renderIdleConf', () => {
-  it('writes seconds for herald-os-idle, with the screensaver only when it is on', () => {
+  it('writes seconds for bantu-os-idle, with the screensaver only when it is on', () => {
     expect(renderIdleConf({})).toContain('screensaver=0\nlock=600\nscreen_off=900\nsuspend=0\n')
     expect(renderIdleConf({ screensaver: { enabled: true, afterMinutes: 3 }, idle: { lockAfter: 5, screenOffAfter: 20, suspendAfter: 60 } })).toContain('screensaver=180\nlock=300\nscreen_off=1200\nsuspend=3600\n')
   })

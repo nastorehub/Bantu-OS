@@ -1,21 +1,21 @@
 # linux/
 
-Everything needed to run Herald OS as the whole desktop of a Fedora machine (Stage 1: a VM on
+Everything needed to run Bantu OS as the whole desktop of a Fedora machine (Stage 1: a VM on
 your Mac). Full guide: [docs/LINUX.md](../docs/LINUX.md).
 
 ```
 linux/
   provision.sh            first-boot provisioner (root, idempotent)
-  bin/                    herald-os (the CLI every hotkey and menu calls), -theme, -omakase, -update,
-                          -tarball (installs and updates the release tarball in /opt/herald-os)
+  bin/                    bantu-os (the CLI every hotkey and menu calls), -theme, -omakase, -update,
+                          -tarball (installs and updates the release tarball in /opt/bantu-os)
   session/                greetd config, compositor + session launchers, wayland-sessions entry,
                           update-check timer, lock-screen style
-  niri/config.kdl         the managed niri config (rendered to ~/.config/niri/herald-os.kdl): hotkeys,
+  niri/config.kdl         the managed niri config (rendered to ~/.config/niri/bantu-os.kdl): hotkeys,
                           window rules, workspaces
-  themes/                 whole-desktop themes (shell, niri, terminal, wallpaper): herald-*
+  themes/                 whole-desktop themes (shell, niri, terminal, wallpaper): bantu-*
   omakase/                the default app set: dnf packages, Flatpaks, web apps
-  plymouth/herald-os/     boot splash
-  migrations/             one-shot upgrade steps herald-os-update runs once per machine
+  plymouth/bantu-os/     boot splash
+  migrations/             one-shot upgrade steps bantu-os-update runs once per machine
   dev/                    push.sh and vm-ssh.sh (Mac -> VM); build.sh, sync.sh, restart-shell.sh,
                           shot.sh (inside the VM)
   vm/                     download-image.sh, make-seed.sh (cloud-init), run-qemu.sh, run-vf.sh
@@ -26,5 +26,5 @@ linux/
 bash linux/vm/download-image.sh && bash linux/vm/make-seed.sh && bash linux/vm/run-qemu.sh
 bash linux/vm/run-qemu.sh console            # first boot provisions (30-45 min, mostly downloads)
 bash linux/dev/push.sh --with-nastech-config  # build the shell in the VM, copy model config (not OAuth logins)
-bash linux/dev/push.sh ssh                   # then: nastech setup (or sign in from the card in Herald OS)
+bash linux/dev/push.sh ssh                   # then: nastech setup (or sign in from the card in Bantu OS)
 ```

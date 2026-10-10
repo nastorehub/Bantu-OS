@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Bantu OS
+Comment=Agent-native desktop powered by NasTech Agent
+Exec=bantu-os-compositor
+Type=Application
+DesktopNames=BantuOS

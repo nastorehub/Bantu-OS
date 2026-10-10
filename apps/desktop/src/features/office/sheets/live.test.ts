@@ -59,11 +59,11 @@ describe('changing a file that is not open', () => {
     expect(pkg.files.filter((file) => /^xl\/charts\/chart(Ex)?\d+\.xml$/.test(file)).length).toBeGreaterThanOrEqual(3)
   })
 
-  it('will not rewrite a file holding what Herald Sheets cannot keep, or lose sheets of a CSV', async () => {
+  it('will not rewrite a file holding what Bantu Sheets cannot keep, or lose sheets of a CSV', async () => {
     const macros = await handmadePackage({ extraParts: { 'xl/vbaProject.bin': 'not really a project' } })
     const io = memoryFiles({ '/tmp/macros.xlsx': macros, '/tmp/list.csv': new TextEncoder().encode('a,b\n1,2\n') })
 
-    await expect(changeFile('/tmp/macros.xlsx', (target) => writeRange(target, { range: 'A1', values: [[1]] }), sheetsAdapter, io)).rejects.toThrow(/Macros \(VBA\) are not kept.*open it in Herald Sheets/)
+    await expect(changeFile('/tmp/macros.xlsx', (target) => writeRange(target, { range: 'A1', values: [[1]] }), sheetsAdapter, io)).rejects.toThrow(/Macros \(VBA\) are not kept.*open it in Bantu Sheets/)
     expect(io.files['/tmp/macros.xlsx']).toBe(macros)
     await expect(
       changeFile('/tmp/list.csv', async ({ univer, workbook }) => {

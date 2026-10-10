@@ -16,7 +16,7 @@ import { useDeck } from './Stage.tsx'
 
 /*
  * The themes to pick from, each drawn as a sample slide: the deck's own when it came with the file,
- * Herald's, then the custom ones (which can be edited and deleted). A theme goes on every slide or
+ * Bantu's, then the custom ones (which can be edited and deleted). A theme goes on every slide or
  * on the picked ones; New Theme… starts the theme editor from the theme in use.
  */
 
@@ -175,7 +175,7 @@ export function ThemePanel({ doc, onDone }: { doc: SlidesDocument; onDone: () =>
             type="button"
             onClick={() => {
               setDoomed(null)
-              deleteCustomTheme(doomed.id).catch((error: unknown) => commands.notify(`Herald Slides could not delete the theme: ${messageOf(error)}`))
+              deleteCustomTheme(doomed.id).catch((error: unknown) => commands.notify(`Bantu Slides could not delete the theme: ${messageOf(error)}`))
             }}
             className="h-7 rounded-md bg-danger/15 px-2 text-danger hover:bg-danger/25"
           >

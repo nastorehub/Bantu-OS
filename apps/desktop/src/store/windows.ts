@@ -35,7 +35,7 @@ export const $page = atom<PageId>('overview')
 /** Menu-bar title: the focused window's title. */
 export const $focusedTitle = computed([$windows, $focusedWindowId, $page], (windows, id, page) => {
   if (!id || !windows[id]) {
-    return 'Herald OS'
+    return 'Bantu OS'
   }
 
   return id === MAIN_WINDOW_ID ? appById(page).name : windows[id].title
@@ -133,7 +133,7 @@ export function showPage(page: PageId): void {
   // Panels mode: only the NasTech window renders pages; other surfaces ask it (and the compositor focuses it).
   if (isPanels && !isMainSurface) {
     relayToMain({ type: 'show-page', args: [page] })
-    window.heraldOS.shell.open('main').catch(() => undefined)
+    window.bantuOS.shell.open('main').catch(() => undefined)
 
     return
   }
@@ -183,7 +183,7 @@ export function openApp(appId: NasTechAppId, options: { payload?: Record<string,
 
   // Panels mode: floating NasTech apps are real compositor windows, one Electron window each.
   if (isPanels) {
-    window.heraldOS.shell.open(`window:${appId}`, options.payload ? { type: 'payload', payload: options.payload } : undefined).catch(() => undefined)
+    window.bantuOS.shell.open(`window:${appId}`, options.payload ? { type: 'payload', payload: options.payload } : undefined).catch(() => undefined)
 
     return `window:${appId}`
   }

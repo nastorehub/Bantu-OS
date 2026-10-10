@@ -62,7 +62,7 @@ export function VoiceSection() {
 
   useEffect(() => {
     void fetchLiveStatus().then(setLiveStatus)
-    void window.heraldOS.voice.microphoneStatus().then(setMic)
+    void window.bantuOS.voice.microphoneStatus().then(setMic)
   }, [])
 
   useEffect(() => setHotkeyDraft(voice.hotkey), [voice.hotkey])
@@ -98,7 +98,7 @@ export function VoiceSection() {
 
   const requestMic = async () => {
     try {
-      setMic(await window.heraldOS.voice.requestMicrophone())
+      setMic(await window.bantuOS.voice.requestMicrophone())
     } catch (error) {
       notify({ title: 'Microphone', body: errorText(error), level: 'error' })
     }
@@ -108,7 +108,7 @@ export function VoiceSection() {
     setTesting(true)
 
     try {
-      await speakWithFreeFallback('Hello. This is NasTech, speaking from Herald OS.')
+      await speakWithFreeFallback('Hello. This is NasTech, speaking from Bantu OS.')
       config.reload()
       markSaved()
     } catch (error) {
@@ -146,7 +146,7 @@ export function VoiceSection() {
         <SettingsRow
           icon={<IconMicrophone />}
           label="Microphone access"
-          description={mic === 'granted' ? 'Granted.' : mic === 'denied' || mic === 'restricted' ? 'Denied. Allow Herald OS under System Settings > Privacy & Security > Microphone.' : 'Not asked yet; the first conversation asks.'}
+          description={mic === 'granted' ? 'Granted.' : mic === 'denied' || mic === 'restricted' ? 'Denied. Allow Bantu OS under System Settings > Privacy & Security > Microphone.' : 'Not asked yet; the first conversation asks.'}
           keywords="permission privacy"
         >
           {mic !== 'granted' && (

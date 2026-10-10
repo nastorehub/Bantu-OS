@@ -9,7 +9,7 @@ import { overlapping } from './tables.ts'
 /*
  * Pivot tables on the sheets that are still there, with their caches (a cache several pivot tables
  * share is copied once) and the workbook's list of caches. A cache whose data is on a sheet that is
- * still there is refreshed when Excel opens the file, so its pivot tables show the cells as Herald
+ * still there is refreshed when Excel opens the file, so its pivot tables show the cells as Bantu
  * saved them; one whose sheet is gone, or whose name or table the file no longer has, is kept as it
  * was. Pivot tables fed by a data connection or the data model go (the fidelity report names them).
  */
@@ -32,7 +32,7 @@ export function pivotSourceOf(cacheXml: string): PivotSource {
   return { type: source.type ?? '', sheet: range.sheet, ref: range.ref, name: range.name, external: Boolean(range['r:id']) }
 }
 
-/** Whether Herald keeps the pivot tables of a cache: those over a range of a workbook, not a connection or the data model. */
+/** Whether Bantu keeps the pivot tables of a cache: those over a range of a workbook, not a connection or the data model. */
 export const keepsPivotCache = (cacheXml: string): boolean => pivotSourceOf(cacheXml).type === 'worksheet'
 
 /** The id slicers and timelines give a pivot cache (its x14 pivotCacheId). */

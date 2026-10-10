@@ -3,10 +3,10 @@ import { beforeAll, describe, expect, it } from 'vitest'
 import {
   defaultAdjustment,
   defaultEffect,
-  defaultHeraldAdjustment,
+  defaultBantuAdjustment,
   defaultTransform,
-  HERALD_ADJUSTMENT_KINDS,
-  type HeraldAdjustment,
+  BANTU_ADJUSTMENT_KINDS,
+  type BantuAdjustment,
   type LayerRecord,
   newId,
   parseManifest,
@@ -15,7 +15,7 @@ import {
   imageFileFor,
   maskFileFor
 } from '../../../../shared/canvas/comp-format.ts'
-import { adjustmentFrom, adjustmentTo, fromPsd, heraldFrom, heraldTo, Notes, type PixelData, type PsdSourceLayer, rgbOf, toPsd } from './psd-map.ts'
+import { adjustmentFrom, adjustmentTo, fromPsd, bantuFrom, bantuTo, Notes, type PixelData, type PsdSourceLayer, rgbOf, toPsd } from './psd-map.ts'
 
 beforeAll(() => {
   // The tests run without a canvas: ag-psd makes plain pixel buffers, as in the worker.
@@ -114,7 +114,7 @@ function sample(): Psd {
   }
 }
 
-describe('Photoshop documents into Herald layers', () => {
+describe('Photoshop documents into Bantu layers', () => {
   const imported = () => fromPsd(roundTrip(sample()))
 
   it('keeps the order, folders, visibility, opacity and blend modes', () => {
@@ -150,7 +150,7 @@ describe('Photoshop documents into Herald layers', () => {
     expect(title.textAnchor).toEqual([10, 80])
   })
 
-  it('maps the adjustments Herald has, and notes the rest', () => {
+  it('maps the adjustments Bantu has, and notes the rest', () => {
     const { layers, notes } = imported()
     const adjustment = (name: string) => layers.find((layer) => layer.record.name === name)!.record.adjustment!
     expect(adjustment('Curves').curves.channels[0]).toEqual([
@@ -160,15 +160,15 @@ describe('Photoshop documents into Herald layers', () => {
     ])
     expect(adjustment('Levels').levels.ranges[0]).toEqual({ black: 10, white: 240, gamma: 1.2, outputBlack: 5, outputWhite: 250 })
     expect(adjustment('Tint')).toMatchObject({ kind: 'Hue/Saturation', colorize: true, hue: 200, saturation: 40, lightness: -10 })
-    // Threshold is one of Herald's own, beside a Compositor stand-in.
+    // Threshold is one of Bantu's own, beside a Compositor stand-in.
     const threshold = layers.find((layer) => layer.record.name === 'Threshold')!.record
-    expect(threshold.heraldAdjustment).toEqual({ kind: 'Threshold', level: 128 })
+    expect(threshold.bantuAdjustment).toEqual({ kind: 'Threshold', level: 128 })
     expect(threshold.adjustment!.kind).toBe('Levels')
     expect(notes.some((note) => note.includes('Blend mode Dissolve') && note.includes('“Grain”'))).toBe(true)
     expect(notes.some((note) => note.includes('(Multiply) became Pass Through') && note.includes('“Multiply folder”'))).toBe(true)
   })
 
-  it('maps layer effects, hidden ones too, and notes the ones Herald does not draw', () => {
+  it('maps layer effects, hidden ones too, and notes the ones Bantu does not draw', () => {
     const { layers, notes } = imported()
     const card = layers.find((layer) => layer.record.name === 'Card')!
     expect(card.record.effects!.shadow).toMatchObject({ angle: 120, distance: 8, blur: 12, red: 0, green: 0, blue: 0, opacity: 0.6 })
@@ -195,18 +195,18 @@ describe('Photoshop documents into Herald layers', () => {
 
   it('lets go of a colour table it cannot read, with a note', () => {
     const notes = new Notes()
-    expect(heraldFrom({ type: 'color lookup', lutFormat: '3dl', lut3DFileData: new Uint8Array(4) }, notes, 'Film')).toBe('left out')
-    expect(heraldFrom({ type: 'color lookup', lutFormat: 'cube', lut3DFileData: new TextEncoder().encode('LUT_3D_SIZE 2\n') }, notes, 'Broken')).toBe('left out')
+    expect(bantuFrom({ type: 'color lookup', lutFormat: '3dl', lut3DFileData: new Uint8Array(4) }, notes, 'Film')).toBe('left out')
+    expect(bantuFrom({ type: 'color lookup', lutFormat: 'cube', lut3DFileData: new TextEncoder().encode('LUT_3D_SIZE 2\n') }, notes, 'Broken')).toBe('left out')
     expect(notes.list()[0]).toMatch(/\.3dl or \.look table.*“Film”/)
     expect(notes.list()[1]).toMatch(/could not be read.*“Broken”/)
-    // Compositor's kinds are not Herald's own.
-    expect(heraldFrom({ type: 'invert' }, notes, 'Invert')).toBeNull()
+    // Compositor's kinds are not Bantu's own.
+    expect(bantuFrom({ type: 'invert' }, notes, 'Invert')).toBeNull()
   })
 })
 
 const pixels = (width: number, height: number, rgba: number[]): PixelData => ({ ...solid(width, height, rgba), channels: 4 })
 
-describe('Herald layers into Photoshop documents', () => {
+describe('Bantu layers into Photoshop documents', () => {
   const record = (name: string, extra: Partial<LayerRecord> = {}): LayerRecord => ({ id: newId(), name, isVisible: true, transform: defaultTransform(10, 10), isGroup: false, opacity: 1, blendMode: 'Normal', ...extra })
 
   it('writes layers, folders, masks, clipping, text, adjustments and effects, and reads back the same', () => {
@@ -270,7 +270,7 @@ describe('Herald layers into Photoshop documents', () => {
     }
   })
 
-  it('writes Herald’s own adjustments as Photoshop’s, which read back the same', () => {
+  it('writes Bantu’s own adjustments as Photoshop’s, which read back the same', () => {
     const table = new TextEncoder().encode('LUT_3D_SIZE 2\n0 0 0\n1 0 0\n0 1 0\n1 1 0\n0 0 1\n1 0 1\n0 1 1\n1 1 1\n')
     const changed: Record<string, Record<string, unknown>> = {
       'Brightness/Contrast': { brightness: 30, contrast: -20 },
@@ -282,23 +282,23 @@ describe('Herald layers into Photoshop documents', () => {
       Threshold: { level: 100 },
       'Color Lookup': { name: 'Identity.cube', size: 2 }
     }
-    const layers: PsdSourceLayer[] = HERALD_ADJUSTMENT_KINDS.map((kind) => ({
-      record: record(kind, { adjustment: defaultAdjustment('Levels'), heraldAdjustment: { ...defaultHeraldAdjustment(kind), ...changed[kind] } as HeraldAdjustment }),
+    const layers: PsdSourceLayer[] = BANTU_ADJUSTMENT_KINDS.map((kind) => ({
+      record: record(kind, { adjustment: defaultAdjustment('Levels'), bantuAdjustment: { ...defaultBantuAdjustment(kind), ...changed[kind] } as BantuAdjustment }),
       pixels: null,
       mask: null,
       ...(kind === 'Color Lookup' ? { table } : {})
     }))
     const { psd } = toPsd({ width: 10, height: 10, resolution: 72, layers, composite: pixels(10, 10, [0, 0, 0, 255]) })
     const back = fromPsd(roundTrip(psd))
-    expect(back.layers.map((layer) => layer.record.name)).toEqual([...HERALD_ADJUSTMENT_KINDS])
+    expect(back.layers.map((layer) => layer.record.name)).toEqual([...BANTU_ADJUSTMENT_KINDS])
 
     for (const layer of back.layers) {
-      const kind = layer.record.name as HeraldAdjustment['kind']
-      expect(layer.record.heraldAdjustment, kind).toMatchObject({ kind, ...changed[kind] })
+      const kind = layer.record.name as BantuAdjustment['kind']
+      expect(layer.record.bantuAdjustment, kind).toMatchObject({ kind, ...changed[kind] })
     }
 
     expect(back.layers.at(-1)!.table).toEqual(table)
     // A Color Lookup with no table yet has nothing to write.
-    expect(heraldTo(defaultHeraldAdjustment('Color Lookup'), undefined)).toBeNull()
+    expect(bantuTo(defaultBantuAdjustment('Color Lookup'), undefined)).toBeNull()
   })
 })

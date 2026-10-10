@@ -51,7 +51,7 @@ export async function readPersons(pkg: XlsxPackage): Promise<Map<string, Person>
   return people
 }
 
-/** A person's Univer user id: the name of someone the file knows only by name, as Herald's own user is; else their GUID. */
+/** A person's Univer user id: the name of someone the file knows only by name, as Bantu's own user is; else their GUID. */
 const personIdFor = (person: Person | undefined, id: string): string => (person && (!person.providerId || person.providerId === 'None') ? personIdOf(person.userId || person.displayName) : id)
 
 /** A time Excel wrote (UTC, often without a zone) as one the comment shows in local time. */

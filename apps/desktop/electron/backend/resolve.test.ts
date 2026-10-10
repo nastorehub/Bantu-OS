@@ -23,10 +23,10 @@ function checkout(root: string, executables: string[]): string {
 }
 
 beforeEach(() => {
-  dir = fs.mkdtempSync(path.join(os.tmpdir(), 'herald-resolve-'))
+  dir = fs.mkdtempSync(path.join(os.tmpdir(), 'bantu-resolve-'))
   vi.stubEnv('NASTECH_HOME', path.join(dir, '.nastech'))
   vi.stubEnv('PATH', path.join(dir, 'empty'))
-  vi.stubEnv('HERALD_OS_NASTECH_ROOT', undefined)
+  vi.stubEnv('BANTU_OS_NASTECH_ROOT', undefined)
   vi.stubEnv('NASTECH_OS_NASTECH_ROOT', undefined)
 })
 
@@ -82,10 +82,10 @@ describe('resolveBackendRuntime', () => {
     expect(resolveBackendRuntime()).toMatchObject({ kind: 'managed', command: [path.join(managed, 'venv', 'bin', 'python'), '-m', 'nastech_cli.main'] })
   })
 
-  it('puts HERALD_OS_NASTECH_ROOT first', () => {
+  it('puts BANTU_OS_NASTECH_ROOT first', () => {
     checkout(path.join(dir, '.nastech', 'nastech-agent'), ['.nastech/bin/nastech'])
     const own = checkout(path.join(dir, 'own'), ['.nastech/bin/nastech'])
-    vi.stubEnv('HERALD_OS_NASTECH_ROOT', own)
+    vi.stubEnv('BANTU_OS_NASTECH_ROOT', own)
 
     expect(resolveBackendRuntime()).toMatchObject({ kind: 'env', root: own })
   })

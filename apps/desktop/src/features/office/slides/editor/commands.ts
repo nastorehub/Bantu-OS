@@ -415,7 +415,7 @@ export async function insertPictures(files: readonly Blob[], at?: [number, numbe
         return element ? model.updateElements(placed.deck, slideId, [element.id], (entry) => ({ ...entry, x: at[0] - entry.width / 2 + index * 16, y: at[1] - entry.height / 2 + index * 16 }), placed.label) : placed
       }, doc)
     } catch {
-      slidesSession.notify('Herald Slides could not read that picture', 'error')
+      slidesSession.notify('Bantu Slides could not read that picture', 'error')
     }
   }
 }
@@ -763,9 +763,9 @@ export function currentFormat(doc = live()): Format {
 /** Whether text formatting has anything to work on. */
 export const canFormatText = (doc = live()): boolean => Boolean($textSession.get()?.doc === doc && doc) || Boolean(doc && textBodies(doc).length)
 
-const CLIPBOARD_TYPE = 'application/x-herald-slides'
+const CLIPBOARD_TYPE = 'application/x-bantu-slides'
 
-/** The selection on the clipboard: Herald's own copy, and its words as text for other apps. */
+/** The selection on the clipboard: Bantu's own copy, and its words as text for other apps. */
 export function copySelection(data: DataTransfer, doc = live()): boolean {
   const chosen = doc?.selection ?? []
 
@@ -802,7 +802,7 @@ export function copyToClipboard(cut = false, doc = live()): void {
   document.removeEventListener('copy', onCopy, { capture: true })
 }
 
-/** Elements copied from Herald Slides, made safe. */
+/** Elements copied from Bantu Slides, made safe. */
 export function clipboardElements(text: string): SlideElement[] {
   try {
     const parsed = JSON.parse(text) as { elements?: unknown }
@@ -813,7 +813,7 @@ export function clipboardElements(text: string): SlideElement[] {
   }
 }
 
-/** Paste what the clipboard holds: Herald's own elements, pictures, or text as a new text box. */
+/** Paste what the clipboard holds: Bantu's own elements, pictures, or text as a new text box. */
 export async function pasteFrom(data: DataTransfer, doc = live()): Promise<boolean> {
   if (!doc) {
     return false

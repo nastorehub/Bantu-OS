@@ -2,7 +2,7 @@ import fs from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 
-/* Herald Office uses Univer's open-source packages only: none of its paid ones may come in, even through another package. */
+/* Bantu Office uses Univer's open-source packages only: none of its paid ones may come in, even through another package. */
 
 const lockfile = fileURLToPath(new URL('../../../../../../package-lock.json', import.meta.url))
 

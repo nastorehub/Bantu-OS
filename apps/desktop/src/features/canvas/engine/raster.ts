@@ -1,5 +1,5 @@
 /*
- * Pixels for Herald Canvas: RGBA layers in straight (not premultiplied) alpha, or one-channel masks
+ * Pixels for Bantu Canvas: RGBA layers in straight (not premultiplied) alpha, or one-channel masks
  * and selections, 8 bits a channel. Every change bumps `version` and is logged, so each GPU context
  * re-uploads only what changed since it last looked.
  */

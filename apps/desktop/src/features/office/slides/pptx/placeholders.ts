@@ -9,7 +9,7 @@ import { isFooterRole, layoutPlaceholders } from '../layouts.ts'
  * elements fill their layout's by role, in order, and name them by type and index.
  */
 
-/** The names Herald's layouts gave their text placeholders in files written before the master was Herald's to write, in order. */
+/** The names Bantu's layouts gave their text placeholders in files written before the master was Bantu's to write, in order. */
 export function placeholderNames(layout: LayoutId): { name: string; role: PlaceholderRole }[] {
   const seen: Partial<Record<PlaceholderRole, number>> = {}
 

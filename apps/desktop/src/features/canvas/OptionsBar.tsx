@@ -259,7 +259,7 @@ function TypeFields({ doc }: { doc: CanvasDocument }) {
       <label className="flex items-center gap-1.5 text-fg-3">
         Font
         <input
-          list="herald-canvas-fonts"
+          list="bantu-canvas-fonts"
           value={family}
           onChange={(event) => {
             setFamily(event.target.value)
@@ -272,7 +272,7 @@ function TypeFields({ doc }: { doc: CanvasDocument }) {
           onKeyDown={stop}
           className="glass-input h-6 w-36 rounded-md px-1.5 text-[12px] text-fg outline-none"
         />
-        <datalist id="herald-canvas-fonts">
+        <datalist id="bantu-canvas-fonts">
           {(fonts ?? []).map((family) => (
             <option key={family} value={family} />
           ))}

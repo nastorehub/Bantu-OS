@@ -74,8 +74,8 @@ export async function startDictation(): Promise<void> {
 }
 
 /**
- * The Herald Docs page, Sheets cell or Slides text box in front takes the words itself, one step to
- * undo and the clipboard untouched. Dictation goes to the app in front, so only while Herald is that
+ * The Bantu Docs page, Sheets cell or Slides text box in front takes the words itself, one step to
+ * undo and the clipboard untouched. Dictation goes to the app in front, so only while Bantu is that
  * app; anything that fails leaves the words to main.
  */
 async function typedIntoOffice(text: string, submit: boolean): Promise<boolean> {
@@ -123,7 +123,7 @@ export async function finishDictation(): Promise<void> {
       return
     }
 
-    const result = await window.heraldOS.dictation.type(text, { submit })
+    const result = await window.bantuOS.dictation.type(text, { submit })
 
     if (result.copied) {
       notify({ title: 'Dictation copied', body: `Paste it where you want it: ${text.slice(0, 80)}${text.length > 80 ? '…' : ''}`, level: 'info' })
@@ -177,7 +177,7 @@ export function bindDictation(): () => void {
     }
   })
   // Panels mode: the menu bar is another window; it shows "Listening" from this relay.
-  const offRelay = isPanels ? $dictation.listen(state => void window.heraldOS.shell.relay('menubar', { type: 'dictation-state', args: [state.phase] }).catch(() => undefined)) : () => undefined
+  const offRelay = isPanels ? $dictation.listen(state => void window.bantuOS.shell.relay('menubar', { type: 'dictation-state', args: [state.phase] }).catch(() => undefined)) : () => undefined
 
   return () => {
     off()

@@ -2,7 +2,7 @@ import { type CalloutKind, cssLineHeight, DEFAULT_HEADER_DISTANCE, type DocJSON,
 import { fieldText } from './fields.ts'
 
 /*
- * A Herald Docs document as HTML and CSS: the print view main turns into a PDF, and the styles the
+ * A Bantu Docs document as HTML and CSS: the print view main turns into a PDF, and the styles the
  * editor's page uses, so that what prints is what the page shows. Pages are paper whatever the
  * theme: black text on white. The print view lays each page out as the page view measured it
  * (its header, its part of the text, its footnotes and its footer), or, without those

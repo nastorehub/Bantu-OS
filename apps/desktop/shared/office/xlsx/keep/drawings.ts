@@ -7,7 +7,7 @@ import type { Keep } from './context.ts'
 import type { Refusal } from './parts.ts'
 
 /*
- * The anchors of a sheet's drawing that Herald does not show (pictures, shapes, charts it does not
+ * The anchors of a sheet's drawing that Bantu does not show (pictures, shapes, charts it does not
  * draw, SmartArt, ink, slicers), carried into the sheet's drawing in the written file with the parts
  * they name. Anchors standing in for form controls and embedded objects go with those (the fidelity
  * report names them), and a slicer's anchor goes when its slicer does.
@@ -58,7 +58,7 @@ async function keptAnchor(keep: Keep, drawing: SourceDrawing & { targets: Map<st
   return { xml: xml.replace(pattern, (_whole, before: string, quote: string, id: string) => `${before}${quote}{{rel:${ids.indexOf(decodeXml(id))}}}${quote}`), relationships }
 }
 
-/** Give each sheet that is still there the anchors of its drawing that Herald does not show. */
+/** Give each sheet that is still there the anchors of its drawing that Bantu does not show. */
 export async function keepDrawings(keep: Keep): Promise<void> {
   for (const sheet of keep.sheets) {
     const source = await drawingOf(keep.pkg, sheet.source)

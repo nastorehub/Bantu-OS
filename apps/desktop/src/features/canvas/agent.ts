@@ -1,5 +1,5 @@
 /*
- * What NasTech (and the command bar, voice and the CLI) does in Herald Canvas. A command works on a
+ * What NasTech (and the command bar, voice and the CLI) does in Bantu Canvas. A command works on a
  * project: the one it names, or the image in front. When that project is open in this window the
  * change lands in the open document (one undoable step, saved right after); otherwise it is read
  * from disk, changed and written back, and any window showing it reloads.
@@ -8,11 +8,11 @@
 import {
   ADJUSTMENT_KINDS,
   defaultAdjustment,
-  defaultHeraldAdjustment,
+  defaultBantuAdjustment,
   defaultTransform,
-  HERALD_ADJUSTMENT_KINDS,
-  type HeraldAdjustment,
-  isHeraldKind,
+  BANTU_ADJUSTMENT_KINDS,
+  type BantuAdjustment,
+  isBantuKind,
   LIMITS,
   RANGES,
   type ShapeStyle,
@@ -46,7 +46,7 @@ import {
   gradientStopsFrom,
   gradientStyleFrom,
   guideAxisFrom,
-  heraldWith,
+  bantuWith,
   holeBox,
   jsonObject,
   lineEnds,
@@ -72,7 +72,7 @@ import { checkFilter, FILTER_NAMES } from './engine/filters.ts'
 import { pixelToDocument } from './engine/geometry.ts'
 import { type ColourStop, type Gradient, type GradientStyle, gradientTable, lineAcross } from './engine/gradient.ts'
 import { guideNear, layoutGuides, onCanvas, positionFrom, withGuides, withoutGuides } from './engine/guides.ts'
-import { heraldLayer, heraldOf, withHerald } from './engine/herald-adjust.ts'
+import { bantuLayer, bantuOf, withBantu } from './engine/bantu-adjust.ts'
 import { coverageReader } from './engine/sampling.ts'
 import { filterArea, filterTargetArea, mixInto } from './filter-run.ts'
 import { anchorOffset, cropCanvas, resizeCanvas, rotateLayers, scaleImage } from './engine/canvas-size.ts'
@@ -123,7 +123,7 @@ const resolve = (input: string): string => resolvePath(input, $env.get()?.homeDi
 
 /** The project in front of the person: the active document of the Canvas window used last. */
 export async function currentProject(): Promise<string | null> {
-  const windows = await window.heraldOS.canvas.presence()
+  const windows = await window.bantuOS.canvas.presence()
 
   for (const entry of windows) {
     const active = entry.documents.find((doc) => doc.key === entry.active) ?? entry.documents[0]
@@ -142,7 +142,7 @@ export async function target(project?: unknown): Promise<Target> {
 
   if (named) {
     if (!isProjectPath(named)) {
-      throw new Error(`${baseName(named)} is not a Herald Canvas project (a folder ending in ${PROJECT_EXTENSION}); open it with canvas.open first`)
+      throw new Error(`${baseName(named)} is not a Bantu Canvas project (a folder ending in ${PROJECT_EXTENSION}); open it with canvas.open first`)
     }
 
     const open = $documents.get().find((doc) => doc.path === named)
@@ -151,7 +151,7 @@ export async function target(project?: unknown): Promise<Target> {
       return { doc: open, live: true }
     }
 
-    if (!(await window.heraldOS.canvas.exists(named))) {
+    if (!(await window.bantuOS.canvas.exists(named))) {
       throw new Error(`There is no project at ${named}`)
     }
 
@@ -170,7 +170,7 @@ export async function target(project?: unknown): Promise<Target> {
     return target(current)
   }
 
-  throw new Error('No image is open in Herald Canvas: open one (canvas.open) or start one (canvas.new)')
+  throw new Error('No image is open in Bantu Canvas: open one (canvas.open) or start one (canvas.new)')
 }
 
 /** Record a change as one undoable step (marked as a command's in the History panel), and save it where it lives. */
@@ -205,7 +205,7 @@ export async function freeProjectPath(folder: string, name: string): Promise<str
   for (let n = 1; n < 1000; n++) {
     const candidate = `${folder}/${n === 1 ? clean : `${clean} ${n}`}${PROJECT_EXTENSION}`
 
-    if (!(await window.heraldOS.canvas.exists(candidate))) {
+    if (!(await window.bantuOS.canvas.exists(candidate))) {
       return candidate
     }
   }
@@ -275,7 +275,7 @@ export function gradientRaster(width: number, height: number, text: string, styl
 /** An image for a layer: a file, an http(s) address, or a data: URL. */
 export async function loadImage(source: string): Promise<Raster> {
   if (/^https?:\/\//i.test(source)) {
-    const fetched = await window.heraldOS.canvas.fetchImage(source)
+    const fetched = await window.bantuOS.canvas.fetchImage(source)
 
     return toRaster(fetched.image, 4, fetched.svg)
   }
@@ -290,7 +290,7 @@ export async function loadImage(source: string): Promise<Raster> {
   const extension = /(\.[^./]+)$/.exec(file)?.[1]?.toLowerCase() ?? ''
 
   if (!CANVAS_IMAGE_EXTENSIONS.has(extension)) {
-    throw new Error(`Herald Canvas does not read ${extension || 'that kind of file'}`)
+    throw new Error(`Bantu Canvas does not read ${extension || 'that kind of file'}`)
   }
 
   return readPicture(file)
@@ -342,29 +342,29 @@ export async function open(path: unknown): Promise<Outcome> {
   if (typeof path !== 'string' || !path.trim()) {
     openInCanvas()
 
-    return { summary: 'Opened Herald Canvas' }
+    return { summary: 'Opened Bantu Canvas' }
   }
 
   const file = resolve(path)
 
-  if (!(await window.heraldOS.canvas.exists(file))) {
+  if (!(await window.bantuOS.canvas.exists(file))) {
     throw new Error(`Nothing at ${file}`)
   }
 
   if (isProjectPath(file)) {
     await show(file)
 
-    return { summary: `Opened ${baseName(file)} in Herald Canvas`, data: { path: file } }
+    return { summary: `Opened ${baseName(file)} in Bantu Canvas`, data: { path: file } }
   }
 
   // An image becomes a project beside the others, so edits never touch the original; a Photoshop document keeps its layers.
   const { doc, notes } = isLayeredImage(file) ? await (await import('./psd/psd.ts')).documentFromPsd(file) : { doc: await documentFromImage(file), notes: [] as string[] }
-  const project = await freeProjectPath(resolve('~/Pictures/Herald Canvas'), baseName(file))
+  const project = await freeProjectPath(resolve('~/Pictures/Bantu Canvas'), baseName(file))
   await saveProject(doc, project)
   await show(project)
 
   return {
-    summary: `Opened ${fileName(file)} in Herald Canvas as ${baseName(project)} (the original is untouched)${notes.length ? `. Approximated: ${notes.join('; ')}` : ''}`,
+    summary: `Opened ${fileName(file)} in Bantu Canvas as ${baseName(project)} (the original is untouched)${notes.length ? `. Approximated: ${notes.join('; ')}` : ''}`,
     data: { path: project, source: file, width: doc.state.width, height: doc.state.height, layers: doc.state.layers.length, ...(notes.length ? { notes } : {}) }
   }
 }
@@ -378,7 +378,7 @@ export async function create(args: Record<string, unknown>): Promise<Outcome> {
   }
 
   const background = (['white', 'black', 'transparent'] as const).find((kind) => kind === args.background) ?? 'white'
-  const folder = resolve(typeof args.folder === 'string' && args.folder.trim() ? args.folder : '~/Pictures/Herald Canvas')
+  const folder = resolve(typeof args.folder === 'string' && args.folder.trim() ? args.folder : '~/Pictures/Bantu Canvas')
   const file = await freeProjectPath(folder, typeof args.name === 'string' ? args.name : 'Untitled')
   const doc = newDocument(width, height, background, Math.round(finite(args.resolution) ?? 72))
 
@@ -395,7 +395,7 @@ export async function create(args: Record<string, unknown>): Promise<Outcome> {
 }
 
 export async function status(): Promise<Outcome> {
-  const windows = await window.heraldOS.canvas.presence()
+  const windows = await window.bantuOS.canvas.presence()
   const { $documents, activeDocument } = await store()
   // Desktop mode: this window holds the Canvas documents (even while the window is closed), and
   // knows them better than its last report; other windows' reports fill in the rest.
@@ -412,7 +412,7 @@ export async function status(): Promise<Outcome> {
   const current = documents.find((doc) => doc.active) ?? documents[0]
 
   return {
-    summary: documents.length ? `${documents.length} image${documents.length === 1 ? '' : 's'} open${current ? `; in front: ${current.name}` : ''}` : 'Nothing is open in Herald Canvas',
+    summary: documents.length ? `${documents.length} image${documents.length === 1 ? '' : 's'} open${current ? `; in front: ${current.name}` : ''}` : 'Nothing is open in Bantu Canvas',
     data: { documents: documents.map(({ key: _key, ...doc }) => doc), current: current?.path ?? null }
   }
 }
@@ -583,14 +583,14 @@ export async function group(args: Record<string, unknown>): Promise<Outcome> {
 /** A Color Lookup's table from a `.cube` file NasTech named, with the settings it gives (its name and size). */
 async function tableFrom(file: unknown): Promise<{ table: ColorTable; name: string; size: number }> {
   const path = resolve(String(file))
-  const table = parseCube(await window.heraldOS.canvas.readTable(path))
+  const table = parseCube(await window.bantuOS.canvas.readTable(path))
 
   return { table, name: fileName(path), size: table.size }
 }
 
-/** Herald-only settings changed by what NasTech gave, with the table its `table` file holds. */
-async function heraldChanged(current: HeraldAdjustment, settings: Record<string, unknown>): Promise<{ settings: HeraldAdjustment; table?: ColorTable }> {
-  const next = heraldWith(current, settings, readColour)
+/** Bantu-only settings changed by what NasTech gave, with the table its `table` file holds. */
+async function bantuChanged(current: BantuAdjustment, settings: Record<string, unknown>): Promise<{ settings: BantuAdjustment; table?: ColorTable }> {
+  const next = bantuWith(current, settings, readColour)
 
   if (settings.table === undefined || settings.table === '') {
     return { settings: next }
@@ -609,19 +609,19 @@ export async function addAdjustment(args: Record<string, unknown>): Promise<Outc
   const on = await target(args.project)
   const { state } = on.doc
   const asked = String(args.kind ?? '').toLowerCase()
-  const kind = [...ADJUSTMENT_KINDS, ...HERALD_ADJUSTMENT_KINDS].find((entry) => entry.toLowerCase() === asked)
+  const kind = [...ADJUSTMENT_KINDS, ...BANTU_ADJUSTMENT_KINDS].find((entry) => entry.toLowerCase() === asked)
 
   if (!kind) {
-    throw new Error(`Adjustments: ${[...ADJUSTMENT_KINDS, ...HERALD_ADJUSTMENT_KINDS].join(', ')}`)
+    throw new Error(`Adjustments: ${[...ADJUSTMENT_KINDS, ...BANTU_ADJUSTMENT_KINDS].join(', ')}`)
   }
 
   const settings = jsonObject(args.settings, 'settings', '{"saturation": 20}')
   const appearance = { ...(typeof args.name === 'string' && args.name.trim() ? { name: args.name.trim() } : {}), opacity: opacityFrom(args.opacity) ?? 1, blendMode: blendFrom(args.blend) ?? 'Normal' }
   let layer: CanvasLayer
 
-  if (isHeraldKind(kind)) {
-    const changed = await heraldChanged(defaultHeraldAdjustment(kind), settings)
-    layer = { ...heraldLayer(kind, state.width, state.height), ...appearance, ...withHerald(changed.settings), ...(changed.table ? { table: changed.table } : {}) }
+  if (isBantuKind(kind)) {
+    const changed = await bantuChanged(defaultBantuAdjustment(kind), settings)
+    layer = { ...bantuLayer(kind, state.width, state.height), ...appearance, ...withBantu(changed.settings), ...(changed.table ? { table: changed.table } : {}) }
   } else {
     layer = { ...adjustmentLayer(kind, state.width, state.height), ...appearance, adjustment: adjustmentWith(defaultAdjustment(kind), settings, readColour) }
   }
@@ -682,16 +682,16 @@ export async function setAdjustment(args: Record<string, unknown>): Promise<Outc
   const settings = jsonObject(args.settings, 'settings', '{"saturation": -30}')
   const patch: Partial<CanvasLayer> = {}
   const changes: string[] = []
-  const herald = heraldOf(layer)
+  const bantu = bantuOf(layer)
 
-  if (layer.heraldAdjustment && !herald) {
-    throw new Error(`${layer.name} is a ${String(layer.heraldAdjustment.kind)} adjustment from a newer Herald Canvas: this version cannot change it`)
+  if (layer.bantuAdjustment && !bantu) {
+    throw new Error(`${layer.name} is a ${String(layer.bantuAdjustment.kind)} adjustment from a newer Bantu Canvas: this version cannot change it`)
   }
 
   if (Object.keys(settings).length) {
-    if (herald) {
-      const changed = await heraldChanged(herald, settings)
-      Object.assign(patch, withHerald(changed.settings), changed.table ? { table: changed.table } : {})
+    if (bantu) {
+      const changed = await bantuChanged(bantu, settings)
+      Object.assign(patch, withBantu(changed.settings), changed.table ? { table: changed.table } : {})
     } else {
       patch.adjustment = adjustmentWith(layer.adjustment, settings, readColour)
     }
@@ -717,7 +717,7 @@ export async function setAdjustment(args: Record<string, unknown>): Promise<Outc
     throw new Error('Nothing to change: give settings (a JSON object), opacity or blend')
   }
 
-  await apply(on, herald?.kind ?? layer.adjustment.kind, withLayer(on.doc.state, layer.id, patch))
+  await apply(on, bantu?.kind ?? layer.adjustment.kind, withLayer(on.doc.state, layer.id, patch))
 
   return { summary: `${layer.name}: ${changes.join(', ')}`, data: { layer: describeLayer(on.doc.state, findLayer(on.doc.state, layer.id)!) } }
 }
@@ -1064,7 +1064,7 @@ export async function exportTo(args: Record<string, unknown>): Promise<Outcome> 
     file = `${file}.${kind === 'jpeg' ? 'jpg' : kind}`
   }
 
-  if ((await window.heraldOS.canvas.exists(file)) && args.overwrite !== true) {
+  if ((await window.bantuOS.canvas.exists(file)) && args.overwrite !== true) {
     throw new Error(`${fileName(file)} already exists: pass overwrite=true to replace it`)
   }
 
@@ -1096,7 +1096,7 @@ export async function save(args: Record<string, unknown>): Promise<Outcome> {
     throw new Error('This image has never been saved: say where, with to=~/Pictures/Name.comp')
   }
 
-  if (to && file !== on.doc.path && (await window.heraldOS.canvas.exists(file)) && args.overwrite !== true) {
+  if (to && file !== on.doc.path && (await window.bantuOS.canvas.exists(file)) && args.overwrite !== true) {
     throw new Error(`${baseName(file)} already exists: pass overwrite=true to replace it`)
   }
 
@@ -1110,7 +1110,7 @@ export async function save(args: Record<string, unknown>): Promise<Outcome> {
   return { summary: `Saved ${baseName(file)}`, data: { path: file } }
 }
 
-const PREVIEW_FOLDER = '/tmp/herald-canvas-previews'
+const PREVIEW_FOLDER = '/tmp/bantu-canvas-previews'
 
 /** A flattened PNG of the image for NasTech to look at, at most `size` pixels on its long side. */
 export async function preview(args: Record<string, unknown>): Promise<Outcome> {
@@ -1120,7 +1120,7 @@ export async function preview(args: Record<string, unknown>): Promise<Outcome> {
   const scale = Math.min(1, side / Math.max(state.width, state.height))
   const raster = flatten(state, scale)
   const name = (on.doc.path ? baseName(on.doc.path) : on.doc.name).replace(/[^\w.-]+/g, '-') || 'canvas'
-  const file = await window.heraldOS.canvas.writeFile(`${PREVIEW_FOLDER}/${name}.png`, { width: raster.width, height: raster.height, channels: 4, data: new Uint8Array(raster.data.buffer, raster.data.byteOffset, raster.data.byteLength) })
+  const file = await window.bantuOS.canvas.writeFile(`${PREVIEW_FOLDER}/${name}.png`, { width: raster.width, height: raster.height, channels: 4, data: new Uint8Array(raster.data.buffer, raster.data.byteOffset, raster.data.byteLength) })
 
   return {
     summary: `Preview of ${on.doc.name} (${raster.width}×${raster.height}): ${file}`,
@@ -1284,9 +1284,9 @@ export async function step(direction: 'undo' | 'redo', args: Record<string, unkn
   if (!on.live) {
     if (isPanels) {
       // The Canvas window is its own process there: it takes the request as its payload.
-      await window.heraldOS.shell.open('window:canvas', { type: 'payload', payload: { command: direction, path: on.doc.path, steps: count, at: Date.now() } })
+      await window.bantuOS.shell.open('window:canvas', { type: 'payload', payload: { command: direction, path: on.doc.path, steps: count, at: Date.now() } })
 
-      return { summary: `Asked Herald Canvas to ${direction} ${count === 1 ? 'a step' : `${count} steps`} in ${on.doc.name}` }
+      return { summary: `Asked Bantu Canvas to ${direction} ${count === 1 ? 'a step' : `${count} steps`} in ${on.doc.name}` }
     }
 
     throw new Error('Undo works in the open Canvas window: open the project first')

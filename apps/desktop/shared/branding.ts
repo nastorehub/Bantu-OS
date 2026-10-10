@@ -1,6 +1,6 @@
 /*
- * Branding: a logo and a name for About, and a lock-screen picture (Herald OS Linux). Kept in
- * ~/.config/herald-os/branding/ by main, which copies the images there; pure and tested.
+ * Branding: a logo and a name for About, and a lock-screen picture (Bantu OS Linux). Kept in
+ * ~/.config/bantu-os/branding/ by main, which copies the images there; pure and tested.
  */
 
 export interface BrandingView {

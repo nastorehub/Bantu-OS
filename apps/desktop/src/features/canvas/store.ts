@@ -1,5 +1,5 @@
 /*
- * Herald Canvas's open documents in this window. Projects on disk are watched: a change made
+ * Bantu Canvas's open documents in this window. Projects on disk are watched: a change made
  * elsewhere (NasTech, Compositor, another window) comes in as an undoable step, or as a question
  * when there are unsaved edits here. Saved projects save themselves shortly after each edit.
  */
@@ -51,7 +51,7 @@ export function showNotes(title: string, notes: string[]): void {
   }
 }
 
-const AUTOSAVE_KEY = 'herald-canvas.autosave'
+const AUTOSAVE_KEY = 'bantu-canvas.autosave'
 export const $autosave = atom<boolean>(globalThis.localStorage?.getItem(AUTOSAVE_KEY) !== 'off')
 
 export function setAutosave(on: boolean): void {
@@ -78,7 +78,7 @@ export const activeDocument = (): CanvasDocument | null => $documents.get().find
 
 /** Tell main what is open here, so NasTech's commands know which image is in front. */
 export function reportPresence(focused = false): void {
-  window.heraldOS.canvas.report({
+  window.bantuOS.canvas.report({
     focused,
     active: $activeKey.get(),
     documents: $documents.get().map((doc) => ({ key: doc.key, path: doc.path, name: doc.name, width: doc.state.width, height: doc.state.height, modified: doc.modified, layers: doc.state.layers.length }))
@@ -204,7 +204,7 @@ export async function save(doc: CanvasDocument | null = activeDocument(), option
   let file = options.to ?? doc.path
 
   if (!file || (options.as && !options.to)) {
-    file = await window.heraldOS.canvas.pickSave('project', doc.name)
+    file = await window.bantuOS.canvas.pickSave('project', doc.name)
 
     if (!file) {
       return false
@@ -243,7 +243,7 @@ export async function exportDocument(doc: CanvasDocument | null, kind: ExportKin
     return null
   }
 
-  const file = await window.heraldOS.canvas.pickSave(kind, doc.name)
+  const file = await window.bantuOS.canvas.pickSave(kind, doc.name)
 
   if (!file) {
     return null

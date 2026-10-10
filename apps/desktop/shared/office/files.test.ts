@@ -15,7 +15,7 @@ describe('extensionOf and formatOf', () => {
 })
 
 describe('openFormats and saveFormats', () => {
-  it('offers only what Herald reads and writes', () => {
+  it('offers only what Bantu reads and writes', () => {
     expect(openFormats('docs', plain).map((format) => format.extension)).toEqual(['.docx', '.docm', '.md', '.markdown', '.txt'])
     expect(saveFormats('docs', plain).map((format) => format.extension)).toEqual(['.docx', '.md', '.txt'])
     expect(openFormats('sheets', plain).map((format) => format.extension)).toEqual(['.xlsx', '.xlsm', '.csv'])

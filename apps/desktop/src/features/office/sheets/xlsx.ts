@@ -17,7 +17,7 @@ export type XlsxResponse = { id: number; ok: true; read?: XlsxReadResult; writte
 let worker: Worker | null = null
 let nextId = 0
 const waiting = new Map<number, { resolve: (response: XlsxResponse) => void; reject: (error: Error) => void }>()
-/** The file each workbook was read from, by the workbook's id: saving it carries over the parts Herald does not model. */
+/** The file each workbook was read from, by the workbook's id: saving it carries over the parts Bantu does not model. */
 const originals = new Map<string, Uint8Array>()
 const KEPT_ORIGINALS = 24
 
@@ -27,7 +27,7 @@ function start(): Worker | null {
   }
 
   if (!worker) {
-    worker = new Worker(new URL('./xlsx-worker.ts', import.meta.url), { type: 'module', name: 'herald-sheets-xlsx' })
+    worker = new Worker(new URL('./xlsx-worker.ts', import.meta.url), { type: 'module', name: 'bantu-sheets-xlsx' })
     worker.onmessage = (event: MessageEvent<XlsxResponse>) => {
       waiting.get(event.data.id)?.resolve(event.data)
       waiting.delete(event.data.id)
@@ -61,7 +61,7 @@ function ask(request: Work): Promise<XlsxResponse> | null {
   })
 }
 
-/** Read an .xlsx file into a workbook snapshot, with what Herald Sheets could not keep. */
+/** Read an .xlsx file into a workbook snapshot, with what Bantu Sheets could not keep. */
 export async function readXlsx(bytes: Uint8Array, options: { id: string; name: string; extension?: string }): Promise<XlsxReadResult> {
   originals.set(options.id, bytes)
 

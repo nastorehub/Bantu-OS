@@ -50,7 +50,7 @@ export function addSlideStyles(): void {
 
   added = true
   const style = document.createElement('style')
-  style.dataset.heraldSlides = ''
+  style.dataset.bantuSlides = ''
   style.textContent = SLIDE_CSS
   document.head.append(style)
 }

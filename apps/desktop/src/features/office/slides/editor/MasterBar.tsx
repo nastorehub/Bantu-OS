@@ -17,7 +17,7 @@ import { ThemePanel } from './ThemePanel.tsx'
 /*
  * The bar over the slide in the master view: what goes on the master (a logo, its background, the
  * header and footer, the theme) and on the layout in front (its background, whether it shows the
- * master's drawings, its name), putting Herald's master back, and the way out of the view. Also the
+ * master's drawings, its name), putting Bantu's master back, and the way out of the view. Also the
  * dialogs the bar, the panels and the menus open, mounted once in the window.
  */
 
@@ -83,7 +83,7 @@ function LogoPanel({ doc, onDone }: { doc: SlidesDocument; onDone: () => void })
           event.target.value = ''
 
           if (picked) {
-            insertLogo(picked, { corner, ...(layout && layoutOnly ? { layoutId: layout } : {}) }, doc).then(onDone, () => commands.notify('Herald Slides could not read that picture'))
+            insertLogo(picked, { corner, ...(layout && layoutOnly ? { layoutId: layout } : {}) }, doc).then(onDone, () => commands.notify('Bantu Slides could not read that picture'))
           }
         }}
       />
@@ -115,7 +115,7 @@ function RenamePanel({ doc, onDone }: { doc: SlidesDocument; onDone: () => void 
 function ResetPanel({ doc, onDone }: { doc: SlidesDocument; onDone: () => void }) {
   return (
     <div className="flex w-[260px] flex-col gap-2.5 text-[12px] text-fg-2">
-      <p>Put Herald’s master and layouts back in place of this deck’s? Slides keep what they say; what was added to the master and layouts goes.</p>
+      <p>Put Bantu’s master and layouts back in place of this deck’s? Slides keep what they say; what was added to the master and layouts goes.</p>
       <div className="flex justify-end gap-1.5">
         <button type="button" onClick={onDone} className="h-7 rounded-md px-2.5 hover:bg-white/8 hover:text-fg">
           Cancel

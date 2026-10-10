@@ -5,7 +5,7 @@ import { decodeText, encodeText } from '../print.ts'
 import type { OfficeAdapter } from '../types.ts'
 
 /*
- * Herald Docs' files: Word documents (read by our own WordprocessingML mapper, written with the
+ * Bantu Docs' files: Word documents (read by our own WordprocessingML mapper, written with the
  * docx package, both loaded only when a Word file is opened or saved), Markdown and plain text, and
  * the print view main turns into a PDF, its pages laid out as the page view lays them out.
  */

@@ -1,6 +1,6 @@
 /*
  * A picture's pixel size and type from its first bytes, for the formats a browser shows: PNG, JPEG,
- * GIF, BMP and WebP. Anything else (EMF, WMF, TIFF…) gives null, as Herald cannot show it, and so
+ * GIF, BMP and WebP. Anything else (EMF, WMF, TIFF…) gives null, as Bantu cannot show it, and so
  * does a file cut short before its size.
  */
 
@@ -100,7 +100,7 @@ function webp(bytes: Uint8Array): ImageSize | null {
   return null
 }
 
-/** A picture's size in pixels and its MIME type, or null when it is not one Herald can show. */
+/** A picture's size in pixels and its MIME type, or null when it is not one Bantu can show. */
 export function imageSize(bytes: Uint8Array): ImageSize | null {
   if (has(bytes, 0, PNG)) {
     return bytes.length >= 24 && word(bytes, 12, 'IHDR') ? sized(u32be(bytes, 16), u32be(bytes, 20), 'image/png') : null

@@ -215,7 +215,7 @@ export function CommandPalette({ onClose, standalone = false, onApplications, cl
                 key={app.path}
                 value={`app:${app.name}`}
                 onSelect={() => {
-                  window.heraldOS.apps.launch(app.path).catch(() => undefined)
+                  window.bantuOS.apps.launch(app.path).catch(() => undefined)
                   close()
                 }}
                 icon={<IconArrowRight size={15} />}

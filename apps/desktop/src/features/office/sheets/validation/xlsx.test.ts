@@ -27,7 +27,7 @@ const RULES: Args[] = [
   { range: 'H2:H9', rule: { type: 'any' }, input: { title: 'Notes', message: 'Anything you like' } }
 ]
 
-/** The rules as set, read back from Herald. */
+/** The rules as set, read back from Bantu. */
 async function written(): Promise<{ bytes: Uint8Array; set: ValidationSettings[]; losses: string[] }> {
   const book = newWorkbook('book', 'Book', [newSheet('s1', 'Orders'), newSheet('s2', 'Lists', { 0: { 0: { v: 'Red', t: CELL_TYPE.string }, 1: { v: 2, t: CELL_TYPE.number } } })])
   const { result, snapshot } = await withHeadlessSheets(book, async ({ univer, workbook }) => {

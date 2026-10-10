@@ -1,14 +1,14 @@
-"""Carry pre-rename "NasTech OS" settings in the NasTech config over to Herald OS. Idempotent.
+"""Carry pre-rename "NasTech OS" settings in the NasTech config over to Bantu OS. Idempotent.
 
 Run by scripts/bootstrap.sh with the NasTech runtime's own interpreter (it needs ``nastech_cli``):
 
     python scripts/migrate-nastech-config.py
 
 Renames, wherever they appear in ``$NASTECH_HOME/config.yaml``:
-  plugin   nastech-os-bridge  -> herald-os-bridge   (plugins.enabled / disabled / entries)
-  toolset  nastech_os         -> herald_os          (platform_toolsets, known_plugin_toolsets)
-  "always allow" approvals   plugin_rule:nastech_os:*  -> plugin_rule:herald_os:*
-  section  nastech_os         -> herald_os
+  plugin   nastech-os-bridge  -> bantu-os-bridge   (plugins.enabled / disabled / entries)
+  toolset  nastech_os         -> bantu_os          (platform_toolsets, known_plugin_toolsets)
+  "always allow" approvals   plugin_rule:nastech_os:*  -> plugin_rule:bantu_os:*
+  section  nastech_os         -> bantu_os
 """
 
 from __future__ import annotations
@@ -17,9 +17,9 @@ import copy
 import sys
 from typing import Any, Callable
 
-OLD_PLUGIN, NEW_PLUGIN = "nastech-os-bridge", "herald-os-bridge"
-OLD_TOOLSET, NEW_TOOLSET = "nastech_os", "herald_os"
-OLD_RULE, NEW_RULE = "plugin_rule:nastech_os:", "plugin_rule:herald_os:"
+OLD_PLUGIN, NEW_PLUGIN = "nastech-os-bridge", "bantu-os-bridge"
+OLD_TOOLSET, NEW_TOOLSET = "nastech_os", "bantu_os"
+OLD_RULE, NEW_RULE = "plugin_rule:nastech_os:", "plugin_rule:bantu_os:"
 
 
 def _renamed(values: Any, rename: Callable[[Any], Any]) -> Any:
@@ -87,7 +87,7 @@ def main() -> int:
         print("    NasTech config: nothing to migrate")
         return 0
     save_config(migrated)
-    print("    NasTech config: moved NasTech OS plugin, toolset and approvals to Herald OS")
+    print("    NasTech config: moved NasTech OS plugin, toolset and approvals to Bantu OS")
     return 0
 
 

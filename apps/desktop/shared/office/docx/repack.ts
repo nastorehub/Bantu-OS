@@ -90,11 +90,11 @@ export class Repack {
     const ids = new Set(relationships.map((element) => attributeOf(element, 'Id')))
     let number = 1
 
-    while (ids.has(`rIdHerald${number}`)) {
+    while (ids.has(`rIdBantu${number}`)) {
       number++
     }
 
-    const id = `rIdHerald${number}`
+    const id = `rIdBantu${number}`
     this.setText(path, xml.replace('</Relationships>', `<Relationship Id="${id}" Type="${escaped(type)}" Target="${escaped(relativeTarget(source, target))}"/></Relationships>`))
 
     return id

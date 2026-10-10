@@ -4,7 +4,7 @@ import { notify } from './notifications.ts'
 
 /*
  * NasTech's Tool Search (`tools.tool_search.enabled`) keeps plugin and MCP tools behind a lookup to
- * save prompt tokens. It is one setting for every NasTech session, and Herald OS turns it off at setup
+ * save prompt tokens. It is one setting for every NasTech session, and Bantu OS turns it off at setup
  * so its system tools stay directly callable (ADR-010); Settings and `agents.toolSearch.set` turn it
  * back on.
  */
@@ -40,6 +40,6 @@ export function bindBridgeSetupNotice(): () => void {
     }
 
     said = state.bridgeError
-    notify({ key: 'bridge-setup', title: 'NasTech cannot use the system tools yet', body: `${state.bridgeError}. Herald OS tries again at its next start.`, level: 'error' })
+    notify({ key: 'bridge-setup', title: 'NasTech cannot use the system tools yet', body: `${state.bridgeError}. Bantu OS tries again at its next start.`, level: 'error' })
   })
 }

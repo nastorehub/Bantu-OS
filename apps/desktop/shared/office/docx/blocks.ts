@@ -2,7 +2,7 @@ import { type CalloutKind, type DocNode, textNode } from '../document.ts'
 import type { ListType } from './numbering.ts'
 
 /*
- * The blocks of a Word file's text, read paragraph by paragraph, put together the way Herald Docs
+ * The blocks of a Word file's text, read paragraph by paragraph, put together the way Bantu Docs
  * nests them: numbered paragraphs into lists by their numbering and level, the paragraphs that
  * continue a list item into it, code lines into code blocks, and quote and callout paragraphs
  * into quotes and callouts.
@@ -191,7 +191,7 @@ function flow(entries: readonly Entry[]): DocNode[] {
   return out
 }
 
-/** Herald Docs blocks from the entries of a part of the file, in order. */
+/** Bantu Docs blocks from the entries of a part of the file, in order. */
 export function assemble(entries: readonly Entry[]): DocNode[] {
   const out: DocNode[] = []
   let start = 0

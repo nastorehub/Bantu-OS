@@ -9,11 +9,11 @@ import { openValidationDialog } from './ValidationDialog.tsx'
 /** Univer's own validation sidebar opens with this; its list dropdown's Edit opens it on the rule. */
 const UNIVER_VALIDATION_PANEL = 'data-validation.operation.open-validation-panel'
 const LIST_DROPDOWN = 'sheet.operation.show-data-validation-dropdown'
-const INPUT_MESSAGE = 'herald-sheets-validation-input-message'
+const INPUT_MESSAGE = 'bantu-sheets-validation-input-message'
 
 /**
  * Once a workbook is on screen: the selected cell's input message shows beside it (Univer keeps
- * them but does not show them), and Univer's validation sidebar opens Herald's Data validation
+ * them but does not show them), and Univer's validation sidebar opens Bantu's Data validation
  * dialog instead; gives what stops both.
  */
 export function attachValidation(engine: Pick<SheetsEngine, 'univer' | 'api' | 'unitId'>, docKey: string): () => void {

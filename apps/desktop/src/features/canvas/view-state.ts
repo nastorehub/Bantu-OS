@@ -27,7 +27,7 @@ export interface ViewOptions {
   smartGuides: boolean
 }
 
-const VIEW_OPTIONS_KEY = 'herald-canvas.view'
+const VIEW_OPTIONS_KEY = 'bantu-canvas.view'
 
 const DEFAULT_VIEW: ViewOptions = { rulers: false, guides: true, lockGuides: false, snap: true, snapGuides: true, snapLayers: true, snapCanvas: true, smartGuides: true }
 
@@ -49,7 +49,7 @@ export function setViewOption<K extends keyof ViewOptions>(key: K, value: ViewOp
 
 export type PanelTab = 'properties' | 'history'
 
-const PANEL_TAB_KEY = 'herald-canvas.panel-tab'
+const PANEL_TAB_KEY = 'bantu-canvas.panel-tab'
 
 /** Which panel shares the side with the Layers panel. */
 export const $panelTab = atom<PanelTab>(globalThis.localStorage?.getItem(PANEL_TAB_KEY) === 'history' ? 'history' : 'properties')

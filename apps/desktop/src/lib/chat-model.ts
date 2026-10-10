@@ -8,7 +8,7 @@ import type {
   TranscriptMessage,
   TurnStatus,
   Usage
-} from '@herald-os/client'
+} from '@bantu-os/client'
 
 export interface UserMessage {
   id: string

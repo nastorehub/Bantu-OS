@@ -18,7 +18,7 @@ import { $presentation, decks } from './store.ts'
 /*
  * Presenting: the deck's shown slides one at a time over everything, fitted to the window, each
  * coming in by its transition, with an end screen after the last; or the presenter view, the
- * slides beside it in Herald's window or on another display. Arrows, Space, Enter, Page keys and
+ * slides beside it in Bantu's window or on another display. Arrows, Space, Enter, Page keys and
  * clicks move on; typing a number and Enter jumps; B and W blank the screen; Escape ends.
  */
 
@@ -30,9 +30,9 @@ export { stopPresenting }
 
 /** How to present. */
 export interface PresentOptions {
-  /** Show the presenter view: the slides go on another display when there is one, else beside it in Herald's window. */
+  /** Show the presenter view: the slides go on another display when there is one, else beside it in Bantu's window. */
   presenter?: boolean
-  /** With the presenter view, keep the slides beside it in Herald's window even when another display is there. */
+  /** With the presenter view, keep the slides beside it in Bantu's window even when another display is there. */
   oneDisplay?: boolean
 }
 
@@ -53,7 +53,7 @@ export function startPresenting(key: string, index: number, options: PresentOpti
     return
   }
 
-  // Herald's own window fills the screen already, and the developer's window is presented in;
+  // Bantu's own window fills the screen already, and the developer's window is presented in;
   // a window of its own (panels) goes full screen.
   const own = isPanels || (!$env.get()?.isDev && (window.outerWidth < screen.width || window.outerHeight < screen.height))
 

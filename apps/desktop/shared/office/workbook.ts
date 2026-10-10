@@ -1,5 +1,5 @@
 /*
- * The parts of a Univer workbook snapshot Herald's converters read and write. They are plain data
+ * The parts of a Univer workbook snapshot Bantu's converters read and write. They are plain data
  * (Univer's own types describe the same shapes), so converters run anywhere, tests included.
  */
 
@@ -38,7 +38,7 @@ export interface WorkbookSnapshot {
   [key: string]: unknown
 }
 
-/** The smallest sheet Herald shows, so a short file still has room to grow. */
+/** The smallest sheet Bantu shows, so a short file still has room to grow. */
 const MIN_ROWS = 1000
 const MIN_COLUMNS = 26
 

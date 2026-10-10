@@ -135,7 +135,7 @@ function sheetMenus(): { edit: OfficeCommand[]; menus: OfficeMenu[] } {
   }
 }
 
-/** Herald Sheets: spreadsheets on Univer in a Herald window. */
+/** Bantu Sheets: spreadsheets on Univer in a Bantu window. */
 export function SheetsWindow({ payload }: { payload?: Record<string, unknown> }) {
   const [canOpen, setCanOpen] = useState(true)
 
@@ -150,7 +150,7 @@ export function SheetsWindow({ payload }: { payload?: Record<string, unknown> })
       if (officeAppFor(file, abilities) === 'sheets') {
         sheetsSession.open(file).catch((error: unknown) => sheetsSession.notify(`Could not open ${file.split('/').pop()}: ${messageOf(error)}`, 'error'))
       } else {
-        sheetsSession.notify(`Herald Sheets does not open ${file.split('/').pop()}`, 'error')
+        sheetsSession.notify(`Bantu Sheets does not open ${file.split('/').pop()}`, 'error')
       }
     })
   }

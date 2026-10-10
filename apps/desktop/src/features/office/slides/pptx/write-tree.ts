@@ -34,7 +34,7 @@ export interface TreeContext {
   extra?: XmlElement[]
 }
 
-/** The name PowerPoint's selection pane shows: the element's own, or what it is and a number (Herald's ids stay in Herald's own copy). */
+/** The name PowerPoint's selection pane shows: the element's own, or what it is and a number (Bantu's ids stay in Bantu's own copy). */
 export function nameOf(element: SlideElement, names: Map<string, number>, base = element.name ?? describeElement(element)): string {
   const n = (names.get(base) ?? 0) + 1
   names.set(base, n)

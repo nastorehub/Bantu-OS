@@ -57,12 +57,12 @@ import { count, drop, emptyReport, type ImportReport, note, type ReportKind } fr
 import { attr, child, childrenNamed, descendants, elements, find, flagAttr, numberAttr, parseXml, textOf, xml, type XmlElement } from './xml.ts'
 
 /*
- * Reading a PowerPoint file (.pptx, and .pptm the same way) into a Herald deck. Parts are found
+ * Reading a PowerPoint file (.pptx, and .pptm the same way) into a Bantu deck. Parts are found
  * through their relationships, as PowerPoint finds them. The master most slides use becomes the
- * deck's, with a layout for each of Herald's; each slide's shapes are read back to front with what
- * their placeholders, layout, master and theme lend them, and become Herald's text boxes, shapes,
+ * deck's, with a layout for each of Bantu's; each slide's shapes are read back to front with what
+ * their placeholders, layout, master and theme lend them, and become Bantu's text boxes, shapes,
  * lines and connectors, pictures, tables (their styles worked out into each cell) and the objects
- * it keeps as they were (charts, SmartArt, embedded objects). What Herald has no element for is
+ * it keeps as they were (charts, SmartArt, embedded objects). What Bantu has no element for is
  * shown as the nearest thing it has (a pattern as one colour) or left out, and the report counts
  * every element once, as kept, approximated or left out, with the reasons.
  */
@@ -75,7 +75,7 @@ const WHY = {
   hidden: 'hidden objects left out',
   unreadable: 'objects that could not be read left out',
   nested: 'groups nested too deeply left out',
-  nearestShape: 'shapes Herald does not draw shown as the nearest shape it does',
+  nearestShape: 'shapes Bantu does not draw shown as the nearest shape it does',
   customShape: 'custom shapes drawn as rectangles',
   gradient: 'gradient lines and text shown in one colour',
   pattern: 'pattern fills shown as a solid colour',
@@ -84,7 +84,7 @@ const WHY = {
   effects: 'shadows and other effects left out',
   objectLinks: 'links on objects left out',
   lineText: 'text on lines left out',
-  straight: 'connectors Herald does not draw shown straight',
+  straight: 'connectors Bantu does not draw shown straight',
   customDash: 'custom dashes shown as plain dashes',
   links: 'links kept as plain text',
   scripts: 'superscript and subscript shown as ordinary text',
@@ -95,7 +95,7 @@ const WHY = {
   turnedText: 'text turned inside its shape shown upright',
   wordArt: 'WordArt shown as plain text',
   exactSpacing: 'exact line spacing shown as a multiple',
-  numbering: 'list numbers shown in the nearest style Herald has',
+  numbering: 'list numbers shown in the nearest style Bantu has',
   pictureBullets: 'picture bullets shown as dots',
   pictureCut: 'pictures cut to shapes shown as rectangles',
   tiled: 'tiled pictures shown stretched',
@@ -107,7 +107,7 @@ const WHY = {
   oleBox: 'embedded objects without a picture shown as a box (kept in the file as they were)',
   chartBox: 'charts shown as a box (kept in the file as they were)',
   diagramBox: 'SmartArt without a drawing shown as a box (kept in the file as it was)',
-  format: 'pictures in formats Herald cannot show',
+  format: 'pictures in formats Bantu cannot show',
   missing: 'pictures missing from the file left out',
   linked: 'pictures linked from outside the file left out',
   emptyTables: 'tables without cells left out',
@@ -117,7 +117,7 @@ const WHY = {
   turnedTables: 'turned tables shown upright',
   backgroundStretch: 'background pictures fill the slide without stretching',
   backgroundTiles: 'tiled backgrounds shown as one picture',
-  transitions: 'transitions shown as the nearest one Herald plays',
+  transitions: 'transitions shown as the nearest one Bantu plays',
   footers: 'dates, footers and slide numbers shown as most slides have them',
   graphics: 'background graphics shown on slides that did not show them'
 } as const
@@ -142,7 +142,7 @@ const GROUPS: Record<string, string> = {
   ...each('bullet', 'a:buNone a:buAutoNum a:buChar a:buBlip')
 }
 
-/** Presets Herald does not draw, by the shape of its own they look most like (anything else is a rectangle). */
+/** Presets Bantu does not draw, by the shape of its own they look most like (anything else is a rectangle). */
 const NEAREST: Record<string, ShapeKind> = {
   round2DiagRect: 'round2SameRect',
   snip2DiagRect: 'snip2SameRect',
@@ -199,7 +199,7 @@ const LAYOUT_TYPES: Record<string, LayoutId> = {
   picTx: 'picture-caption'
 }
 
-/** Layouts by name, for layouts without a type: Herald's names (which the layouts it writes carry) and PowerPoint's own for its title slide. */
+/** Layouts by name, for layouts without a type: Bantu's names (which the layouts it writes carry) and PowerPoint's own for its title slide. */
 const LAYOUT_BY_NAME: Record<string, LayoutId> = { ...Object.fromEntries(LAYOUTS.map((id) => [LAYOUT_NAMES[id].toLowerCase(), id])), 'title slide': 'title' }
 
 /** Placeholder types that hold a layout's content. */
@@ -208,17 +208,17 @@ const CONTENT: ReadonlySet<string> = new Set(['body', 'obj', 'chart', 'tbl', 'cl
 /** Date, footer, slide number and header placeholders. */
 const FOOTERS: ReadonlySet<string> = new Set(['dt', 'ftr', 'sldNum', 'hdr'])
 
-/** The date, footer and slide number placeholders, by the role Herald gives each. */
+/** The date, footer and slide number placeholders, by the role Bantu gives each. */
 const FOOTER_TYPES: Record<string, FooterRole> = { dt: 'date', ftr: 'footer', sldNum: 'number' }
 
-/** What Herald's layouts call the body placeholders that PowerPoint's leave as plain text. */
+/** What Bantu's layouts call the body placeholders that PowerPoint's leave as plain text. */
 const BODY_ROLES: Partial<Record<LayoutId, PlaceholderRole>> = { section: 'subtitle', comparison: 'heading', 'picture-caption': 'caption' }
 
 const ALIGNS: Record<string, TextAlign> = { l: 'left', ctr: 'center', r: 'right', just: 'justify', justLow: 'justify', dist: 'justify', thaiDist: 'justify' }
 
 const ANCHORS: Record<string, Anchor> = { t: 'top', ctr: 'middle', b: 'bottom' }
 
-/** PowerPoint's list numbering, as Herald's own styles or the nearest of them. */
+/** PowerPoint's list numbering, as Bantu's own styles or the nearest of them. */
 const NUMBERINGS: Record<string, NumberStyle> = {
   ...Object.fromEntries(NUMBER_STYLES.map((style) => [style, style])),
   alphaLcParenBoth: 'alphaLcParenR',
@@ -275,7 +275,7 @@ const UNSEEN: Stroke = { color: 'tx1', width: 0.75, dash: 'solid', alpha: 0 }
 /** The theme's background colour as a background of its own, for a slide or layout showing it over one that differs. */
 const THEME_BACKGROUND: Background = { kind: 'solid', color: 'bg1' }
 
-/** The graphic frames Herald keeps as they were, as the object each becomes. */
+/** The graphic frames Bantu keeps as they were, as the object each becomes. */
 const KEPT: Partial<Record<ReportKind, ObjectKind>> = { chart: 'chart', smartart: 'diagram', ole: 'ole' }
 
 const round2 = (value: number): number => Math.round(value * 100) / 100 || 0
@@ -335,17 +335,17 @@ const themeOf = (theme: ThemeInfo, slots: Record<Slot, string>, id = 'imported')
 /** The scheme colour each slot holds under a colour map: the backgrounds and text as it maps them, the accents as themselves. */
 const slotsOf = (map: Record<string, string>): Record<Slot, string> => Object.fromEntries(SLOTS.map((slot) => [slot, slot.startsWith('accent') ? slot : map[slot]])) as Record<Slot, string>
 
-/** Graphic frames a markup choice offers that Herald keeps, by the `mc:AlternateContent` they were chosen from. */
+/** Graphic frames a markup choice offers that Bantu keeps, by the `mc:AlternateContent` they were chosen from. */
 const CHOSEN = new WeakMap<XmlElement, XmlElement>()
 
-/** A markup choice's chart or SmartArt frame, which Herald keeps over the fallback's stand-in for it. */
+/** A markup choice's chart or SmartArt frame, which Bantu keeps over the fallback's stand-in for it. */
 function keptChoice(alternate: XmlElement): XmlElement | undefined {
   return childrenNamed(alternate, 'mc:Choice')
     .map((choice) => child(choice, 'p:graphicFrame'))
     .find((frame) => frame !== undefined && /\/(chart|chartex|diagram)$/.test(attr(find(frame, 'a:graphic/a:graphicData'), 'uri') ?? ''))
 }
 
-/** A shape tree's children, with markup-compatibility choices made: a chart or SmartArt Herald keeps, else the fallback where there is one, else the first choice. */
+/** A shape tree's children, with markup-compatibility choices made: a chart or SmartArt Bantu keeps, else the fallback where there is one, else the first choice. */
 function treeChildren(tree: XmlElement | undefined, depth = 0): XmlElement[] {
   return elements(tree).flatMap((node) => {
     if (node.name !== 'mc:AlternateContent') {
@@ -399,7 +399,7 @@ interface Template {
   root: XmlElement | undefined
   relationships: Relationship[]
   drawings: XmlElement[]
-  /** Those of its drawings that show the slide number, which each slide shows as its own (Herald's text has no fields). */
+  /** Those of its drawings that show the slide number, which each slide shows as its own (Bantu's text has no fields). */
   numbered: XmlElement[]
 }
 
@@ -422,7 +422,7 @@ interface Layout extends Template {
   /** Whether the master's own shapes show on this layout's slides. */
   showsMaster: boolean
   id: LayoutId
-  /** Known by its name alone, as the layouts Herald writes are (they number their placeholders from 100, in Herald's order). */
+  /** Known by its name alone, as the layouts Bantu writes are (they number their placeholders from 100, in Bantu's order). */
   named: boolean
 }
 
@@ -497,7 +497,7 @@ function mapOver(root: XmlElement, base: Record<string, string>): Record<string,
   return override ? readColorMap(override, base) : base
 }
 
-/** The Herald layout for a layout whose type and name do not say, by the placeholders it has. */
+/** The Bantu layout for a layout whose type and name do not say, by the placeholders it has. */
 function layoutFrom(placeholders: readonly PlaceholderShape[]): LayoutId {
   const types = placeholders.map((entry) => entry.type)
 
@@ -575,7 +575,7 @@ interface Scope {
   number: number
   /** The part the shapes are in, as read, for keeping an object's XML as it was written. */
   part?: { path: string; root: XmlElement }
-  /** Herald's id for each shape read, by its id in the file, for gluing connectors. */
+  /** Bantu's id for each shape read, by its id in the file, for gluing connectors. */
   ids: Map<string, string>
   links: Link[]
   /** The date, footer and slide number placeholders a slide carries. */
@@ -765,7 +765,7 @@ function roleOf(type: string, layout: LayoutId | undefined): PlaceholderRole | u
   return type === 'body' ? (BODY_ROLES[layout ?? 'title-content'] ?? 'body') : 'body'
 }
 
-/** The role of a placeholder in a layout Herald wrote, which numbers its placeholders from 100 in its own layout's order. */
+/** The role of a placeholder in a layout Bantu wrote, which numbers its placeholders from 100 in its own layout's order. */
 function writtenRole(layout: Layout | undefined, shape: PlaceholderShape | undefined): PlaceholderRole | undefined {
   if (!layout?.named || !shape || shape.idx < 100) {
     return undefined
@@ -859,7 +859,7 @@ function gradientStops(gradient: XmlElement, palette: Palette, placeholder: Pain
     .sort((a, b) => a.at - b.at)
 }
 
-/** A gradient fill (`a:gradFill`) as Herald's: along its line's angle, or spreading from the middle for a path gradient; null with fewer than two stops. */
+/** A gradient fill (`a:gradFill`) as Bantu's: along its line's angle, or spreading from the middle for a path gradient; null with fewer than two stops. */
 function gradientOf(fill: XmlElement, palette: Palette, placeholder: Paint | null): Gradient | null {
   const stops = gradientStops(fill, palette, placeholder)
 
@@ -872,7 +872,7 @@ interface FillRead {
   picture?: XmlElement
 }
 
-/** A fill element as Herald's fill; `group` is the enclosing group's fill, for `a:grpFill`. */
+/** A fill element as Bantu's fill; `group` is the enclosing group's fill, for `a:grpFill`. */
 function readFill(element: XmlElement | undefined, palette: Palette, placeholder: Paint | null, issues: Set<string>, group?: XmlElement): FillRead {
   if (element?.name === 'a:solidFill') {
     return { fill: fillOf(colorIn(element, palette, placeholder)) }
@@ -922,7 +922,7 @@ function dashOf(line: XmlElement, issues: Set<string>): Dash {
   return DASH_PRESETS[attr(child(line, 'a:prstDash'), 'val') ?? 'solid'] ?? 'solid'
 }
 
-/** An outline (`a:ln`) as Herald's stroke; null when nothing draws it. */
+/** An outline (`a:ln`) as Bantu's stroke; null when nothing draws it. */
 function readStroke(line: XmlElement | undefined, palette: Palette, placeholder: Paint | null, issues: Set<string>): Stroke | null {
   const fill = elements(line).find((node) => FILLS.has(node.name))
   let paint: Paint | null = null
@@ -1038,7 +1038,7 @@ interface Draft {
   look: RunLook
 }
 
-/** A typeface as Herald's font: the theme's heading or body font (`+mj-lt`, `+mn-ea`…), or the family. */
+/** A typeface as Bantu's font: the theme's heading or body font (`+mj-lt`, `+mn-ea`…), or the family. */
 function fontOf(typeface: string | undefined): FontRef | undefined {
   if (!typeface) {
     return undefined
@@ -1092,7 +1092,7 @@ function readRun(text: string, props: XmlElement, sources: TextSources, scope: S
   return { text: cap === 'all' ? text.toUpperCase() : text, look }
 }
 
-/** A bullet's glyph as Herald can show it: a symbol font's character becomes what it looks like, or a dot. */
+/** A bullet's glyph as Bantu can show it: a symbol font's character becomes what it looks like, or a dot. */
 function glyphOf(char: string | undefined, font: string | undefined): string {
   const glyph = char || '•'
   const code = glyph.codePointAt(0) ?? 0
@@ -1255,7 +1255,7 @@ function sharedLook(drafts: readonly Draft[]): BodyStyle {
 
 const insetOf = (props: XmlElement, name: string, fallback: number): number => pt(Math.max(0, numberAttr(props, name, fallback)))
 
-/** A text body (`p:txBody`) with what its sources lend it, as Herald's: paragraphs of runs over the look most of them share. */
+/** A text body (`p:txBody`) with what its sources lend it, as Bantu's: paragraphs of runs over the look most of them share. */
 function readBody(txBody: XmlElement | undefined, sources: TextSources, scope: Scope, issues: Set<string>): TextBody {
   const props = overlay('a:bodyPr', sources.bodies)
   const drafts = childrenNamed(txBody, 'a:p').map((paragraph) => readParagraph(paragraph, sources, scope, issues))
@@ -1316,7 +1316,7 @@ function loadPicture(scope: Scope, blip: XmlElement | undefined): Promise<Loaded
   return remember(scope.ctx.pictures, relationship.target, () => readImage(scope.ctx.pkg, relationship.target))
 }
 
-/** How much of a picture its frame cuts off; a negative side insets it, which Herald shows filling the frame. */
+/** How much of a picture its frame cuts off; a negative side insets it, which Bantu shows filling the frame. */
 function cropOf(rect: XmlElement | undefined, issues: Set<string>): Crop | undefined {
   if (!rect) {
     return undefined
@@ -1852,7 +1852,7 @@ function readCell(tc: XmlElement | undefined, parts: readonly XmlElement[], back
 const strokeKey = (stroke: Stroke | null): string => (stroke ? `${stroke.color} ${stroke.width} ${stroke.dash} ${stroke.alpha ?? 1}` : 'none')
 
 /**
- * A table (`a:tbl`) as Herald's: its grid, rows at least as tall as their text, and cells with
+ * A table (`a:tbl`) as Bantu's: its grid, rows at least as tall as their text, and cells with
  * merged ones whole, the table's style worked out into each cell's fill, text and lines. The line
  * most sides have (a cell's own, else its style's) becomes the table's, and each cell keeps the
  * sides that differ from it.
@@ -2071,7 +2071,7 @@ async function readFrame(frame: XmlElement, scope: Scope, at: readonly Transform
     return kept
   }
 
-  // A markup choice Herald cannot keep is shown as its fallback, as other choices are.
+  // A markup choice Bantu cannot keep is shown as its fallback, as other choices are.
   if (fallback) {
     return walk(treeChildren(fallback), scope, at, depth)
   }
@@ -2124,7 +2124,7 @@ async function readNode(node: XmlElement, scope: Scope, at: readonly Transform[]
   return []
 }
 
-/** Shapes back to front as Herald's elements; one that cannot be read is counted as left out and the rest go on. */
+/** Shapes back to front as Bantu's elements; one that cannot be read is counted as left out and the rest go on. */
 async function walk(nodes: readonly XmlElement[], scope: Scope, at: readonly Transform[], depth: number, group?: XmlElement): Promise<SlideElement[]> {
   const out: SlideElement[] = []
 
@@ -2294,7 +2294,7 @@ async function readTemplate(ctx: Context, master: Master, layout?: Layout): Prom
   return { background, own: bg !== undefined, elements }
 }
 
-/** A master's layouts Herald keeps: for each of its own layouts, the first that maps to it; and how many others there are. */
+/** A master's layouts Bantu keeps: for each of its own layouts, the first that maps to it; and how many others there are. */
 async function layoutsOf(ctx: Context, master: Master): Promise<{ kept: Map<LayoutId, Layout>; others: number }> {
   const listed = childrenNamed(child(master.root, 'p:sldLayoutIdLst'), 'p:sldLayoutId').map((entry) => partOf(master.relationships, attr(entry, 'r:id')))
   const paths = listed.some((entry) => entry !== undefined) ? listed : master.relationships.filter((entry) => entry.type === 'slideLayout' && !entry.external).map((entry) => entry.target)
@@ -2316,7 +2316,7 @@ async function layoutsOf(ctx: Context, master: Master): Promise<{ kept: Map<Layo
 
 /**
  * The deck's master: the background, elements and placeholders of the master most slides use, and
- * for each of Herald's layouts the first of its layouts that maps to it (Herald's own where none
+ * for each of Bantu's layouts the first of its layouts that maps to it (Bantu's own where none
  * does). Notes the drawings and background it gives slides of each layout, for each slide to add
  * what its own differ in.
  */
@@ -2329,7 +2329,7 @@ async function readMaster(ctx: Context): Promise<{ master: DeckMaster; others: n
 
   const own = await readTemplate(ctx, master)
   const drawn = own.elements.some((element) => !element.placeholder)
-  const herald = defaultMaster(ctx.size)
+  const bantu = defaultMaster(ctx.size)
   const { kept, others } = await layoutsOf(ctx, master)
   const layouts: SlideLayout[] = []
 
@@ -2337,7 +2337,7 @@ async function readMaster(ctx: Context): Promise<{ master: DeckMaster; others: n
     const layout = kept.get(id)
 
     if (!layout) {
-      layouts.push(herald.layouts.find((entry) => entry.id === id)!)
+      layouts.push(bantu.layouts.find((entry) => entry.id === id)!)
       ctx.drawn.set(id, drawn ? [master.path] : [])
       ctx.backgrounds.set(id, own.background)
       continue
@@ -2531,7 +2531,7 @@ function sizeOf(presentation: XmlElement): SlideSize {
   return width > 0 && height > 0 ? { width: pt(width), height: pt(height) } : { ...SLIDE_SIZES.wide }
 }
 
-/** A PowerPoint file's slides as a Herald deck, with what reading kept, approximated and left out. */
+/** A PowerPoint file's slides as a Bantu deck, with what reading kept, approximated and left out. */
 export async function importPresentation(zip: JSZip, title: string): Promise<{ deck: Deck; report: ImportReport }> {
   const pkg = new Package(zip)
   const path = await presentationPath(pkg)
@@ -2605,7 +2605,7 @@ export async function importPresentation(zip: JSZip, title: string): Promise<{ d
     ['sections', attempt(() => descendants(child(presentation, 'p:extLst'), 'p14:section').length, 0)],
     ['custom shows', childrenNamed(child(presentation, 'p:custShowLst'), 'p:custShow').length],
     ['slide masters besides the one most slides use', master ? masterPaths.filter((entry) => entry !== ctx.main.path).length : 0],
-    ['slide layouts Herald has no place for', master?.others ?? 0]
+    ['slide layouts Bantu has no place for', master?.others ?? 0]
   ]
 
   if (nearest) {

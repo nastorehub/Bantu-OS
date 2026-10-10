@@ -71,10 +71,10 @@ describe('workbookFromCsv and csvFromWorkbook', () => {
   })
 
   it('writes the text of a cell Univer keeps as rich text alone, as it keeps text typed into a formatted cell', () => {
-    const typed = { body: { dataStream: 'Typed in\rHerald\r\n', textRuns: [{ st: 0, ed: 1, ts: { cl: { rgb: '#0c1431' } } }, { st: 1, ed: 15, ts: { ff: 'Calibri', fs: 11 } }] } }
+    const typed = { body: { dataStream: 'Typed in\rBantu\r\n', textRuns: [{ st: 0, ed: 1, ts: { cl: { rgb: '#0c1431' } } }, { st: 1, ed: 15, ts: { ff: 'Calibri', fs: 11 } }] } }
     const workbook = newWorkbook('book', 'Book', [newSheet('s', 'S', { 0: { 0: { v: null, p: typed }, 1: { v: 'plain' } }, 1: { 0: { v: 'x' } } })])
 
-    expect(csvFromWorkbook(workbook).text).toBe('"Typed in\nHerald",plain\nx,\n')
+    expect(csvFromWorkbook(workbook).text).toBe('"Typed in\nBantu",plain\nx,\n')
   })
 
   it('takes the automatic colour off the runs of rich text too', () => {

@@ -31,7 +31,7 @@ import { $panelStates, loadPanel, PANEL_TITLES, panelAction } from '../../store/
 
 /*
  * The menu bar's quick panels: Wi-Fi, Bluetooth, sound, displays, battery and power, and the
- * calendar. On Herald OS Linux they change things; on macOS they only show what Control Center
+ * calendar. On Bantu OS Linux they change things; on macOS they only show what Control Center
  * would, plus the volume.
  */
 
@@ -507,7 +507,7 @@ function ClockPanel() {
 
   useEffect(() => {
     const timer = setInterval(() => setNow(new Date()), 15_000)
-    void window.heraldOS.calendar
+    void window.bantuOS.calendar
       .today()
       .then(result => setEvents(result.events))
       .catch(() => setEvents([]))

@@ -121,7 +121,7 @@ describe('the slides menus', () => {
     expect([checked('theme-selected-paper'), checked('theme-all-paper'), checked('theme-all-midnight')]).toEqual([true, false, true])
   })
 
-  it('list the custom themes after Herald’s, and edit the deck’s when it is one', () => {
+  it('list the custom themes after Bantu’s, and edit the deck’s when it is one', () => {
     const doc = open()
     const custom = { ...model.editTheme(THEMES[2], { name: 'Mine' }), id: 'custom-mine' }
     $customThemes.set([custom])

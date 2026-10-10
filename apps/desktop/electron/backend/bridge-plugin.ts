@@ -3,35 +3,35 @@ import fs from 'node:fs'
 import path from 'node:path'
 import type { BackendRuntime } from '../../shared/ipc.ts'
 import { log } from '../log.ts'
-import { nastechHome, heraldOsDataDir } from '../paths.ts'
+import { nastechHome, bantuOsDataDir } from '../paths.ts'
 
 /*
- * A packaged Herald OS carries the herald-os-bridge plugin in its resources. NasTech loads user
+ * A packaged Bantu OS carries the bantu-os-bridge plugin in its resources. NasTech loads user
  * plugins from ~/.nastech/plugins, and only enabled ones, so before NasTech starts the app links its
  * copy there and turns it and its tools on: what `npm run bootstrap` does for a checkout and
- * `herald-os setup` for the Linux packages. docs/SYSTEM-BRIDGE.md lists every change.
+ * `bantu-os setup` for the Linux packages. docs/SYSTEM-BRIDGE.md lists every change.
  */
 
 export type PluginEntry = { kind: 'missing' } | { kind: 'link'; target: string; exists: boolean } | { kind: 'folder' }
 
 const TOOL_SEARCH = 'tools.tool_search.enabled'
 
-/** The Tool Search value found before Herald OS first turned it off; every setup path writes it once. */
-const toolSearchRecord = () => path.join(heraldOsDataDir(), 'tool-search-before')
+/** The Tool Search value found before Bantu OS first turned it off; every setup path writes it once. */
+const toolSearchRecord = () => path.join(bantuOsDataDir(), 'tool-search-before')
 
-/** What to do with ~/.nastech/plugins/herald-os-bridge, given the app's own copy (pure; tested). */
+/** What to do with ~/.nastech/plugins/bantu-os-bridge, given the app's own copy (pure; tested). */
 export function bridgeLinkPlan(entry: PluginEntry, bundled: string): 'create' | 'replace' | 'keep' {
   if (entry.kind === 'missing') {
     return 'create'
   }
 
-  // A folder is the person's own, and a checkout's link (bootstrap, herald-os setup) stays theirs.
+  // A folder is the person's own, and a checkout's link (bootstrap, bantu-os setup) stays theirs.
   if (entry.kind === 'folder' || path.resolve(entry.target) === path.resolve(bundled)) {
     return 'keep'
   }
 
   // A link that leads nowhere, or into another copy of the app (moved, updated, run from the DMG).
-  const anotherApp = /\.app\/Contents\/Resources\/herald-os-bridge\/?$/.test(entry.target) || entry.target.startsWith('/opt/herald-os/')
+  const anotherApp = /\.app\/Contents\/Resources\/bantu-os-bridge\/?$/.test(entry.target) || entry.target.startsWith('/opt/bantu-os/')
 
   return !entry.exists || anotherApp ? 'replace' : 'keep'
 }
@@ -111,17 +111,17 @@ async function step(runtime: BackendRuntime, args: string[], change: string): Pr
  * for the shell to show, or null.
  */
 export async function ensureBridgePlugin(runtime: BackendRuntime, resources: string = process.resourcesPath): Promise<string | null> {
-  const bundled = path.join(resources, 'herald-os-bridge')
+  const bundled = path.join(resources, 'bantu-os-bridge')
 
   if (!resources || !fs.existsSync(path.join(bundled, 'plugin.yaml'))) {
     return null
   }
 
-  const link = path.join(nastechHome(), 'plugins', 'herald-os-bridge')
+  const link = path.join(nastechHome(), 'plugins', 'bantu-os-bridge')
   // Once: enable the plugin and its tools, and keep them directly callable (tool search would hide
   // them behind a lookup). The marker means it worked, so a failed try runs again on the next start
   // and a person who turns the plugin off or removes its link later (setup --undo) is left alone.
-  const enabled = path.join(heraldOsDataDir(), 'bridge-enabled')
+  const enabled = path.join(bantuOsDataDir(), 'bridge-enabled')
 
   try {
     const entry = readEntry(link)
@@ -150,8 +150,8 @@ export async function ensureBridgePlugin(runtime: BackendRuntime, resources: str
   }
 
   const failed =
-    (await step(runtime, ['plugins', 'enable', 'herald-os-bridge'], `adds it to plugins.enabled in ${path.join(nastechHome(), 'config.yaml')}`)) ??
-    (await step(runtime, ['tools', 'enable', 'herald_os'], 'saves platform_toolsets.cli with herald_os in it; the tools run only in Herald OS sessions')) ??
+    (await step(runtime, ['plugins', 'enable', 'bantu-os-bridge'], `adds it to plugins.enabled in ${path.join(nastechHome(), 'config.yaml')}`)) ??
+    (await step(runtime, ['tools', 'enable', 'bantu_os'], 'saves platform_toolsets.cli with bantu_os in it; the tools run only in Bantu OS sessions')) ??
     (await keepToolsDirect(runtime))
 
   if (failed) {

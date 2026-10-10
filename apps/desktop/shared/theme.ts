@@ -444,9 +444,9 @@ export function validateTheme(value: unknown): string | null {
 
 // ---- NasTech skins ------------------------------------------------------------------------------
 
-export const HERALD_SKIN = 'herald-os'
+export const BANTU_SKIN = 'bantu-os'
 
-/** The NasTech skin (`~/.nastech/skins/herald-os.yaml`) that dresses NasTech's own CLI and TUI in the theme. */
+/** The NasTech skin (`~/.nastech/skins/bantu-os.yaml`) that dresses NasTech's own CLI and TUI in the theme. */
 export function nastechSkinColors(colors: ThemeColors): Record<string, string> {
   return {
     banner_border: colors.accent,
@@ -481,7 +481,7 @@ export function nastechSkinColors(colors: ThemeColors): Record<string, string> {
 }
 
 export function nastechSkinYaml(label: string, colors: ThemeColors): string {
-  const lines = [`# Written by Herald OS from its "${label.replace(/"/g, "'")}" theme; Herald OS rewrites it when the theme changes.`, `name: ${HERALD_SKIN}`, `description: "Herald OS: ${label.replace(/"/g, "'")}"`, 'colors:']
+  const lines = [`# Written by Bantu OS from its "${label.replace(/"/g, "'")}" theme; Bantu OS rewrites it when the theme changes.`, `name: ${BANTU_SKIN}`, `description: "Bantu OS: ${label.replace(/"/g, "'")}"`, 'colors:']
 
   for (const [key, value] of Object.entries(nastechSkinColors(colors))) {
     lines.push(`  ${key}: "${value}"`)
@@ -490,7 +490,7 @@ export function nastechSkinYaml(label: string, colors: ThemeColors): string {
   return `${lines.join('\n')}\n`
 }
 
-/** Herald colours from a NasTech skin the person picked with /skin; null when it lacks the basics. */
+/** Bantu colours from a NasTech skin the person picked with /skin; null when it lacks the basics. */
 export function themeColorsFromSkin(skin: { colors?: Record<string, string> } | null | undefined): ThemeColors | null {
   const c = skin?.colors ?? {}
   const get = (...keys: string[]) => keys.map(key => c[key]).find(isHexColor)

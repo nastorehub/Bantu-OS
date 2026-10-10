@@ -1,5 +1,5 @@
 /*
- * The on-device models Herald Canvas can use. None ships with the app: each is downloaded from
+ * The on-device models Bantu Canvas can use. None ships with the app: each is downloaded from
  * where its publisher put it the first time the person allows it, checked against the size and
  * SHA-256 recorded here, and only then run. Only permissively licensed weights are listed.
  */
@@ -83,7 +83,7 @@ export function modelInfo(id: string): ModelInfo {
 export const modelBytes = (model: ModelInfo): number => model.files.reduce((sum, file) => sum + file.bytes, 0)
 
 /** The scheme the main process serves verified model files on, to the window's workers. */
-export const MODEL_SCHEME = 'herald-model'
+export const MODEL_SCHEME = 'bantu-model'
 
 export const modelFileUrl = (id: ModelId, file: string): string => `${MODEL_SCHEME}://${id}/${encodeURIComponent(file)}`
 

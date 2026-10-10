@@ -4,7 +4,7 @@
  * entries. The project keeps the file as it was read, beside the layer's images.
  */
 
-import { HERALD_RANGES } from '../../../../shared/canvas/comp-format.ts'
+import { BANTU_RANGES } from '../../../../shared/canvas/comp-format.ts'
 import type { RGB3 } from './adjust-math.ts'
 
 export interface ColorTable {
@@ -33,7 +33,7 @@ const triple = (words: string[], line: number, what: string): RGB3 => {
   return values as RGB3
 }
 
-/** A `.cube` file's 3D table; throws with what is wrong when the file is not one Herald reads. */
+/** A `.cube` file's 3D table; throws with what is wrong when the file is not one Bantu reads. */
 export function parseCube(bytes: Uint8Array): ColorTable {
   if (bytes.byteLength > TABLE_FILE_BYTES) {
     throw new Error(`The table file is larger than ${TABLE_FILE_BYTES / 1024 / 1024} MB`)
@@ -76,7 +76,7 @@ export function parseCube(bytes: Uint8Array): ColorTable {
         .replace(/^"(.*)"$/, '$1')
     } else if (keyword === 'LUT_3D_SIZE') {
       size = Number(words[1])
-      const [least, most] = HERALD_RANGES.tableSize
+      const [least, most] = BANTU_RANGES.tableSize
 
       if (!Number.isInteger(size) || size < least || size > most) {
         throw new Error(`Color Lookup takes tables of ${least} to ${most} entries a side, not ${words[1] ?? 'none'}`)
@@ -147,7 +147,7 @@ export function lookUp(c: RGB3, table: ColorTable): RGB3 {
 }
 
 /** A table written out as a `.cube` file (for tables made here, such as tests and an identity table). */
-export function cubeText(size: number, colour: (r: number, g: number, b: number) => RGB3, title = 'Herald Canvas'): string {
+export function cubeText(size: number, colour: (r: number, g: number, b: number) => RGB3, title = 'Bantu Canvas'): string {
   const rows = [`TITLE "${title}"`, `LUT_3D_SIZE ${size}`]
 
   for (let b = 0; b < size; b++) {

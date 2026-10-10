@@ -35,7 +35,7 @@ export function NasTechComposer({ disabled, streaming, placeholder, autoFocus, o
   }
 
   const attach = async () => {
-    const paths = await window.heraldOS.fs.pickFiles({ multiple: true })
+    const paths = await window.bantuOS.fs.pickFiles({ multiple: true })
 
     if (paths.length === 0) {
       return

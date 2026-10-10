@@ -10,7 +10,7 @@ describe('saved templates', () => {
     vi.unstubAllGlobals()
   })
 
-  it('keep a document whole, but not what Herald holds of the Word file it came from', () => {
+  it('keep a document whole, but not what Bantu holds of the Word file it came from', () => {
     const doc = { ...letter(), attrs: { ...letter().attrs, kept: { parts: ['word/theme/theme1.xml'] } } }
 
     expect(templateModel(doc).attrs?.kept).toBeNull()
@@ -32,13 +32,13 @@ describe('saved templates', () => {
     expect(doc?.attrs?.styles).toEqual({ normal: { font: 'Georgia  body  display none' }, heading1: { color: '#123456', size: 18 } })
   })
 
-  it('come from main for Herald Docs, those that are not documents left out, and none from a window without the call', async () => {
+  it('come from main for Bantu Docs, those that are not documents left out, and none from a window without the call', async () => {
     const templates = vi.fn(async () => [
       { id: 'a', name: 'Letter', savedAt: '2026-10-09T08:00:00.000Z', model: letter() },
       { id: 'b', name: 'Broken', savedAt: '', model: { type: 'doc', content: [{ type: 'nothing' }] } }
     ])
     const save = vi.fn(async () => ({ id: 'c', name: 'Mine', savedAt: '' }))
-    vi.stubGlobal('window', { heraldOS: { office: { templates, saveTemplate: save } } })
+    vi.stubGlobal('window', { bantuOS: { office: { templates, saveTemplate: save } } })
 
     expect((await savedTemplates()).map((entry) => entry.name)).toEqual(['Letter'])
     expect(templates).toHaveBeenCalledWith('docs')
@@ -46,7 +46,7 @@ describe('saved templates', () => {
     await saveTemplate('Mine', { ...letter(), attrs: { ...letter().attrs, kept: { parts: [] } } })
     expect(save).toHaveBeenCalledWith('docs', 'Mine', expect.objectContaining({ attrs: expect.objectContaining({ kept: null }) }), undefined)
 
-    vi.stubGlobal('window', { heraldOS: { office: {} } })
+    vi.stubGlobal('window', { bantuOS: { office: {} } })
     expect(await savedTemplates()).toEqual([])
   })
 })

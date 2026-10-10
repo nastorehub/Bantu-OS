@@ -4,7 +4,7 @@ import { memorySummary } from './memory-summary.ts'
 
 const MEMORY_MD = [
   'Sam prefers short answers, with the command first and the explanation after.',
-  '**Herald OS**: the desktop shell lives in ~/Projects/herald and ships from main (2026-09-30).',
+  '**Bantu OS**: the desktop shell lives in ~/Projects/bantu and ships from main (2026-09-30).',
   'Deploys go out on Fridays only after the staging check passes.',
   'Sam reports to Priya on the platform team.'
 ].join(ENTRY_DELIMITER)

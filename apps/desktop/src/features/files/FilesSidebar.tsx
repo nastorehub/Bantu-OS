@@ -20,7 +20,7 @@ interface Place {
 
 async function namesIn(dir: string): Promise<Set<string>> {
   try {
-    return new Set((await window.heraldOS.fs.readDir(dir)).map(entry => entry.name))
+    return new Set((await window.bantuOS.fs.readDir(dir)).map(entry => entry.name))
   } catch {
     return new Set()
   }

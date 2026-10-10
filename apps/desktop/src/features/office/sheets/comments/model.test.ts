@@ -178,7 +178,7 @@ describe('notes', () => {
 describe('comments and notes through .xlsx files', () => {
   confirmed('Sam Rivera')
 
-  it('keeps threads, replies, resolved threads, authors, times and notes through a file Herald writes', async () => {
+  it('keeps threads, replies, resolved threads, authors, times and notes through a file Bantu writes', async () => {
     const { result: before, snapshot } = await run(async (target) => {
       const { id } = await addComment(target, { cell: 'B2', text: 'Is rent right?' })
       await replyToComment(target, { id, text: 'Yes' })

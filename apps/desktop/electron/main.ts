@@ -1,7 +1,7 @@
 import { app, BrowserWindow, globalShortcut, ipcMain, Notification, protocol, shell } from 'electron'
 import os from 'node:os'
 import path from 'node:path'
-import { type EnvInfo, type HeraldOSPrefs, IPC, type RestRequest, type ShellCommand, type WindowState } from '../shared/ipc.ts'
+import { type EnvInfo, type BantuOSPrefs, IPC, type RestRequest, type ShellCommand, type WindowState } from '../shared/ipc.ts'
 import { BackendManager } from './backend/manager.ts'
 import { forgetInheritedSession } from './backend/session-env.ts'
 import { CrashWatcher } from './crash/watch.ts'
@@ -34,7 +34,7 @@ import { log, logTail } from './log.ts'
 import { migrateLegacyData } from './migrate.ts'
 import { registerNotificationHistoryIpc } from './notifications-history.ts'
 import { SwitchService } from './switches.ts'
-import { nastechHome, heraldOsDataDir, isDev } from './paths.ts'
+import { nastechHome, bantuOsDataDir, isDev } from './paths.ts'
 import { readPrefs, writePrefs } from './prefs.ts'
 import { isOmarchy, readOmarchyTheme } from './theme/omarchy.ts'
 import { prefsForTheme } from './theme/themes.ts'
@@ -52,17 +52,17 @@ import { registerServiceIpc } from './shell/services.ts'
 import { WallpaperService } from './shell/wallpaper.ts'
 import { appIconPath, createMainWindow } from './window.ts'
 
-app.setName('Herald OS')
+app.setName('Bantu OS')
 // Chromium turns WebGL off where it does not accelerate the graphics (virtual machines, drivers it
-// blocklists), and Herald Canvas draws with WebGL: there it falls back to SwiftShader, Chromium's
+// blocklists), and Bantu Canvas draws with WebGL: there it falls back to SwiftShader, Chromium's
 // software renderer, rather than to nothing. Machines it accelerates are not affected.
 if (process.platform === 'linux') {
   app.commandLine.appendSwitch('enable-unsafe-swiftshader')
 }
-// Widget plugins load from herald-plugin://<id>/, Canvas's verified models from herald-model://<model>/
+// Widget plugins load from bantu-plugin://<id>/, Canvas's verified models from bantu-model://<model>/
 // (registered before the app is ready, as Electron requires).
 protocol.registerSchemesAsPrivileged([
-  { scheme: 'herald-plugin', privileges: { standard: true, secure: true, supportFetchAPI: true } },
+  { scheme: 'bantu-plugin', privileges: { standard: true, secure: true, supportFetchAPI: true } },
   { scheme: MODEL_SCHEME, privileges: { standard: true, secure: true, supportFetchAPI: true, corsEnabled: true, stream: true } }
 ])
 
@@ -70,7 +70,7 @@ protocol.registerSchemesAsPrivileged([
 // shell, the Linux session included, would freeze behind a box nobody may see. Log it and go on.
 process.on('uncaughtException', error => log('main', `uncaught exception: ${error.stack ?? error.message}`))
 
-// Started by a command a NasTech session ran, Herald OS inherits that session; the terminals, apps,
+// Started by a command a NasTech session ran, Bantu OS inherits that session; the terminals, apps,
 // hooks and backend it starts must not pass for it (backend/session-env.ts).
 for (const name of forgetInheritedSession()) {
   log('main', `dropped the inherited ${name}`)
@@ -94,7 +94,7 @@ const plugins = new PluginHost(
   osBridge
 )
 /** Preferences changed outside a renderer (the CLI, a theme): every window and the wallpaper follow. */
-function broadcastPrefs(next: HeraldOSPrefs): void {
+function broadcastPrefs(next: BantuOSPrefs): void {
   wallpaper?.apply(next.wallpaper)
 
   for (const win of BrowserWindow.getAllWindows()) {
@@ -108,10 +108,10 @@ const switches = new SwitchService({
   onPrefs: broadcastPrefs,
   showScreensaver: () => mainWindow?.webContents.send(IPC.shellCommand, { type: 'screensaver' } satisfies ShellCommand)
 })
-// Linux without the panels session: Herald as an app inside Hyprland or Omarchy, or the cage kiosk.
-// The `herald-os` CLI (and so the compositor's hotkeys) reaches the one window through the same socket.
+// Linux without the panels session: Bantu as an app inside Hyprland or Omarchy, or the cage kiosk.
+// The `bantu-os` CLI (and so the compositor's hotkeys) reaches the one window through the same socket.
 const appHost = !panels && process.platform === 'linux' ? new DesktopHost(() => mainWindow, createCompositor(detectCompositor())) : null
-// macOS: Cmd+Ctrl+E opens the emoji picker over any app (Herald OS Linux binds it in niri).
+// macOS: Cmd+Ctrl+E opens the emoji picker over any app (Bantu OS Linux binds it in niri).
 const emojiPanel = !panels && process.platform === 'darwin' ? new EmojiPanel(() => mainWindow) : null
 const shellHost: ShellHost | null = panels ?? appHost
 const control = shellHost
@@ -128,11 +128,11 @@ const control = shellHost
     )
   : null
 // Desktop mode has no compositor CLI socket; the OS control server gives it the same `ui*` surface.
-const osControlPath = panels ? path.join(process.env.XDG_RUNTIME_DIR || `/run/user/${process.getuid?.() ?? 1000}`, 'herald-os', 'control.sock') : path.join(heraldOsDataDir(), 'control.sock')
+const osControlPath = panels ? path.join(process.env.XDG_RUNTIME_DIR || `/run/user/${process.getuid?.() ?? 1000}`, 'bantu-os', 'control.sock') : path.join(bantuOsDataDir(), 'control.sock')
 const osControl = panels
   ? null
   : new OsControlServer(osControlPath, async request => {
-      // No CLI talks to this socket (the Linux one serves `herald-os`), so every client is the backend.
+      // No CLI talks to this socket (the Linux one serves `bantu-os`), so every client is the backend.
       if (request.token !== osControlToken()) {
         return { ok: false, error: 'invalid control token' }
       }
@@ -234,7 +234,7 @@ function registerCoreIpc(): void {
   })
 
   ipcMain.handle(IPC.prefsGet, () => readPrefs())
-  ipcMain.handle(IPC.prefsSet, (_event, patch: Partial<HeraldOSPrefs>) => {
+  ipcMain.handle(IPC.prefsSet, (_event, patch: Partial<BantuOSPrefs>) => {
     const next = writePrefs(patch)
 
     if ('wallpaper' in patch) {
@@ -255,7 +255,7 @@ function registerCoreIpc(): void {
 
     // The keymap lives in niri's config, which the CLI renders (niri reloads it by itself).
     if ('keymap' in patch && process.platform === 'linux') {
-      void run('herald-os', ['keymap', next.keymap === 'omarchy' ? 'omarchy' : 'herald'], 10_000).then(result => result.code !== 0 && log('keymap', result.stderr.trim()))
+      void run('bantu-os', ['keymap', next.keymap === 'omarchy' ? 'omarchy' : 'bantu'], 10_000).then(result => result.code !== 0 && log('keymap', result.stderr.trim()))
     }
 
     // Every surface window sees the same preferences.
@@ -339,8 +339,8 @@ function createWindow(): void {
   appHost?.start()
   control?.start()
 
-  // Inside Omarchy, Herald wears Omarchy's theme from the start (its theme-set hook keeps it in step),
-  // unless a Herald theme was picked since.
+  // Inside Omarchy, Bantu wears Omarchy's theme from the start (its theme-set hook keeps it in step),
+  // unless a Bantu theme was picked since.
   const themeName = readPrefs().themeName
   const omarchy = appHost && isOmarchy() && (!themeName || themeName.startsWith('omarchy-')) ? readOmarchyTheme() : null
 
@@ -350,7 +350,7 @@ function createWindow(): void {
 }
 
 app.whenReady().then(async () => {
-  log('main', `Herald OS ${app.getVersion()} starting (dev=${isDev}, mode=${mode}, NASTECH_HOME=${nastechHome()})`)
+  log('main', `Bantu OS ${app.getVersion()} starting (dev=${isDev}, mode=${mode}, NASTECH_HOME=${nastechHome()})`)
   // A packaged app carries its icon in the bundle; `electron .` would show Electron's.
   const icon = isDev ? appIconPath() : undefined
 

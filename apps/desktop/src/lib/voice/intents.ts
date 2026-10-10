@@ -159,7 +159,7 @@ const NASTECH_MARKERS = /\b(why|how come|explain|summari[sz]e|write|draft|fix|de
  */
 const FILING_REQUEST = /\b(renam(?:e|ing)|organi[sz]e|tidy up|sort (?:out|through)|where (?:it|they|this|these|those|that) (?:belongs?|goes|go|should go))\b|(?:^|\b(?:and|then|to|please|also)\s+)file (?:it|them|this|these|those|that|the|my|all|every|everything)\b/i
 
-/** What Herald Docs, Sheets and Slides make, and the parts of one that a request changes. */
+/** What Bantu Docs, Sheets and Slides make, and the parts of one that a request changes. */
 const DOCUMENTS = 'spreadsheet|sheet|workbook|document|doc|report|letter|memo|essay|resume|cv|invoice|quote|estimate|budget|forecast|itinerary|plan|schedule|timetable|rota|agenda|outline|summary|proposal|presentation|deck|slideshow|slide|chart|graph|table|list|checklist|tracker|calendar|timeline|newsletter|brochure|flyer|poster|template|form|minutes|notes'
 const PARTS = 'row|column|cell|heading|title|subtitle|header|footer|paragraph|section|sentence|bullet points?|bullets|page numbers|footnote|caption|formula|total|text|words?|line|selection|numbers|values|dates|names'
 const LINKS = 'for|about|on|of|with|that|to|from|in|by|and|so|called|named|titled|showing|comparing|listing|covering|tracking|using|based|per|at'
@@ -168,7 +168,7 @@ const MODIFIER = `(?!(?:${LINKS}|an?|the|my|our|this|it)\\b)[\\w'&-]+`
 const THING = `(?:${DOCUMENTS}|${PARTS})s?\\b`
 
 /**
- * Making or changing what a document holds: NasTech does that work in Herald Docs, Sheets and
+ * Making or changing what a document holds: NasTech does that work in Bantu Docs, Sheets and
  * Slides, so these never fill a command's slot ("build me {goal}", "make {name} bigger") or start a
  * build; a whole command phrase ("new document", "make it bigger") still runs.
  */

@@ -42,7 +42,7 @@ export async function oneStep<T>(target: SheetsTarget, change: () => T | Promise
   }
 
   const history = target.univer.__getInjector().get(IUndoRedoService)
-  const scope = history.beginUndoRedoGroup(unitId, `herald-command-${++groups}`, 'append')
+  const scope = history.beginUndoRedoGroup(unitId, `bantu-command-${++groups}`, 'append')
   grouping.add(unitId)
 
   try {

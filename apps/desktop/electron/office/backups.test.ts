@@ -57,7 +57,7 @@ describe('OfficeBackups', () => {
     expect(first).toBe(path.join(root, 'backups', '2026-10-08', 'Budget.csv'))
     expect(await fs.readFile(first!, 'utf8')).toBe('original')
 
-    await fs.writeFile(file, 'saved by Herald')
+    await fs.writeFile(file, 'saved by Bantu')
     expect(await backups.before(file)).toBeNull()
 
     const later = new OfficeBackups(path.join(root, 'backups'), { fileBytes: 1024, totalBytes: 1024 * 1024, days: 30 }, () => day)

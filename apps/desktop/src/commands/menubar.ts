@@ -2,7 +2,7 @@ import { MENU_BAR_ITEMS, MENU_BAR_LABELS, type MenuBarItem, moveMenuBarItem, nor
 import { $prefs, updatePrefs } from '../store/backend.ts'
 import { fail, ok, type OsCommand } from '../store/os-commands.ts'
 
-/* The menu bar's items and clock: the commands behind Settings > Appearance > Menu bar and `herald-os bar`. */
+/* The menu bar's items and clock: the commands behind Settings > Appearance > Menu bar and `bantu-os bar`. */
 
 const layout = () => normalizeMenuBar($prefs.get().menuBar)
 const shown = (item: MenuBarItem) => (item === 'usage' ? Boolean($prefs.get().usageInMenuBar) : !layout().hidden.includes(item))

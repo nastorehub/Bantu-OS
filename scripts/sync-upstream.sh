@@ -6,7 +6,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 LOCK="$ROOT/upstream/UPSTREAM.lock"
 DEST="$ROOT/upstream/nastech-agent"
-STAMP="$DEST/.herald-os-upstream-sha"
+STAMP="$DEST/.bantu-os-upstream-sha"
 
 repo="$(sed -n 's/^repo=//p' "$LOCK" | tr -d '[:space:]')"
 sha="$(sed -n 's/^sha=//p' "$LOCK" | tr -d '[:space:]')"

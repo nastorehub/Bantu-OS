@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Build the cloud-init NoCloud seed (cidata.iso) that turns a stock Fedora Cloud image into a
-# Herald OS Linux machine on first boot: creates the `nastech` user, installs an SSH key, embeds
+# Bantu OS Linux machine on first boot: creates the `nastech` user, installs an SSH key, embeds
 # the `linux/` payload (provisioner, session files, dev scripts) and runs the provisioner.
 #
 #   bash linux/vm/make-seed.sh            # writes linux/vm/build/cidata.iso
@@ -21,7 +21,7 @@ rm -f "$SEED/user-data" "$SEED/meta-data"
 # SSH key used by linux/dev/push.sh and the verification scripts.
 if [[ ! -f "$KEY" ]]; then
   echo "==> Generating SSH key $KEY"
-  ssh-keygen -q -t ed25519 -N '' -C 'herald-os-dev' -f "$KEY"
+  ssh-keygen -q -t ed25519 -N '' -C 'bantu-os-dev' -f "$KEY"
 fi
 PUBKEY="$(cat "$KEY.pub")"
 
@@ -34,13 +34,13 @@ NASTECH_REF="$(sed -n 's/^sha=//p' "$ROOT/upstream/UPSTREAM.lock" | tr -d '[:spa
 PAYLOAD_B64="$(cd "$LINUX_DIR" && COPYFILE_DISABLE=1 tar czf - --exclude './vm/build' . | base64 | tr -d '\n')"
 
 cat >"$SEED/meta-data" <<EOF
-instance-id: herald-os-$(date +%Y%m%d%H%M%S)
-local-hostname: herald-os
+instance-id: bantu-os-$(date +%Y%m%d%H%M%S)
+local-hostname: bantu-os
 EOF
 
 cat >"$SEED/user-data" <<EOF
 #cloud-config
-hostname: herald-os
+hostname: bantu-os
 preserve_hostname: false
 timezone: $(readlink /etc/localtime | sed 's|.*/zoneinfo/||' || echo UTC)
 
@@ -63,25 +63,25 @@ disable_root: true
 
 # UTM (Apple Virtualization backend) exposes a VirtioFS share by tag; harmless when absent.
 mounts:
-  - ["herald-os", "/mnt/herald-os", "virtiofs", "defaults,nofail,x-systemd.device-timeout=5", "0", "0"]
+  - ["bantu-os", "/mnt/bantu-os", "virtiofs", "defaults,nofail,x-systemd.device-timeout=5", "0", "0"]
 
 write_files:
-  - path: /etc/herald-os/ref
+  - path: /etc/bantu-os/ref
     permissions: '0644'
     content: |
       NASTECH_REF=${NASTECH_REF}
-  - path: /usr/local/share/herald-os-linux.tar.gz
+  - path: /usr/local/share/bantu-os-linux.tar.gz
     permissions: '0644'
     encoding: b64
     content: ${PAYLOAD_B64}
 
 runcmd:
-  - [mkdir, -p, /usr/local/share/herald-os-linux]
-  - [tar, -xzf, /usr/local/share/herald-os-linux.tar.gz, -C, /usr/local/share/herald-os-linux]
-  - [chmod, -R, a+rX, /usr/local/share/herald-os-linux]
-  - [bash, /usr/local/share/herald-os-linux/provision.sh]
+  - [mkdir, -p, /usr/local/share/bantu-os-linux]
+  - [tar, -xzf, /usr/local/share/bantu-os-linux.tar.gz, -C, /usr/local/share/bantu-os-linux]
+  - [chmod, -R, a+rX, /usr/local/share/bantu-os-linux]
+  - [bash, /usr/local/share/bantu-os-linux/provision.sh]
 
-final_message: "cloud-init finished after \$UPTIME seconds; the Herald OS provisioning log is /var/log/herald-os-provision.log"
+final_message: "cloud-init finished after \$UPTIME seconds; the Bantu OS provisioning log is /var/log/bantu-os-provision.log"
 EOF
 
 rm -f "$BUILD/cidata.iso"

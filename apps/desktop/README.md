@@ -1,7 +1,7 @@
 # apps/desktop
 
-The Herald OS shell, built on Electron. Its renderer draws everything you see in Herald OS: the menu
-bar, dock, windows, launcher and Herald's own apps. Setup is in the
+The Bantu OS shell, built on Electron. Its renderer draws everything you see in Bantu OS: the menu
+bar, dock, windows, launcher and Bantu's own apps. Setup is in the
 [root README](../../README.md); how the pieces talk to each other is in
 [docs/ARCHITECTURE.md](../../docs/ARCHITECTURE.md); conventions for pages are in
 [DESIGN.md](DESIGN.md).
@@ -16,7 +16,7 @@ electron/              Electron main: owns the machine
   platform/            HostPlatform per OS: darwin.ts, linux.ts, generic.ts (placeholder elsewhere)
   shell/               shell modes, panels-mode windows, control socket, notification daemon
   wm/                  niri compositor IPC (Linux panels mode)
-preload/index.ts       the `window.heraldOS` bridge, the renderer's only way to reach main
+preload/index.ts       the `window.bantuOS` bridge, the renderer's only way to reach main
 shared/                types shared by main, preload and renderer (IPC contract, voice settings)
 src/                   React renderer
   main.tsx             entry
@@ -45,7 +45,7 @@ Run them here, or from the repository root (`npm run dev`, `npm run build`, `npm
 | `npm run typecheck` | `tsc` for the renderer and for main and preload |
 | `npm test` | Vitest over `src`, `electron` and `shared` |
 | `npm run dist:mac` | Apple Silicon DMG and zip in `release/` (unsigned) |
-| `npm run dist:linux` | `herald-os-<version>-linux-<arch>.tar.gz` in `release/` for this machine's architecture (`-- --x64` or `-- --arm64` to pick), with the Linux CLIs, session, themes, catalog and bridge plugin in `resources/` |
+| `npm run dist:linux` | `bantu-os-<version>-linux-<arch>.tar.gz` in `release/` for this machine's architecture (`-- --x64` or `-- --arm64` to pick), with the Linux CLIs, session, themes, catalog and bridge plugin in `resources/` |
 
 ## Common changes
 

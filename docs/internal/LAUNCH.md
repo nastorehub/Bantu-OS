@@ -1,6 +1,6 @@
 # Launch checklist
 
-What has to happen, in order, to take Herald OS public. Nothing in this list is automated: every
+What has to happen, in order, to take Bantu OS public. Nothing in this list is automated: every
 step is a deliberate decision.
 
 ## Before the repository goes public
@@ -19,9 +19,9 @@ step is a deliberate decision.
    as repository secrets and commit `cosign.pub` as `linux/image/cosign.pub` (images built after
    that only accept signed updates). Keep the private key and its password out of the repository.
 6. **The Arch package.** Run the Arch package workflow; fill `sha256sums` in
-   `packaging/arch/herald-os-bin/PKGBUILD` from the release's `.sha256` files (`updpkgsums`), and
+   `packaging/arch/bantu-os-bin/PKGBUILD` from the release's `.sha256` files (`updpkgsums`), and
    generate each `.SRCINFO` with `makepkg --printsrcinfo`.
-7. **An Omarchy test.** On an Omarchy VM: install the package, `herald-os setup`, `herald-os omarchy
+7. **An Omarchy test.** On an Omarchy VM: install the package, `bantu-os setup`, `bantu-os omarchy
    install`, and check the theme hook, the menu entry (Omarchy's menu extension format) and the keys.
 
 ## Launch day
@@ -29,7 +29,7 @@ step is a deliberate decision.
 1. Flip the repository to public.
 2. Enable GitHub Discussions (Settings > General > Features) with Q&A, Ideas and Show and tell.
 3. Publish the draft release the tag created.
-4. Publish the AUR packages from `packaging/arch/` (`herald-os-bin` first, then `herald-os-git`).
+4. Publish the AUR packages from `packaging/arch/` (`bantu-os-bin` first, then `bantu-os-git`).
 5. Switch image signing to keyless cosign if wanted (ADR-018): it publishes the workflow identity to
    the public Rekor log, which is fine once the repository is public.
 6. Post the demo and the release notes.

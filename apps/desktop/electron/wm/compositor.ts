@@ -4,8 +4,8 @@ import { NiriClient } from './niri.ts'
 
 /**
  * What the shell needs from the compositor it runs in: a mirror of windows and workspaces, the
- * focused window (context for "ask about this window") and actions. niri runs the Herald OS session;
- * Hyprland is where Herald runs as an app (Omarchy).
+ * focused window (context for "ask about this window") and actions. niri runs the Bantu OS session;
+ * Hyprland is where Bantu runs as an app (Omarchy).
  */
 export interface Compositor {
   readonly name: CompositorName

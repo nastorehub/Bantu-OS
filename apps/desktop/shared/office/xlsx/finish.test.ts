@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { CELL_TYPE, newSheet, newWorkbook } from '../workbook.ts'
 import { childElements } from './drawing.ts'
 import { DrawingBuilder } from './finish.ts'
-import { HERALD_PART, readHeraldPart } from './herald-part.ts'
+import { BANTU_PART, readBantuPart } from './bantu-part.ts'
 import { CONTENT_TYPE, PackageWriter, placeInWorkbook, placeInWorksheet, REL, relativeTarget } from './opc.ts'
 import { openPackage } from './package.ts'
 import { workbookFromXlsx } from './read.ts'
@@ -15,7 +15,7 @@ describe('package helpers', () => {
   it('names a part from another relative to the first, as relationships do', () => {
     expect(relativeTarget('xl/worksheets/sheet1.xml', 'xl/drawings/drawing1.xml')).toBe('../drawings/drawing1.xml')
     expect(relativeTarget('xl/workbook.xml', 'xl/pivotCache/pivotCacheDefinition1.xml')).toBe('pivotCache/pivotCacheDefinition1.xml')
-    expect(relativeTarget('_', 'herald/sheets.json')).toBe('herald/sheets.json')
+    expect(relativeTarget('_', 'bantu/sheets.json')).toBe('bantu/sheets.json')
   })
 
   it('puts elements where the schema has them, passing over names reused inside the extension list', () => {
@@ -89,22 +89,22 @@ describe('source drawings', () => {
   })
 })
 
-describe('Herald part', () => {
-  it('keeps the Herald data of each sheet through a file, by the sheet’s name', async () => {
+describe('Bantu part', () => {
+  it('keeps the Bantu data of each sheet through a file, by the sheet’s name', async () => {
     const summary = { source: 'A1:C9', rows: ['Region'] }
-    const sheet = { ...newSheet('s1', 'Summary', { 0: { 0: { v: 'Region', t: CELL_TYPE.string } } }), custom: { herald: { summaries: [summary] } } }
+    const sheet = { ...newSheet('s1', 'Summary', { 0: { 0: { v: 'Region', t: CELL_TYPE.string } } }), custom: { bantu: { summaries: [summary] } } }
     const { bytes } = await xlsxFromWorkbook(newWorkbook('book', 'Book', [newSheet('s0', 'Data'), sheet]))
     const pkg = await openPackage(bytes)
 
-    expect(pkg.files).toContain(HERALD_PART)
-    expect((await readHeraldPart(pkg))?.sheets).toEqual({ Summary: { summaries: [summary] } })
+    expect(pkg.files).toContain(BANTU_PART)
+    expect((await readBantuPart(pkg))?.sheets).toEqual({ Summary: { summaries: [summary] } })
     const { workbook } = await workbookFromXlsx(bytes, { id: 'again', name: 'Book' })
-    expect((workbook.sheets['sheet-2'].custom as { herald?: unknown }).herald).toEqual({ summaries: [summary] })
+    expect((workbook.sheets['sheet-2'].custom as { bantu?: unknown }).bantu).toEqual({ summaries: [summary] })
   })
 
-  it('writes no part for a workbook without Herald data', async () => {
+  it('writes no part for a workbook without Bantu data', async () => {
     const { bytes } = await xlsxFromWorkbook(newWorkbook('book', 'Book'))
 
-    expect((await openPackage(bytes)).files).not.toContain(HERALD_PART)
+    expect((await openPackage(bytes)).files).not.toContain(BANTU_PART)
   })
 })

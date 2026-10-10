@@ -28,7 +28,7 @@ import { bindUsage } from './usage.ts'
 import { bindVoice } from './voice.ts'
 import { bindWake } from './wake.ts'
 
-const BOOT_FLAG = '__heraldOSBooted'
+const BOOT_FLAG = '__bantuOSBooted'
 
 /** Wire every store to its source exactly once, before React mounts (guard survives dev HMR re-evaluation). */
 export function bootRenderer(): void {

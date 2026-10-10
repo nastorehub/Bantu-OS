@@ -14,7 +14,7 @@ import { KindIcon } from './kinds.tsx'
 import { type ChartDescription, describeChart, type SeriesDescription, updateChart } from './model.ts'
 import { OFFICE_ACCENTS } from './option.ts'
 import { KIND_NAMES } from './recommend.ts'
-import { heraldPalette } from './theme.ts'
+import { bantuPalette } from './theme.ts'
 
 /*
  * A chart's settings, beside its sheet: what it shows (its series and their cells), how (its kind,
@@ -278,7 +278,7 @@ function ChartPanel({ docKey, chart }: { docKey: string; chart: string }) {
   const target = liveTarget(docKey)
   const palettes = [
     ['Workbook theme', target ? workbookPalette(target.workbook) : OFFICE_ACCENTS],
-    ['Herald', heraldPalette()],
+    ['Bantu', bantuPalette()],
     ['Office', OFFICE_ACCENTS]
   ] as const
   const colorOf = (i: number) => description.series[i]?.color ?? description.palette[i % Math.max(1, description.palette.length)] ?? '#4472c4'

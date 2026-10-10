@@ -7,11 +7,11 @@ import { pathToFileURL } from 'node:url'
 
 /*
  * OpenDocument files through headless LibreOffice, when it is installed: `soffice --headless
- * --convert-to` turns an .odt into a .docx (and back) for Herald's own readers and writers. Each
+ * --convert-to` turns an .odt into a .docx (and back) for Bantu's own readers and writers. Each
  * run gets a profile of its own, so a LibreOffice the person has open is neither used nor disturbed.
  */
 
-/** Formats LibreOffice is asked for: Herald's own and the OpenDocument ones. */
+/** Formats LibreOffice is asked for: Bantu's own and the OpenDocument ones. */
 export const CONVERT_TARGETS: ReadonlySet<string> = new Set(['docx', 'xlsx', 'pptx', 'odt', 'ods', 'odp', 'csv', 'pdf'])
 
 const CONVERT_TIMEOUT_MS = 120_000
@@ -64,7 +64,7 @@ export async function convertWithLibreOffice(file: string, to: string): Promise<
     throw new Error('LibreOffice is not installed')
   }
 
-  const work = await fs.mkdtemp(path.join(os.tmpdir(), 'herald-office-convert-'))
+  const work = await fs.mkdtemp(path.join(os.tmpdir(), 'bantu-office-convert-'))
 
   try {
     const outDir = path.join(work, 'out')

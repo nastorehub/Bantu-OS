@@ -40,7 +40,7 @@ export function PluginFrame({ plugin, at, className, title, width, height }: { p
     let windowStart = 0
     let count = 0
 
-    const reply = (message: Record<string, unknown>) => frame.current?.contentWindow?.postMessage({ herald: 1, ...message }, '*')
+    const reply = (message: Record<string, unknown>) => frame.current?.contentWindow?.postMessage({ bantu: 1, ...message }, '*')
     const pushTheme = () => reply({ event: 'theme', colors: themeColors(), scheme: document.documentElement.dataset.scheme ?? 'dark' })
 
     const onMessage = (event: MessageEvent) => {
@@ -48,9 +48,9 @@ export function PluginFrame({ plugin, at, className, title, width, height }: { p
         return
       }
 
-      const message = event.data as { herald?: number; id?: number; method?: PluginMethod; params?: Record<string, unknown>; ready?: boolean }
+      const message = event.data as { bantu?: number; id?: number; method?: PluginMethod; params?: Record<string, unknown>; ready?: boolean }
 
-      if (!message || message.herald !== 1) {
+      if (!message || message.bantu !== 1) {
         return
       }
 
@@ -71,7 +71,7 @@ export function PluginFrame({ plugin, at, className, title, width, height }: { p
         return
       }
 
-      void window.heraldOS.plugins
+      void window.bantuOS.plugins
         .call(id, message.method, message.params ?? {})
         .then(result => reply({ reply: message.id, result }))
         .catch((error: unknown) => reply({ reply: message.id, error: error instanceof Error ? error.message.replace(/^Error invoking remote method '[^']+': (Error: )?/, '') : String(error) }))
@@ -84,7 +84,7 @@ export function PluginFrame({ plugin, at, className, title, width, height }: { p
 
   // The palette changed: tell the widget.
   useEffect(() => {
-    frame.current?.contentWindow?.postMessage({ herald: 1, event: 'theme', colors: themeColors(), scheme: document.documentElement.dataset.scheme ?? 'dark' }, '*')
+    frame.current?.contentWindow?.postMessage({ bantu: 1, event: 'theme', colors: themeColors(), scheme: document.documentElement.dataset.scheme ?? 'dark' }, '*')
   }, [prefs.themeColors, prefs.themeScheme, prefs.theme, prefs.accent])
 
   // Chromium paints a frame opaque when its colour scheme differs from the page around it, so the
@@ -94,9 +94,9 @@ export function PluginFrame({ plugin, at, className, title, width, height }: { p
   return (
     <iframe
       ref={frame}
-      // `at` tells the widget where it sits (herald.placement); the revision changes when its files
+      // `at` tells the widget where it sits (bantu.placement); the revision changes when its files
       // are saved, so the frame reloads.
-      src={`herald-plugin://${id}/${plugin.manifest.entry}?at=${at}&scheme=${scheme}&rev=${plugin.revision}`}
+      src={`bantu-plugin://${id}/${plugin.manifest.entry}?at=${at}&scheme=${scheme}&rev=${plugin.revision}`}
       sandbox="allow-scripts"
       title={title ?? plugin.manifest.name}
       className={cn('block border-0 bg-transparent', className)}

@@ -1,4 +1,4 @@
-// CPU and memory from herald.stats() (the "stats" permission), every two seconds.
+// CPU and memory from bantu.stats() (the "stats" permission), every two seconds.
 function show(id, percent) {
   const row = document.getElementById(id)
   row.querySelector('i').style.width = `${percent}%`
@@ -8,7 +8,7 @@ function show(id, percent) {
 
 async function tick() {
   try {
-    const stats = await herald.stats()
+    const stats = await bantu.stats()
     show('cpu', stats.cpuPercent)
     show('memory', (stats.memoryUsed / stats.memoryTotal) * 100)
   } catch (error) {

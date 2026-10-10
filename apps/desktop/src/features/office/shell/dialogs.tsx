@@ -55,7 +55,7 @@ export function NotesDialog<Model>({ session, title, notes }: { session: OfficeS
 }
 
 /**
- * Before Herald first saves over a file: what it showed differently when it opened the file, and
+ * Before Bantu first saves over a file: what it showed differently when it opened the file, and
  * what the format will not keep. The person replaces the file, saves a copy instead, or goes back.
  */
 export function FidelityDialog<Model>({ session, docKey, notes, losses, resolve }: { session: OfficeSession<Model>; docKey: string; notes: string[]; losses: string[]; resolve: (choice: 'replace' | 'copy' | 'cancel') => void }) {
@@ -84,7 +84,7 @@ export function FidelityDialog<Model>({ session, docKey, notes, losses, resolve 
           <NoteList notes={losses} />
         </div>
       )}
-      <p className="mb-5 text-[11.5px] text-fg-3">The file as it is now is copied into Herald's Office backups before it is replaced.</p>
+      <p className="mb-5 text-[11.5px] text-fg-3">The file as it is now is copied into Bantu's Office backups before it is replaced.</p>
       <div className="flex justify-end gap-2">
         <GlassButton variant="ghost" onClick={() => choose('cancel')}>
           Cancel

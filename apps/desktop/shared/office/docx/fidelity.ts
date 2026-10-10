@@ -4,7 +4,7 @@ import { attr, child, children, type XmlElement } from './xml.ts'
 
 /*
  * What opening a Word file approximates or leaves out, as sentences for the person opening it:
- * what reading the text finds (hidden text, fields Herald cannot keep, floating pictures) and what
+ * what reading the text finds (hidden text, fields Bantu cannot keep, floating pictures) and what
  * the sections and the package hold (later sections' headers, columns, macros). Each is said once,
  * only when the file has it, and always in the same order.
  */
@@ -47,7 +47,7 @@ export const NOTES: Readonly<Record<NoteKey, string>> = {
   pageNumbers: 'Page numbers in letters or Roman numerals are shown as plain numbers.',
   tocOptions: "Tables of contents list the document's headings by level; their other options (such as other styles) are not kept.",
   floatingPictures: 'Pictures placed beside the text are shown in line with it.',
-  unshownPictures: 'Pictures in formats Herald Docs cannot show (EMF, WMF or TIFF) are left out.',
+  unshownPictures: 'Pictures in formats Bantu Docs cannot show (EMF, WMF or TIFF) are left out.',
   linkedPictures: 'Pictures linked from outside the file are left out.',
   charts: 'Charts and SmartArt are shown as pictures, or left out when the file has no picture of them.',
   textBoxes: 'Text boxes placed beside the text are shown after the paragraph they are anchored to.',
@@ -60,14 +60,14 @@ export const NOTES: Readonly<Record<NoteKey, string>> = {
   contentControls: 'Content controls (form fields, checkboxes) are shown as their text.',
   columns: 'Text in columns is shown in one column, and saving keeps it in one column.',
   objects: 'Embedded objects (such as spreadsheets) are shown as their pictures and are not kept.',
-  macros: 'Macros are not kept: Herald Docs saves Word documents without them.'
+  macros: 'Macros are not kept: Bantu Docs saves Word documents without them.'
 }
 
-/** The note for styles Herald Docs has no style of its own for, naming up to three. */
+/** The note for styles Bantu Docs has no style of its own for, naming up to three. */
 export function stylesNote(names: readonly string[]): string {
   const listed = names.slice(0, 3).join(', ')
 
-  return `Styles Herald Docs does not have (${names.length > 3 ? `${listed} and others` : listed}) are kept as the formatting they give the text.`
+  return `Styles Bantu Docs does not have (${names.length > 3 ? `${listed} and others` : listed}) are kept as the formatting they give the text.`
 }
 
 /** The notes for what was found, styles first, then in the order of NOTES. */

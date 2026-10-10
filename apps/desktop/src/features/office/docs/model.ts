@@ -7,7 +7,7 @@ import { countCharacters, countWords, type DocJSON, type DocNode, pageOf } from 
 import { docsSchema } from './schema.ts'
 
 /*
- * Herald Docs' document API: reading a document and changing it, on its ProseMirror state, so the
+ * Bantu Docs' document API: reading a document and changing it, on its ProseMirror state, so the
  * same operation works on the document open in a window and on a file read from disk. Each
  * operation builds one transaction: on a live editor it is one step to undo, and it never merges
  * with the person's own typing before or after it. The window's toolbar and NasTech's commands use

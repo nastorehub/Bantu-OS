@@ -59,17 +59,17 @@ import { NasTechAvatar } from '../../components/app-icon.tsx'
 import { GlassButton } from '../../components/ui/glass.tsx'
 import { Kbd, Spinner } from '../../components/ui/primitives.tsx'
 import { cn } from '../../lib/cn.ts'
-import { CLI_UNAVAILABLE_MESSAGE, type CliOutcome, parseThemeList, runHeraldOs, runHeraldOsWithToast } from '../../lib/herald-os-cli.ts'
+import { CLI_UNAVAILABLE_MESSAGE, type CliOutcome, parseThemeList, runBantuOs, runBantuOsWithToast } from '../../lib/bantu-os-cli.ts'
 import { $env } from '../../store/backend.ts'
 import { $catalog, loadCatalog } from '../../store/catalog.ts'
 import { openSurface, relayToMain } from '../../store/shell.ts'
 import { openApp, showPage } from '../../store/windows.ts'
 
 /*
- * The Herald OS control menu (Mod+M or Mod+Alt+Space), modelled on Omarchy's: a tree of groups whose leaves
- * run the `herald-os` CLI, a power action, or a shell navigation. Leaves that need input show an
+ * The Bantu OS control menu (Mod+M or Mod+Alt+Space), modelled on Omarchy's: a tree of groups whose leaves
+ * run the `bantu-os` CLI, a power action, or a shell navigation. Leaves that need input show an
  * inline form step; destructive power actions show an inline confirm step. Everything degrades to
- * "Available on Herald OS Linux" where the CLI does not exist.
+ * "Available on Bantu OS Linux" where the CLI does not exist.
  */
 
 interface FormField {
@@ -94,7 +94,7 @@ type Leaf =
   | { kind: 'theme' }
   | { kind: 'wallpaper' }
   | { kind: 'local'; run: () => void }
-  /** Pick from the install catalog (herald-os catalog list), then run `install <id>` or `remove <id>`. */
+  /** Pick from the install catalog (bantu-os catalog list), then run `install <id>` or `remove <id>`. */
   | { kind: 'catalog'; mode: 'install' | 'remove' }
   /** A menu.json program: main starts it by the entry's id. */
   | { kind: 'exec'; id: string }
@@ -139,10 +139,10 @@ const POWER_CONFIRM: Partial<Record<PowerAction, string>> = {
 
 /** Run a power action; resolves to an inline message when the machine cannot do it here. */
 export async function runPower(action: PowerAction): Promise<string | null> {
-  const bridge = window.heraldOS?.shell?.power
+  const bridge = window.bantuOS?.shell?.power
   const platform = $env.get()?.platform
 
-  // systemctl / niri / herald-os only exist on Herald OS Linux; elsewhere say so instead of spawning nothing.
+  // systemctl / niri / bantu-os only exist on Bantu OS Linux; elsewhere say so instead of spawning nothing.
   if (typeof bridge !== 'function' || (platform && platform !== 'linux')) {
     return CLI_UNAVAILABLE_MESSAGE
   }
@@ -160,7 +160,7 @@ export async function runPower(action: PowerAction): Promise<string | null> {
 
 const field = (id: string, label: string, placeholder: string): FormField => ({ id, label, placeholder, required: true })
 
-/** The menu tree. `herald-os` argv per leaf is spelled out inline so it doubles as documentation. */
+/** The menu tree. `bantu-os` argv per leaf is spelled out inline so it doubles as documentation. */
 function buildMenu(actions: { applications: () => void; close: () => void }): MenuItem[] {
   return [
     {
@@ -217,13 +217,13 @@ function buildMenu(actions: { applications: () => void; close: () => void }): Me
     {
       id: 'update',
       label: 'Update',
-      hint: 'Herald OS',
+      hint: 'Bantu OS',
       icon: IconRefresh,
       children: [
-        { id: 'update-herald-os', label: 'Herald OS', hint: 'The shell, system packages, apps and NasTech', icon: IconRefresh, leaf: { kind: 'cli', argv: ['update'] } },
+        { id: 'update-bantu-os', label: 'Bantu OS', hint: 'The shell, system packages, apps and NasTech', icon: IconRefresh, leaf: { kind: 'cli', argv: ['update'] } },
         { id: 'update-firmware-check', label: 'Firmware', hint: 'Check the BIOS, docks and drives (fwupd)', icon: IconCpu, leaf: { kind: 'cli', argv: ['firmware', 'check'] } },
         { id: 'update-firmware', label: 'Install firmware updates', hint: 'Some finish on the next restart', icon: IconCpu, leaf: { kind: 'cli', argv: ['firmware', 'update'] } },
-        { id: 'update-rollback', label: 'Go back to the previous version', hint: 'The Herald OS image or a release tarball; it applies when Herald OS restarts', icon: IconHistory, leaf: { kind: 'cli', argv: ['rollback'] } }
+        { id: 'update-rollback', label: 'Go back to the previous version', hint: 'The Bantu OS image or a release tarball; it applies when Bantu OS restarts', icon: IconHistory, leaf: { kind: 'cli', argv: ['rollback'] } }
       ]
     },
     {
@@ -380,7 +380,7 @@ function extensionItem(entry: MenuExtension, close: () => void): MenuItem {
   const { action } = entry
 
   switch (action.kind) {
-    case 'herald-os':
+    case 'bantu-os':
       return { ...base, leaf: { kind: 'cli', argv: action.argv } }
     case 'exec':
       return { ...base, leaf: { kind: 'exec', id: entry.id } }
@@ -390,7 +390,7 @@ function extensionItem(entry: MenuExtension, close: () => void): MenuItem {
         leaf: {
           kind: 'local',
           run: () => {
-            void window.heraldOS.shell.openExternal(action.url)
+            void window.bantuOS.shell.openExternal(action.url)
             close()
           }
         }
@@ -479,7 +479,7 @@ type Step =
 export interface ControlMenuProps {
   onClose: () => void
   onApplications: () => void
-  /** Jump straight to an item (by id), e.g. `update-herald-os` from the menu bar's update indicator. */
+  /** Jump straight to an item (by id), e.g. `update-bantu-os` from the menu bar's update indicator. */
   initialItem?: string
 }
 
@@ -489,7 +489,7 @@ export function ControlMenu({ onClose, onApplications, initialItem }: ControlMen
 
   // Read menu.json each time the menu opens, so an edit shows up without a restart.
   useEffect(() => {
-    void window.heraldOS.shell
+    void window.bantuOS.shell
       .menuExtensions?.()
       .then(setExtensions)
       .catch(() => undefined)
@@ -546,7 +546,7 @@ export function ControlMenu({ onClose, onApplications, initialItem }: ControlMen
     switch (leaf.kind) {
       case 'cli':
         if (leaf.detached) {
-          relayToMain({ type: 'herald-os', args: leaf.argv, text: item.label })
+          relayToMain({ type: 'bantu-os', args: leaf.argv, text: item.label })
           onClose()
         } else {
           setStep({ kind: 'run', title: item.label, argv: leaf.argv })
@@ -591,7 +591,7 @@ export function ControlMenu({ onClose, onApplications, initialItem }: ControlMen
 
         return
       case 'exec':
-        void window.heraldOS.shell.runMenuExtension(leaf.id).then(onClose, (error: unknown) =>
+        void window.bantuOS.shell.runMenuExtension(leaf.id).then(onClose, (error: unknown) =>
           setStep({ kind: 'message', title: item.label, text: error instanceof Error ? error.message.replace(/^Error invoking remote method '[^']+': (Error: )?/, '') : String(error), tone: 'danger' })
         )
 
@@ -692,7 +692,7 @@ export function ControlMenu({ onClose, onApplications, initialItem }: ControlMen
           <NasTechAvatar size={22} rounded={6} />
         )}
         <span className="flex min-w-0 items-center gap-1.5 text-[14px] font-semibold">
-          <span className={cn(title.length > 0 && 'text-fg-3')}>Herald OS</span>
+          <span className={cn(title.length > 0 && 'text-fg-3')}>Bantu OS</span>
           {title.map(label => (
             <span key={label} className="flex items-center gap-1.5">
               <IconChevronRight size={13} className="text-fg-4" />
@@ -900,7 +900,7 @@ export function PowerConfirm({ action, onCancel, onDone }: { action: PowerAction
   )
 }
 
-/** Runs one `herald-os` command with a spinner, then shows the tail of its output. */
+/** Runs one `bantu-os` command with a spinner, then shows the tail of its output. */
 function RunStep({ title, argv, onClose, onBack }: { title: string; argv: string[]; onClose: () => void; onBack: () => void }) {
   const [outcome, setOutcome] = useState<CliOutcome | null>(null)
   const doneRef = useRef<HTMLButtonElement>(null)
@@ -908,7 +908,7 @@ function RunStep({ title, argv, onClose, onBack }: { title: string; argv: string
   useEffect(() => {
     let cancelled = false
     setOutcome(null)
-    void runHeraldOsWithToast(argv, title).then(result => {
+    void runBantuOsWithToast(argv, title).then(result => {
       if (!cancelled) {
         setOutcome(result)
       }
@@ -926,7 +926,7 @@ function RunStep({ title, argv, onClose, onBack }: { title: string; argv: string
     }
   }, [outcome])
 
-  const command = `herald-os ${argv.map(arg => (/\s/.test(arg) ? JSON.stringify(arg) : arg)).join(' ')}`
+  const command = `bantu-os ${argv.map(arg => (/\s/.test(arg) ? JSON.stringify(arg) : arg)).join(' ')}`
 
   return (
     <div className="flex flex-col gap-3 p-4">
@@ -959,7 +959,7 @@ function RunStep({ title, argv, onClose, onBack }: { title: string; argv: string
   )
 }
 
-/** `herald-os theme list` as a keyboard-navigable list of choices; picking one runs `theme set <name>`. */
+/** `bantu-os theme list` as a keyboard-navigable list of choices; picking one runs `theme set <name>`. */
 function ThemeStep({ onBack, onRun }: { onBack: () => void; onRun: (title: string, argv: string[]) => void }) {
   const [themes, setThemes] = useState<string[] | null>(null)
   const [current, setCurrent] = useState<string | null>(null)
@@ -970,7 +970,7 @@ function ThemeStep({ onBack, onRun }: { onBack: () => void; onRun: (title: strin
 
   useEffect(() => {
     let cancelled = false
-    void Promise.all([runHeraldOs(['theme', 'list']), runHeraldOs(['theme', 'current'])]).then(([list, now]) => {
+    void Promise.all([runBantuOs(['theme', 'list']), runBantuOs(['theme', 'current'])]).then(([list, now]) => {
       if (cancelled) {
         return
       }
@@ -1188,7 +1188,7 @@ export function InlineMessage({ text, tone, className }: { text: string; tone: '
   )
 }
 
-/** Power mode (`herald-os power`): the System group as a compact card. */
+/** Power mode (`bantu-os power`): the System group as a compact card. */
 export function PowerCard({ onClose }: { onClose: () => void }) {
   const [confirm, setConfirm] = useState<PowerAction | null>(null)
   const [message, setMessage] = useState<string | null>(null)

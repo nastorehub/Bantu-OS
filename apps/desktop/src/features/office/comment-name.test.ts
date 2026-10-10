@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import type { HeraldOSPrefs, SystemInfo } from '../../../shared/ipc.ts'
+import type { BantuOSPrefs, SystemInfo } from '../../../shared/ipc.ts'
 import { $prefs } from '../../store/backend.ts'
 import { $systemInfo } from '../../store/system.ts'
 import { $commentName, $nameQuestion, accountName, answerCommentName, askCommentName, commentNameFor, NASTECH_NAME, loadCommentName, NEUTRAL_NAME, setCommentName } from './comment-name.ts'
@@ -98,12 +98,12 @@ describe('the name on what commands add', () => {
 })
 
 describe('the name in the prefs', () => {
-  /** Main's prefs as the window's bridge reaches them, and the storage where Herald Docs kept its own name. */
-  function main(saved: Partial<HeraldOSPrefs> = {}, docsName?: string) {
-    let prefs: HeraldOSPrefs = { ...FIRST_PREFS, ...saved }
-    const set = vi.fn(async (patch: Partial<HeraldOSPrefs>) => (prefs = { ...prefs, ...patch }))
-    const stored = new Map(docsName === undefined ? [] : [['herald.docs.author', docsName]])
-    vi.stubGlobal('window', { heraldOS: { prefs: { get: async () => prefs, set } } })
+  /** Main's prefs as the window's bridge reaches them, and the storage where Bantu Docs kept its own name. */
+  function main(saved: Partial<BantuOSPrefs> = {}, docsName?: string) {
+    let prefs: BantuOSPrefs = { ...FIRST_PREFS, ...saved }
+    const set = vi.fn(async (patch: Partial<BantuOSPrefs>) => (prefs = { ...prefs, ...patch }))
+    const stored = new Map(docsName === undefined ? [] : [['bantu.docs.author', docsName]])
+    vi.stubGlobal('window', { bantuOS: { prefs: { get: async () => prefs, set } } })
     vi.stubGlobal('document', { documentElement: { dataset: {}, style: { setProperty: () => {}, removeProperty: () => {} } } })
     vi.stubGlobal('localStorage', { getItem: (key: string) => stored.get(key) ?? null, removeItem: (key: string) => stored.delete(key) })
 
@@ -123,20 +123,20 @@ describe('the name in the prefs', () => {
     expect($commentName.get()).toBe('')
   })
 
-  it('takes the one Herald Docs kept, once, when the prefs have none', async () => {
+  it('takes the one Bantu Docs kept, once, when the prefs have none', async () => {
     const { set, stored } = main({}, 'Ann Example')
 
     expect(await loadCommentName()).toBe('Ann Example')
     expect(set).toHaveBeenCalledWith({ commentName: 'Ann Example' })
     expect($commentName.get()).toBe('Ann Example')
-    expect(stored.has('herald.docs.author')).toBe(false)
+    expect(stored.has('bantu.docs.author')).toBe(false)
 
     await setCommentName('')
 
     expect(await loadCommentName()).toBe('')
   })
 
-  it('keeps the one the prefs have over the one Herald Docs kept, and forgets that one', async () => {
+  it('keeps the one the prefs have over the one Bantu Docs kept, and forgets that one', async () => {
     const { set, stored } = main({ commentName: 'Sam Rivera' }, 'Ann Example')
 
     expect(await loadCommentName()).toBe('Sam Rivera')

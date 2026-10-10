@@ -5,7 +5,7 @@ import { encodeXml } from '../xml.ts'
 import { NS, solidFill } from './drawingml.ts'
 
 /*
- * A Herald chart as an Excel chart part (c:chartSpace), drawn in Excel as Herald draws it: each
+ * A Bantu chart as an Excel chart part (c:chartSpace), drawn in Excel as Bantu draws it: each
  * series' colour written out, the categories of the first series that has them for every series,
  * a pie's slices in the palette's colours, bars, lines and areas sized and styled alike, and caches
  * of the cells' values so the chart shows before Excel works its formulas out. Every element goes
@@ -26,7 +26,7 @@ export interface ChartCells {
 /** Axis ids: the primary category and value axes, then the secondary ones of a combo chart. */
 const AXIS = { category: 101, value: 102, category2: 103, value2: 104 }
 
-/** Herald's lines are 2 pixels wide and its scatter points 8 pixels across. */
+/** Bantu's lines are 2 pixels wide and its scatter points 8 pixels across. */
 const LINE_WIDTH = 19050
 const GRID_COLOR = '#d9d9d9'
 const AXIS_COLOR = '#bfbfbf'
@@ -307,7 +307,7 @@ class ChartWriter {
         const labels = this.labels(type, false, stacked)
 
         if (type === 'column') {
-          // Herald leaves 35% of each category between its bars, and 20% of a bar between bars side by side.
+          // Bantu leaves 35% of each category between its bars, and 20% of a bar between bars side by side.
           const bars = stacked ? 1 : members.length
           const gap = Math.round(Math.min(500, (35 / 65) * bars * 100))
           groups.push(`<c:barChart>${val('barDir', horizontal ? 'bar' : 'col')}${val('grouping', grouping ?? 'clustered')}${val('varyColors', 0)}${series}${labels}${val('gapWidth', gap)}${val('overlap', stacked ? 100 : -20)}${axes}</c:barChart>`)
@@ -321,9 +321,9 @@ class ChartWriter {
 
     const areasOnly = indexes.length > 0 && indexes.every((i) => typeOf(i) === 'area')
     const between = areasOnly ? 'midCat' : 'between'
-    // Excel lists bars from the bottom up, where Herald lists them from the top down unless reversed.
+    // Excel lists bars from the bottom up, where Bantu lists them from the top down unless reversed.
     const reversed = horizontal !== (spec.axes?.x?.reverse === true)
-    // Across reversed categories a value axis crosses at the other end, so it stays where Herald draws it: below the bars, left of the columns, the second one on the right.
+    // Across reversed categories a value axis crosses at the other end, so it stays where Bantu draws it: below the bars, left of the columns, the second one on the right.
     const axes =
       this.categoryAxis(AXIS.category, AXIS.value, spec.axes?.x, { position: horizontal ? 'l' : 'b', reversed }) +
       this.valueAxis(AXIS.value, AXIS.category, spec.axes?.y, { position: horizontal ? 'b' : 'l', gridlines: true, crosses: reversed ? 'max' : 'autoZero', between })

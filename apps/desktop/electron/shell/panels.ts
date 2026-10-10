@@ -43,7 +43,7 @@ interface SurfaceWindowOptions {
  * state to every renderer.
  */
 export class PanelShell implements ShellHost {
-  /** The Herald OS session runs on niri: its window rules place these windows. */
+  /** The Bantu OS session runs on niri: its window rules place these windows. */
   readonly wm: Compositor = new NiriClient()
   private readonly windows = new Map<ShellSurface, BrowserWindow>()
   private readonly pending = new Map<ShellSurface, ShellCommand[]>()
@@ -144,7 +144,7 @@ export class PanelShell implements ShellHost {
   }
 
   /**
-   * Web apps: a frameless window showing one site (installed through `herald-os install webapp`).
+   * Web apps: a frameless window showing one site (installed through `bantu-os install webapp`).
    * Titled with the app's name so niri, the dock and the menu bar treat it as its own app.
    */
   openWebApp(url: string, name: string, slug: string): void {

@@ -92,7 +92,7 @@ export interface StyleNotes {
 export const NOTES = {
   pattern: 'Patterned cell fills are shown as solid colours.',
   gradient: 'Gradient cell fills are shown as solid colours.',
-  alignment: 'Some alignments (fill, centre across selection, justify down) are shown as the nearest one Herald Sheets has.'
+  alignment: 'Some alignments (fill, centre across selection, justify down) are shown as the nearest one Bantu Sheets has.'
 } as const
 
 /** A font's own settings, those that differ from `base`, as Univer text style fields (cells and rich text runs both use these). */

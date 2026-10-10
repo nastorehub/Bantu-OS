@@ -3,7 +3,7 @@ import path from 'node:path'
 import type { CatalogEntryView, CatalogGroupView } from '../../shared/ipc.ts'
 
 /*
- * The install catalog's JSON (linux/catalog/*.json). On Herald OS Linux the `herald-os catalog`
+ * The install catalog's JSON (linux/catalog/*.json). On Bantu OS Linux the `bantu-os catalog`
  * CLI owns installing; on macOS the main process installs the entries that have a macOS method
  * (npm, Homebrew, a download page). These helpers are pure so both paths share them.
  */
@@ -146,7 +146,7 @@ export function entryView(group: CatalogGroup, entry: CatalogEntry, state: { ins
   }
 }
 
-/** `herald-os catalog list --json` → the groups the shell shows (tolerant of extra fields). */
+/** `bantu-os catalog list --json` → the groups the shell shows (tolerant of extra fields). */
 export function parseCliListing(stdout: string): CatalogGroupView[] {
   const data = JSON.parse(stdout) as { groups?: CatalogGroupView[] }
 

@@ -190,7 +190,7 @@ describe('the new nodes', () => {
 })
 
 describe('typography', () => {
-  it("gives each style the document's own look over Herald's", () => {
+  it("gives each style the document's own look over Bantu's", () => {
     const css = looksCss(doc([], { page: null, styles: { normal: { font: 'Calibri', size: 12 }, heading1: { size: 16, color: '#2f5496', bold: false } } }), '.doc')
 
     expect(css).toContain('.doc { font-family: Calibri, Carlito, "Helvetica Neue", Arial, "Liberation Sans", sans-serif; font-size: 12pt; line-height: 1.38 }')

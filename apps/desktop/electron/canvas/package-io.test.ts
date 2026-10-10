@@ -77,7 +77,7 @@ describe('writePackage and readPackage', () => {
       isVisible: true,
       transform: defaultTransform(8, 4),
       adjustment: defaultAdjustment('Levels'),
-      heraldAdjustment: { kind: 'Color Lookup', name: 'Film.cube', size: 2 }
+      bantuAdjustment: { kind: 'Color Lookup', name: 'Film.cube', size: 2 }
     })
     const table = new TextEncoder().encode('LUT_3D_SIZE 2\n0 0 0\n1 0 0\n0 1 0\n1 1 0\n0 0 1\n1 0 1\n0 1 1\n1 1 1\n')
     const assets = { [imageFileFor(A)]: rgba(8, 4, 1), [maskFileFor(A)]: gray(8, 4, 2), [imageFileFor(B)]: rgba(2, 2, 3) }
@@ -155,7 +155,7 @@ describe('PackageWatcher', () => {
     }
   }
 
-  it('reports a change made elsewhere, but not Herald saving its own work', { timeout: 30_000 }, async () => {
+  it('reports a change made elsewhere, but not Bantu saving its own work', { timeout: 30_000 }, async () => {
     const dir = await project()
     const assets = { [imageFileFor(A)]: rgba(8, 4, 1), [maskFileFor(A)]: gray(8, 4, 2), [imageFileFor(B)]: rgba(2, 2, 3) }
     const first = await writePackage(dir, { manifest: twoLayers(), assets })
@@ -165,7 +165,7 @@ describe('PackageWatcher', () => {
     watcher.start()
 
     try {
-      // Herald's own save.
+      // Bantu's own save.
       const renamed = twoLayers()
       renamed.layers[1].name = 'Mine'
       await watcher.ownWrite(() => writePackage(dir, { manifest: renamed, assets: {} }))

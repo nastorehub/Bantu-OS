@@ -1,13 +1,13 @@
 # Hotkeys
 
-On Herald OS Linux the system key is `Super` (the Windows or Command key); in the virtual machine on
+On Bantu OS Linux the system key is `Super` (the Windows or Command key); in the virtual machine on
 a Mac it is `Alt` instead, because macOS keeps `Command` for itself. `Super+K` shows every Linux
-shortcut on screen. Herald's own pages also answer to `Ctrl` on Linux, so `Ctrl+K` and `Ctrl+1`
+shortcut on screen. Bantu's own pages also answer to `Ctrl` on Linux, so `Ctrl+K` and `Ctrl+1`
 work everywhere.
 
-## NasTech and Herald OS
+## NasTech and Bantu OS
 
-| Action | macOS | Herald OS Linux |
+| Action | macOS | Bantu OS Linux |
 | --- | --- | --- |
 | Command bar | `Cmd+K` | `Super+Shift+Space` or `Ctrl+K` |
 | All applications | `Cmd+Shift+A` | `Super+A` |
@@ -17,7 +17,7 @@ work everywhere.
 | Ask about part of the screen | `Cmd+Shift+S` | `Super+Shift+S` |
 | Ask about the focused window | | `Super+Space` |
 | Screenshot of the whole screen, to NasTech | | `Super+Ctrl+Shift+S` |
-| Herald OS menu: apps, themes, updates | | `Super+M` or `Super+Alt+Space` |
+| Bantu OS menu: apps, themes, updates | | `Super+M` or `Super+Alt+Space` |
 | Show these hotkeys | | `Super+K` |
 | Overview, NasTech, Missions, Memory, Files, Automations, Connections | `Cmd+1` ... `Cmd+7` | `Ctrl+1` ... `Ctrl+7` |
 | Settings | `Cmd+,` | `Super+,` |
@@ -32,7 +32,7 @@ work everywhere.
 | Lock, power menu | | `Super+Ctrl+L`, `Super+Escape` |
 | Leave or enter fullscreen, quit | `Cmd+Ctrl+F`, `Cmd+Q` | `Super+Shift+Escape` quits the session |
 
-## Windows (Herald OS Linux)
+## Windows (Bantu OS Linux)
 
 | Action | Keys |
 | --- | --- |
@@ -47,7 +47,7 @@ work everywhere.
 | Spaces: Personal, Work, Ideas | `Super+1`, `Super+2`, `Super+3` (with `Shift` to move the window there) |
 | Previous window | `Super+Tab` |
 
-## Quick panels and switches (Herald OS Linux)
+## Quick panels and switches (Bantu OS Linux)
 
 | Action | Keys |
 | --- | --- |
@@ -56,7 +56,7 @@ work everywhere.
 | Night light, stay awake, do not disturb | `Super+Ctrl+N`, `Super+Ctrl+I`, `Super+Ctrl+,` |
 | Turn the screens off | `Super+Shift+P` |
 
-## Capture (Herald OS Linux)
+## Capture (Bantu OS Linux)
 
 | Action | Keys |
 | --- | --- |
@@ -66,10 +66,10 @@ work everywhere.
 | Pick a colour from the screen | `Super+Ctrl+Print` |
 | Ask NasTech about part of the screen | `Super+Shift+S` |
 
-## Herald Canvas
+## Bantu Canvas
 
-The image editor uses the usual photo-editor keys; [the Herald Canvas page](canvas.md#tools) lists
-them all. `Cmd` on a Mac is `Ctrl` on Herald OS Linux.
+The image editor uses the usual photo-editor keys; [the Bantu Canvas page](canvas.md#tools) lists
+them all. `Cmd` on a Mac is `Ctrl` on Bantu OS Linux.
 
 | Action | Keys |
 | --- | --- |
@@ -82,16 +82,16 @@ them all. `Cmd` on a Mac is `Ctrl` on Herald OS Linux.
 | Duplicate (or copy the selection to a layer), Deselect | `Cmd+J`, `Cmd+D` |
 | Fit on screen, actual pixels | `Cmd+0`, `Cmd+1` |
 
-## Omarchy keys (Herald OS Linux)
+## Omarchy keys (Bantu OS Linux)
 
-Coming from Omarchy? Settings > General > Keymap, or `herald-os keymap omarchy`, makes `Super+C`,
+Coming from Omarchy? Settings > General > Keymap, or `bantu-os keymap omarchy`, makes `Super+C`,
 `Super+X` and `Super+V` copy, cut and paste in every app, terminals included. Talking to NasTech
-moves to `Super+Shift+V` and centring a column to `Super+Ctrl+C`; `herald-os keymap herald` switches
+moves to `Super+Shift+V` and centring a column to `Super+Ctrl+C`; `bantu-os keymap bantu` switches
 back.
 
 ## Your own shortcuts
 
-On Herald OS Linux, add binds to `~/.config/niri/local.kdl`, which Herald OS never overwrites; any
-`herald-os` command can be a bind, and binding a key Herald OS already uses replaces it.
+On Bantu OS Linux, add binds to `~/.config/niri/local.kdl`, which Bantu OS never overwrites; any
+`bantu-os` command can be a bind, and binding a key Bantu OS already uses replaces it.
 [Make it yours](make-it-yours.md#keyboard-shortcuts) has examples, including switching a key off,
 and NasTech can write them for you: "add a shortcut that opens Obsidian".

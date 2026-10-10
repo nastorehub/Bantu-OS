@@ -2,7 +2,7 @@ import { app, BrowserWindow, screen, shell } from 'electron'
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import type { HeraldOSPrefs } from '../shared/ipc.ts'
+import type { BantuOSPrefs } from '../shared/ipc.ts'
 import { osEnv } from './env.ts'
 import { audienceWindow } from './office/presenter.ts'
 import { devServerUrl, isShellPage, rendererIndex } from './paths.ts'
@@ -16,9 +16,9 @@ export function appIconPath(): string | undefined {
   return [path.join(root, 'build', 'icon.png'), path.join(root, 'dist', 'renderer', 'brand', 'nastech-icon.png')].find(file => fs.existsSync(file))
 }
 
-export function createMainWindow(prefs: HeraldOSPrefs): BrowserWindow {
+export function createMainWindow(prefs: BantuOSPrefs): BrowserWindow {
   const { workAreaSize } = screen.getPrimaryDisplay()
-  // Herald OS Linux: the shell is the whole session (cage hands it the only output). Kiosk mode
+  // Bantu OS Linux: the shell is the whole session (cage hands it the only output). Kiosk mode
   // removes every escape hatch a window manager would normally offer.
   const kiosk = osEnv('KIOSK') === '1'
   const darwin = process.platform === 'darwin'
@@ -30,9 +30,9 @@ export function createMainWindow(prefs: HeraldOSPrefs): BrowserWindow {
     show: false,
     frame: false,
     titleBarStyle: 'hidden',
-    // Herald OS is its own environment: launch fullscreen on its own Space. `simpleFullscreen`
+    // Bantu OS is its own environment: launch fullscreen on its own Space. `simpleFullscreen`
     // keeps the menu bar hidden without the macOS fullscreen animation on every toggle.
-    // HERALD_OS_WINDOWED=1 is a developer escape hatch for automated runs and screenshots.
+    // BANTU_OS_WINDOWED=1 is a developer escape hatch for automated runs and screenshots.
     fullscreen: kiosk || (prefs.fullscreenOnLaunch && !osEnv('WINDOWED')),
     kiosk,
     simpleFullscreen: false,

@@ -1,7 +1,7 @@
-# Herald OS Architecture
+# Bantu OS Architecture
 
-Herald OS is an agent-native operating system: it makes NasTech Agent the primary interface between
-the user and the computer. Herald OS Linux is the whole system (Fedora underneath, the Herald shell
+Bantu OS is an agent-native operating system: it makes NasTech Agent the primary interface between
+the user and the computer. Bantu OS Linux is the whole system (Fedora underneath, the Bantu shell
 as the session); on macOS the same shell runs fullscreen over the macOS desktop. It is a separate
 product from NasTech Desktop: it consumes the upstream NasTech runtime unchanged and grows its own
 shell on top.
@@ -17,7 +17,7 @@ The same seam rules upstream NasTech Desktop uses apply here:
 | NasTech runtime | The work: sessions, model calls, tools, skills, memory, cron, approvals | the user's NasTech install (`$NASTECH_HOME/nastech-agent`) |
 
 The renderer never touches Node or Electron directly; native power arrives through a narrow,
-typed preload bridge (`window.heraldOS`). Agent behaviour is never re-implemented in React.
+typed preload bridge (`window.bantuOS`). Agent behaviour is never re-implemented in React.
 
 ```mermaid
 flowchart LR
@@ -30,10 +30,10 @@ flowchart LR
   subgraph runtime [NasTech runtime in NASTECH_HOME]
     Serve["nastech serve (JSON-RPC + REST)"]
     Agent[AIAgent, tools, skills, memory]
-    Bridge[herald-os-bridge plugin]
+    Bridge[bantu-os-bridge plugin]
     Serve --> Agent --> Bridge
   end
-  Renderer -->|"WebSocket JSON-RPC (@herald-os/client)"| Serve
+  Renderer -->|"WebSocket JSON-RPC (@bantu-os/client)"| Serve
   Main -->|"REST with session token"| Serve
   Bridge -->|"request_tool_approval"| Serve
   Bridge -->|"mdfind, open, lsof, ps, osascript"| macOS[(macOS)]
@@ -45,7 +45,7 @@ flowchart LR
 Both seams (`HostPlatform` in Electron main, `HostAdapter` in the bridge plugin) are implemented per
 host. The renderer and the agent see identical tool names and return shapes on every platform.
 
-| | macOS | Linux (Herald OS Linux) | Windows |
+| | macOS | Linux (Bantu OS Linux) | Windows |
 | --- | --- | --- | --- |
 | Shell runs as | fullscreen over the macOS desktop | the whole session: `greetd` -> `niri` -> shell (`cage` as a fallback) | stub |
 | `HostPlatform` | `platform/darwin.ts` (`plutil`, `sips`, `qlmanage`, `mdfind`, EventKit JXA) | `platform/linux.ts` (`/proc`, `.desktop` entries, icon themes, `nmcli`, `recently-used.xbel`, GNOME thumbnail cache) | `platform/generic.ts` |
@@ -58,15 +58,15 @@ Setup, session model and dev loop for Linux: `docs/LINUX.md`.
 ## Backend lifecycle
 
 1. Resolve a runtime through an ordered ladder (`apps/desktop/electron/backend/resolve.ts`):
-   `HERALD_OS_NASTECH_ROOT` -> `$NASTECH_HOME/nastech-agent` managed install (the `.nastech/bin/nastech`
+   `BANTU_OS_NASTECH_ROOT` -> `$NASTECH_HOME/nastech-agent` managed install (the `.nastech/bin/nastech`
    launcher today's installers publish, else the `venv/bin/python` of earlier ones) -> `nastech` on
-   `PATH` or in `~/.local/bin`. Each candidate is probed before use. `herald-os` looks the same way
-   (`nastech_install`; `herald-os nastech-command` for scripts such as `firstboot.sh` and
-   `herald-os-update`). With no runtime the shell waits and looks again every few seconds; on the
-   image it also waits while `/var/lib/herald-os/nastech-pending` says the first boot's NasTech install
-   is still to come (`herald-os-nastech.service`).
+   `PATH` or in `~/.local/bin`. Each candidate is probed before use. `bantu-os` looks the same way
+   (`nastech_install`; `bantu-os nastech-command` for scripts such as `firstboot.sh` and
+   `bantu-os-update`). With no runtime the shell waits and looks again every few seconds; on the
+   image it also waits while `/var/lib/bantu-os/nastech-pending` says the first boot's NasTech install
+   is still to come (`bantu-os-nastech.service`).
 2. Spawn `nastech serve --host 127.0.0.1 --port 0` with `NASTECH_DASHBOARD_SESSION_TOKEN` (random per
-   launch), `HERALD_OS=1`, and `NASTECH_HOME`.
+   launch), `BANTU_OS=1`, and `NASTECH_HOME`.
 3. Read `NASTECH_BACKEND_READY port=N` from stdout, then poll `GET /api/status` with
    `X-Nastech-Session-Token` until it answers.
 4. Hand `{ wsUrl, baseUrl }` to the renderer. The renderer dials `ws://127.0.0.1:N/api/ws?token=...`
@@ -78,11 +78,11 @@ Setup, session model and dev loop for Linux: `docs/LINUX.md`.
 ## Wire contract
 
 The wire is declared in Python (`tui_gateway/contracts`) and generated into
-`apps/shared/src/gateway-contract.generated.ts` upstream. Herald OS re-exports that file through
+`apps/shared/src/gateway-contract.generated.ts` upstream. Bantu OS re-exports that file through
 `packages/nastech-client`, so a field the backend stops sending fails `tsc` here instead of drifting.
 
-Sessions are created with `source: "herald_os"`. Upstream only folds Desktop-only GUI tools into
-sessions whose source is `desktop`, so a Herald OS session never receives tools whose client half
+Sessions are created with `source: "bantu_os"`. Upstream only folds Desktop-only GUI tools into
+sessions whose source is `desktop`, so a Bantu OS session never receives tools whose client half
 lives in NasTech Desktop.
 
 Server-to-client requests the shell answers: `approval`, `clarify`, `sudo`, `secret`. Anything else
@@ -97,7 +97,7 @@ and a small window manager. Its apps are registered in `src/shell/apps.ts`:
 
 - **Pages** of the main NasTech window, picked from its sidebar: Overview, NasTech (chat), Missions,
   Memory, Files, Automations, Connections, Settings.
-- **Floating apps** with their own window: Terminal, System, Web, Studio, Herald Canvas, Herald
+- **Floating apps** with their own window: Terminal, System, Web, Studio, Bantu Canvas, Bantu
   Docs, Sheets and Slides, and a chat pop-out.
 
 It runs in one of two modes, chosen by Electron main (`electron/shell/mode.ts`):
@@ -105,7 +105,7 @@ It runs in one of two modes, chosen by Electron main (`electron/shell/mode.ts`):
 | Mode | Used by | Windows |
 | --- | --- | --- |
 | `desktop` | macOS, Linux under `cage` | One fullscreen Electron window; the renderer's own window manager (`src/store/windows.ts`, `src/shell/wm/`) lays out every app inside it. |
-| `panels` | Linux under `niri` (`HERALD_OS_SHELL_MODE=panels`) | One Electron window per surface (menu bar, dock, main window, command bar, wallpaper, each floating app), tiled by the compositor. `src/shell/ShellRoot.tsx` picks what each window shows. |
+| `panels` | Linux under `niri` (`BANTU_OS_SHELL_MODE=panels`) | One Electron window per surface (menu bar, dock, main window, command bar, wallpaper, each floating app), tiled by the compositor. `src/shell/ShellRoot.tsx` picks what each window shows. |
 
 Code layout (details in [`apps/desktop/README.md`](../apps/desktop/README.md), conventions in
 [`apps/desktop/DESIGN.md`](../apps/desktop/DESIGN.md)): `src/shell` is the desktop chrome,
@@ -121,11 +121,11 @@ catalogue in `src/commands/`), so three callers drive the UI the same way:
 2. The voice fast path (`src/lib/voice/intents.ts`), which runs simple requests such as "open
    missions" or "hide the sidebar" locally, without a model round-trip.
 3. NasTech itself, through the bridge's `os_ui` tool. Electron main serves a JSON-lines Unix socket
-   (`~/.nastech/herald-os/control.sock` in desktop mode, `$XDG_RUNTIME_DIR/herald-os/control.sock`
+   (`~/.nastech/bantu-os/control.sock` in desktop mode, `$XDG_RUNTIME_DIR/bantu-os/control.sock`
    in panels mode) and hands the backend its path and a per-launch token
-   (`HERALD_OS_CONTROL_SOCKET`, `HERALD_OS_CONTROL_TOKEN`). The socket is readable only by the
+   (`BANTU_OS_CONTROL_SOCKET`, `BANTU_OS_CONTROL_TOKEN`). The socket is readable only by the
    user (mode 0600) and refuses requests without the token. In panels mode it also serves the
-   `herald-os` CLI that the compositor's hotkeys call; those commands need no token.
+   `bantu-os` CLI that the compositor's hotkeys call; those commands need no token.
 
 Voice (engines, wake word, barge-in) is described in [`VOICE.md`](VOICE.md).
 
@@ -156,7 +156,7 @@ The Overview leads with up to three threads of work the user may want to resume.
 The feature stays off until the user turns it on, because the names of files, projects,
 conversations and events go to the model provider.
 
-## Herald Canvas
+## Bantu Canvas
 
 The image editor (decision record: ADR-020; using it: [the manual](manual/canvas.md)) lives in
 `src/features/canvas`, with the project format in `shared/canvas` and file access in
@@ -181,9 +181,9 @@ The image editor (decision record: ADR-020; using it: [the manual](manual/canvas
   tool maps its actions to them. In panels mode the commands run in the NasTech window and the Canvas
   window, its own process, reloads the project when it changes.
 
-## Herald Office
+## Bantu Office
 
-Herald Docs, Sheets and Slides (decision record: ADR-021; using them:
+Bantu Docs, Sheets and Slides (decision record: ADR-021; using them:
 [the manual](manual/office.md)) live in `src/features/office`, with the formats in `shared/office`
 and file access in `electron/office`.
 
@@ -193,10 +193,10 @@ and file access in `electron/office`.
   saves, watches, prints and closes its documents through an adapter that reads, writes and prints
   its formats (`docs/adapter.ts` and so on); `shared/office/files.ts` says which formats each app
   opens and saves, and main builds its dialogs from it.
-- **The save policy.** Before the first save over a file, the fidelity report lists what Herald
+- **The save policy.** Before the first save over a file, the fidelity report lists what Bantu
   showed differently and what the format will not keep; main copies the original into
-  `office-backups` under the Herald OS data folder the first time Herald writes over it in a session
-  (`electron/office/backups.ts`). Herald saves a document by itself only once the person has saved
+  `office-backups` under the Bantu OS data folder the first time Bantu writes over it in a session
+  (`electron/office/backups.ts`). Bantu saves a document by itself only once the person has saved
   it, and stops when a save would lose something new. A change on disk loads by itself when there
   are no unsaved edits and is a question when there are.
 - **Docs** is TipTap 3 (`docs/`): one schema (`docs/schema.ts`) for the editor, the converters, the
@@ -205,21 +205,21 @@ and file access in `electron/office`.
   notes edited in place on them (`parts.ts`, `PartEditor.tsx`) and sections that each have a page
   setup. Comments (`comments.ts`, `CommentsPanel.tsx`) and live tables of contents (`toc.ts`,
   `toc-view.ts`) are operations of the same API, and templates (`docs/templates/`) and statistics
-  (`statistics.ts`) build and read documents of the same shape. Word files go through Herald's own
+  (`statistics.ts`) build and read documents of the same shape. Word files go through Bantu's own
   reader and the docx package (`shared/office/docx`), Markdown and plain text through
   `shared/office/doc-text.ts`, and the page spell-checks with suggestions on right-click
   (`electron/office/spelling.ts`).
 - **Sheets** is Univer's open-source packages (`univer/`), one instance per open workbook, in
-  Herald's palette (`palette.ts`, `theme.ts`, `univer.css`); formulas are worked out in a worker,
+  Bantu's palette (`palette.ts`, `theme.ts`, `univer.css`); formulas are worked out in a worker,
   `.xlsx` is read and written in another (`sheets/xlsx-worker.ts`), and `sheets/headless.ts` runs
-  Univer without a window for the workbook API (`sheets/model.ts`). Herald's own features attach to
+  Univer without a window for the workbook API (`sheets/model.ts`). Bantu's own features attach to
   each workbook's Univer (`sheets/features.ts`): charts drawn by ECharts in Univer's floating
   objects (`sheets/charts/`), comments and notes, named ranges and validation, each in a folder of
   its own, and the data tools and the summaries built of formulas (`sheets/tools/`).
   `shared/office/xlsx` writes charts, comments and notes into the package after ExcelJS
-  (`finish.ts`), carries the parts of the opened file that Herald does not model, such as pivot
-  tables, pictures and slicers (`keep/`), and keeps what only Herald reads back in a part of its own
-  (`herald-part.ts`).
+  (`finish.ts`), carries the parts of the opened file that Bantu does not model, such as pivot
+  tables, pictures and slicers (`keep/`), and keeps what only Bantu reads back in a part of its own
+  (`bantu-part.ts`).
 - **Slides** is a DOM slide editor: a deck in points with PowerPoint's model (`slides/deck.ts`),
   one view that draws a slide for the editor, the slide list, presenting and PDF export
   (`slides/view/`), TipTap for the text in boxes, shapes and table cells (`slides/editor/`), and the
@@ -231,14 +231,14 @@ and file access in `electron/office`.
   audience window, which main lets open full screen on another display
   (`electron/office/presenter.ts`). `from-document.ts` and `from-sheet.ts` lay out slides from a
   Docs document and tables from a Sheets range by rule. PowerPoint files are written by PptxGenJS
-  with a finishing pass and read by Herald's own DrawingML reader (`slides/pptx/`), and each file
-  Herald saves carries its deck for exact reopening (`slides/pptx/herald-part.ts`).
+  with a finishing pass and read by Bantu's own DrawingML reader (`slides/pptx/`), and each file
+  Bantu saves carries its deck for exact reopening (`slides/pptx/bantu-part.ts`).
 - **NasTech** works through the `docs.*`, `sheets.*`, `slides.*` and `office.list` commands
   (`src/commands/docs.ts`, `docs-depth.ts`, `sheets.ts`, `sheets-depth.ts`, `slides.ts`,
   `office.ts`), which find their document in `agent.ts`: open in this window, the change is one
   transaction (Docs), one Univer undo group (Sheets) or one step of the deck's history (Slides), so
   it is one step to undo and saves the way the person's edits do; a file that is not open is
-  changed and written back only when Herald keeps everything in it. In panels mode each Office app
+  changed and written back only when Bantu keeps everything in it. In panels mode each Office app
   is its own window, and main relays a command from the NasTech window to the window that has the
   document open (`officeRun`). Each window's report carries its documents' selections, which
   `office.list`, the `os_ui` state and spoken requests pass on to NasTech. The Ask NasTech bar and the
@@ -253,15 +253,15 @@ and file access in `electron/office`.
   safety net, and `watches.ts` ends each watch with its window. `print.ts` gives Export as PDF and
   Print one path: the window's print view is loaded, scripts off, in a hidden window that prints it
   to PDF bytes or through the system's print dialog, so paper shows what the PDF does.
-  `templates.ts` keeps the templates the person saves, in `office-templates` under the Herald OS
+  `templates.ts` keeps the templates the person saves, in `office-templates` under the Bantu OS
   data folder. `convert.ts` can convert OpenDocument files through headless LibreOffice when it is
   installed; no window converts through it yet, so `.odt`, `.ods` and `.odp` stay off in
   `shared/office/files.ts`.
 
 ## System bridge
 
-`plugins/herald-os-bridge` is a regular out-of-tree NasTech plugin. It registers a narrow toolset
-(`herald_os`) that exposes the host machine through explicit, permission-tiered tools. Execution
+`plugins/bantu-os-bridge` is a regular out-of-tree NasTech plugin. It registers a narrow toolset
+(`bantu_os`) that exposes the host machine through explicit, permission-tiered tools. Execution
 happens on the backend host behind a `HostAdapter` abstraction (`darwin` and `linux` implemented;
 `windows` is a stub). Sensitive operations route through upstream's own approval gate
 (`tools.approval.request_tool_approval`) so the shell renders one approval card for everything.
@@ -270,10 +270,10 @@ See [`SYSTEM-BRIDGE.md`](SYSTEM-BRIDGE.md).
 ## Upstream compatibility
 
 - The Python runtime is never forked: it is whatever `nastech update` installs.
-- Only `apps/shared/src` is compiled into Herald OS, from a pinned snapshot
+- Only `apps/shared/src` is compiled into Bantu OS, from a pinned snapshot
   (`upstream/UPSTREAM.lock`, fetched by `scripts/sync-upstream.sh`).
 - The plugin uses only public plugin APIs (`register`, `ctx.register_tool`, `ctx.register_skill`,
   `tools.approval.request_tool_approval`), and reads each turn's session source the way NasTech's own
-  tools do (`gateway.session_context.get_session_env`) to keep its tools to Herald OS sessions.
-- Anything Herald OS needs from core that does not exist yet (for example a generic plugin
+  tools do (`gateway.session_context.get_session_env`) to keep its tools to Bantu OS sessions.
+- Anything Bantu OS needs from core that does not exist yet (for example a generic plugin
   server-request hook for client-side execution) is proposed upstream rather than patched locally.

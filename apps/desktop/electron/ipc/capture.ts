@@ -10,7 +10,7 @@ import { pickColourMac, readImageMac } from '../platform/mac-tools.ts'
 
 /** Screen grabs handed to NasTech; they only need to outlive the question about them. */
 export function capturesDir(): string {
-  return path.join(os.tmpdir(), 'herald-os-captures')
+  return path.join(os.tmpdir(), 'bantu-os-captures')
 }
 
 const stamp = () => {
@@ -168,7 +168,7 @@ class Recorder {
     let file: string
 
     if (process.platform === 'darwin') {
-      file = path.join(dir, `Herald OS Recording ${stamp()}.mov`)
+      file = path.join(dir, `Bantu OS Recording ${stamp()}.mov`)
       command = 'screencapture'
       args = ['-v', ...(options.audio ? ['-g'] : []), file]
     } else if (process.platform === 'linux') {
@@ -237,7 +237,7 @@ class Recorder {
 const IMAGE_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.webp', '.gif', '.bmp'])
 const MAX_IMAGE_BYTES = 40 * 1024 * 1024
 
-/** Only images under the home folder or Herald OS's own capture folder are read or written here. */
+/** Only images under the home folder or Bantu OS's own capture folder are read or written here. */
 function userImagePath(target: string, mustExist: boolean): string {
   const file = path.resolve(String(target).replace(/^file:\/\//, ''))
   const inside = [os.homedir(), capturesDir()].some(root => file === root || file.startsWith(`${root}${path.sep}`))
@@ -268,10 +268,10 @@ export function registerCaptureIpc(onRecording: (state: RecordingState) => void)
     return start ? recorder.start(options) : recorder.stop()
   })
   ipcMain.handle(IPC.captureRecordState, () => recorder.state())
-  // macOS: the colour picker, QR codes and text from the screen (Herald OS Linux runs them through its CLI).
+  // macOS: the colour picker, QR codes and text from the screen (Bantu OS Linux runs them through its CLI).
   ipcMain.handle(IPC.captureTool, async (_event, tool: CaptureTool): Promise<CaptureToolResult> => {
     if (process.platform !== 'darwin') {
-      throw new Error('On Herald OS Linux the herald-os CLI runs these tools')
+      throw new Error('On Bantu OS Linux the bantu-os CLI runs these tools')
     }
 
     if (tool === 'colour') {

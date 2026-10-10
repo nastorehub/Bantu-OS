@@ -1,5 +1,5 @@
 /*
- * Text layers for Herald Canvas. A text layer is a pixel layer whose PNG shows the text, plus the
+ * Text layers for Bantu Canvas. A text layer is a pixel layer whose PNG shows the text, plus the
  * text and its style in the manifest, so it can be edited again (and Compositor reads the same
  * record). Fonts are kept by PostScript-style name ("HelveticaNeue-Bold"); lines are laid out here
  * from a measuring function, and drawn with a 2D canvas. Point text grows from where it was

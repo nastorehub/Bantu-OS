@@ -97,7 +97,7 @@ describe('the slide master and its layouts', () => {
     expect(read.headerFooter).toBeUndefined()
   })
 
-  it('names the master and its layouts by id, Herald’s name or the deck’s own', () => {
+  it('names the master and its layouts by id, Bantu’s name or the deck’s own', () => {
     const deck = renameLayoutStep(pitch(), { layout: 'title-content', name: 'Bullets' }).deck
 
     expect(['', 'master', 'Slide Master', 'two columns', 'Section Header', 'bullets'].map((value) => masterPlaceOf(deck, value))).toEqual(['master', 'master', 'master', 'two-content', 'section', 'title-content'])
@@ -185,14 +185,14 @@ describe('the slide master and its layouts', () => {
     expect(() => renameLayoutStep(deck, { name: 'Big' })).toThrow('Say which layout to rename')
   })
 
-  it('puts Herald’s own master back', () => {
+  it('puts Bantu’s own master back', () => {
     const deck = addLogoStep(pitch(), { source: '~/logo.png' }, { front: null, pictures }).deck
     const reset = resetMasterStep(deck)
 
     expect(reset.deck.master).toBeUndefined()
     expect(readMaster(reset.deck).master.elements).toEqual([])
-    expect(reset.done).toMatch(/^put Herald’s own master and layouts back/)
-    expect(resetMasterStep(pitch()).done).toBe('it already has Herald’s own master')
+    expect(reset.done).toMatch(/^put Bantu’s own master and layouts back/)
+    expect(resetMasterStep(pitch()).done).toBe('it already has Bantu’s own master')
   })
 
   it('sets the date, slide number and footer every slide shows, title slides left without them', () => {
@@ -271,13 +271,13 @@ describe('themes', () => {
     const some = setThemeStep(deck, { theme: 'midnight', slide: '2, 3' }, none)
     const custom = { front: null, themes: [brand] }
 
-    expect([some.deck.theme.id, ...some.deck.slides.map((slide) => slide.theme?.id)]).toEqual(['herald', undefined, 'midnight', 'midnight'])
+    expect([some.deck.theme.id, ...some.deck.slides.map((slide) => slide.theme?.id)]).toEqual(['bantu', undefined, 'midnight', 'midnight'])
     expect(some.done).toBe('gave slides 2 and 3 the Midnight theme')
     expect(readDeck(some.deck).slides.map((slide) => ('theme' in slide ? slide.theme : null))).toEqual([null, 'Midnight', 'Midnight'])
     expect(setThemeStep(deck, { theme: 'midnight', slide: 'all' }, none).deck.theme.id).toBe('midnight')
     expect(setThemeStep(deck, { theme: 'Brand' }, custom).deck.theme).toBe(brand)
     expect(setThemeStep(deck, { theme: 'custom-brand' }, custom).deck.theme).toBe(brand)
-    expect(() => setThemeStep(deck, { theme: 'neon' }, custom)).toThrow('theme is one of herald, midnight, paper, graphite, forest, coral, mono, ocean, aurora, dune, slate, blossom, ember or a custom theme (Brand: custom-brand), not “neon”')
+    expect(() => setThemeStep(deck, { theme: 'neon' }, custom)).toThrow('theme is one of bantu, midnight, paper, graphite, forest, coral, mono, ocean, aurora, dune, slate, blossom, ember or a custom theme (Brand: custom-brand), not “neon”')
   })
 
   it('makes a custom theme from another with colours and fonts changed, under a name of its own', () => {
@@ -295,7 +295,7 @@ describe('themes', () => {
     expect(() => themeFromArgs({ name: 'Odd', background: 'navy' }, THEMES[0], THEMES)).toThrow('A theme’s background colour is one of its colours')
   })
 
-  it('lists Herald’s themes and the person’s', () => {
+  it('lists Bantu’s themes and the person’s', () => {
     const listed = themesList([brand])
 
     expect(listed.themes.map((theme) => theme.id)).toEqual(THEMES.map((theme) => theme.id))
@@ -502,7 +502,7 @@ describe('tables and slides from a sheet', () => {
       ['Region', 'Units'],
       ['Region 1', '100']
     ])
-    expect(() => insertRangeStep(deck, { slide: 2, workbook: 'Sales.xlsx', range: 'selection' }, { front: null, sheets: new Map([['Sales.xlsx', { ...source, selection: null }]]) })).toThrow('Only a workbook open in Herald Sheets has a selection: give a range of Sales.xlsx, like A1:D12')
+    expect(() => insertRangeStep(deck, { slide: 2, workbook: 'Sales.xlsx', range: 'selection' }, { front: null, sheets: new Map([['Sales.xlsx', { ...source, selection: null }]]) })).toThrow('Only a workbook open in Bantu Sheets has a selection: give a range of Sales.xlsx, like A1:D12')
     expect(() => insertRangeStep(deck, { workbook: 'Other.xlsx' }, { front: null, sheets })).toThrow('The workbook Other.xlsx was not read')
   })
 
@@ -524,13 +524,13 @@ describe('tables and slides from a sheet', () => {
   })
 })
 
-// Documents as Herald Docs holds them.
+// Documents as Bantu Docs holds them.
 const p = (text: string): DocNode => ({ type: 'paragraph', content: [{ type: 'text', text }] })
 const h = (level: number, text: string): DocNode => ({ type: 'heading', attrs: { level }, content: [{ type: 'text', text }] })
 const ul = (...items: string[]): DocNode => ({ type: 'bulletList', content: items.map((item) => ({ type: 'listItem', content: [p(item)] })) })
 const doc = (...content: DocNode[]): DocJSON => ({ type: 'doc', content })
 
-/** A change of Herald Docs' made to a document as on a file, and the document it leaves. */
+/** A change of Bantu Docs' made to a document as on a file, and the document it leaves. */
 function made(change: Change, json: DocJSON): DocJSON {
   const state = stateOf(json)
   const tr = change.build(state, null, false)(state)
@@ -668,7 +668,7 @@ describe('reading a deck’s depth', () => {
     deck = setHeaderFooterStep(deck, { number: true, date: true }).deck
     const read = readDeck(deck)
 
-    expect(read).toMatchObject({ theme: 'Herald', transition: 'fade', headerFooter: { date: { format: 'numeric' }, slideNumber: true } })
+    expect(read).toMatchObject({ theme: 'Bantu', transition: 'fade', headerFooter: { date: { format: 'numeric' }, slideNumber: true } })
     expect(read.slides[0]).not.toHaveProperty('theme')
     expect(read.slides[0]).not.toHaveProperty('transition')
     expect(read.slides[1]).toMatchObject({ theme: 'Midnight', transition: { kind: 'push', direction: 'up', seconds: 0.5 } })

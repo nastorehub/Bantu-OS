@@ -3,7 +3,7 @@ import { atom } from 'nanostores'
 import type { ReactNode } from 'react'
 
 /*
- * Herald Sheets' own dialogs (Summarize, Validation, Names…) and its side panel (a chart's settings),
+ * Bantu Sheets' own dialogs (Summarize, Validation, Names…) and its side panel (a chart's settings),
  * over and beside the sheet of the document they belong to. A feature opens one with the element to
  * show; one dialog and one panel at a time.
  */

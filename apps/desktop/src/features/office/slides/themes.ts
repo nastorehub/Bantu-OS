@@ -1,7 +1,7 @@
 import { type Background, type Color, type Deck, type FontRef, type GradientStop, type Slide, type Slot, SLOTS, type Theme } from './deck.ts'
 
 /*
- * Herald Slides' themes: ten colour slots (backgrounds, text and six accents, as PowerPoint's theme
+ * Bantu Slides' themes: ten colour slots (backgrounds, text and six accents, as PowerPoint's theme
  * has them) and a heading and a body font. Elements name slots and theme fonts, so applying a theme
  * repaints a deck without touching what was picked by hand. Each built-in theme's text reads at
  * 4.5:1 or better on both its backgrounds and its accents at 3:1 or better on the first; its fonts
@@ -28,7 +28,7 @@ const shade = (from: Slot, to: Slot, angle: number, radial = false): Background 
 
 /** In slot order: bg1, tx1, bg2, tx2, accent1 to accent6. */
 export const THEMES: readonly Theme[] = [
-  theme('herald', 'Herald', ['Avenir Next', 'Avenir Next'], ['#ffffff', '#13204a', '#eef3ff', '#3a4a7a', '#2563eb', '#0d8a7f', '#b86e00', '#d6405b', '#6d5ce8', '#1a7fb0']),
+  theme('bantu', 'Bantu', ['Avenir Next', 'Avenir Next'], ['#ffffff', '#13204a', '#eef3ff', '#3a4a7a', '#2563eb', '#0d8a7f', '#b86e00', '#d6405b', '#6d5ce8', '#1a7fb0']),
   theme('midnight', 'Midnight', ['Helvetica Neue', 'Helvetica Neue'], ['#0a1435', '#f3f7ff', '#142357', '#b4c4ee', '#5c9dff', '#36e6a6', '#f2c25e', '#ff7a7a', '#a99cff', '#3ad4ff']),
   theme('paper', 'Paper', ['Georgia', 'Georgia'], ['#fbf7ef', '#2b2520', '#f2eadb', '#5f5044', '#a84b24', '#3e6b59', '#8f6514', '#6b4e8a', '#2f6690', '#8c3b3b']),
   theme('graphite', 'Graphite', ['Futura', 'Avenir Next'], ['#1e1f23', '#edeef0', '#2b2d33', '#b0b5be', '#f2c85c', '#4cc2ff', '#ff8a6b', '#7bd88f', '#c38fff', '#ff6f98']),

@@ -2,7 +2,7 @@ import type { ShapeKind } from './deck.ts'
 import type { GeometryDefinition } from './shapes-geometry.ts'
 
 /*
- * Every preset Herald draws, as DrawingML's preset definitions give it: its adjust values with
+ * Every preset Bantu draws, as DrawingML's preset definitions give it: its adjust values with
  * their defaults, its guides, its paths (with the parts PowerPoint shades or leaves unfilled), and
  * its text rectangle. Written in the formula language shapes-geometry.ts works out.
  */

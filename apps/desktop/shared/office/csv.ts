@@ -196,7 +196,7 @@ export function decodeCsv(bytes: Uint8Array): { text: string; encoding: CsvEncod
   try {
     return { text: new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(bytes), encoding: 'utf-8', notes: [] }
   } catch {
-    return { text: new TextDecoder('windows-1252').decode(bytes), encoding: 'utf-8', notes: ['The file is not in UTF-8; Herald reads it as Windows-1252 and saves it as UTF-8.'] }
+    return { text: new TextDecoder('windows-1252').decode(bytes), encoding: 'utf-8', notes: ['The file is not in UTF-8; Bantu reads it as Windows-1252 and saves it as UTF-8.'] }
   }
 }
 

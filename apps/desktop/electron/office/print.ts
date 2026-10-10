@@ -50,7 +50,7 @@ const NO_PRINTER = /^(No printers available on the network|Failed to enumerate p
 const pdfOptions = (landscape: boolean, pageSize: OfficePdfRequest['pageSize'] = 'A4'): Electron.PrintToPDFOptions => ({ printBackground: true, landscape, pageSize, preferCSSPageSize: true, margins: { top: 0, bottom: 0, left: 0, right: 0 } })
 
 async function withPrintView<T>(html: string, name: string, surface: PrintSurface, run: (surface: PrintSurface) => Promise<T>): Promise<T> {
-  const work = await fs.mkdtemp(path.join(os.tmpdir(), 'herald-office-print-'))
+  const work = await fs.mkdtemp(path.join(os.tmpdir(), 'bantu-office-print-'))
 
   try {
     // A file, not a data: URL, so a print view with many pictures is not limited in length.

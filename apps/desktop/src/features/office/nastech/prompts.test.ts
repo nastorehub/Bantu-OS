@@ -42,7 +42,7 @@ describe('the prompt for a request about a document', () => {
   it('names the document, the words and the docs tool, and asks for one call and a short reply', () => {
     const prompt = buildPrompt(docs())
 
-    expect(prompt.startsWith('[Herald Docs] The person is working on “Report.docx” (~/Documents/Report.docx) in Herald Docs and asks: make the intro friendlier\n')).toBe(true)
+    expect(prompt.startsWith('[Bantu Docs] The person is working on “Report.docx” (~/Documents/Report.docx) in Bantu Docs and asks: make the intro friendlier\n')).toBe(true)
     expect(prompt).toContain('- Work on that document with the docs tool (document="~/Documents/Report.docx").')
     expect(prompt).toContain('Land the whole change in ONE call where you can (action=edit for several changes): each call is one step the person can undo.')
     expect(prompt).toContain('- Do not save unless asked.')
@@ -75,18 +75,18 @@ describe('the prompt for a request about a document', () => {
   it('calls a document that is not saved yet by its tab name', () => {
     const prompt = buildPrompt(docs({ document: { name: 'Untitled 2', path: null } }))
 
-    expect(prompt).toContain('working on “Untitled 2” (not saved yet: call it "Untitled 2") in Herald Docs')
+    expect(prompt).toContain('working on “Untitled 2” (not saved yet: call it "Untitled 2") in Bantu Docs')
     expect(prompt).toContain('docs tool (document="Untitled 2")')
   })
 
   it('lists the other open documents, at most eight, for requests across them', () => {
     const prompt = buildPrompt(docs({ others: [{ app: 'sheets', name: 'Budget.xlsx', path: '/Users/sam/Budget.xlsx', selection: 'Sheet1!B2:D9' }, { app: 'docs', name: 'Notes', path: null }] }))
 
-    expect(prompt).toContain('Also open in Herald Office: “Budget.xlsx” (Herald Sheets, ~/Budget.xlsx, selection Sheet1!B2:D9); “Notes” (Herald Docs, not saved yet).')
+    expect(prompt).toContain('Also open in Bantu Office: “Budget.xlsx” (Bantu Sheets, ~/Budget.xlsx, selection Sheet1!B2:D9); “Notes” (Bantu Docs, not saved yet).')
 
     const many = buildPrompt(docs({ others: Array.from({ length: 11 }, (_, n) => ({ app: 'docs' as const, name: `Draft ${n + 1}`, path: null })) }))
 
-    expect(many).toContain('“Draft 8” (Herald Docs, not saved yet), and 3 more.')
+    expect(many).toContain('“Draft 8” (Bantu Docs, not saved yet), and 3 more.')
     expect(many).not.toContain('Draft 9')
   })
 })
@@ -95,7 +95,7 @@ describe('the prompt for a request about a workbook', () => {
   it('shows the selection as a grid with the active cell’s formula, and names the sheets tool', () => {
     const prompt = buildPrompt(sheets())
 
-    expect(prompt.startsWith('[Herald Sheets] The person is working on “Budget.xlsx” (~/Budget.xlsx) in Herald Sheets and asks: add a total row\n')).toBe(true)
+    expect(prompt.startsWith('[Bantu Sheets] The person is working on “Budget.xlsx” (~/Budget.xlsx) in Bantu Sheets and asks: add a total row\n')).toBe(true)
     expect(prompt).toContain('Selection: Sheet1!B2:D4 (3 rows × 3 columns); the active cell D2 holds =SUM(B2:C2).')
     expect(prompt).toContain('What the cells show:\nrow | B | C | D\n2 | Rent | 1,200 | 1,200\n3 | Food | 300 | \n4 | Bus | 80 | 80')
     expect(prompt).toContain('- Work on that workbook with the sheets tool (workbook="~/Budget.xlsx"); range=selection is the selected cells.')
@@ -178,7 +178,7 @@ describe('the inline actions', () => {
   it('reviews a document that is not saved yet by its tab name', () => {
     const prompt = buildPrompt(docs({ document: { name: 'Untitled 2', path: null }, action: { id: 'review' } }))
 
-    expect(prompt).toContain('working on “Untitled 2” (not saved yet: call it "Untitled 2") in Herald Docs')
+    expect(prompt).toContain('working on “Untitled 2” (not saved yet: call it "Untitled 2") in Bantu Docs')
     expect(prompt).toContain('action=add_comments document="Untitled 2" comments=[')
   })
 
@@ -295,7 +295,7 @@ describe('the prompt for a request about a presentation', () => {
   it('names the slide in front by number, with its text, notes, selection and the deck’s titles', () => {
     const prompt = buildPrompt(deck())
 
-    expect(prompt.startsWith('[Herald Slides] The person is working on “Pitch.pptx” (~/Pitch.pptx) in Herald Slides and asks: add a slide about pricing\n')).toBe(true)
+    expect(prompt.startsWith('[Bantu Slides] The person is working on “Pitch.pptx” (~/Pitch.pptx) in Bantu Slides and asks: add a slide about pricing\n')).toBe(true)
     expect(prompt).toContain(
       'In front: slide 3 of 5, “Market” (layout title-content, id slide-3).\nIts text:\n"""\nGrowing 20% a year\n  Mostly in Europe\n"""\nIts speaker notes:\n"""\nSay the number twice.\n"""\nSelected on it: text box “Source: Gartner”.\nThe slides: 1 “Pitch”, 2 “Problem”, 3 “Market”, 4 (no title), 5 “Ask”.'
     )

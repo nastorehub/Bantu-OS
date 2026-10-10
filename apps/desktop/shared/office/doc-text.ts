@@ -7,10 +7,10 @@ import { type CalloutKind, commentsOf, type DocJSON, type DocMark, type DocNode,
 import { fieldText } from './fields.ts'
 
 /*
- * Plain text and Markdown as Herald Docs documents and back. Plain text keeps its lines as
+ * Plain text and Markdown as Bantu Docs documents and back. Plain text keeps its lines as
  * paragraphs. Markdown is read as CommonMark with GitHub's tables, task lists, strikethrough,
  * autolinks and footnotes: headings, emphasis, lists, links, pictures, tables, code blocks with
- * their language, quotes, rules and notes. GitHub's alerts (> [!NOTE]) are Herald's callouts;
+ * their language, quotes, rules and notes. GitHub's alerts (> [!NOTE]) are Bantu's callouts;
  * underline, superscript, subscript and highlight go through the HTML tags Markdown allows; a page
  * break is an empty marked div. Fields are saved as the text they show, and text boxes as their
  * blocks. What Markdown cannot hold is listed when saving.
@@ -175,7 +175,7 @@ export function textFromDocument(document: DocJSON, layout: Partial<TextLayout> 
 
 // Markdown: reading.
 
-/** GitHub's alert kinds and Herald's callouts, each way. */
+/** GitHub's alert kinds and Bantu's callouts, each way. */
 const ALERTS: Record<string, CalloutKind> = { NOTE: 'info', TIP: 'success', IMPORTANT: 'note', WARNING: 'warning', CAUTION: 'error' }
 const ALERT_OF: Record<CalloutKind, string> = { info: 'NOTE', success: 'TIP', note: 'IMPORTANT', warning: 'WARNING', error: 'CAUTION' }
 const ALERT_START = /^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\][ \t]*(?:\n|$)/i
@@ -486,7 +486,7 @@ const LAYOUT_ATTRS = ['lineHeight', 'spaceBefore', 'spaceAfter', 'indent', 'firs
 const MARK_ORDER: readonly MarkName[] = ['link', 'bold', 'italic', 'strike', 'underline', 'superscript', 'subscript', 'highlight']
 const HTML_TAG: Partial<Record<MarkName, string>> = { underline: 'u', superscript: 'sup', subscript: 'sub', highlight: 'mark' }
 
-/** Footnote markers Herald shows as text go back as they were written, not escaped. */
+/** Footnote markers Bantu shows as text go back as they were written, not escaped. */
 const FOOTNOTE = /\[\^[^\]\s]+\](?::)?/g
 
 const raw = (value: string): Html => ({ type: 'html', value })

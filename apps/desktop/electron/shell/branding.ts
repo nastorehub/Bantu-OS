@@ -8,7 +8,7 @@ import { log } from '../log.ts'
 
 /*
  * Branding (About's logo and name, the Linux lock-screen picture). Main is the only writer: Settings,
- * the commands and `herald-os branding` all come here; `herald-os lock` reads branding.json.
+ * the commands and `bantu-os branding` all come here; `bantu-os lock` reads branding.json.
  */
 
 interface Stored {
@@ -17,7 +17,7 @@ interface Stored {
   lock?: string
 }
 
-export const brandingDir = (): string => path.join(os.homedir(), '.config', 'herald-os', 'branding')
+export const brandingDir = (): string => path.join(os.homedir(), '.config', 'bantu-os', 'branding')
 const storeFile = () => path.join(brandingDir(), 'branding.json')
 const expandHome = (value: string) => (value === '~' ? os.homedir() : value.startsWith('~/') ? path.join(os.homedir(), value.slice(2)) : value)
 

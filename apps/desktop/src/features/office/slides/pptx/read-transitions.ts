@@ -4,8 +4,8 @@ import { DIRECTIONS, transitionFor } from '../transitions.ts'
 import { attr, child, childrenNamed, elements, flagAttr, numberAttr, type XmlElement } from './xml.ts'
 
 /*
- * A slide's transition as Herald plays it: the effects Herald has as themselves, with the way they
- * travel and how long they take, and PowerPoint's others as the nearest effect Herald has.
+ * A slide's transition as Bantu plays it: the effects Bantu has as themselves, with the way they
+ * travel and how long they take, and PowerPoint's others as the nearest effect Bantu has.
  */
 
 /** How long each of PowerPoint's speeds takes, in milliseconds (a transition says `fast` by default). */
@@ -15,7 +15,7 @@ const SIDES: Record<string, TransitionDirection> = { l: 'left', r: 'right', u: '
 
 const each = (kind: Transition, names: string): Record<string, Transition> => Object.fromEntries(names.split(' ').map((name) => [name, kind]))
 
-/** Effects Herald does not play, by the one it plays that looks most like each (anything else fades). */
+/** Effects Bantu does not play, by the one it plays that looks most like each (anything else fades). */
 const NEAREST: Record<string, Transition> = {
   ...each('wipe', 'randomBar blinds checker comb strips wedge wheel wheelReverse circle diamond plus'),
   ...each('push', 'pan conveyor ferris gallery switch flip vortex prism'),
@@ -26,7 +26,7 @@ const NEAREST: Record<string, Transition> = {
 export interface TransitionRead {
   /** Null for a slide that just appears. */
   transition: SlideTransition | null
-  /** Whether Herald plays the very effect the slide has. */
+  /** Whether Bantu plays the very effect the slide has. */
   exact: boolean
   /** Whether the slide moves on by itself after a time. */
   timed: boolean
@@ -46,7 +46,7 @@ function transitionElement(root: XmlElement): XmlElement | undefined {
   return among('mc:Choice') ?? child(root, 'p:transition') ?? among('mc:Fallback')
 }
 
-/** An effect Herald plays itself, as it plays it; null for one it does not. */
+/** An effect Bantu plays itself, as it plays it; null for one it does not. */
 function ownEffect(name: string, effect: XmlElement, duration: number): { transition: SlideTransition; exact: boolean } | null {
   const dir = attr(effect, 'dir')
   const through = flagAttr(effect, 'thruBlk') === true
@@ -69,7 +69,7 @@ function ownEffect(name: string, effect: XmlElement, duration: number): { transi
   return name === 'zoom' ? { transition: { kind: 'zoom', duration, direction: dir === 'in' ? 'in' : 'out' }, exact: true } : null
 }
 
-/** A slide's transition as Herald plays it, with what it cannot keep of it. */
+/** A slide's transition as Bantu plays it, with what it cannot keep of it. */
 export function readTransition(root: XmlElement): TransitionRead {
   const element = transitionElement(root)
   const effect = elements(element).find((node) => node.name !== 'p:sndAc' && node.name !== 'p:extLst')

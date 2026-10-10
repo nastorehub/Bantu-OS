@@ -15,7 +15,7 @@ Borrowed from the field (see `LANDSCAPE.md` for the source of each):
 - Whole-environment themes driven by NasTech skins; agent-authored themes (Omarchy).
 - Agent Task Manager: per-session resources, tokens, approvals, stop (OpenNeo).
 - Live "NasTech is acting" banner with Interrupt during GUI automation (SomaOS).
-- `herald-os-tailor` skill so NasTech can reconfigure Herald OS itself (Omarchy).
+- `bantu-os-tailor` skill so NasTech can reconfigure Bantu OS itself (Omarchy).
 - `system_shortcut` tool over macOS Shortcuts / App Intents (Apple).
 
 Also planned:
@@ -33,7 +33,7 @@ Also planned:
   Windows Search for file search), NSIS installer.
 - Signed and notarized macOS builds; auto-update channel.
 
-## Herald OS Linux
+## Bantu OS Linux
 
 No custom kernel at any stage. See `docs/LINUX.md` and ADR-012.
 
@@ -54,22 +54,22 @@ on the Mac (QEMU or UTM).
 
 **Stage 3 (under way, ADR-018): a distribution.** Fedora bootc images: an x86_64 installer ISO
 (optional encryption, dual boot, unattended through kickstart) and an aarch64 VM image, `bootc
-upgrade` and `bootc rollback` behind `herald-os update` and `herald-os rollback`, first-boot setup and
+upgrade` and `bootc rollback` behind `bantu-os update` and `bantu-os rollback`, first-boot setup and
 reset, firewall and SSH off by default, fingerprint and security-key sign-in, firmware updates,
 signed images. Still to come: a recovery partition, an NVIDIA image, Fedora Asahi for M1 and M2.
 Apple Silicon M3 and later stay VM-only until Asahi covers them.
 
 ## Arch and Omarchy (ADR-017)
 
-Fedora stays the base of Herald OS Linux; Arch gets a package. One Linux release tarball per
-architecture feeds both the Fedora images and `packaging/arch/` (`herald-os-bin`, `herald-os-git`).
-On Arch, Herald OS runs as its own session on niri or in app mode inside Hyprland, where it follows
+Fedora stays the base of Bantu OS Linux; Arch gets a package. One Linux release tarball per
+architecture feeds both the Fedora images and `packaging/arch/` (`bantu-os-bin`, `bantu-os-git`).
+On Arch, Bantu OS runs as its own session on niri or in app mode inside Hyprland, where it follows
 the Omarchy theme and defers updates to `omarchy update`. The AUR package is published only when the
 repository goes public.
 
 ## Omarchy parity (October 2026)
 
-What Omarchy has that Herald OS lacked, in the order it is being built:
+What Omarchy has that Bantu OS lacked, in the order it is being built:
 
 1. Agent features on both platforms: crash help, "make it yours" themes and the tailoring skill,
    asking about a screen region, a usage view, event-triggered automations and hooks, a notarized

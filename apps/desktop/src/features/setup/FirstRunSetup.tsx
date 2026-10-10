@@ -11,7 +11,7 @@ import { StatusPanel } from '../status/StatusPanel.tsx'
 type Step = 'welcome' | 'account' | 'wifi' | 'nastech' | 'done'
 
 /**
- * First-boot setup on the Herald OS image: who the computer is for, their name and password,
+ * First-boot setup on the Bantu OS image: who the computer is for, their name and password,
  * Wi-Fi, and NasTech's sign-in. Setting it up for someone else skips the account and leaves setup
  * waiting for them at the next start.
  */
@@ -22,7 +22,7 @@ export function FirstRunSetup() {
   const auth = useStore($nastechAuth)
 
   useEffect(() => {
-    void window.heraldOS.setup
+    void window.bantuOS.setup
       ?.state()
       .then(state => setDue(state.needed))
       .catch(() => undefined)
@@ -38,7 +38,7 @@ export function FirstRunSetup() {
   }
 
   const finish = async () => {
-    await window.heraldOS.setup.finish({ later: forSomeoneElse })
+    await window.bantuOS.setup.finish({ later: forSomeoneElse })
     setDue(false)
   }
 
@@ -46,7 +46,7 @@ export function FirstRunSetup() {
   const next = () => setStep(steps[Math.min(steps.length - 1, steps.indexOf(step) + 1)] ?? 'done')
 
   return (
-    <div className="absolute inset-0 z-(--z-boot) flex items-center justify-center bg-bg/85 backdrop-blur-md animate-fade-in" role="dialog" aria-label="Set up Herald OS">
+    <div className="absolute inset-0 z-(--z-boot) flex items-center justify-center bg-bg/85 backdrop-blur-md animate-fade-in" role="dialog" aria-label="Set up Bantu OS">
       <div className="float flex w-[min(560px,92vw)] flex-col gap-5 rounded-2xl p-7">
         <div className="flex items-center gap-3">
           <NasTechLogo height={22} />
@@ -82,9 +82,9 @@ export function FirstRunSetup() {
             <Heading
               icon={forSomeoneElse ? <IconGift size={18} /> : <IconCheck size={18} />}
               title={forSomeoneElse ? 'Ready to hand over' : 'You are all set'}
-              text={forSomeoneElse ? 'The next time it starts, it asks its new owner for a name, a password and their NasTech sign-in.' : 'Press Super+Space to ask NasTech about anything on screen, or Super+M for the Herald OS menu.'}
+              text={forSomeoneElse ? 'The next time it starts, it asks its new owner for a name, a password and their NasTech sign-in.' : 'Press Super+Space to ask NasTech about anything on screen, or Super+M for the Bantu OS menu.'}
             />
-            <Footer onNext={() => void finish()} label={forSomeoneElse ? 'Done' : 'Start using Herald OS'} />
+            <Footer onNext={() => void finish()} label={forSomeoneElse ? 'Done' : 'Start using Bantu OS'} />
           </div>
         )}
       </div>
@@ -117,7 +117,7 @@ function Footer({ onNext, label, busy, disabled }: { onNext: () => void; label: 
 function Welcome({ onChoose }: { onChoose: (someoneElse: boolean) => void }) {
   return (
     <div className="flex flex-col gap-4">
-      <Heading icon={<IconUser size={18} />} title="Welcome to Herald OS" text="A computer you can talk to. A few questions and it is yours." />
+      <Heading icon={<IconUser size={18} />} title="Welcome to Bantu OS" text="A computer you can talk to. A few questions and it is yours." />
       <div className="grid grid-cols-2 gap-3">
         <button type="button" onClick={() => onChoose(false)} className="glass-input flex flex-col items-start gap-1 rounded-xl p-4 text-left hover:border-line-strong">
           <span className="text-[14px] font-medium text-fg">It is for me</span>
@@ -145,8 +145,8 @@ function Account({ onDone }: { onDone: () => void }) {
     setError(null)
 
     try {
-      await window.heraldOS.setup.name(name)
-      const result = await window.heraldOS.setup.password(password)
+      await window.bantuOS.setup.name(name)
+      const result = await window.bantuOS.setup.password(password)
 
       if (result.ok) {
         onDone()
@@ -166,7 +166,7 @@ function Account({ onDone }: { onDone: () => void }) {
         void save()
       }}
     >
-      <Heading icon={<IconLock size={18} />} title="Your name and password" text="Herald OS greets you by name. The password unlocks the screen and approves changes to the system." />
+      <Heading icon={<IconLock size={18} />} title="Your name and password" text="Bantu OS greets you by name. The password unlocks the screen and approves changes to the system." />
       <label className="flex flex-col gap-1.5 text-[12px] text-fg-3">
         Name
         <input value={name} onChange={event => setName(event.target.value)} autoFocus autoComplete="name" className="glass-input h-10 rounded-lg px-3 text-[14px] text-fg outline-none" />

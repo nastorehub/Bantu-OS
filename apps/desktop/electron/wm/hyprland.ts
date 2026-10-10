@@ -68,8 +68,8 @@ export class HyprlandClient implements Compositor {
 
   async action(action: WmAction): Promise<void> {
     if (action.type === 'screenshot') {
-      // Hyprland has no screenshot UI of its own; Herald's capture does it with grim and slurp.
-      spawn('herald-os', ['capture', 'screenshot', action.what === 'select' ? 'region' : action.what], { detached: true, stdio: 'ignore' }).unref()
+      // Hyprland has no screenshot UI of its own; Bantu's capture does it with grim and slurp.
+      spawn('bantu-os', ['capture', 'screenshot', action.what === 'select' ? 'region' : action.what], { detached: true, stdio: 'ignore' }).unref()
 
       return
     }
@@ -365,12 +365,12 @@ export function toState(clients: unknown, workspaces: unknown, monitors: unknown
   return { available: true, windows, workspaces: spaces, focusedWindowId: windows.some(w => w.id === focusedId) ? focusedId : null }
 }
 
-/** Scratchpads (`special:…`), which Herald leaves alone. Named workspaces have negative ids too. */
+/** Scratchpads (`special:…`), which Bantu leaves alone. Named workspaces have negative ids too. */
 function isSpecial(space: { id?: number; name?: string }): boolean {
   return (space.name ?? '').startsWith('special:')
 }
 
-/** A workspace by number, or by name (Herald's Spaces are named). */
+/** A workspace by number, or by name (Bantu's Spaces are named). */
 function workspaceRef(ref: string | number): string {
   return /^\d+$/.test(String(ref)) ? String(ref) : `name:${ref}`
 }
@@ -405,7 +405,7 @@ export function dispatchLua(action: WmAction): string[] {
     case 'maximize-column':
       return ['hl.dsp.window.fullscreen({ mode = "maximized" })']
     case 'toggle-overview':
-      return ['hl.dsp.exec_cmd("herald-os applications")']
+      return ['hl.dsp.exec_cmd("bantu-os applications")']
     case 'screenshot':
       return []
     case 'raw':
@@ -432,7 +432,7 @@ export function dispatchArgs(action: WmAction): string[][] {
       return [['fullscreen', '1']]
     case 'toggle-overview':
       // No overview without a plugin; the launcher is the closest thing.
-      return [['exec', 'herald-os applications']]
+      return [['exec', 'bantu-os applications']]
     case 'screenshot':
       return []
     case 'raw':

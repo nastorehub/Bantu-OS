@@ -1,6 +1,6 @@
 name: Release
 
-# Builds what Herald OS ships. A tag (v0.2.0) attaches the builds to a draft GitHub release; a manual
+# Builds what Bantu OS ships. A tag (v0.2.0) attaches the builds to a draft GitHub release; a manual
 # run only uploads them as workflow artifacts. Nothing here makes the repository or a release public.
 
 on:
@@ -59,13 +59,13 @@ jobs:
       - name: Verify the signature and the notarization ticket
         if: steps.signing.outputs.signed == 'true'
         run: |
-          app="$(find apps/desktop/release -maxdepth 3 -name 'Herald OS.app' -print -quit)"
+          app="$(find apps/desktop/release -maxdepth 3 -name 'Bantu OS.app' -print -quit)"
           codesign --verify --deep --strict --verbose=2 "$app"
           xcrun stapler validate "$app"
           spctl --assess --type execute --verbose "$app"
       - uses: actions/upload-artifact@v4
         with:
-          name: herald-os-macos
+          name: bantu-os-macos
           path: |
             apps/desktop/release/*.dmg
             apps/desktop/release/*.zip
@@ -76,7 +76,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           files=(apps/desktop/release/*.dmg apps/desktop/release/*.zip)
-          gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1 || gh release create "$GITHUB_REF_NAME" --draft --title "Herald OS $GITHUB_REF_NAME" --notes "Draft written by the release workflow."
+          gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1 || gh release create "$GITHUB_REF_NAME" --draft --title "Bantu OS $GITHUB_REF_NAME" --notes "Draft written by the release workflow."
           gh release upload "$GITHUB_REF_NAME" "${files[@]}" --clobber
 
   linux:
@@ -106,25 +106,25 @@ jobs:
         run: npm run dist:linux --workspace apps/desktop -- --${{ matrix.arch }}
       - name: Check what the tarball carries
         run: |
-          tarball="$(ls apps/desktop/release/herald-os-*-linux-*.tar.gz)"
+          tarball="$(ls apps/desktop/release/bantu-os-*-linux-*.tar.gz)"
           listing="$(tar -tzf "$tarball")"
-          for required in /herald-os /resources/app.asar /resources/herald-os-linux/bin/herald-os /resources/herald-os-linux/bin/herald-os-catalog \
-            /resources/herald-os-linux/session/herald-os-session /resources/themes/ /resources/catalog/ai.json /resources/herald-os-bridge/plugin.yaml; do
+          for required in /bantu-os /resources/app.asar /resources/bantu-os-linux/bin/bantu-os /resources/bantu-os-linux/bin/bantu-os-catalog \
+            /resources/bantu-os-linux/session/bantu-os-session /resources/themes/ /resources/catalog/ai.json /resources/bantu-os-bridge/plugin.yaml; do
             grep -q -- "$required" <<<"$listing" || { echo "::error::$required is missing from $tarball"; exit 1; }
           done
           # Named as downloaded, so sha256sum -c works next to the download.
           (cd "$(dirname "$tarball")" && sha256sum "$(basename "$tarball")") | tee "$tarball.sha256"
       - uses: actions/upload-artifact@v4
         with:
-          name: herald-os-linux-${{ matrix.arch }}
+          name: bantu-os-linux-${{ matrix.arch }}
           path: |
-            apps/desktop/release/herald-os-*-linux-*.tar.gz
-            apps/desktop/release/herald-os-*-linux-*.tar.gz.sha256
+            apps/desktop/release/bantu-os-*-linux-*.tar.gz
+            apps/desktop/release/bantu-os-*-linux-*.tar.gz.sha256
           if-no-files-found: error
       - name: Attach to the draft release
         if: startsWith(github.ref, 'refs/tags/v')
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1 || gh release create "$GITHUB_REF_NAME" --draft --title "Herald OS $GITHUB_REF_NAME" --notes "Draft written by the release workflow."
-          gh release upload "$GITHUB_REF_NAME" apps/desktop/release/herald-os-*-linux-*.tar.gz apps/desktop/release/herald-os-*-linux-*.tar.gz.sha256 --clobber
+          gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1 || gh release create "$GITHUB_REF_NAME" --draft --title "Bantu OS $GITHUB_REF_NAME" --notes "Draft written by the release workflow."
+          gh release upload "$GITHUB_REF_NAME" apps/desktop/release/bantu-os-*-linux-*.tar.gz apps/desktop/release/bantu-os-*-linux-*.tar.gz.sha256 --clobber

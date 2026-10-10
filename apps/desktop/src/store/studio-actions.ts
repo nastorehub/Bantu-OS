@@ -28,10 +28,10 @@ export async function startBuild(goal: string): Promise<{ sessionId: string; fol
   }
 
   const root = projectsRoot()
-  await window.heraldOS.fs.mkdir(root)
-  const taken = new Set((await window.heraldOS.fs.readDir(root)).map(entry => entry.name))
+  await window.bantuOS.fs.mkdir(root)
+  const taken = new Set((await window.bantuOS.fs.readDir(root)).map(entry => entry.name))
   const folder = `${root}/${uniqueName(projectSlug(trimmed), taken)}`
-  await window.heraldOS.fs.mkdir(folder)
+  await window.bantuOS.fs.mkdir(folder)
 
   const title = (trimmed.charAt(0).toUpperCase() + trimmed.slice(1, TITLE_MAX)).trimEnd()
   const chat = await createChat({ cwd: folder, title })

@@ -31,7 +31,7 @@ describe('parseTomlStrings', () => {
 })
 
 describe('themeColorsFromOmarchy', () => {
-  it('maps an alacritty palette to Herald colours', () => {
+  it('maps an alacritty palette to Bantu colours', () => {
     const colors = themeColorsFromOmarchy(parseTomlStrings(ALACRITTY))
     expect(colors).toMatchObject({ bg: '#1a1b26', fg: '#a9b1d6', accent: '#7aa2f7', accent_strong: '#89b4fa', urgent: '#f7768e', ok: '#9ece6a', warn: '#e0af68' })
   })

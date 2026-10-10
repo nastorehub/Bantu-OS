@@ -1,5 +1,5 @@
 /*
- * An open Herald Canvas document. Its state is immutable and replaced on every change, so undo is
+ * An open Bantu Canvas document. Its state is immutable and replaced on every change, so undo is
  * a swap back to an earlier state; pixels live in rasters shared between states and change only
  * through PixelEdit, which keeps its own history. Layers run bottom to top, each folder right
  * before its children, the order `.comp` uses.
@@ -425,7 +425,7 @@ export interface DocumentInit {
   name: string
   path?: string | null
   documentId?: string
-  /** Manifest fields Herald does not use, written back as they were. */
+  /** Manifest fields Bantu does not use, written back as they were. */
   extra?: Record<string, unknown>
   digest?: string | null
 }

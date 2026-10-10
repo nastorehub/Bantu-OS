@@ -17,8 +17,8 @@ export function catalogDirs(): string[] {
   return [
     path.join(process.resourcesPath ?? '', 'catalog'),
     path.resolve(app.getAppPath(), '..', '..', 'linux', 'catalog'),
-    '/usr/local/share/herald-os-linux/catalog',
-    '/usr/share/herald-os/catalog'
+    '/usr/local/share/bantu-os-linux/catalog',
+    '/usr/share/bantu-os/catalog'
   ]
 }
 
@@ -190,10 +190,10 @@ export function registerCatalogIpc(): void {
       return macList()
     }
 
-    const result = await run('herald-os', ['catalog', 'list', '--json'], 120_000)
+    const result = await run('bantu-os', ['catalog', 'list', '--json'], 120_000)
 
     if (result.code !== 0) {
-      throw new Error(tail(result.stderr) || `herald-os catalog exited ${result.code}`)
+      throw new Error(tail(result.stderr) || `bantu-os catalog exited ${result.code}`)
     }
 
     return parseCliListing(result.stdout)
@@ -212,7 +212,7 @@ export function registerCatalogIpc(): void {
         return macRun(id, action)
       }
 
-      const result = await run('herald-os', ['catalog', action, id], INSTALL_TIMEOUT_MS)
+      const result = await run('bantu-os', ['catalog', action, id], INSTALL_TIMEOUT_MS)
 
       return { ok: result.code === 0, output: tail(result.code === 0 ? result.stdout || result.stderr : result.stderr || result.stdout) }
     })

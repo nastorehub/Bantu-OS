@@ -266,7 +266,7 @@ const MARKS = [
   { id: 'subscript', label: 'Subscript', shortcut: 'mod+,', icon: <IconSubscript /> }
 ] as const
 
-/** Herald Docs' formatting bar for the document in front, once its editor is there. */
+/** Bantu Docs' formatting bar for the document in front, once its editor is there. */
 export function DocsToolbar({ docKey }: { docKey: string }) {
   const editor = useStore($editors)[docKey] ?? null
 

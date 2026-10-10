@@ -1,7 +1,7 @@
 import { useStore } from '@nanostores/react'
 import { IconBell, IconBolt, IconCalendar, IconClock, IconDatabase, IconDeviceFloppy, IconFileText, IconPencil, IconPlayerPlay } from '@tabler/icons-react'
 import { type ReactNode, useEffect, useState } from 'react'
-import { describeRule, type EventAutomation, HERALD_EVENTS, type HeraldEventName } from '../../../shared/events.ts'
+import { describeRule, type EventAutomation, BANTU_EVENTS, type BantuEventName } from '../../../shared/events.ts'
 import { GlassButton, GlassCard, Pill, Toggle } from '../../components/ui/glass.tsx'
 import { cn } from '../../lib/cn.ts'
 import { formatRelative } from '../../lib/format.ts'
@@ -15,7 +15,7 @@ import { FieldLabel, GlyphTile, Hint, JobTile, SelectInput, TextArea, TextInput,
 
 type StepId = 'when' | 'gather' | 'deliver'
 
-const NOTIFY_KEY = (id: string) => `herald-os.automation-notify.${id}`
+const NOTIFY_KEY = (id: string) => `bantu-os.automation-notify.${id}`
 
 const readNotifyPref = (id: string): boolean => {
   try {
@@ -261,7 +261,7 @@ function Step({ index, icon, title, summary, editing, onEdit, children }: { inde
 
 /** The event an automation waits for (and the program or network it narrows to). */
 function EventRuleEditor({ rule, onDone }: { rule: EventAutomation; onDone: () => void }) {
-  const [event, setEvent] = useState<HeraldEventName>(rule.event)
+  const [event, setEvent] = useState<BantuEventName>(rule.event)
   const matchKey = event === 'crash' ? 'app' : event === 'network-change' ? 'wifi' : null
   const [matchValue, setMatchValue] = useState(matchKey ? (rule.match?.[matchKey] ?? '') : '')
   const [saving, setSaving] = useState(false)
@@ -281,8 +281,8 @@ function EventRuleEditor({ rule, onDone }: { rule: EventAutomation; onDone: () =
   return (
     <>
       <FieldLabel htmlFor="automation-event">When this happens</FieldLabel>
-      <SelectInput id="automation-event" value={event} onChange={e => setEvent(e.target.value as HeraldEventName)}>
-        {HERALD_EVENTS.filter(choice => choice.automation).map(choice => (
+      <SelectInput id="automation-event" value={event} onChange={e => setEvent(e.target.value as BantuEventName)}>
+        {BANTU_EVENTS.filter(choice => choice.automation).map(choice => (
           <option key={choice.name} value={choice.name}>
             {choice.label}
           </option>

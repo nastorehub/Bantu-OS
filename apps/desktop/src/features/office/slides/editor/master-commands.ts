@@ -172,7 +172,7 @@ export function readCustomThemes(report = true): void {
     customThemesRead = null
 
     if (report) {
-      commands.notify(`Herald Slides could not read the custom themes: ${messageOf(error)}`)
+      commands.notify(`Bantu Slides could not read the custom themes: ${messageOf(error)}`)
     }
   })
 }

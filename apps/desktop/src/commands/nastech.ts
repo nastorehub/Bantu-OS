@@ -264,7 +264,7 @@ export const nastechCommands: readonly OsCommand[] = [
   {
     id: 'agents.toolSearch.set',
     title: 'Tool search',
-    description: "NasTech's Tool Search for every session: on looks plugin and MCP tools up when needed (fewer prompt tokens), off keeps Herald OS's system tools directly callable. New conversations use it.",
+    description: "NasTech's Tool Search for every session: on looks plugin and MCP tools up when needed (fewer prompt tokens), off keeps Bantu OS's system tools directly callable. New conversations use it.",
     tier: 'mutate',
     args: [{ name: 'enabled', type: 'boolean', description: 'true to turn Tool Search on, false to turn it off; leave it out to flip it' }],
     phrases: [

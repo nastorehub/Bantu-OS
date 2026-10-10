@@ -30,10 +30,10 @@ describe('hookEnv', () => {
   it('gives hooks the event, its time, its JSON and each detail', () => {
     const env = hookEnv({ name: 'network-change', at: Date.parse('2026-10-06T07:00:00Z'), detail: { online: 'true', wifi: 'Home 5G', 'away-minutes': '3' } })
 
-    expect(env.HERALD_EVENT).toBe('network-change')
-    expect(env.HERALD_EVENT_AT).toBe('2026-10-06T07:00:00.000Z')
-    expect(env.HERALD_EVENT_WIFI).toBe('Home 5G')
-    expect(env.HERALD_EVENT_AWAY_MINUTES).toBe('3')
-    expect(JSON.parse(env.HERALD_EVENT_JSON).detail.online).toBe('true')
+    expect(env.BANTU_EVENT).toBe('network-change')
+    expect(env.BANTU_EVENT_AT).toBe('2026-10-06T07:00:00.000Z')
+    expect(env.BANTU_EVENT_WIFI).toBe('Home 5G')
+    expect(env.BANTU_EVENT_AWAY_MINUTES).toBe('3')
+    expect(JSON.parse(env.BANTU_EVENT_JSON).detail.online).toBe('true')
   })
 })

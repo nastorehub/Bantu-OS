@@ -1,5 +1,5 @@
 /*
- * Herald Slides' deck: slides holding text boxes, shapes, lines, pictures and tables on a page
+ * Bantu Slides' deck: slides holding text boxes, shapes, lines, pictures and tables on a page
  * measured in points, as PowerPoint measures its slides (16:9 is 960 by 540, 4:3 is 720 by 540), so
  * every position is a whole number of EMU (12,700 a point) in a PowerPoint file. A deck is plain
  * data, replaced on every change, so undo is a step back to an earlier deck. Colours either name
@@ -440,9 +440,9 @@ export const OBJECT_KINDS = ['chart', 'diagram', 'ole', 'media', 'other'] as con
 export type ObjectKind = (typeof OBJECT_KINDS)[number]
 
 /**
- * Something a PowerPoint file holds that Herald does not edit (a chart, SmartArt, an embedded
+ * Something a PowerPoint file holds that Bantu does not edit (a chart, SmartArt, an embedded
  * object), kept whole so a file saved again still has it: the XML of its graphic frame and the
- * parts it refers to are written back as they were, moved and sized to its box. Herald shows the
+ * parts it refers to are written back as they were, moved and sized to its box. Bantu shows the
  * picture or the drawing the file keeps for it, or a labelled box.
  */
 export interface ObjectElement extends Frame {
@@ -531,7 +531,7 @@ export interface SlideLayout {
 /**
  * The slide master: the background and drawings every slide has (a logo, a band), its title and
  * text placeholders (whose look the layouts' take), the date, footer and slide number
- * placeholders, and a layout for each of Herald's layouts. Its elements are a slide's in kind;
+ * placeholders, and a layout for each of Bantu's layouts. Its elements are a slide's in kind;
  * placeholders among them are not drawn on slides, but place and style the layouts' own.
  */
 export interface Master {
@@ -542,7 +542,7 @@ export interface Master {
   layouts: SlideLayout[]
 }
 
-/** PowerPoint's date fields Herald draws: 10/9/2026, Friday, October 9, 2026, 9 October 2026 and October 9, 2026. */
+/** PowerPoint's date fields Bantu draws: 10/9/2026, Friday, October 9, 2026, 9 October 2026 and October 9, 2026. */
 export const DATE_FORMATS = ['datetime1', 'datetime2', 'datetime3', 'datetime4'] as const
 
 export type DateFormat = (typeof DATE_FORMATS)[number]
@@ -567,7 +567,7 @@ export interface Deck {
   theme: Theme
   /** How a slide without a transition of its own comes in when presenting. */
   transition: Transition
-  /** The slide master; none is Herald's own for the size (`masterOf` in layouts.ts). */
+  /** The slide master; none is Bantu's own for the size (`masterOf` in layouts.ts). */
   master?: Master
   /** None shows no date, footer or slide number. */
   headerFooter?: HeaderFooter

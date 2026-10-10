@@ -113,7 +113,7 @@ export const navigationCommands: readonly OsCommand[] = [
   {
     id: 'page.open',
     title: 'Open a page or app',
-    description: 'Show a Herald OS page (overview, nastech, missions, memory, files, automations, connections, settings) or open an app (terminal, system).',
+    description: 'Show a Bantu OS page (overview, nastech, missions, memory, files, automations, connections, settings) or open an app (terminal, system).',
     tier: 'read',
     args: [{ name: 'name', type: 'string', description: 'Page or app name', required: true }],
     phrases: ['open the {name} page', 'switch to {name}', 'go to the {name} page'],
@@ -258,7 +258,7 @@ export const navigationCommands: readonly OsCommand[] = [
     args: [],
     phrases: ['toggle fullscreen', 'go fullscreen', 'fullscreen', 'exit fullscreen', 'leave fullscreen', 'enter fullscreen'],
     run: async () => {
-      await window.heraldOS.window.toggleFullscreen()
+      await window.bantuOS.window.toggleFullscreen()
 
       return ok('Toggled fullscreen')
     }

@@ -24,7 +24,7 @@ function slideOf(live: SlidesDocument): SlideSelection {
   }
 }
 
-/** A Herald Slides deck open in this window, for a request to NasTech: the slide in front, the deck's titles and its history. */
+/** A Bantu Slides deck open in this window, for a request to NasTech: the slide in front, the deck's titles and its history. */
 export function slidesLive(docKey: string): LiveDoc | null {
   const doc = slidesSession.find(docKey)
   const live = decks.get(docKey)

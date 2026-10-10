@@ -1,7 +1,7 @@
 /*
- * Photoshop documents to Herald Canvas layers and back, through ag-psd's document model. Pixel
- * layers, folders, masks, clipping, blend modes, opacity, text, the adjustments Herald has and the
- * layer effects it draws carry over. What Herald cannot hold is approximated or left out, and
+ * Photoshop documents to Bantu Canvas layers and back, through ag-psd's document model. Pixel
+ * layers, folders, masks, clipping, blend modes, opacity, text, the adjustments Bantu has and the
+ * layer effects it draws carry over. What Bantu cannot hold is approximated or left out, and
  * each such thing goes into the notes the person is shown. Pure: it runs in a worker and in tests.
  */
 
@@ -29,13 +29,13 @@ import {
   type CurvePoint,
   defaultAdjustment,
   defaultEffect,
-  defaultHeraldAdjustment,
+  defaultBantuAdjustment,
   defaultTransform,
   type GlowEffect,
-  HERALD_RANGES,
-  type HeraldAdjustment,
+  BANTU_RANGES,
+  type BantuAdjustment,
   type Inks,
-  isHeraldKind,
+  isBantuKind,
   type LayerEffects,
   type LayerRecord,
   type LevelRange,
@@ -87,7 +87,7 @@ export interface ImportedPsd {
 
 // --- Shared ------------------------------------------------------------------------------------
 
-/** Herald's blend modes by ag-psd's names; the rest have no counterpart. */
+/** Bantu's blend modes by ag-psd's names; the rest have no counterpart. */
 const FROM_PSD_BLEND: Partial<Record<PsdBlendMode, BlendMode>> = {
   normal: 'Normal',
   darken: 'Darken',
@@ -115,7 +115,7 @@ const FROM_PSD_BLEND: Partial<Record<PsdBlendMode, BlendMode>> = {
   luminosity: 'Luminosity'
 }
 
-const TO_PSD_BLEND = Object.fromEntries(Object.entries(FROM_PSD_BLEND).map(([psd, herald]) => [herald, psd])) as Record<BlendMode, PsdBlendMode>
+const TO_PSD_BLEND = Object.fromEntries(Object.entries(FROM_PSD_BLEND).map(([psd, bantu]) => [bantu, psd])) as Record<BlendMode, PsdBlendMode>
 
 /** Photoshop's name for a blend mode, as its menus show it. */
 const blendLabel = (mode: string): string => mode.replace(/\b\w/g, (letter) => letter.toUpperCase())
@@ -245,9 +245,9 @@ export function eightBit(width: number, height: number, data: PixelArray, channe
   return { width, height, channels, data: out }
 }
 
-// --- Photoshop to Herald -----------------------------------------------------------------------
+// --- Photoshop to Bantu -----------------------------------------------------------------------
 
-/** One of the twelve adjustments from a Photoshop adjustment layer, or null when Herald has no counterpart. */
+/** One of the twelve adjustments from a Photoshop adjustment layer, or null when Bantu has no counterpart. */
 export function adjustmentFrom(source: AdjustmentLayer, notes: Notes, name: string): Adjustment | null {
   switch (source.type) {
     case 'hue/saturation': {
@@ -359,25 +359,25 @@ export function adjustmentFrom(source: AdjustmentLayer, notes: Notes, name: stri
   }
 }
 
-const heraldRanged = (value: number | undefined, range: keyof typeof HERALD_RANGES, fallback: number, whole = false): number => {
-  const number = typeof value === 'number' && Number.isFinite(value) ? clamp(value, HERALD_RANGES[range]) : fallback
+const bantuRanged = (value: number | undefined, range: keyof typeof BANTU_RANGES, fallback: number, whole = false): number => {
+  const number = typeof value === 'number' && Number.isFinite(value) ? clamp(value, BANTU_RANGES[range]) : fallback
 
   return whole ? Math.round(number) : number
 }
 
 /**
- * One of Herald's own adjustments from a Photoshop adjustment layer (with a Color Lookup's `.cube`
+ * One of Bantu's own adjustments from a Photoshop adjustment layer (with a Color Lookup's `.cube`
  * file), or null when the layer is none of them. A Color Lookup holding another kind of table, or
  * a colour profile, is left out with a note.
  */
-export function heraldFrom(source: AdjustmentLayer, notes: Notes, name: string): { settings: HeraldAdjustment; table?: Uint8Array } | 'left out' | null {
+export function bantuFrom(source: AdjustmentLayer, notes: Notes, name: string): { settings: BantuAdjustment; table?: Uint8Array } | 'left out' | null {
   const mixer = (channel: ChannelMixerChannel | undefined, fallback: MixerRow): MixerRow =>
-    channel ? { red: heraldRanged(channel.red, 'mixer', fallback.red), green: heraldRanged(channel.green, 'mixer', fallback.green), blue: heraldRanged(channel.blue, 'mixer', fallback.blue), constant: heraldRanged(channel.constant, 'mixer', fallback.constant) } : fallback
+    channel ? { red: bantuRanged(channel.red, 'mixer', fallback.red), green: bantuRanged(channel.green, 'mixer', fallback.green), blue: bantuRanged(channel.blue, 'mixer', fallback.blue), constant: bantuRanged(channel.constant, 'mixer', fallback.constant) } : fallback
   const inks = (cmyk: { c: number; m: number; y: number; k: number } | undefined): Inks => ({
-    cyan: heraldRanged(cmyk?.c, 'inks', 0),
-    magenta: heraldRanged(cmyk?.m, 'inks', 0),
-    yellow: heraldRanged(cmyk?.y, 'inks', 0),
-    black: heraldRanged(cmyk?.k, 'inks', 0)
+    cyan: bantuRanged(cmyk?.c, 'inks', 0),
+    magenta: bantuRanged(cmyk?.m, 'inks', 0),
+    yellow: bantuRanged(cmyk?.y, 'inks', 0),
+    black: bantuRanged(cmyk?.k, 'inks', 0)
   })
 
   switch (source.type) {
@@ -386,16 +386,16 @@ export function heraldFrom(source: AdjustmentLayer, notes: Notes, name: string):
         notes.add('Legacy Brightness/Contrast settings were kept as they are, and look a little different', name)
       }
 
-      return { settings: { kind: 'Brightness/Contrast', brightness: heraldRanged(source.brightness, 'brightness', 0), contrast: heraldRanged(source.contrast, 'contrast', 0) } }
+      return { settings: { kind: 'Brightness/Contrast', brightness: bantuRanged(source.brightness, 'brightness', 0), contrast: bantuRanged(source.contrast, 'contrast', 0) } }
     case 'vibrance':
-      return { settings: { kind: 'Vibrance', vibrance: heraldRanged(source.vibrance, 'vibrance', 0), saturation: heraldRanged(source.saturation, 'saturation', 0) } }
+      return { settings: { kind: 'Vibrance', vibrance: bantuRanged(source.vibrance, 'vibrance', 0), saturation: bantuRanged(source.saturation, 'saturation', 0) } }
     case 'photo filter': {
-      const defaults = defaultHeraldAdjustment('Photo Filter') as PhotoFilterSettings
+      const defaults = defaultBantuAdjustment('Photo Filter') as PhotoFilterSettings
 
-      return { settings: { kind: 'Photo Filter', color: rgbOf(source.color, defaults.color), density: heraldRanged(source.density, 'density', defaults.density), preserveLuminosity: source.preserveLuminosity !== false } }
+      return { settings: { kind: 'Photo Filter', color: rgbOf(source.color, defaults.color), density: bantuRanged(source.density, 'density', defaults.density), preserveLuminosity: source.preserveLuminosity !== false } }
     }
     case 'channel mixer': {
-      const defaults = defaultHeraldAdjustment('Channel Mixer') as ChannelMixerSettings
+      const defaults = defaultBantuAdjustment('Channel Mixer') as ChannelMixerSettings
 
       return {
         settings: { kind: 'Channel Mixer', monochrome: Boolean(source.monochrome), red: mixer(source.red, defaults.red), green: mixer(source.green, defaults.green), blue: mixer(source.blue, defaults.blue), gray: mixer(source.gray, defaults.gray) }
@@ -404,9 +404,9 @@ export function heraldFrom(source: AdjustmentLayer, notes: Notes, name: string):
     case 'selective color':
       return { settings: { kind: 'Selective Color', absolute: source.mode === 'absolute', ...(Object.fromEntries(SELECTIVE_RANGES.map((range) => [range, inks(source[range])])) as Record<SelectiveRange, Inks>) } }
     case 'posterize':
-      return { settings: { kind: 'Posterize', levels: heraldRanged(source.levels, 'posterize', 4, true) } }
+      return { settings: { kind: 'Posterize', levels: bantuRanged(source.levels, 'posterize', 4, true) } }
     case 'threshold':
-      return { settings: { kind: 'Threshold', level: heraldRanged(source.level, 'threshold', 128, true) } }
+      return { settings: { kind: 'Threshold', level: bantuRanged(source.level, 'threshold', 128, true) } }
     case 'color lookup': {
       const data = source.lut3DFileData
 
@@ -431,8 +431,8 @@ export function heraldFrom(source: AdjustmentLayer, notes: Notes, name: string):
   }
 }
 
-/** Herald's own adjustment as a Photoshop adjustment layer; a Color Lookup needs its table's file. */
-export function heraldTo(settings: HeraldAdjustment, table: Uint8Array | undefined): AdjustmentLayer | null {
+/** Bantu's own adjustment as a Photoshop adjustment layer; a Color Lookup needs its table's file. */
+export function bantuTo(settings: BantuAdjustment, table: Uint8Array | undefined): AdjustmentLayer | null {
   const whole = (row: MixerRow) => ({ red: Math.round(row.red), green: Math.round(row.green), blue: Math.round(row.blue), constant: Math.round(row.constant) })
   const cmyk = (entry: Inks) => ({ c: Math.round(entry.cyan), m: Math.round(entry.magenta), y: Math.round(entry.yellow), k: Math.round(entry.black) })
 
@@ -500,7 +500,7 @@ function hueAndSaturation({ red, green, blue }: RGB): [number, number] {
   return [h * 60, s * 100]
 }
 
-/** Herald's layer effects from Photoshop's, with what does not carry over noted. */
+/** Bantu's layer effects from Photoshop's, with what does not carry over noted. */
 export function effectsFrom(fx: LayerEffectsInfo, globalAngle: number, notes: Notes, name: string): LayerEffects | undefined {
   const effects: LayerEffects = {}
   const off = fx.disabled === true
@@ -588,7 +588,7 @@ export function effectsFrom(fx: LayerEffectsInfo, globalAngle: number, notes: No
   const dropped = [fx.bevel && 'bevel and emboss', fx.satin && 'satin', fx.gradientOverlay?.length && 'gradient overlay', fx.patternOverlay && 'pattern overlay'].filter(Boolean)
 
   if (dropped.length) {
-    notes.add(`Layer effects Herald Canvas does not draw (${dropped.join(', ')}) were left out`, name)
+    notes.add(`Layer effects Bantu Canvas does not draw (${dropped.join(', ')}) were left out`, name)
   }
 
   return Object.keys(effects).length ? effects : undefined
@@ -596,7 +596,7 @@ export function effectsFrom(fx: LayerEffectsInfo, globalAngle: number, notes: No
 
 const JUSTIFY: Record<string, TextAlignment> = { left: 'Left', center: 'Center', right: 'Right', 'justify-left': 'Left', 'justify-center': 'Center', 'justify-right': 'Right', 'justify-all': 'Left' }
 
-/** A Photoshop text layer as Herald's text record and its anchor, or null (with a note) when it has to stay a picture. */
+/** A Photoshop text layer as Bantu's text record and its anchor, or null (with a note) when it has to stay a picture. */
 export function textFrom(layer: Layer, notes: Notes, name: string): { text: TextStyle; anchor: Vec2 } | null {
   const source = layer.text
 
@@ -612,7 +612,7 @@ export function textFrom(layer: Layer, notes: Notes, name: string): { text: Text
   }
 
   if (source.orientation === 'vertical') {
-    return keep('Herald Canvas sets text horizontally')
+    return keep('Bantu Canvas sets text horizontally')
   }
 
   if (source.warp && source.warp.style && source.warp.style !== 'none') {
@@ -665,7 +665,7 @@ export function textFrom(layer: Layer, notes: Notes, name: string): { text: Text
   const styleNotes = [base.fauxBold && 'faux bold', base.fauxItalic && 'faux italic', base.underline && 'underline', base.strikethrough && 'strikethrough', (base.horizontalScale ?? 1) !== 1 && 'horizontal scale', (base.verticalScale ?? 1) !== 1 && 'vertical scale', base.baselineShift && 'baseline shift'].filter(Boolean)
 
   if (styleNotes.length) {
-    notes.add(`Text styling Herald Canvas lacks (${styleNotes.join(', ')}) goes when the text is edited`, name)
+    notes.add(`Text styling Bantu Canvas lacks (${styleNotes.join(', ')}) goes when the text is edited`, name)
   }
 
   const text: TextStyle = {
@@ -793,7 +793,7 @@ function maskFrom(mask: LayerMaskData | undefined, box: { x: number; y: number; 
   return { mask: { width: box.width, height: box.height, channels: 1, data: out }, enabled }
 }
 
-/** A Photoshop document (read with `useImageData`) as Herald layers, with notes on what changed on the way. */
+/** A Photoshop document (read with `useImageData`) as Bantu layers, with notes on what changed on the way. */
 export function fromPsd(psd: Psd): ImportedPsd {
   const notes = new Notes()
   const layers: PsdLayer[] = []
@@ -837,7 +837,7 @@ export function fromPsd(psd: Psd): ImportedPsd {
 
       if (isGroup) {
         if (blend !== 'pass through' && blend !== 'normal') {
-          notes.add(`Folders are pass-through in Herald Canvas, so a folder’s own blend mode (${blendLabel(blend)}) became Pass Through`, name)
+          notes.add(`Folders are pass-through in Bantu Canvas, so a folder’s own blend mode (${blendLabel(blend)}) became Pass Through`, name)
         }
       } else if (FROM_PSD_BLEND[blend]) {
         record.blendMode = FROM_PSD_BLEND[blend]
@@ -862,9 +862,9 @@ export function fromPsd(psd: Psd): ImportedPsd {
       }
 
       if (source.adjustment) {
-        const herald = heraldFrom(source.adjustment, notes, name)
-        // A Herald-only kind's stand-in is made when the document is put together; Levels holds its place.
-        const adjustment = herald ? (herald === 'left out' ? null : defaultAdjustment('Levels')) : adjustmentFrom(source.adjustment, notes, name)
+        const bantu = bantuFrom(source.adjustment, notes, name)
+        // A Bantu-only kind's stand-in is made when the document is put together; Levels holds its place.
+        const adjustment = bantu ? (bantu === 'left out' ? null : defaultAdjustment('Levels')) : adjustmentFrom(source.adjustment, notes, name)
 
         if (!adjustment) {
           continue
@@ -872,9 +872,9 @@ export function fromPsd(psd: Psd): ImportedPsd {
 
         record.adjustment = adjustment
 
-        if (herald && herald !== 'left out') {
-          record.heraldAdjustment = herald.settings
-          table = herald.table ?? null
+        if (bantu && bantu !== 'left out') {
+          record.bantuAdjustment = bantu.settings
+          table = bantu.table ?? null
         }
 
         pixels = null
@@ -926,7 +926,7 @@ export function fromPsd(psd: Psd): ImportedPsd {
         if (base && !base.record.isGroup && !base.record.adjustment) {
           record.maskSourceID = base.record.id
 
-          // Photoshop hides a clipping stack with its base; Herald would go on clipping to a hidden base.
+          // Photoshop hides a clipping stack with its base; Bantu would go on clipping to a hidden base.
           if (!base.record.isVisible && record.isVisible) {
             record.isVisible = false
             notes.add('Layers clipped to a hidden layer were hidden too, as Photoshop shows them', name)
@@ -960,7 +960,7 @@ export function fromPsd(psd: Psd): ImportedPsd {
   return { width, height, resolution: clamp(Math.round(ppi) || 72, [1, 9600]), layers, notes: notes.list() }
 }
 
-// --- Herald to Photoshop -----------------------------------------------------------------------
+// --- Bantu to Photoshop -----------------------------------------------------------------------
 
 export interface PsdSourceLayer {
   record: LayerRecord
@@ -999,7 +999,7 @@ const asImageData = (image: PixelData) => {
   return { width: image.width, height: image.height, data }
 }
 
-/** Herald's adjustment as a Photoshop adjustment layer, or null for the four Photoshop keeps as filters. */
+/** Bantu's adjustment as a Photoshop adjustment layer, or null for the four Photoshop keeps as filters. */
 export function adjustmentTo(adjustment: Adjustment): AdjustmentLayer | null {
   switch (adjustment.kind) {
     case 'Hue/Saturation': {
@@ -1050,7 +1050,7 @@ export function adjustmentTo(adjustment: Adjustment): AdjustmentLayer | null {
 
       return {
         type: 'gradient map',
-        name: 'Herald Canvas',
+        name: 'Bantu Canvas',
         gradientType: 'solid',
         reverse: settings.reversed,
         smoothness: 1,
@@ -1082,7 +1082,7 @@ function hslColour(hue: number, saturation: number, lightness: number): RGB {
   return { red: channel(h + 1 / 3), green: channel(h), blue: channel(h - 1 / 3) }
 }
 
-/** Herald's layer effects as Photoshop's. */
+/** Bantu's layer effects as Photoshop's. */
 export function effectsTo(effects: LayerEffects): LayerEffectsInfo | undefined {
   const fx: LayerEffectsInfo = {}
   const enabled = (record: { enabled?: boolean }) => record.enabled !== false
@@ -1116,7 +1116,7 @@ export function effectsTo(effects: LayerEffects): LayerEffectsInfo | undefined {
 }
 
 /**
- * Herald's text record as Photoshop's (Photoshop sets it again when the person updates the layer):
+ * Bantu's text record as Photoshop's (Photoshop sets it again when the person updates the layer):
  * `transform` takes layout pixels to the document, its last two numbers the anchor's place.
  */
 export function textTo(text: TextStyle, transform: [number, number, number, number, number, number]): NonNullable<Layer['text']> {
@@ -1161,7 +1161,7 @@ export function textTo(text: TextStyle, transform: [number, number, number, numb
   return record
 }
 
-/** Herald layers as a Photoshop document (with notes on what changed on the way). */
+/** Bantu layers as a Photoshop document (with notes on what changed on the way). */
 export function toPsd(source: PsdSource): { psd: Psd; notes: string[] } {
   const notes = new Notes()
   const byParent = new Map<string | undefined, PsdSourceLayer[]>()
@@ -1192,12 +1192,12 @@ export function toPsd(source: PsdSource): { psd: Psd; notes: string[] } {
       }
 
       if (record.adjustment) {
-        const herald = record.heraldAdjustment && isHeraldKind(record.heraldAdjustment.kind) ? record.heraldAdjustment : null
-        // A kind from a newer Herald Canvas goes as its stand-in.
-        const adjustment = herald ? heraldTo(herald, entry.table) : adjustmentTo(record.adjustment)
+        const bantu = record.bantuAdjustment && isBantuKind(record.bantuAdjustment.kind) ? record.bantuAdjustment : null
+        // A kind from a newer Bantu Canvas goes as its stand-in.
+        const adjustment = bantu ? bantuTo(bantu, entry.table) : adjustmentTo(record.adjustment)
 
         if (!adjustment) {
-          notes.add(herald?.kind === 'Color Lookup' ? 'A Color Lookup without a table was left out' : `${record.adjustment.kind} has no adjustment layer in Photoshop: it shows in the flattened image only`, record.name)
+          notes.add(bantu?.kind === 'Color Lookup' ? 'A Color Lookup without a table was left out' : `${record.adjustment.kind} has no adjustment layer in Photoshop: it shows in the flattened image only`, record.name)
 
           return []
         }

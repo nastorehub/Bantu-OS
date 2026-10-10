@@ -1,6 +1,6 @@
 # Security policy
 
-Herald OS lets an AI agent operate your computer, so security reports matter. Thank you for taking
+Bantu OS lets an AI agent operate your computer, so security reports matter. Thank you for taking
 the time to send one.
 
 ## Reporting a vulnerability
@@ -13,26 +13,26 @@ contact, without details.
 A useful report says what an attacker controls (a web page, a file, a model response, another
 local user), what they gain, and how to reproduce it. Expect a first reply within a week.
 
-Herald OS is pre-1.0. Only the latest `main` is supported, and fixes land there.
+Bantu OS is pre-1.0. Only the latest `main` is supported, and fixes land there.
 
 Vulnerabilities in NasTech Agent itself (the `nastech` runtime, its tools, providers, or gateway)
 belong upstream: [nastechresearch/nastech-agent](https://github.com/nastechresearch/nastech-agent).
 
 ## Security model
 
-These are the guarantees Herald OS aims for. Breaking one of them is a vulnerability.
+These are the guarantees Bantu OS aims for. Breaking one of them is a vulnerability.
 
-- **Desktop tools are gated.** The agent's desktop tools come from the `herald-os-bridge` plugin,
+- **Desktop tools are gated.** The agent's desktop tools come from the `bantu-os-bridge` plugin,
   and each has a tier. `read` and `act` tools run immediately and are logged; `mutate` tools need
   your approval; `destructive` tools need approval on every call. Protected paths (`~/.ssh`,
   `~/.gnupg`, keychains, browser cookies, `$NASTECH_HOME/.env`, `$NASTECH_HOME/auth.json`, system
   folders) are refused before any prompt. Every call is appended to
-  `$NASTECH_HOME/herald-os/audit.jsonl`. See [docs/SYSTEM-BRIDGE.md](docs/SYSTEM-BRIDGE.md).
+  `$NASTECH_HOME/bantu-os/audit.jsonl`. See [docs/SYSTEM-BRIDGE.md](docs/SYSTEM-BRIDGE.md).
 - **The backend is local.** `nastech serve` listens on 127.0.0.1 only, behind a random token that
   changes on every launch. The Electron main process adds the token to REST calls.
 - **The control socket is private.** The socket the agent uses to operate the interface (the
   `os_ui` tool) is readable only by your user (mode 0600) and refuses requests without a
-  per-launch token. On Linux it also accepts the `herald-os` commands that the compositor's
+  per-launch token. On Linux it also accepts the `bantu-os` commands that the compositor's
   hotkeys run.
 - **Shell windows stay on the shell.** They run with context isolation, the Chromium sandbox and
   no Node integration, and reach the system only through the preload API. They cannot navigate

@@ -1,0 +1,159 @@
+"""The tools are offered and run only in Bantu OS's own sessions, whatever the configuration says."""
+
+from __future__ import annotations
+
+import importlib
+import json
+import os
+import sys
+import types
+
+import pytest
+
+
+def _mod(plugin, name):
+    return importlib.import_module(plugin.__name__ + ".bridge." + name)
+
+
+class Ctx:
+    def __init__(self):
+        self.tools: dict[str, dict] = {}
+
+    def register_tool(self, **kwargs):
+        self.tools[kwargs["name"]] = kwargs
+
+    def register_skill(self, name, path, description=""):
+        pass
+
+
+@pytest.fixture
+def session(monkeypatch):
+    """NasTech's ``gateway.session_context``: a bound turn sets every variable (unnamed ones to ""),
+    which hides the process environment; with nothing bound the environment answers. A process
+    binds sessions (the latch) only when it binds one, as here; the ``nastech`` CLI never does."""
+    state: dict = {"bound": None}
+    package = types.ModuleType("gateway")
+    package.__path__ = []
+    module = types.ModuleType("gateway.session_context")
+
+    def get_session_env(name, default=""):
+        if state["bound"] is not None:
+            return state["bound"].get(name, "")
+        return os.environ.get(name, default)
+
+    module.get_session_env = get_session_env
+    module.session_context_engaged = lambda: state["bound"] is not None
+    monkeypatch.setitem(sys.modules, "gateway", package)
+    monkeypatch.setitem(sys.modules, "gateway.session_context", module)
+    for name in ("BANTU_OS", "NASTECH_KANBAN_TASK", "NASTECH_SESSION_SOURCE", "NASTECH_SESSION_PLATFORM", "NASTECH_CRON_SESSION", "BANTU_OS_BRIDGE_DISABLED", "NASTECH_OS_BRIDGE_DISABLED"):
+        monkeypatch.delenv(name, raising=False)
+
+    def bind(env: dict[str, str], bound: dict[str, str] | None) -> None:
+        for name, value in env.items():
+            monkeypatch.setenv(name, value)
+        state["bound"] = bound
+
+    return bind
+
+
+@pytest.fixture
+def registered(plugin):
+    ctx = Ctx()
+    plugin.register(ctx)
+    return ctx.tools
+
+
+BANTU_BACKEND = {"BANTU_OS": "1"}
+
+# name -> (process environment, variables bound for the turn or None, tools offered, calls run)
+CONTEXTS = {
+    "a Bantu OS turn": ({}, {"NASTECH_SESSION_SOURCE": "bantu_os"}, True, True),
+    "a session saved before the rename": ({}, {"NASTECH_SESSION_SOURCE": "nastech_os"}, True, True),
+    "Telegram in the person's gateway": ({}, {"NASTECH_SESSION_PLATFORM": "telegram"}, False, False),
+    # A gateway the backend starts inherits BANTU_OS=1; a leaked source in its environment is hidden by the bound turn.
+    "Telegram in a gateway Bantu OS's backend started": ({**BANTU_BACKEND, "NASTECH_SESSION_SOURCE": "bantu_os"}, {"NASTECH_SESSION_PLATFORM": "telegram"}, False, False),
+    "cron in Bantu OS's backend": (BANTU_BACKEND, {"NASTECH_CRON_SESSION": "1"}, False, False),
+    "the API server": (BANTU_BACKEND, {"NASTECH_SESSION_PLATFORM": "api_server"}, False, False),
+    "the nastech CLI": ({}, None, False, False),
+    "the NasTech TUI": ({}, {"NASTECH_SESSION_SOURCE": "tui"}, False, False),
+    "NasTech Desktop": ({}, {"NASTECH_SESSION_SOURCE": "desktop"}, False, False),
+    "a kanban worker the backend started": ({**BANTU_BACKEND, "NASTECH_KANBAN_TASK": "t_1"}, None, False, False),
+    "Bantu OS's backend between turns": (BANTU_BACKEND, None, True, False),
+    "an eager resume in Bantu OS's backend": (BANTU_BACKEND, {"NASTECH_SESSION_SOURCE": "desktop"}, True, False),
+    "a process a Bantu OS session started": ({**BANTU_BACKEND, "NASTECH_SESSION_SOURCE": "bantu_os"}, None, True, True),
+    # The nastech CLI takes its source from the environment: one Bantu OS's backend did not start
+    # must not pass for a Bantu OS turn, whatever it inherited or was told.
+    "the nastech CLI with an inherited Bantu OS source": ({"NASTECH_SESSION_SOURCE": "bantu_os"}, None, False, False),
+    "nastech chat --source bantu_os": ({"NASTECH_SESSION_SOURCE": "bantu_os", "NASTECH_SESSION_SOURCE_EXPLICIT": "1"}, None, False, False),
+}
+
+
+@pytest.mark.parametrize("name", list(CONTEXTS))
+def test_tools_are_offered_and_run_only_for_bantu_os(name, plugin, registered, session, tmp_path):
+    env, bound, offered, runs = CONTEXTS[name]
+    session(env, bound)
+    assert plugin._check_available() is offered
+
+    result = json.loads(registered["system_files"]["handler"]({"action": "mkdir", "path": str(tmp_path / "plan"), "dry_run": True}))
+    assert result["success"] is runs, result
+    if not runs:
+        assert result["decision"] == "outside_bantu" and "Bantu OS" in result["error"]
+
+
+def test_every_tool_is_registered_gated(plugin, registered):
+    tools = _mod(plugin, "tools")
+    assert list(registered) == [spec.name for spec in tools.TOOL_SPECS]
+    for spec in tools.TOOL_SPECS:
+        entry = registered[spec.name]
+        assert entry["toolset"] == "bantu_os" and entry["check_fn"] is plugin._check_available
+        assert entry["handler"] is not spec.handler and entry["handler"].__wrapped__ is spec.handler
+
+
+def test_a_refused_call_does_nothing_and_is_audited(plugin, registered, session, tmp_path, monkeypatch, isolated_home):
+    perm = _mod(plugin, "permissions")
+    monkeypatch.setattr(perm, "_confirm", lambda *a, **k: (_ for _ in ()).throw(AssertionError("a refused call must not ask")))
+    session(BANTU_BACKEND, {"NASTECH_SESSION_PLATFORM": "telegram"})
+    target = tmp_path / "nope"
+
+    result = json.loads(registered["system_files"]["handler"]({"action": "mkdir", "path": str(target)}))
+
+    assert not result["success"] and "telegram" in result["error"]
+    assert not target.exists()
+    entry = json.loads((isolated_home / "bantu-os" / "audit.jsonl").read_text().strip().splitlines()[-1])
+    assert entry["tool"] == "system_files" and entry["decision"] == "outside_bantu" and entry["ok"] is False
+
+
+def test_a_nastech_without_the_latch_still_takes_the_source_it_was_given(plugin, registered, session, monkeypatch, tmp_path):
+    session({"NASTECH_SESSION_SOURCE": "bantu_os"}, None)
+    monkeypatch.delattr(sys.modules["gateway.session_context"], "session_context_engaged")
+    assert plugin._check_available() is True
+    result = json.loads(registered["system_files"]["handler"]({"action": "mkdir", "path": str(tmp_path / "plan"), "dry_run": True}))
+    assert result["success"] is True, result
+
+
+def test_a_call_without_a_session_in_the_backend_points_at_nastech_update(registered, session):
+    session(BANTU_BACKEND, None)
+    result = json.loads(registered["system_info"]["handler"]({}))
+    assert not result["success"] and "nastech update" in result["error"]
+
+
+def test_switching_the_bridge_off_stops_calls_in_bantu_sessions_too(plugin, registered, session, monkeypatch):
+    session({}, {"NASTECH_SESSION_SOURCE": "bantu_os"})
+    monkeypatch.setenv("BANTU_OS_BRIDGE_DISABLED", "1")
+    assert plugin._check_available() is False
+    result = json.loads(registered["system_info"]["handler"]({}))
+    assert not result["success"] and result["decision"] == "disabled" and "switched off" in result["error"]
+
+
+def test_the_verdict_is_not_cached_across_sessions(plugin, monkeypatch):
+    uncached = set()
+    package = types.ModuleType("tools")
+    package.__path__ = []
+    registry = types.ModuleType("tools.registry")
+    registry.no_cache_check_fn = lambda fn: uncached.add(fn) or fn
+    monkeypatch.setitem(sys.modules, "tools", package)
+    monkeypatch.setitem(sys.modules, "tools.registry", registry)
+
+    plugin.register(Ctx())
+
+    assert plugin._check_available in uncached

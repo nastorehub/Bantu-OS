@@ -1,5 +1,5 @@
 /*
- * Herald Canvas's menus and their shortcuts, in one table so the two never disagree. Shortcuts
+ * Bantu Canvas's menus and their shortcuts, in one table so the two never disagree. Shortcuts
  * follow the usual photo-editor keys (⌘J duplicates or copies the selection to a layer, ⌘E merges
  * down, ⌘G groups, ⌘T transforms, ⇧F5 fills).
  */
@@ -119,7 +119,7 @@ export interface CanvasMenu {
 const onDoc = (run: (doc: CanvasDocument) => void) => (doc: CanvasDocument | null) => doc && run(doc)
 
 const openFile = async (): Promise<void> => {
-  const file = await window.heraldOS.canvas.pickOpen()
+  const file = await window.bantuOS.canvas.pickOpen()
 
   if (file) {
     openPath(file).catch((error: unknown) => notify(`Could not open ${file.split('/').pop()}: ${messageOf(error)}`, 'error'))

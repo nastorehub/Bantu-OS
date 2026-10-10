@@ -16,7 +16,7 @@ import { child, elements, find, parseXml, serializeXml, xml, type XmlElement } f
  * The slide masters, their layouts and their themes, written whole from the deck in place of the
  * single master PptxGenJS writes. A master has its background, its placeholders (the title and text
  * whose look its text styles give every slide, and the date, footer and slide number) and its
- * drawings; each of Herald's layouts has its placeholders, its own date, footer and slide number or
+ * drawings; each of Bantu's layouts has its placeholders, its own date, footer and slide number or
  * the master's, its drawings and its background. Drawings are written as slides' elements are: on
  * a slide of their own in a second PptxGenJS package (placeholders stand there as plain shapes), and
  * moved here with the pictures they name. Slides with a theme of their own get a master of their own,
@@ -112,7 +112,7 @@ export function planMasters(deck: Deck): MasterPlan[] {
 export const drawingSets = (plans: readonly MasterPlan[]): DrawingSet[] =>
   plans.flatMap((plan) => [{ elements: plan.master.elements, background: plan.background, theme: plan.theme }, ...plan.layouts.map((layout) => ({ elements: layout.elements, background: layout.layout.background, theme: plan.theme }))])
 
-/** A list level's settings (`a:lvlNpPr`) from a placeholder's look; below the first, levels take Herald's own bullets and indents. */
+/** A list level's settings (`a:lvlNpPr`) from a placeholder's look; below the first, levels take Bantu's own bullets and indents. */
 function levelXml(level: number, spec: PlaceholderSpec): XmlElement {
   const own = spec.paragraph ?? {}
   const paragraph: Omit<Paragraph, 'runs'> =
@@ -129,7 +129,7 @@ const NAMESPACES = { 'xmlns:a': 'http://schemas.openxmlformats.org/drawingml/200
 
 const COLOR_MAP = { bg1: 'lt1', tx1: 'dk1', bg2: 'lt2', tx2: 'dk2', accent1: 'accent1', accent2: 'accent2', accent3: 'accent3', accent4: 'accent4', accent5: 'accent5', accent6: 'accent6', hlink: 'hlink', folHlink: 'folHlink' }
 
-/** The text styles every slide's text takes: titles' and body text's from the master's title and text placeholders (Herald's own where it has none), the rest PowerPoint's. */
+/** The text styles every slide's text takes: titles' and body text's from the master's title and text placeholders (Bantu's own where it has none), the rest PowerPoint's. */
 function textStylesXml(master: Master, size: SlideSize): XmlElement {
   const lookOf = (role: PlaceholderRole) => specOf((masterPlaceholder(master, role) ?? masterPlaceholder(defaultMaster(size), role))!)!
   const other = Array.from({ length: 9 }, (_, level) =>
@@ -291,7 +291,7 @@ async function drawnPart(drawings: JSZip, types: ContentTypes, index: number, pa
   return { tree, background: find(root, 'p:cSld/p:bg') }
 }
 
-/** A master's or layout's background: a colour or gradient as Herald writes them, a picture as drawn (cropped to cover), PowerPoint's own for a master without one. */
+/** A master's or layout's background: a colour or gradient as Bantu writes them, a picture as drawn (cropped to cover), PowerPoint's own for a master without one. */
 function backgroundOf(background: Background | null, drawn: XmlElement | undefined, size: SlideSize, onMaster: boolean): XmlElement[] {
   if (!background) {
     return onMaster ? [backgroundXml(null)!] : []

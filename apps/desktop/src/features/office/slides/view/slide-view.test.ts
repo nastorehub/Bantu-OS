@@ -22,7 +22,7 @@ const deckOf = (slides: Slide[], patch: Partial<Deck> = {}): Deck => ({ id: 'dec
 
 const draw = (props: Pick<SlideViewProps, 'deck' | 'slide'> & Partial<SlideViewProps>): string => renderToStaticMarkup(createElement(SlideView, { scale: 1, mode: 'present', ...props }))
 
-/** Herald's master with a logo of its own and a band on the Title and Content layout. */
+/** Bantu's master with a logo of its own and a band on the Title and Content layout. */
 function brandedMaster(showMaster = true): Master {
   const base = defaultMaster(SIZE)
   const logo = shapeElement('ellipse', box(880, 20, 60, 60), { id: 'logo', fill: { color: 'accent2' } })

@@ -4,12 +4,12 @@ import { describe, expect, it } from 'vitest'
 import {
   CompFormatError,
   defaultAdjustment,
-  defaultHeraldAdjustment,
+  defaultBantuAdjustment,
   defaultTransform,
   FORMAT_ID,
   FORMAT_VERSION,
-  HERALD_ADJUSTMENT_KINDS,
-  HERALD_RANGES,
+  BANTU_ADJUSTMENT_KINDS,
+  BANTU_RANGES,
   imageFileFor,
   type LayerRecord,
   maskFileFor,
@@ -178,8 +178,8 @@ describe("Compositor's ranges", () => {
     expect(parsed.layers.map((entry) => entry.id)).toEqual([A, B, G])
   })
 
-  it('lists the same ranges in the herald-canvas skill', () => {
-    const skill = readFileSync(fileURLToPath(new URL('../../../../plugins/herald-os-bridge/skills/herald-canvas/SKILL.md', import.meta.url)), 'utf8').replace(/\s+/g, ' ')
+  it('lists the same ranges in the bantu-canvas skill', () => {
+    const skill = readFileSync(fileURLToPath(new URL('../../../../plugins/bantu-os-bridge/skills/bantu-canvas/SKILL.md', import.meta.url)), 'utf8').replace(/\s+/g, ' ')
     const shown = (name: RangeName) => RANGES[name].map((value) => String(value).replace('-', '−')).join('…')
     const listed: [string, RangeName][] = [
       ['`hue`', 'hue'],
@@ -220,9 +220,9 @@ describe("Compositor's ranges", () => {
       expect(skill, name).toContain(shown(name))
     }
 
-    // Herald's own adjustments, held to Herald's bounds.
-    const herald = (name: keyof typeof HERALD_RANGES) => HERALD_RANGES[name].map((value) => String(value).replace('-', '−')).join('…')
-    const heraldListed: [string, keyof typeof HERALD_RANGES][] = [
+    // Bantu's own adjustments, held to Bantu's bounds.
+    const bantu = (name: keyof typeof BANTU_RANGES) => BANTU_RANGES[name].map((value) => String(value).replace('-', '−')).join('…')
+    const bantuListed: [string, keyof typeof BANTU_RANGES][] = [
       ['`brightness`', 'brightness'],
       ['`contrast`', 'contrast'],
       ['`vibrance`', 'vibrance'],
@@ -234,11 +234,11 @@ describe("Compositor's ranges", () => {
       ['`level`', 'threshold']
     ]
 
-    for (const [field, name] of heraldListed) {
-      expect(skill, `${field} ${name}`).toContain(`${field} ${herald(name)}`)
+    for (const [field, name] of bantuListed) {
+      expect(skill, `${field} ${name}`).toContain(`${field} ${bantu(name)}`)
     }
 
-    expect(skill).toContain(`${herald('tableSize')} entries a side`)
+    expect(skill).toContain(`${bantu('tableSize')} entries a side`)
   })
 })
 
@@ -261,26 +261,26 @@ describe('serializeManifest', () => {
   })
 })
 
-describe("Herald's own adjustments", () => {
-  const adjustmentLayer = (herald: Record<string, unknown>) => ({ ...layer(A), imageFile: undefined, adjustment: defaultAdjustment('Levels'), heraldAdjustment: herald })
+describe("Bantu's own adjustments", () => {
+  const adjustmentLayer = (bantu: Record<string, unknown>) => ({ ...layer(A), imageFile: undefined, adjustment: defaultAdjustment('Levels'), bantuAdjustment: bantu })
 
   it('round-trips every kind with its defaults filled in, beside a stand-in Compositor reads', () => {
-    for (const kind of HERALD_ADJUSTMENT_KINDS) {
+    for (const kind of BANTU_ADJUSTMENT_KINDS) {
       const base = newManifest(100, 50)
       base.layers = [adjustmentLayer({ kind }) as LayerRecord]
       const written = JSON.parse(serializeManifest(base))
-      expect(written.layers[0].heraldAdjustment, kind).toEqual(defaultHeraldAdjustment(kind))
+      expect(written.layers[0].bantuAdjustment, kind).toEqual(defaultBantuAdjustment(kind))
       // What Compositor decodes is untouched: its own kind, complete.
       expect(written.layers[0].adjustment.kind).toBe('Levels')
-      expect(parseManifestText(JSON.stringify(written)).layers[0].heraldAdjustment).toEqual(defaultHeraldAdjustment(kind))
+      expect(parseManifestText(JSON.stringify(written)).layers[0].bantuAdjustment).toEqual(defaultBantuAdjustment(kind))
     }
   })
 
   it('keeps settings and fields it does not know, and a kind from a newer version as it was', () => {
     const parsed = parseManifest(manifest([adjustmentLayer({ kind: 'Vibrance', vibrance: 35, note: 'kept' })]))
-    expect(parsed.layers[0].heraldAdjustment).toEqual({ kind: 'Vibrance', vibrance: 35, saturation: 0, note: 'kept' })
+    expect(parsed.layers[0].bantuAdjustment).toEqual({ kind: 'Vibrance', vibrance: 35, saturation: 0, note: 'kept' })
     const future = { kind: 'Shadows/Highlights', amount: 12, nested: { a: [1, 2] } }
-    expect(parseManifest(manifest([adjustmentLayer(future)])).layers[0].heraldAdjustment).toEqual(future)
+    expect(parseManifest(manifest([adjustmentLayer(future)])).layers[0].bantuAdjustment).toEqual(future)
   })
 
   it('holds the settings to their bounds and needs an adjustment beside them', () => {
@@ -291,7 +291,7 @@ describe("Herald's own adjustments", () => {
       ['an ink past 100%', manifest([adjustmentLayer({ kind: 'Selective Color', reds: { cyan: -101 } })])],
       ['a one-entry table', manifest([adjustmentLayer({ kind: 'Color Lookup', size: 1 })])],
       ['no kind', manifest([adjustmentLayer({ vibrance: 1 })])],
-      ['settings on a picture layer', manifest([layer(A, { heraldAdjustment: { kind: 'Threshold', level: 9 } })])]
+      ['settings on a picture layer', manifest([layer(A, { bantuAdjustment: { kind: 'Threshold', level: 9 } })])]
     ]
 
     for (const [label, value] of cases) {

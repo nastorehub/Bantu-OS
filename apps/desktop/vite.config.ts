@@ -12,7 +12,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      '@herald-os/client': fileURLToPath(new URL('../../packages/nastech-client/src/index.ts', import.meta.url))
+      '@bantu-os/client': fileURLToPath(new URL('../../packages/nastech-client/src/index.ts', import.meta.url))
     },
     // The upstream snapshot lives outside this package; React must resolve to one copy.
     dedupe: ['react', 'react-dom']
@@ -29,7 +29,7 @@ export default defineConfig({
     sourcemap: true
   },
   // Module workers split like the window does. A single-file worker carries every lazy import with it:
-  // Univer's hyphenation dictionaries would make Herald Sheets' formula worker, one per workbook, 7 MB.
+  // Univer's hyphenation dictionaries would make Bantu Sheets' formula worker, one per workbook, 7 MB.
   worker: {
     format: 'es'
   }

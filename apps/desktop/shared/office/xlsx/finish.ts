@@ -2,15 +2,15 @@ import type JSZip from 'jszip'
 import type { WorkbookSnapshot } from '../workbook.ts'
 import { finishCharts } from './charts/index.ts'
 import { finishComments } from './comments/index.ts'
-import { writeHeraldPart } from './herald-part.ts'
+import { writeBantuPart } from './bantu-part.ts'
 import { finishKept } from './keep/index.ts'
 import { CONTENT_TYPE, hasElement, PackageWriter, placeInWorksheet, REL } from './opc.ts'
 import { openPackage, type PackageSheet, type XlsxPackage } from './package.ts'
 
 /*
- * What Herald writes into an .xlsx package after ExcelJS: charts, comments and notes, the parts of
- * the file the workbook was opened from that Herald does not model (kept as they were where that is
- * safe), the Herald data of each sheet, and Herald's own part for what only Herald reads back. Each
+ * What Bantu writes into an .xlsx package after ExcelJS: charts, comments and notes, the parts of
+ * the file the workbook was opened from that Bantu does not model (kept as they were where that is
+ * safe), the Bantu data of each sheet, and Bantu's own part for what only Bantu reads back. Each
  * feature adds to one context. A sheet has one drawing part, so the anchors features give a sheet
  * (charts, kept pictures and shapes) are written into it together at the end.
  */
@@ -40,8 +40,8 @@ export interface FinishContext {
   /** What the file cannot keep of this workbook. */
   losses: Set<string>
   drawings: DrawingBuilder
-  /** Sections of Herald's own part, by feature. */
-  herald: Record<string, unknown>
+  /** Sections of Bantu's own part, by feature. */
+  bantu: Record<string, unknown>
 }
 
 export interface DrawingAnchor {
@@ -148,12 +148,12 @@ async function openSource(bytes: Uint8Array): Promise<SourcePackage | null> {
   }
 }
 
-/** Herald data of each sheet (its custom data but what the file holds itself), by the sheet's name in the file. */
+/** Bantu data of each sheet (its custom data but what the file holds itself), by the sheet's name in the file. */
 function sheetData(workbook: WorkbookSnapshot, sheets: WrittenSheet[]): Record<string, unknown> {
   const data: Record<string, unknown> = {}
 
   for (const sheet of sheets) {
-    const { page: _page, ...rest } = ((workbook.sheets[sheet.id]?.custom as { herald?: Record<string, unknown> } | undefined)?.herald ?? {}) as Record<string, unknown>
+    const { page: _page, ...rest } = ((workbook.sheets[sheet.id]?.custom as { bantu?: Record<string, unknown> } | undefined)?.bantu ?? {}) as Record<string, unknown>
 
     if (Object.keys(rest).length) {
       data[sheet.name] = rest
@@ -167,11 +167,11 @@ function sheetData(workbook: WorkbookSnapshot, sheets: WrittenSheet[]): Record<s
 export async function finishPackage(zip: JSZip, workbook: WorkbookSnapshot, sheets: WrittenSheet[], options: { original?: Uint8Array; losses: Set<string> }): Promise<void> {
   const writer = new PackageWriter(zip)
   const source = options.original ? await openSource(options.original) : null
-  const ctx: FinishContext = { workbook, writer, sheets, source, losses: options.losses, drawings: new DrawingBuilder(), herald: { sheets: sheetData(workbook, sheets) } }
+  const ctx: FinishContext = { workbook, writer, sheets, source, losses: options.losses, drawings: new DrawingBuilder(), bantu: { sheets: sheetData(workbook, sheets) } }
   await finishComments(ctx)
   await finishCharts(ctx)
   await finishKept(ctx)
   await ctx.drawings.write(ctx)
-  await writeHeraldPart(writer, ctx.herald)
+  await writeBantuPart(writer, ctx.bantu)
   await writer.flush()
 }

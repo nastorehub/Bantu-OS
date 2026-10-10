@@ -11,7 +11,7 @@ import { areaOf, fieldNames, flag, growTo, listOf, MOST_CELLS, rangeOn, tableAro
  * label cells, so the numbers follow the data as it changes and rows added with known labels count
  * at once. A refresh reads the table again from its first cell and rewrites the summary with the
  * labels it has then. How a summary was made is kept in its sheet's custom data
- * (custom.herald.summaries), which an .xlsx file keeps in Herald's part.
+ * (custom.bantu.summaries), which an .xlsx file keeps in Bantu's part.
  */
 
 export type SummaryFunction = 'sum' | 'count' | 'average' | 'min' | 'max'
@@ -432,7 +432,7 @@ function layoutOf(source: Source, spec: Spec, plan: Plan, top: number, left: num
   return { cells, height, width, headers }
 }
 
-const SET_SUMMARIES = 'herald.mutation.set-sheet-summaries'
+const SET_SUMMARIES = 'bantu.mutation.set-sheet-summaries'
 
 interface SummariesParams {
   unitId: string
@@ -451,10 +451,10 @@ const SetSummariesMutation: IMutation<SummariesParams> = {
       return false
     }
 
-    const { herald, ...custom } = (sheet.getCustomMetadata() ?? {}) as { herald?: Record<string, unknown> }
-    const { summaries: _summaries, ...rest } = herald ?? {}
+    const { bantu, ...custom } = (sheet.getCustomMetadata() ?? {}) as { bantu?: Record<string, unknown> }
+    const { summaries: _summaries, ...rest } = bantu ?? {}
     const next = params.summaries.length ? { ...rest, summaries: structuredClone(params.summaries) } : rest
-    sheet.setCustomMetadata(Object.keys(next).length ? { ...custom, herald: next } : Object.keys(custom).length ? custom : undefined)
+    sheet.setCustomMetadata(Object.keys(next).length ? { ...custom, bantu: next } : Object.keys(custom).length ? custom : undefined)
 
     return true
   }
@@ -469,7 +469,7 @@ const isDefinition = (entry: unknown): entry is SummaryDefinition => {
 
 /** The summaries kept on a sheet. */
 export function summariesOf(sheet: FWorksheet): SummaryDefinition[] {
-  const list = (sheet.getSheet().getCustomMetadata() as { herald?: { summaries?: unknown } } | undefined)?.herald?.summaries
+  const list = (sheet.getSheet().getCustomMetadata() as { bantu?: { summaries?: unknown } } | undefined)?.bantu?.summaries
 
   return Array.isArray(list) ? list.filter(isDefinition).map((entry) => ({ ...entry, columns: Array.isArray(entry.columns) ? entry.columns : [], filters: Array.isArray(entry.filters) ? entry.filters : [] })) : []
 }

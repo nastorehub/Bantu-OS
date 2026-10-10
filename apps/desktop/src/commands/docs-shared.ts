@@ -1,13 +1,13 @@
 import type { CommandArg, CommandContext } from '../store/os-commands.ts'
 
-/* What Herald Docs' commands share: the arguments that name a document and a place in it, and where they run. */
+/* What Bantu Docs' commands share: the arguments that name a document and a place in it, and where they run. */
 
 export const office = () => import('../features/office/agent.ts')
 
-export const document: CommandArg = { name: 'document', type: 'string', description: 'The document: a file (full path or ~/…) or the name of an open document as its tab shows it; the one in front in Herald Docs when left out' }
+export const document: CommandArg = { name: 'document', type: 'string', description: 'The document: a file (full path or ~/…) or the name of an open document as its tab shows it; the one in front in Bantu Docs when left out' }
 
 export const placement: readonly CommandArg[] = [
-  { name: 'at', type: 'string', description: 'Where: end (the default), start, selection (in place of what is selected, or at the caret), marked (in place of the text Herald marked for this request), after (under the paragraph the marked text is in, or the selection when nothing is marked) or heading' },
+  { name: 'at', type: 'string', description: 'Where: end (the default), start, selection (in place of what is selected, or at the caret), marked (in place of the text Bantu marked for this request), after (under the paragraph the marked text is in, or the selection when nothing is marked) or heading' },
   { name: 'heading', type: 'string', description: 'A heading (its text, or its number in the outline from 1): the content goes in its section' },
   { name: 'mode', type: 'string', description: 'With heading: append (at the end of the section, the default), prepend (right under the heading) or replace (in place of the section, keeping the heading)' }
 ]

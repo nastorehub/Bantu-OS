@@ -23,14 +23,14 @@ import {
   type ContextSnapshot,
   type ControlAction,
   type CrashReport,
-  type HeraldOsResult,
+  type BantuOsResult,
   type IncomingNotification,
   type PowerAction,
   type DirEntry,
   type EditAction,
   type EnvInfo,
   type FilePreview,
-  type HeraldOSPrefs,
+  type BantuOSPrefs,
   type ImageInfo,
   type InstalledApp,
   IPC,
@@ -82,7 +82,7 @@ import type { ModelId, ModelProgress, ModelStatus } from '../shared/canvas/model
 import type { OfficeAbilities, OfficeApp } from '../shared/office/files.ts'
 import type { MenuExtensions } from '../shared/menu-extensions.ts'
 import type { PluginMethod, PluginView } from '../shared/plugins.ts'
-import type { HeraldEvent } from '../shared/events.ts'
+import type { BantuEvent } from '../shared/events.ts'
 import type { ThemeSpec, ThemeSummary } from '../shared/theme.ts'
 
 type Unsubscribe = () => void
@@ -170,14 +170,14 @@ const api = {
     onReturned: (listener: (event: ContextReturn) => void): Unsubscribe => subscribe(IPC.contextReturned, listener)
   },
   crash: {
-    /** Programs that crashed since Herald OS started, newest first. */
+    /** Programs that crashed since Bantu OS started, newest first. */
     recent: (): Promise<CrashReport[]> => ipcRenderer.invoke(IPC.crashRecent)
   },
   theme: {
     list: (): Promise<ThemeSummary[]> => ipcRenderer.invoke(IPC.themeList),
     /** Apply an installed theme everywhere; resolves with the new preferences. */
-    apply: (name: string): Promise<HeraldOSPrefs> => ipcRenderer.invoke(IPC.themeApply, name),
-    /** Save a theme into ~/.config/herald-os/themes (with its wallpaper image copied in). */
+    apply: (name: string): Promise<BantuOSPrefs> => ipcRenderer.invoke(IPC.themeApply, name),
+    /** Save a theme into ~/.config/bantu-os/themes (with its wallpaper image copied in). */
     save: (spec: ThemeSpec, imagePath?: string): Promise<string> => ipcRenderer.invoke(IPC.themeSave, spec, imagePath),
     /** A small PNG data URL of an image, to take theme colours from (null when it is not an image). */
     sample: (imagePath: string): Promise<string | null> => ipcRenderer.invoke(IPC.themeSample, imagePath),
@@ -240,7 +240,7 @@ const api = {
     presence: (): Promise<CanvasPresence[]> => ipcRenderer.invoke(IPC.canvasPresence),
     /** Put copied pixels on the system clipboard as a PNG, for other apps. */
     copyImage: (image: CanvasRawImage): Promise<void> => ipcRenderer.invoke(IPC.canvasCopyImage, image),
-    /** The image on the system clipboard (null when there is none), and whether Herald Canvas put it there. */
+    /** The image on the system clipboard (null when there is none), and whether Bantu Canvas put it there. */
     pasteImage: (): Promise<CanvasPasted | null> => ipcRenderer.invoke(IPC.canvasPasteImage),
     /** On-device models: downloaded only when the person allows it, checked before they run. */
     models: {
@@ -310,12 +310,12 @@ const api = {
   branding: {
     /** About's logo and name, and the Linux lock-screen picture. */
     get: (): Promise<BrandingView> => ipcRenderer.invoke(IPC.brandingGet),
-    /** Image paths are copied into ~/.config/herald-os/branding; null removes one. */
+    /** Image paths are copied into ~/.config/bantu-os/branding; null removes one. */
     set: (patch: BrandingPatch): Promise<BrandingView> => ipcRenderer.invoke(IPC.brandingSet, patch),
     onChanged: (listener: (branding: BrandingView) => void): Unsubscribe => subscribe(IPC.brandingChanged, listener)
   },
   setup: {
-    /** First-boot setup on the Herald OS image: due or not, the account, the name so far. */
+    /** First-boot setup on the Bantu OS image: due or not, the account, the name so far. */
     state: (): Promise<SetupState> => ipcRenderer.invoke(IPC.setupState),
     name: (name: string): Promise<SetupResult> => ipcRenderer.invoke(IPC.setupName, name),
     password: (password: string): Promise<SetupResult> => ipcRenderer.invoke(IPC.setupPassword, password),
@@ -327,8 +327,8 @@ const api = {
     type: (text: string, options: { submit?: boolean; delayMs?: number } = {}): Promise<{ typed: boolean; copied: boolean }> => ipcRenderer.invoke(IPC.dictationType, text, options)
   },
   events: {
-    /** Events Herald OS saw lately (login, wake, crash, low battery, …), newest first. */
-    recent: (): Promise<HeraldEvent[]> => ipcRenderer.invoke(IPC.eventsRecent)
+    /** Events Bantu OS saw lately (login, wake, crash, low battery, …), newest first. */
+    recent: (): Promise<BantuEvent[]> => ipcRenderer.invoke(IPC.eventsRecent)
   },
   switches: {
     get: (): Promise<SwitchState> => ipcRenderer.invoke(IPC.switchesGet),
@@ -385,15 +385,15 @@ const api = {
     close: (surface?: ShellSurface): Promise<void> => ipcRenderer.invoke(IPC.shellClose, surface),
     /** Deliver a command to another surface (e.g. the command overlay asking main to send a prompt). */
     relay: (target: ShellSurface, command: ShellCommand): Promise<void> => ipcRenderer.invoke(IPC.shellRelay, target, command),
-    /** Commands arriving for this surface: from the `herald-os` CLI (hotkeys) or another surface. */
+    /** Commands arriving for this surface: from the `bantu-os` CLI (hotkeys) or another surface. */
     onCommand: (listener: (command: ShellCommand) => void): Unsubscribe => subscribe(IPC.shellCommand, listener),
     /** Ask main to resize this surface window (overlays size to their content). */
     resize: (width: number, height: number): Promise<void> => ipcRenderer.invoke(IPC.shellResize, width, height),
     /** Wallpaper surface only: hand a rendered PNG frame to main for swaybg. */
     wallpaperFrame: (dataUrl: string): Promise<void> => ipcRenderer.invoke(IPC.shellWallpaperFrame, dataUrl),
-    /** Run a `herald-os` CLI command from the shell (Linux; rejects elsewhere). */
-    heraldOs: (args: string[]): Promise<HeraldOsResult> => ipcRenderer.invoke(IPC.shellHeraldOs, args),
-    /** The person's control-menu entries from ~/.config/herald-os/menu.json. */
+    /** Run a `bantu-os` CLI command from the shell (Linux; rejects elsewhere). */
+    bantuOs: (args: string[]): Promise<BantuOsResult> => ipcRenderer.invoke(IPC.shellBantuOs, args),
+    /** The person's control-menu entries from ~/.config/bantu-os/menu.json. */
     menuExtensions: (): Promise<MenuExtensions> => ipcRenderer.invoke(IPC.menuExtensions),
     /** Start a menu.json entry's program (main reads it from the file; only the id crosses). */
     runMenuExtension: (id: string): Promise<void> => ipcRenderer.invoke(IPC.menuExtensionRun, id),
@@ -432,10 +432,10 @@ const api = {
     action: (action: WmAction): Promise<void> => ipcRenderer.invoke(IPC.wmAction, action)
   },
   prefs: {
-    get: (): Promise<HeraldOSPrefs> => ipcRenderer.invoke(IPC.prefsGet),
-    set: (patch: Partial<HeraldOSPrefs>): Promise<HeraldOSPrefs> => ipcRenderer.invoke(IPC.prefsSet, patch),
+    get: (): Promise<BantuOSPrefs> => ipcRenderer.invoke(IPC.prefsGet),
+    set: (patch: Partial<BantuOSPrefs>): Promise<BantuOSPrefs> => ipcRenderer.invoke(IPC.prefsSet, patch),
     /** Preferences changed from another surface window. */
-    onChanged: (listener: (prefs: HeraldOSPrefs) => void): Unsubscribe => subscribe(IPC.prefsChanged, listener)
+    onChanged: (listener: (prefs: BantuOSPrefs) => void): Unsubscribe => subscribe(IPC.prefsChanged, listener)
   },
   osControl: {
     /** Main asks this window to run a registry command / list commands / report state. */
@@ -460,6 +460,6 @@ const api = {
   env: (): Promise<EnvInfo> => ipcRenderer.invoke(IPC.envInfo)
 }
 
-export type HeraldOSApi = typeof api
+export type BantuOSApi = typeof api
 
-contextBridge.exposeInMainWorld('heraldOS', api)
+contextBridge.exposeInMainWorld('bantuOS', api)

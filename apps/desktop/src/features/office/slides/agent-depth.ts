@@ -32,7 +32,7 @@ import { deleteCustomTheme, loadCustomThemes, saveCustomTheme } from './theme-st
 import { THEMES } from './themes.ts'
 
 /*
- * What NasTech (and voice, the command bar and `herald-os slides`) does with Herald Slides' depth:
+ * What NasTech (and voice, the command bar and `bantu-os slides`) does with Bantu Slides' depth:
  * the slide master and its layouts, backgrounds, the header and footer, themes of the person's own,
  * transitions, groups, connectors, table borders, fills and slides from a sheet. As in agent.ts, a
  * command works on the presentation it names or the one in front, and each change is one step to
@@ -135,7 +135,7 @@ export async function listThemes(): Promise<Outcome> {
   }
 }
 
-/** The theme a new one starts from: the one named, else the presentation's, else Herald's own. */
+/** The theme a new one starts from: the one named, else the presentation's, else Bantu's own. */
 async function baseTheme(args: Args, custom: readonly Theme[]): Promise<Theme> {
   if (given(args.from)) {
     return themeOf(args.from, custom)
@@ -176,7 +176,7 @@ export async function deleteTheme(args: Args): Promise<Outcome> {
   const builtIn = THEMES.find((theme) => theme.id === wanted || theme.name.toLowerCase() === wanted)
 
   if (builtIn) {
-    throw new Error(`${builtIn.name} is one of Herald’s own themes, which stay: only custom themes are deleted`)
+    throw new Error(`${builtIn.name} is one of Bantu’s own themes, which stay: only custom themes are deleted`)
   }
 
   const custom = await loadCustomThemes()

@@ -13,7 +13,7 @@ import { thumbnailOf } from './templates/thumbnail.ts'
 
 /*
  * The gallery a new document starts from: the blank document, first and selected so that New and
- * then Enter make one, Herald's templates and the person's own, each a live thumbnail of its first
+ * then Enter make one, Bantu's templates and the person's own, each a live thumbnail of its first
  * page. The arrow keys move, Enter makes the document and Escape goes back. Only the person's own
  * New opens it: a document asked for by NasTech or another app is blank, with no dialog.
  */
@@ -291,7 +291,7 @@ export function TemplateGallery() {
       <div role="dialog" aria-label="New document" className="float menu-surface flex max-h-full w-full max-w-[790px] flex-col rounded-2xl animate-pop" onMouseDown={(event) => event.stopPropagation()} onKeyDown={onKeyDown}>
         <div className="px-5 pt-5 pb-3 text-[14px] font-medium text-fg">New document</div>
         <div role="listbox" aria-label="Templates" className="min-h-0 flex-1 overflow-y-auto px-4 pb-3">
-          <div role="group" aria-label="Herald’s templates" className="grid grid-cols-[repeat(auto-fill,140px)] justify-center gap-x-2 gap-y-1">
+          <div role="group" aria-label="Bantu’s templates" className="grid grid-cols-[repeat(auto-fill,140px)] justify-center gap-x-2 gap-y-1">
             {builtIn.map(cardView)}
           </div>
           <div role="group" aria-label="Your templates" className="pt-4">

@@ -9,7 +9,7 @@ import { cellBody, MAX_COLUMNS, MAX_ROWS, ROW_HEIGHT, settleSpans, tableElement 
 import { DEFAULT_INSET } from './text.ts'
 
 /*
- * Tables from Herald Sheets' workbooks: a range of a sheet as the text its cells show (numbers in
+ * Tables from Bantu Sheets' workbooks: a range of a sheet as the text its cells show (numbers in
  * their formats, Excel's common ones worked out here), put on a slide as a table sized to its text,
  * or on slides of their own with the header row repeated when it is too tall for one. The table
  * layout and the estimate of how much text fits a line serve tables from documents too.
@@ -622,7 +622,7 @@ const BOLD = 1.1
 /** The sizes a table's text is tried at, largest first. */
 const TABLE_SIZES = [18, 16, 14, 12]
 const HEADER: Fill = { color: 'accent1' }
-/** Herald's content area on a slide of 960 by 540 points: the text of its Title and Content layout. */
+/** Bantu's content area on a slide of 960 by 540 points: the text of its Title and Content layout. */
 const CONTENT: Box = { x: 60, y: 136, width: 840, height: 364 }
 /** The room between a title and what is under it, on a slide 540 points tall. */
 const UNDER_TITLE = 16

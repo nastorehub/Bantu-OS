@@ -4,9 +4,9 @@ import path from 'node:path'
 import { isHexColor, mix, schemeOf, type ThemeColors, type ThemeSpec, themeSlug } from '../../shared/theme.ts'
 
 /*
- * Herald inside Omarchy follows Omarchy's theme: the active one is linked as current/theme (in
+ * Bantu inside Omarchy follows Omarchy's theme: the active one is linked as current/theme (in
  * ~/.local/state/omarchy on Omarchy 4, ~/.config/omarchy on Omarchy 3), and its colors.toml (or,
- * in older themes, alacritty.toml) holds the palette. Omarchy runs `herald-os theme omarchy` from
+ * in older themes, alacritty.toml) holds the palette. Omarchy runs `bantu-os theme omarchy` from
  * its theme-set hook when the theme changes.
  */
 
@@ -53,7 +53,7 @@ export function parseTomlStrings(text: string): Record<string, string> {
   return out
 }
 
-/** Herald's colours from Omarchy's (or alacritty's) palette; null without a background and foreground. */
+/** Bantu's colours from Omarchy's (or alacritty's) palette; null without a background and foreground. */
 export function themeColorsFromOmarchy(values: Record<string, string>): ThemeColors | null {
   const get = (...keys: string[]) => keys.map(key => values[key]).find(isHexColor)
   const bg = get('background', 'colors.primary.background', 'base00', 'color0')
@@ -96,7 +96,7 @@ function themeName(current: string, dir: string): string {
   return path.basename(dir)
 }
 
-/** The active Omarchy theme as a Herald theme, with Omarchy's background as the wallpaper. */
+/** The active Omarchy theme as a Bantu theme, with Omarchy's background as the wallpaper. */
 export function readOmarchyTheme(home = os.homedir()): { spec: ThemeSpec; dir: string } | null {
   const current = omarchyCurrentDirs(home).find(base => fs.existsSync(path.join(base, 'theme')))
   let dir: string

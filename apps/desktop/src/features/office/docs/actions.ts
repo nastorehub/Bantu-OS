@@ -229,7 +229,7 @@ export async function picturesFromFiles(files: readonly File[]): Promise<void> {
   const added = await insertPictures(editor.view, read)
 
   if (added < read.length) {
-    docsSession.notify('Herald Docs shows PNG, JPEG, GIF, WebP, BMP and SVG pictures', 'error')
+    docsSession.notify('Bantu Docs shows PNG, JPEG, GIF, WebP, BMP and SVG pictures', 'error')
   }
 
   editor.commands.focus()
@@ -245,12 +245,12 @@ export async function pictureFromPath(file: string, at?: { left: number; top: nu
   }
 
   try {
-    const data = await window.heraldOS.office.read(file)
+    const data = await window.bantuOS.office.read(file)
     const pos = at ? editor.view.posAtCoords(at)?.pos : undefined
     const added = await insertPictures(editor.view, [{ bytes: data.bytes, mime }], pos === undefined ? 'selection' : { pos })
 
     if (!added) {
-      docsSession.notify(`Herald Docs does not show ${file.split('/').pop()} as a picture`, 'error')
+      docsSession.notify(`Bantu Docs does not show ${file.split('/').pop()} as a picture`, 'error')
     }
   } catch (error) {
     docsSession.notify(`Could not add ${file.split('/').pop()}: ${messageOf(error)}`, 'error')

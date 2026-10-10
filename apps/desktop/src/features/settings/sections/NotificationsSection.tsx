@@ -7,15 +7,15 @@ import { setCrashHelpEnabled, setCrashMuted } from '../../../store/crashes.ts'
 import { errorText, InlineNote, markSaved, readLocalFlag, SectionTitle, SettingsGroup, SettingsRow, writeLocal } from './shared.tsx'
 
 /*
- * Notification preferences are shell-side flags in localStorage (`herald-os.notify.*`). The
+ * Notification preferences are shell-side flags in localStorage (`bantu-os.notify.*`). The
  * notification store does not read them yet; see the page report for the proposed wiring.
  */
 
 export const NOTIFY_KEYS = {
-  toolCompletions: 'herald-os.notify.tool-completions',
-  approvals: 'herald-os.notify.approvals',
-  taskUpdates: 'herald-os.notify.task-updates',
-  nativeWhenUnfocused: 'herald-os.notify.native-unfocused'
+  toolCompletions: 'bantu-os.notify.tool-completions',
+  approvals: 'bantu-os.notify.approvals',
+  taskUpdates: 'bantu-os.notify.task-updates',
+  nativeWhenUnfocused: 'bantu-os.notify.native-unfocused'
 } as const
 
 type NotifyKey = keyof typeof NOTIFY_KEYS
@@ -24,7 +24,7 @@ const ROWS: { key: NotifyKey; label: string; description: string; icon: React.Re
   { key: 'toolCompletions', label: 'Tool completions', description: 'A toast when a long-running tool finishes in a session you are not looking at.', icon: <IconChecklist />, keywords: 'toast finished' },
   { key: 'approvals', label: 'Approvals', description: 'Tell me when NasTech is waiting for a decision.', icon: <IconShieldCheck />, keywords: 'permission request waiting' },
   { key: 'taskUpdates', label: 'Task updates', description: 'Scheduled tasks that ran, failed or changed.', icon: <IconBellRinging />, keywords: 'cron automations' },
-  { key: 'nativeWhenUnfocused', label: 'Native notifications when unfocused', description: 'Use system notifications while Herald OS is in the background.', icon: <IconDeviceDesktop />, keywords: 'macos system background' }
+  { key: 'nativeWhenUnfocused', label: 'Native notifications when unfocused', description: 'Use system notifications while Bantu OS is in the background.', icon: <IconDeviceDesktop />, keywords: 'macos system background' }
 ]
 
 export function NotificationsSection() {
@@ -43,7 +43,7 @@ export function NotificationsSection() {
 
   return (
     <>
-      <SectionTitle title="Notifications" subtitle="These are Herald OS shell preferences. They shape what the shell surfaces; NasTech itself keeps working either way." />
+      <SectionTitle title="Notifications" subtitle="These are Bantu OS shell preferences. They shape what the shell surfaces; NasTech itself keeps working either way." />
 
       <SettingsGroup title="Alerts">
         {ROWS.map(row => (

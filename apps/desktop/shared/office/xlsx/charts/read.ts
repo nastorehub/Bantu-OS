@@ -4,13 +4,13 @@ import { columnIndex, MAX_COLUMNS, MAX_ROWS, parseRange, splitSheet } from '../a
 import { fillIn, flag, numberIn, type Paint, parsePart } from './drawingml.ts'
 
 /*
- * An Excel chart part (c:chartSpace) read into the chart Herald draws: columns, bars, lines, areas,
+ * An Excel chart part (c:chartSpace) read into the chart Bantu draws: columns, bars, lines, areas,
  * pies, doughnuts, scatter charts, and columns with lines or areas on one or two value axes. A chart
- * Herald cannot read faithfully (another workbook's cells, defined names, literal data, several
+ * Bantu cannot read faithfully (another workbook's cells, defined names, literal data, several
  * areas in one reference, 3D and other kinds) is not read at all: it stays in the file as it is.
  */
 
-/** A sheet of the file as chart formulas name it, with its snapshot id; null for a sheet Herald does not read (a chart sheet). */
+/** A sheet of the file as chart formulas name it, with its snapshot id; null for a sheet Bantu does not read (a chart sheet). */
 export interface SheetRef {
   name: string
   id: string | null
@@ -31,7 +31,7 @@ export interface ReadingContext {
 
 export interface ChartReading {
   spec: ChartSpec
-  /** What Herald Sheets shows differently from the file, for the fidelity report. */
+  /** What Bantu Sheets shows differently from the file, for the fidelity report. */
   notes: string[]
 }
 
@@ -56,7 +56,7 @@ const EXTRAS = ['c:trendline', 'c:errBars', 'c:dropLines', 'c:hiLowLines', 'c:up
 class Unreadable extends Error {}
 
 const unreadable = (): never => {
-  throw new Unreadable('This chart uses what Herald Sheets does not read.')
+  throw new Unreadable('This chart uses what Bantu Sheets does not read.')
 }
 
 /** Every line of a rich text body (c:rich), its runs joined. */
@@ -159,7 +159,7 @@ class Reader {
     return paint?.none ? undefined : paint?.color
   }
 
-  /** An axis of values, or of categories (`bars` for a bar chart's, which Herald lists from the top down where a file lists them from the bottom up), and which way it runs. */
+  /** An axis of values, or of categories (`bars` for a bar chart's, which Bantu lists from the top down where a file lists them from the bottom up), and which way it runs. */
   axis(element: XmlElement | undefined, values: boolean, bars = false): ChartAxis {
     const axis: ChartAxis = { gridlines: Boolean(child(element, 'c:majorGridlines')) }
     const title = titleText(child(element, 'c:title'), 'Axis Title')
@@ -191,7 +191,7 @@ class Reader {
       axis.hidden = true
     }
 
-    // Values run up (or along) their axis from minMax; categories too, but Herald's bars list them from the top down.
+    // Values run up (or along) their axis from minMax; categories too, but Bantu's bars list them from the top down.
     if (values ? maxMin : maxMin !== bars) {
       axis.reverse = true
     }
@@ -258,7 +258,7 @@ async function readSeries(reader: Reader, element: XmlElement, group: XmlElement
     if (scatter) {
       const style = child(group, 'c:scatterStyle')?.attrs.val ?? 'marker'
 
-      // Herald draws a scatter chart's points, with no lines between them.
+      // Bantu draws a scatter chart's points, with no lines between them.
       if (!line?.none && style !== 'marker' && style !== 'none') {
         reader.notes.add(NOTES.scatterLines)
       }
@@ -328,7 +328,7 @@ const groupingOf = (group: XmlElement | undefined): ChartSpec['stacking'] => {
   return grouping === 'stacked' ? 'stacked' : grouping === 'percentStacked' ? 'percent' : 'none'
 }
 
-/** A chart part's chart as Herald draws it; null when Herald cannot read it faithfully, or it is not a chart. */
+/** A chart part's chart as Bantu draws it; null when Bantu cannot read it faithfully, or it is not a chart. */
 export async function readChartXml(xml: string, ctx: ReadingContext): Promise<ChartReading | null> {
   const root = parsePart(xml)
   const chart = root?.name === 'c:chartSpace' ? child(root, 'c:chart') : undefined
@@ -361,7 +361,7 @@ async function readChart(chart: XmlElement, plot: XmlElement, ctx: ReadingContex
 
   const barDirection = (group: XmlElement) => child(group, 'c:barDir')?.attrs.val ?? 'col'
 
-  // Herald draws columns, not horizontal bars, beside lines and areas.
+  // Bantu draws columns, not horizontal bars, beside lines and areas.
   if (groups.length > 1 && groups.some((group) => group.name === 'c:barChart' && barDirection(group) === 'bar')) {
     return null
   }

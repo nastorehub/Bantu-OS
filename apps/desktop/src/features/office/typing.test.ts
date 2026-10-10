@@ -72,7 +72,7 @@ describe('dictated text', () => {
   })
 })
 
-describe('dictation into Herald Sheets', () => {
+describe('dictation into Bantu Sheets', () => {
   it('starts at the first cell of the selection, goes down the column and carries on below', () => {
     expect(columnPlacement('B2', 1)).toEqual({ first: 'B2', next: { row: 2, column: 1, name: 'B3' } })
     expect(columnPlacement('B2:D9', 3)).toEqual({ first: 'B2', next: { row: 4, column: 1, name: 'B5' } })
@@ -82,7 +82,7 @@ describe('dictation into Herald Sheets', () => {
   })
 })
 
-describe('dictation into Herald Docs', () => {
+describe('dictation into Bantu Docs', () => {
   it('reads the character before the caret', () => {
     const start = at('Hello world', 'Hello')
 
@@ -159,7 +159,7 @@ describe('dictation into Herald Docs', () => {
   })
 })
 
-describe('dictation into Herald Slides', () => {
+describe('dictation into Bantu Slides', () => {
   let doc: SlidesDocument
   let box: string
 
@@ -180,7 +180,7 @@ describe('dictation into Herald Slides', () => {
     vi.unstubAllGlobals()
   })
 
-  /** The editor Herald Slides shows for a text box being typed into: its words, its root, and the words each flush recorded. */
+  /** The editor Bantu Slides shows for a text box being typed into: its words, its root, and the words each flush recorded. */
   function editorFor(elementId: string, words: string) {
     const root = { editable: true }
     const view = {

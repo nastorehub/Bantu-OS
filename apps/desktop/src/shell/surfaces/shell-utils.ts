@@ -16,17 +16,17 @@ export function useShellCommands(handler: (command: ShellCommand) => void): void
 
 /** Window titles main gives our own floating windows (see electron/shell/mode.ts); they double as identity. */
 const OUR_FLOATING_TITLES: Record<string, FloatingAppId> = {
-  'Herald OS · Terminal': 'terminal',
-  'Herald OS · System': 'system',
-  'Herald OS · Chat': 'chat-popout',
-  'Herald OS · Studio': 'studio',
-  'Herald OS · Canvas': 'canvas',
-  'Herald OS · Docs': 'docs',
-  'Herald OS · Sheets': 'sheets',
-  'Herald OS · Slides': 'slides'
+  'Bantu OS · Terminal': 'terminal',
+  'Bantu OS · System': 'system',
+  'Bantu OS · Chat': 'chat-popout',
+  'Bantu OS · Studio': 'studio',
+  'Bantu OS · Canvas': 'canvas',
+  'Bantu OS · Docs': 'docs',
+  'Bantu OS · Sheets': 'sheets',
+  'Bantu OS · Slides': 'slides'
 }
 
-export const OUR_MAIN_TITLE = 'Herald OS'
+export const OUR_MAIN_TITLE = 'Bantu OS'
 
 /** Which floating NasTech app one of our compositor windows hosts, when it is one. */
 export function ourFloatingAppId(win: WmWindow): FloatingAppId | null {

@@ -1,27 +1,27 @@
-# The Herald OS manual
+# The Bantu OS manual
 
-Herald OS is an operating system built around an AI agent, NasTech. You talk or type to it, and it
+Bantu OS is an operating system built around an AI agent, NasTech. You talk or type to it, and it
 works across the whole machine: it opens apps, finds and organises files, keeps an eye on what is
 running, remembers what matters to you, runs routines, and builds software while you watch. Anything
 that changes something asks first.
 
-This manual is for using Herald OS day to day. The [README](../../README.md) covers installing it;
+This manual is for using Bantu OS day to day. The [README](../../README.md) covers installing it;
 [docs/ARCHITECTURE.md](../ARCHITECTURE.md) covers how it is built.
 
 - [Coming from macOS](coming-from-macos.md): where your habits go.
-- [Hotkeys](hotkeys.md): every shortcut on macOS and on Herald OS Linux.
+- [Hotkeys](hotkeys.md): every shortcut on macOS and on Bantu OS Linux.
 - [Make it yours](make-it-yours.md): themes, fonts, widgets, the menu bar, your own menu entries,
   branding, keyboard shortcuts, and hooks and automations that run when something happens.
-- [Herald Canvas](canvas.md): the image editor, its tools and AI features, Photoshop files, and
+- [Bantu Canvas](canvas.md): the image editor, its tools and AI features, Photoshop files, and
   working on pictures with NasTech.
-- [Herald Office](office.md): Herald Docs, Sheets and Slides, the files they open and save,
+- [Bantu Office](office.md): Bantu Docs, Sheets and Slides, the files they open and save,
   printing, and working on documents with NasTech and your voice.
 - [Troubleshooting](troubleshooting.md): when something does not work.
 - [FAQ](faq.md): short answers to common questions.
 
 ## The first five minutes
 
-1. **Say hello.** Press `Cmd+K` on a Mac or `Super+Shift+Space` on Herald OS Linux and type what
+1. **Say hello.** Press `Cmd+K` on a Mac or `Super+Shift+Space` on Bantu OS Linux and type what
    you want, or press the voice key (`Alt+Space` on a Mac, `Super+V` on Linux) and say it.
 2. **Let NasTech catch you up.** The Overview offers to look at the names of your recent files,
    projects and chats and suggest where to pick up. It is off until you turn it on.
@@ -35,7 +35,7 @@ This manual is for using Herald OS day to day. The [README](../../README.md) cov
 ## Installing software
 
 Settings > Software (or Install in the `Super+M` menu on Linux, or just "install Steam") lists what
-Herald OS can install in one step: coding agents for the terminal (Claude Code, Codex, OpenCode,
+Bantu OS can install in one step: coding agents for the terminal (Claude Code, Codex, OpenCode,
 Gemini CLI, Copilot CLI), local models with Ollama and LM Studio, languages (Node, Python, Go, Rust,
 Ruby and Rails, PHP and Laravel, and more), editors, terminals, games, a Windows 11 virtual machine,
 media apps, password managers and web apps. Each one installs the right way for your machine, and
@@ -60,7 +60,7 @@ open the folder in Files and say "file the invoices in this folder".
   in the folder you already use (Invoices by year, say). It asks before creating new folders.
 - You see the plan first and approve it on the card. Nothing is overwritten, duplicates are pointed
   out, and "undo that" puts everything back.
-- On Herald OS Linux, scans are read with tesseract, which is installed; `poppler-utils` makes text
+- On Bantu OS Linux, scans are read with tesseract, which is installed; `poppler-utils` makes text
   PDFs faster to read but is optional.
 
 ## Asking about what is on screen, and typing anywhere

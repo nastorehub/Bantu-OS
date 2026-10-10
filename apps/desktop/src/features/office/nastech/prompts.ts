@@ -180,7 +180,7 @@ function othersLine(others: readonly OpenDocument[], home: string): string | nul
   const shown = others.slice(0, MAX_OTHERS).map((doc) => `“${doc.name}” (${OFFICE_APP_NAMES[doc.app]}, ${doc.path ? tildePath(doc.path, home) : 'not saved yet'}${doc.selection ? `, selection ${doc.selection}` : ''})`)
   const more = others.length > MAX_OTHERS ? `, and ${others.length - MAX_OTHERS} more` : ''
 
-  return `Also open in Herald Office: ${shown.join('; ')}${more}.`
+  return `Also open in Bantu Office: ${shown.join('; ')}${more}.`
 }
 
 const REPLY = 'Reply in one or two short sentences saying what changed (or the answer, for a question).'

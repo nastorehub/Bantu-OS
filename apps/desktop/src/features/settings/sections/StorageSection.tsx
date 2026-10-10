@@ -14,7 +14,7 @@ export function StorageSection() {
   const stats = useSystemStats()
   const env = useStore($env)
   const nastechHome = env?.nastechHome ?? null
-  const homeSize = useLocalData(() => (nastechHome ? window.heraldOS.fs.dirSize(nastechHome) : Promise.resolve(null)), [nastechHome])
+  const homeSize = useLocalData(() => (nastechHome ? window.bantuOS.fs.dirSize(nastechHome) : Promise.resolve(null)), [nastechHome])
 
   const askNasTech = () => {
     showPage('nastech')

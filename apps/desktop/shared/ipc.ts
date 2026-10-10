@@ -10,7 +10,7 @@ import type { ColorScheme, ThemeColors } from './theme.ts'
 export type BackendPhase = 'idle' | 'resolving' | 'waiting' | 'starting' | 'ready' | 'restarting' | 'failed' | 'stopped'
 
 export interface BackendRuntime {
-  /** How the runtime was found: env override, managed install, PATH shim, or a backend already running (HERALD_OS_BACKEND_URL). */
+  /** How the runtime was found: env override, managed install, PATH shim, or a backend already running (BANTU_OS_BACKEND_URL). */
   kind: 'env' | 'managed' | 'path' | 'attached'
   label: string
   /** Source checkout root when known (managed install / env override). */
@@ -31,7 +31,7 @@ export interface BackendState {
   sharedGateway?: number
   /** Why the system tools could not be set up in NasTech this start (a failed `nastech` step). */
   bridgeError?: string
-  /** While waiting on the Herald OS image: how installing NasTech Agent goes (offline, installing, retrying). */
+  /** While waiting on the Bantu OS image: how installing NasTech Agent goes (offline, installing, retrying). */
   install?: string
 }
 
@@ -266,7 +266,7 @@ export interface ProjectActivity {
 }
 
 /**
- * What Herald OS can see of the user's recent work, for "Pick up where you left off": documents,
+ * What Bantu OS can see of the user's recent work, for "Pick up where you left off": documents,
  * project folders and running apps, minus everything the user excluded. Never window titles or
  * screen contents.
  */
@@ -306,7 +306,7 @@ export interface ContinuityThread {
 export interface ContinuityPrefs {
   /** Null until the user answers the offer on the Overview: the catch-up sends names to the model provider. */
   enabled: boolean | null
-  /** Folders (absolute paths) and words Herald never looks at; a word hides any path, chat or event containing it. */
+  /** Folders (absolute paths) and words Bantu never looks at; a word hides any path, chat or event containing it. */
   exclude: string[]
   /** Threads from the last catch-up. */
   threads?: ContinuityThread[]
@@ -389,7 +389,7 @@ export interface CatalogEntryView {
   reason?: string
   /** A coding agent that runs in the Terminal. */
   terminal?: boolean
-  /** A terminal app Super+Return can open instead of Herald's terminal. */
+  /** A terminal app Super+Return can open instead of Bantu's terminal. */
   terminalApp?: string
   /** A local model server NasTech can use. */
   nastech?: 'ollama' | 'lmstudio'
@@ -406,10 +406,10 @@ export interface CatalogGroupView {
 }
 
 export interface SetupState {
-  /** The Herald OS image has not been set up by its owner yet. */
+  /** The Bantu OS image has not been set up by its owner yet. */
   needed: boolean
   user: string
-  /** The name Herald greets with (blank until setup asks). */
+  /** The name Bantu greets with (blank until setup asks). */
   name: string
 }
 
@@ -454,7 +454,7 @@ export interface VoicePrefs {
   announceNotifications: boolean
   /** Show NasTech's own tool results on screen (memory, automations, files) even outside a voice conversation. */
   followNasTech: boolean
-  /** Set once Herald OS has tuned local speech recognition (model + vocabulary), so a later user choice is never overwritten. */
+  /** Set once Bantu OS has tuned local speech recognition (model + vocabulary), so a later user choice is never overwritten. */
   sttTuned: boolean
   /** Live engine: close the paid session after this many idle seconds. */
   liveIdleSeconds: number
@@ -469,7 +469,7 @@ export type MicPermission = 'granted' | 'denied' | 'not-determined' | 'restricte
 /** Keyboard modifiers for `EditAction` key presses (Electron accelerator names). */
 export type KeyModifier = 'shift' | 'control' | 'alt' | 'meta'
 
-/** Text and editing actions performed on whatever is focused in a Herald OS window. */
+/** Text and editing actions performed on whatever is focused in a Bantu OS window. */
 export type EditAction =
   | { kind: 'insert'; text: string }
   | { kind: 'key'; key: string; modifiers?: KeyModifier[] }
@@ -491,7 +491,7 @@ export interface OsControlReply {
 /** Authenticated WebSocket endpoints the renderer may dial besides the gateway. */
 export type AudioWsKind = 'speak-stream'
 
-export interface HeraldOSPrefs {
+export interface BantuOSPrefs {
   fullscreenOnLaunch: boolean
   reduceMotion: boolean
   accent: 'blue' | 'ice' | 'violet'
@@ -501,7 +501,7 @@ export interface HeraldOSPrefs {
   /** Colours of a theme without a hand-tuned preset; the shell derives its whole palette from them. */
   themeColors?: ThemeColors
   themeScheme?: ColorScheme
-  /** Restyle Herald OS when NasTech's skin changes (`/skin` in a chat). */
+  /** Restyle Bantu OS when NasTech's skin changes (`/skin` in a chat). */
   followNasTechSkin?: boolean
   /** Font families for the interface and for code, tried before the built-in stacks. */
   fonts?: { ui?: string; mono?: string }
@@ -515,11 +515,11 @@ export interface HeraldOSPrefs {
   doNotDisturb?: boolean
   /** The drawn wallpaper and a clock after this many idle minutes. */
   screensaver?: { enabled: boolean; afterMinutes: number }
-  /** Herald OS Linux: minutes of inactivity before locking, turning the screens off and suspending (0 = never). */
+  /** Bantu OS Linux: minutes of inactivity before locking, turning the screens off and suspending (0 = never). */
   idle?: IdleTimings
-  /** Herald OS Linux: Herald's keys, or Omarchy-style Super+C, X and V for copy, cut and paste everywhere. */
-  keymap?: 'herald' | 'omarchy'
-  /** Herald OS Linux: the terminal Super+Return opens: Herald's own, or a catalog terminal (ghostty, alacritty, kitty, foot). */
+  /** Bantu OS Linux: Bantu's keys, or Omarchy-style Super+C, X and V for copy, cut and paste everywhere. */
+  keymap?: 'bantu' | 'omarchy'
+  /** Bantu OS Linux: the terminal Super+Return opens: Bantu's own, or a catalog terminal (ghostty, alacritty, kitty, foot). */
   defaultTerminal?: string
   /** Absolute path or file:// URL of a custom wallpaper image. */
   wallpaper?: string
@@ -537,7 +537,7 @@ export interface HeraldOSPrefs {
   sidebar?: { width: number; collapsed: boolean }
   /** Slide the Dock off-screen until the cursor reaches the bottom edge (default on). */
   dockAutoHide?: boolean
-  /** The name on the comments and notes the person adds in Herald Office, once they confirmed it; unset until then. */
+  /** The name on the comments and notes the person adds in Bantu Office, once they confirmed it; unset until then. */
   commentName?: string
   voice: VoicePrefs
   continuity: ContinuityPrefs
@@ -546,7 +546,7 @@ export interface HeraldOSPrefs {
 
 export type ScreenshotMode = 'region' | 'window' | 'screen'
 
-/** macOS capture tools (Herald OS Linux runs its own through the CLI). */
+/** macOS capture tools (Bantu OS Linux runs its own through the CLI). */
 export type CaptureTool = 'colour' | 'qr' | 'text'
 
 export interface CaptureToolResult {
@@ -575,7 +575,7 @@ export interface IdleTimings {
 export type SwitchName = 'nightLight' | 'doNotDisturb' | 'stayAwake' | 'screensaver'
 
 export interface SwitchState {
-  /** Warmer colours: wlsunset on Herald OS Linux; null where Herald OS cannot switch it (macOS has Night Shift). */
+  /** Warmer colours: wlsunset on Bantu OS Linux; null where Bantu OS cannot switch it (macOS has Night Shift). */
   nightLight: boolean | null
   doNotDisturb: boolean
   /** The screens stay on and nothing locks or sleeps on its own. */
@@ -655,7 +655,7 @@ export type WmAction =
   | { type: 'screenshot'; what: 'screen' | 'window' | 'select' }
   | { type: 'raw'; args: string[] }
 
-/** A command delivered to a surface: from the `herald-os` CLI (hotkeys), or relayed between surfaces. */
+/** A command delivered to a surface: from the `bantu-os` CLI (hotkeys), or relayed between surfaces. */
 export interface ShellCommand {
   type: string
   args?: string[]
@@ -683,7 +683,7 @@ export interface WebOpenOptions {
   root?: string
 }
 
-/** Main -> renderer: lifecycle of one embedded web view (`window.heraldOS.web`). */
+/** Main -> renderer: lifecycle of one embedded web view (`window.bantuOS.web`). */
 export type WebViewEvent =
   | { id: string; type: 'title'; title: string }
   | { id: string; type: 'url'; url: string }
@@ -714,280 +714,280 @@ export interface EnvInfo {
 
 /** Channel names, table-driven so preload and main cannot drift. */
 export const IPC = {
-  backendGetState: 'herald-os:backend:get-state',
-  backendState: 'herald-os:backend:state',
-  backendRestart: 'herald-os:backend:restart',
-  backendRest: 'herald-os:backend:rest',
-  backendLogTail: 'herald-os:backend:log-tail',
+  backendGetState: 'bantu-os:backend:get-state',
+  backendState: 'bantu-os:backend:state',
+  backendRestart: 'bantu-os:backend:restart',
+  backendRest: 'bantu-os:backend:rest',
+  backendLogTail: 'bantu-os:backend:log-tail',
 
-  systemInfo: 'herald-os:system:info',
-  systemStats: 'herald-os:system:stats',
-  systemStatsPush: 'herald-os:system:stats-push',
-  systemStatsSubscribe: 'herald-os:system:stats-subscribe',
-  systemProcesses: 'herald-os:system:processes',
+  systemInfo: 'bantu-os:system:info',
+  systemStats: 'bantu-os:system:stats',
+  systemStatsPush: 'bantu-os:system:stats-push',
+  systemStatsSubscribe: 'bantu-os:system:stats-subscribe',
+  systemProcesses: 'bantu-os:system:processes',
 
-  appsList: 'herald-os:apps:list',
-  appsLaunch: 'herald-os:apps:launch',
-  appsIcon: 'herald-os:apps:icon',
+  appsList: 'bantu-os:apps:list',
+  appsLaunch: 'bantu-os:apps:launch',
+  appsIcon: 'bantu-os:apps:icon',
 
-  fsHome: 'herald-os:fs:home',
-  fsReadDir: 'herald-os:fs:read-dir',
-  fsReadFile: 'herald-os:fs:read-file',
-  fsReveal: 'herald-os:fs:reveal',
-  fsOpenPath: 'herald-os:fs:open-path',
-  fsOpenIn: 'herald-os:fs:open-in',
-  fsRecent: 'herald-os:fs:recent',
+  fsHome: 'bantu-os:fs:home',
+  fsReadDir: 'bantu-os:fs:read-dir',
+  fsReadFile: 'bantu-os:fs:read-file',
+  fsReveal: 'bantu-os:fs:reveal',
+  fsOpenPath: 'bantu-os:fs:open-path',
+  fsOpenIn: 'bantu-os:fs:open-in',
+  fsRecent: 'bantu-os:fs:recent',
   /** Find files by name under the home folder (Spotlight on macOS). */
-  fsFind: 'herald-os:fs:find',
-  fsThumbnail: 'herald-os:fs:thumbnail',
-  fsImageInfo: 'herald-os:fs:image-info',
-  fsWriteText: 'herald-os:fs:write-text',
-  fsMkdir: 'herald-os:fs:mkdir',
-  fsRename: 'herald-os:fs:rename',
-  fsTrash: 'herald-os:fs:trash',
-  fsExportPdf: 'herald-os:fs:export-pdf',
-  fsPickFiles: 'herald-os:fs:pick-files',
-  fsDirSize: 'herald-os:fs:dir-size',
+  fsFind: 'bantu-os:fs:find',
+  fsThumbnail: 'bantu-os:fs:thumbnail',
+  fsImageInfo: 'bantu-os:fs:image-info',
+  fsWriteText: 'bantu-os:fs:write-text',
+  fsMkdir: 'bantu-os:fs:mkdir',
+  fsRename: 'bantu-os:fs:rename',
+  fsTrash: 'bantu-os:fs:trash',
+  fsExportPdf: 'bantu-os:fs:export-pdf',
+  fsPickFiles: 'bantu-os:fs:pick-files',
+  fsDirSize: 'bantu-os:fs:dir-size',
   /** A bounded recursive listing of a project folder (build output and dependencies skipped). */
-  fsListTree: 'herald-os:fs:list-tree',
-  fsWatchTree: 'herald-os:fs:watch-tree',
-  fsUnwatchTree: 'herald-os:fs:unwatch-tree',
+  fsListTree: 'bantu-os:fs:list-tree',
+  fsWatchTree: 'bantu-os:fs:watch-tree',
+  fsUnwatchTree: 'bantu-os:fs:unwatch-tree',
   /** Main -> renderer: `TreeChangedEvent`. */
-  fsTreeChanged: 'herald-os:fs:tree-changed',
+  fsTreeChanged: 'bantu-os:fs:tree-changed',
 
-  systemNetwork: 'herald-os:system:network',
-  calendarToday: 'herald-os:calendar:today',
+  systemNetwork: 'bantu-os:system:network',
+  calendarToday: 'bantu-os:calendar:today',
 
   /** Recent documents, project folders and running apps, for "Pick up where you left off". */
-  contextSnapshot: 'herald-os:context:snapshot',
+  contextSnapshot: 'bantu-os:context:snapshot',
   /** Main tells the windows the user is back after sleep, a lock or a long idle stretch. */
-  contextReturned: 'herald-os:context:returned',
+  contextReturned: 'bantu-os:context:returned',
 
-  /** The crashes seen since Herald OS started, newest first (offers arrive as a `crash` ShellCommand). */
-  crashRecent: 'herald-os:crash:recent',
+  /** The crashes seen since Bantu OS started, newest first (offers arrive as a `crash` ShellCommand). */
+  crashRecent: 'bantu-os:crash:recent',
 
   /** Installed themes (built in and the user's own). */
-  themeList: 'herald-os:theme:list',
-  /** Apply a theme everywhere: the shell, NasTech's skin and, on Herald OS Linux, the whole session. */
-  themeApply: 'herald-os:theme:apply',
+  themeList: 'bantu-os:theme:list',
+  /** Apply a theme everywhere: the shell, NasTech's skin and, on Bantu OS Linux, the whole session. */
+  themeApply: 'bantu-os:theme:apply',
   /** Save a theme the shell made (from an image) into the user's theme folder. */
-  themeSave: 'herald-os:theme:save',
+  themeSave: 'bantu-os:theme:save',
   /** A small PNG of an image (data URL) to take theme colours from. */
-  themeSample: 'herald-os:theme:sample',
+  themeSample: 'bantu-os:theme:sample',
   /** Install a theme from a git repository (colours and images only). */
-  themeInstall: 'herald-os:theme:install',
+  themeInstall: 'bantu-os:theme:install',
   /** Font families installed on this computer. */
-  fontsList: 'herald-os:fonts:list',
+  fontsList: 'bantu-os:fonts:list',
 
   /** Let the person select part of the screen; resolves with the PNG's path, or null when cancelled. */
-  captureRegion: 'herald-os:capture:region',
+  captureRegion: 'bantu-os:capture:region',
   /** A screenshot of a region, the focused window or the whole screen, saved where screenshots go. */
-  captureScreenshot: 'herald-os:capture:screenshot',
+  captureScreenshot: 'bantu-os:capture:screenshot',
   /** Start, stop or toggle a screen recording; resolves with the recording state. */
-  captureRecord: 'herald-os:capture:record',
-  captureRecordState: 'herald-os:capture:record-state',
-  captureTool: 'herald-os:capture:tool',
+  captureRecord: 'bantu-os:capture:record',
+  captureRecordState: 'bantu-os:capture:record-state',
+  captureTool: 'bantu-os:capture:tool',
   /** Main -> renderer: a recording started or stopped (`RecordingState`). */
-  captureRecordChanged: 'herald-os:capture:record-changed',
+  captureRecordChanged: 'bantu-os:capture:record-changed',
   /** An image file as a data URL, for the markup editor. */
-  captureReadImage: 'herald-os:capture:read-image',
+  captureReadImage: 'bantu-os:capture:read-image',
   /** Write a PNG (data URL) inside the home folder. */
-  captureSaveImage: 'herald-os:capture:save-image',
+  captureSaveImage: 'bantu-os:capture:save-image',
   /** Put an image (a file or a data URL) on the clipboard. */
-  captureCopyImage: 'herald-os:capture:copy-image',
+  captureCopyImage: 'bantu-os:capture:copy-image',
   /** Ask the OS for camera access (macOS), for the camera bubble. */
-  cameraRequest: 'herald-os:camera:request',
+  cameraRequest: 'bantu-os:camera:request',
 
   /** Type text into whatever app is focused (wtype on Wayland, a paste on macOS). */
-  dictationType: 'herald-os:dictation:type',
+  dictationType: 'bantu-os:dictation:type',
 
   /** The install catalog: groups of software with their state here, and installing or removing one. */
-  catalogList: 'herald-os:catalog:list',
-  catalogInstall: 'herald-os:catalog:install',
-  catalogRemove: 'herald-os:catalog:remove',
+  catalogList: 'bantu-os:catalog:list',
+  catalogInstall: 'bantu-os:catalog:install',
+  catalogRemove: 'bantu-os:catalog:remove',
   /** Models a local server (Ollama, LM Studio) has, for "Use with NasTech". */
-  catalogLocalModels: 'herald-os:catalog:local-models',
+  catalogLocalModels: 'bantu-os:catalog:local-models',
 
   /** Widget plugins (ADR-019): the installed ones, turning one on or off, git installs, and their messages. */
-  pluginsList: 'herald-os:plugins:list',
-  pluginsSetEnabled: 'herald-os:plugins:set-enabled',
-  pluginsAdd: 'herald-os:plugins:add',
-  pluginsUpdate: 'herald-os:plugins:update',
-  pluginsRemove: 'herald-os:plugins:remove',
-  pluginCall: 'herald-os:plugins:call',
+  pluginsList: 'bantu-os:plugins:list',
+  pluginsSetEnabled: 'bantu-os:plugins:set-enabled',
+  pluginsAdd: 'bantu-os:plugins:add',
+  pluginsUpdate: 'bantu-os:plugins:update',
+  pluginsRemove: 'bantu-os:plugins:remove',
+  pluginCall: 'bantu-os:plugins:call',
   /** main → renderer: the plugin list changed (installed, enabled, files saved). */
-  pluginsChanged: 'herald-os:plugins:changed',
+  pluginsChanged: 'bantu-os:plugins:changed',
 
-  /** First-boot setup on the Herald OS image: whether it is due, the name, the password, done. */
-  setupState: 'herald-os:setup:state',
-  setupName: 'herald-os:setup:name',
-  setupPassword: 'herald-os:setup:password',
-  setupFinish: 'herald-os:setup:finish',
+  /** First-boot setup on the Bantu OS image: whether it is due, the name, the password, done. */
+  setupState: 'bantu-os:setup:state',
+  setupName: 'bantu-os:setup:name',
+  setupPassword: 'bantu-os:setup:password',
+  setupFinish: 'bantu-os:setup:finish',
 
-  /** The events main emitted lately (`HeraldEvent[]`, newest first), for Settings and the agent. */
-  eventsRecent: 'herald-os:events:recent',
+  /** The events main emitted lately (`BantuEvent[]`, newest first), for Settings and the agent. */
+  eventsRecent: 'bantu-os:events:recent',
 
   /** A quick panel's state (Wi-Fi networks, Bluetooth devices, audio devices, displays, power). */
-  controlsStatus: 'herald-os:controls:status',
+  controlsStatus: 'bantu-os:controls:status',
   /** Change something from a quick panel (`ControlAction`); resolves with the panel's new state. */
-  controlsAction: 'herald-os:controls:action',
+  controlsAction: 'bantu-os:controls:action',
 
-  switchesGet: 'herald-os:switches:get',
+  switchesGet: 'bantu-os:switches:get',
   /** Turn one switch on or off; resolves with every switch's state. */
-  switchesSet: 'herald-os:switches:set',
+  switchesSet: 'bantu-os:switches:set',
   /** Main -> renderer: a switch changed (from the CLI, a hotkey or another window). */
-  switchesChanged: 'herald-os:switches:changed',
+  switchesChanged: 'bantu-os:switches:changed',
 
   /** The notification history (the last week), kept across restarts. */
-  notificationsLoad: 'herald-os:notifications:load',
-  notificationsSave: 'herald-os:notifications:save',
+  notificationsLoad: 'bantu-os:notifications:load',
+  notificationsSave: 'bantu-os:notifications:save',
 
-  terminalCreate: 'herald-os:terminal:create',
-  terminalWrite: 'herald-os:terminal:write',
-  terminalResize: 'herald-os:terminal:resize',
-  terminalDispose: 'herald-os:terminal:dispose',
-  terminalData: 'herald-os:terminal:data',
-  terminalExit: 'herald-os:terminal:exit',
+  terminalCreate: 'bantu-os:terminal:create',
+  terminalWrite: 'bantu-os:terminal:write',
+  terminalResize: 'bantu-os:terminal:resize',
+  terminalDispose: 'bantu-os:terminal:dispose',
+  terminalData: 'bantu-os:terminal:data',
+  terminalExit: 'bantu-os:terminal:exit',
 
-  notifyNative: 'herald-os:notify:native',
+  notifyNative: 'bantu-os:notify:native',
 
-  windowState: 'herald-os:window:state',
-  windowGetState: 'herald-os:window:get-state',
-  windowToggleFullscreen: 'herald-os:window:toggle-fullscreen',
-  windowQuit: 'herald-os:window:quit',
+  windowState: 'bantu-os:window:state',
+  windowGetState: 'bantu-os:window:get-state',
+  windowToggleFullscreen: 'bantu-os:window:toggle-fullscreen',
+  windowQuit: 'bantu-os:window:quit',
 
-  shellOpenExternal: 'herald-os:shell:open-external',
+  shellOpenExternal: 'bantu-os:shell:open-external',
 
-  // Embedded web views: http(s) pages rendered inside a Herald OS window, never the system browser.
+  // Embedded web views: http(s) pages rendered inside a Bantu OS window, never the system browser.
   /** Perform an `EditAction` in this window (or in one of its web views). */
-  editAction: 'herald-os:edit:action',
-  webOpen: 'herald-os:web:open',
+  editAction: 'bantu-os:edit:action',
+  webOpen: 'bantu-os:web:open',
   /** Show a local file (PDF, image, text, media) in a locked-down viewer view. */
-  webOpenFile: 'herald-os:web:open-file',
-  webSetBounds: 'herald-os:web:set-bounds',
-  webClose: 'herald-os:web:close',
+  webOpenFile: 'bantu-os:web:open-file',
+  webSetBounds: 'bantu-os:web:set-bounds',
+  webClose: 'bantu-os:web:close',
   /** Studio preview: a web page or a file inside the project folder. */
-  webOpenPreview: 'herald-os:web:open-preview',
-  webNavigate: 'herald-os:web:navigate',
-  webReload: 'herald-os:web:reload',
+  webOpenPreview: 'bantu-os:web:open-preview',
+  webNavigate: 'bantu-os:web:navigate',
+  webReload: 'bantu-os:web:reload',
   /** Main -> renderer: title/url/loading changes and `closed`. */
-  webEvent: 'herald-os:web:event',
+  webEvent: 'bantu-os:web:event',
 
-  prefsGet: 'herald-os:prefs:get',
-  prefsSet: 'herald-os:prefs:set',
-  prefsChanged: 'herald-os:prefs:changed',
+  prefsGet: 'bantu-os:prefs:get',
+  prefsSet: 'bantu-os:prefs:set',
+  prefsChanged: 'bantu-os:prefs:changed',
 
-  bridgePolicyRead: 'herald-os:bridge:policy-read',
-  bridgePolicyWrite: 'herald-os:bridge:policy-write',
-  bridgeAuditRead: 'herald-os:bridge:audit-read',
+  bridgePolicyRead: 'bantu-os:bridge:policy-read',
+  bridgePolicyWrite: 'bantu-os:bridge:policy-write',
+  bridgeAuditRead: 'bantu-os:bridge:audit-read',
 
-  envInfo: 'herald-os:env:info',
+  envInfo: 'bantu-os:env:info',
 
   // OS control: main asks the NasTech window to run a registry command (from the control socket /
   // the agent's os_ui tool) and the window replies.
-  osControlRequest: 'herald-os:os-control:request',
-  osControlReply: 'herald-os:os-control:reply',
+  osControlRequest: 'bantu-os:os-control:request',
+  osControlReply: 'bantu-os:os-control:reply',
 
   // Voice: microphone permission, tokenized audio WebSocket URLs, the global hotkey.
-  voiceRequestMicrophone: 'herald-os:voice:request-microphone',
-  voiceMicrophoneStatus: 'herald-os:voice:microphone-status',
-  voiceAudioWsUrl: 'herald-os:voice:audio-ws-url',
+  voiceRequestMicrophone: 'bantu-os:voice:request-microphone',
+  voiceMicrophoneStatus: 'bantu-os:voice:microphone-status',
+  voiceAudioWsUrl: 'bantu-os:voice:audio-ws-url',
   /** Main -> renderer: the global voice hotkey was pressed. */
-  voiceHotkey: 'herald-os:voice:hotkey',
+  voiceHotkey: 'bantu-os:voice:hotkey',
 
   // Panels mode: surfaces, cross-window relay, compositor state.
-  shellOpen: 'herald-os:shell:open',
-  shellClose: 'herald-os:shell:close',
-  shellRelay: 'herald-os:shell:relay',
-  shellCommand: 'herald-os:shell:command',
-  shellResize: 'herald-os:shell:resize',
-  shellWallpaperFrame: 'herald-os:shell:wallpaper-frame',
-  wmGetState: 'herald-os:wm:get-state',
-  wmState: 'herald-os:wm:state',
-  wmAction: 'herald-os:wm:action',
+  shellOpen: 'bantu-os:shell:open',
+  shellClose: 'bantu-os:shell:close',
+  shellRelay: 'bantu-os:shell:relay',
+  shellCommand: 'bantu-os:shell:command',
+  shellResize: 'bantu-os:shell:resize',
+  shellWallpaperFrame: 'bantu-os:shell:wallpaper-frame',
+  wmGetState: 'bantu-os:wm:get-state',
+  wmState: 'bantu-os:wm:state',
+  wmAction: 'bantu-os:wm:action',
 
   // Phase 2: system services reachable from any surface.
-  /** Run a `herald-os` CLI command (install, reminder, notice, ocr, …); resolves with its output. */
-  shellHeraldOs: 'herald-os:shell:herald-os',
-  menuExtensions: 'herald-os:menu:extensions',
-  menuExtensionRun: 'herald-os:menu:extension-run',
-  brandingGet: 'herald-os:branding:get',
-  brandingSet: 'herald-os:branding:set',
-  brandingChanged: 'herald-os:branding:changed',
+  /** Run a `bantu-os` CLI command (install, reminder, notice, ocr, …); resolves with its output. */
+  shellBantuOs: 'bantu-os:shell:bantu-os',
+  menuExtensions: 'bantu-os:menu:extensions',
+  menuExtensionRun: 'bantu-os:menu:extension-run',
+  brandingGet: 'bantu-os:branding:get',
+  brandingSet: 'bantu-os:branding:set',
+  brandingChanged: 'bantu-os:branding:changed',
   /** Power actions: suspend | reboot | poweroff | logout | lock. */
-  shellPower: 'herald-os:shell:power',
+  shellPower: 'bantu-os:shell:power',
   /** Clipboard history (cliphist): list entries / paste one back to the clipboard. */
-  clipboardHistory: 'herald-os:clipboard:history',
-  clipboardPaste: 'herald-os:clipboard:paste',
+  clipboardHistory: 'bantu-os:clipboard:history',
+  clipboardPaste: 'bantu-os:clipboard:paste',
   /** Desktop notifications from other apps (org.freedesktop.Notifications), pushed to the NasTech window. */
-  notificationsIncoming: 'herald-os:notifications:incoming',
-  notificationsAction: 'herald-os:notifications:action',
+  notificationsIncoming: 'bantu-os:notifications:incoming',
+  notificationsAction: 'bantu-os:notifications:action',
 
-  // Herald Canvas: `.comp` projects (a manifest and PNG layers), images to open and export, live reload.
-  canvasPickOpen: 'herald-os:canvas:pick-open',
-  canvasPickSave: 'herald-os:canvas:pick-save',
-  canvasRead: 'herald-os:canvas:read',
-  canvasReadAsset: 'herald-os:canvas:read-asset',
-  canvasWrite: 'herald-os:canvas:write',
-  canvasReadImage: 'herald-os:canvas:read-image',
+  // Bantu Canvas: `.comp` projects (a manifest and PNG layers), images to open and export, live reload.
+  canvasPickOpen: 'bantu-os:canvas:pick-open',
+  canvasPickSave: 'bantu-os:canvas:pick-save',
+  canvasRead: 'bantu-os:canvas:read',
+  canvasReadAsset: 'bantu-os:canvas:read-asset',
+  canvasWrite: 'bantu-os:canvas:write',
+  canvasReadImage: 'bantu-os:canvas:read-image',
   /** A layered file (PSD, PSB) read in parts, so a large one need not cross in one message. */
-  canvasReadPart: 'herald-os:canvas:read-part',
+  canvasReadPart: 'bantu-os:canvas:read-part',
   /** A colour table (`.cube`) for a Color Lookup layer, as its bytes. */
-  canvasReadTable: 'herald-os:canvas:read-table',
-  canvasWriteFile: 'herald-os:canvas:write-file',
+  canvasReadTable: 'bantu-os:canvas:read-table',
+  canvasWriteFile: 'bantu-os:canvas:write-file',
   /** An export written a part at a time: PNG rows compressed by main, or bytes as they are. */
-  canvasStreamBegin: 'herald-os:canvas:stream-begin',
-  canvasStreamWrite: 'herald-os:canvas:stream-write',
-  canvasStreamEnd: 'herald-os:canvas:stream-end',
-  canvasStreamAbort: 'herald-os:canvas:stream-abort',
-  canvasWatch: 'herald-os:canvas:watch',
-  canvasUnwatch: 'herald-os:canvas:unwatch',
-  canvasExists: 'herald-os:canvas:exists',
-  canvasFetch: 'herald-os:canvas:fetch',
-  canvasReport: 'herald-os:canvas:report',
-  canvasPresence: 'herald-os:canvas:presence',
+  canvasStreamBegin: 'bantu-os:canvas:stream-begin',
+  canvasStreamWrite: 'bantu-os:canvas:stream-write',
+  canvasStreamEnd: 'bantu-os:canvas:stream-end',
+  canvasStreamAbort: 'bantu-os:canvas:stream-abort',
+  canvasWatch: 'bantu-os:canvas:watch',
+  canvasUnwatch: 'bantu-os:canvas:unwatch',
+  canvasExists: 'bantu-os:canvas:exists',
+  canvasFetch: 'bantu-os:canvas:fetch',
+  canvasReport: 'bantu-os:canvas:report',
+  canvasPresence: 'bantu-os:canvas:presence',
   /** Copied pixels onto the system clipboard as a PNG, and an image off it for Paste. */
-  canvasCopyImage: 'herald-os:canvas:copy-image',
-  canvasPasteImage: 'herald-os:canvas:paste-image',
+  canvasCopyImage: 'bantu-os:canvas:copy-image',
+  canvasPasteImage: 'bantu-os:canvas:paste-image',
   /** Main -> renderer: an open project changed on disk (NasTech, a script, Compositor). */
-  canvasChanged: 'herald-os:canvas:changed',
+  canvasChanged: 'bantu-os:canvas:changed',
   /** On-device models: what is downloaded, downloads (asked for by the person), and removal. */
-  canvasModels: 'herald-os:canvas:models',
-  canvasModelDownload: 'herald-os:canvas:model-download',
-  canvasModelCancel: 'herald-os:canvas:model-cancel',
-  canvasModelRemove: 'herald-os:canvas:model-remove',
+  canvasModels: 'bantu-os:canvas:models',
+  canvasModelDownload: 'bantu-os:canvas:model-download',
+  canvasModelCancel: 'bantu-os:canvas:model-cancel',
+  canvasModelRemove: 'bantu-os:canvas:model-remove',
   /** Main -> renderer: how a model download is going. */
-  canvasModelProgress: 'herald-os:canvas:model-progress',
+  canvasModelProgress: 'bantu-os:canvas:model-progress',
 
-  // Herald Office (Docs, Sheets, Slides): files read and written whole, watched, backed up before Herald first saves over them.
+  // Bantu Office (Docs, Sheets, Slides): files read and written whole, watched, backed up before Bantu first saves over them.
   /** What this machine adds to the formats (LibreOffice for OpenDocument files). */
-  officeAbilities: 'herald-os:office:abilities',
-  officePickOpen: 'herald-os:office:pick-open',
-  officePickSave: 'herald-os:office:pick-save',
-  officeRead: 'herald-os:office:read',
-  officeWrite: 'herald-os:office:write',
-  officeWatch: 'herald-os:office:watch',
-  officeUnwatch: 'herald-os:office:unwatch',
-  officeReport: 'herald-os:office:report',
-  officePresence: 'herald-os:office:presence',
+  officeAbilities: 'bantu-os:office:abilities',
+  officePickOpen: 'bantu-os:office:pick-open',
+  officePickSave: 'bantu-os:office:pick-save',
+  officeRead: 'bantu-os:office:read',
+  officeWrite: 'bantu-os:office:write',
+  officeWatch: 'bantu-os:office:watch',
+  officeUnwatch: 'bantu-os:office:unwatch',
+  officeReport: 'bantu-os:office:report',
+  officePresence: 'bantu-os:office:presence',
   /** Print a window's print view to a PDF the person names. */
-  officeExportPdf: 'herald-os:office:export-pdf',
+  officeExportPdf: 'bantu-os:office:export-pdf',
   /** Print a window's print view on paper, through the system's print dialog. */
-  officePrint: 'herald-os:office:print',
+  officePrint: 'bantu-os:office:print',
   /** A file converted by headless LibreOffice, as the converted file's bytes. */
-  officeConvert: 'herald-os:office:convert',
-  /** Templates the person saved from an Office app, in the Herald OS data folder (office-templates/<app>/). */
-  officeTemplates: 'herald-os:office:templates',
-  officeTemplateSave: 'herald-os:office:template-save',
-  officeTemplateRename: 'herald-os:office:template-rename',
-  officeTemplateRemove: 'herald-os:office:template-remove',
+  officeConvert: 'bantu-os:office:convert',
+  /** Templates the person saved from an Office app, in the Bantu OS data folder (office-templates/<app>/). */
+  officeTemplates: 'bantu-os:office:templates',
+  officeTemplateSave: 'bantu-os:office:template-save',
+  officeTemplateRename: 'bantu-os:office:template-rename',
+  officeTemplateRemove: 'bantu-os:office:template-remove',
   /** Main -> renderer: an open file changed on disk (NasTech, another app); its new digest, or null once it is gone. */
-  officeChanged: 'herald-os:office:changed',
+  officeChanged: 'bantu-os:office:changed',
   /** Panels mode: run a command in the Office window that has a document open, and wait for its result. */
-  officeRun: 'herald-os:office:run',
+  officeRun: 'bantu-os:office:run',
   /** Main -> an Office window: run this command here; the window answers on `officeRunReply`. */
-  officeRunRequest: 'herald-os:office:run-request',
-  officeRunReply: 'herald-os:office:run-reply'
+  officeRunRequest: 'bantu-os:office:run-request',
+  officeRunReply: 'bantu-os:office:run-reply'
 } as const
 
 /** Raw pixels for a project image or an export: RGBA layers, grayscale masks. */
@@ -1025,7 +1025,7 @@ export interface CanvasFilePart {
   bytes: Uint8Array
 }
 
-/** An open Herald Canvas document, as a window reports it (for NasTech's commands). */
+/** An open Bantu Canvas document, as a window reports it (for NasTech's commands). */
 export interface CanvasDocSummary {
   key: string
   path: string | null
@@ -1049,7 +1049,7 @@ export interface CanvasFetched {
   svg: boolean
 }
 
-/** The image on the system clipboard, and whether it is still what Herald Canvas copied there last. */
+/** The image on the system clipboard, and whether it is still what Bantu Canvas copied there last. */
 export interface CanvasPasted {
   image: CanvasRawImage | Uint8Array
   own: boolean
@@ -1182,7 +1182,7 @@ export interface IncomingNotification {
   expireTimeout: number
 }
 
-export interface HeraldOsResult {
+export interface BantuOsResult {
   code: number
   stdout: string
   stderr: string

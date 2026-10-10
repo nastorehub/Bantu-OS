@@ -8,7 +8,7 @@ import { Show } from './Show.tsx'
 import { next, type Presentation, previous } from './state.ts'
 
 /*
- * The audience window: an empty page of Herald's own that the main process puts full screen on
+ * The audience window: an empty page of Bantu's own that the main process puts full screen on
  * another display, drawn from this page. Its head holds copies of this page's style sheets (and of
  * those that come later, as chunks load); its keys and its size are its own.
  */

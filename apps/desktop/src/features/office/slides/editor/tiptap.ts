@@ -165,7 +165,7 @@ const firstFamily = (value: string): string | null =>
 
 /** The style mark's attributes: theme slots and theme fonts by name, drawn in the deck's theme. */
 const RunStyle = Extension.create<{ theme: Theme | null }>({
-  name: 'heraldRunStyle',
+  name: 'bantuRunStyle',
 
   addOptions() {
     return { theme: null }
@@ -221,7 +221,7 @@ function paragraphLook(theme: Theme, body: TextBody): Plugin {
   const cache = new WeakMap<ProseNode, DecorationSet>()
 
   return new Plugin({
-    key: new PluginKey('heraldSlideParagraphs'),
+    key: new PluginKey('bantuSlideParagraphs'),
     props: {
       decorations(state) {
         const known = cache.get(state.doc)
@@ -263,6 +263,6 @@ export function slideTextExtensions(theme: Theme, body: TextBody) {
     TextStyle,
     RunStyle.configure({ theme }),
     UndoRedo.configure({ depth: 200 }),
-    Extension.create({ name: 'heraldSlideParagraphs', addProseMirrorPlugins: () => [paragraphLook(theme, body)] })
+    Extension.create({ name: 'bantuSlideParagraphs', addProseMirrorPlugins: () => [paragraphLook(theme, body)] })
   ]
 }

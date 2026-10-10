@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Boot Herald OS Linux in QEMU (Apple Hypervisor) from the terminal. This is the scriptable twin of
+# Boot Bantu OS Linux in QEMU (Apple Hypervisor) from the terminal. This is the scriptable twin of
 # the UTM setup in linux/README.md: same qcow2 image, same seed, same SSH port, so everything in
 # linux/dev/ works against either.
 #
 #   bash linux/vm/run-qemu.sh              # window on the Mac, SSH on 127.0.0.1:2222
 #   HEADLESS=1 bash linux/vm/run-qemu.sh   # VNC on 127.0.0.1:5901 instead of a window
-#   bash linux/vm/run-qemu.sh --image herald-os-<v>-aarch64.qcow2   # boot a built Herald OS image
+#   bash linux/vm/run-qemu.sh --image bantu-os-<v>-aarch64.qcow2   # boot a built Bantu OS image
 #   bash linux/vm/run-qemu.sh stop|status|console|reset
 #
 # First boot runs cloud-init provisioning (several minutes: dnf + NasTech Agent install). Watch it
@@ -16,15 +16,15 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BUILD="$HERE/build"
 VERSION="${FEDORA_VERSION:-44}"
 BASE="$BUILD/fedora-cloud-${VERSION}-aarch64.qcow2"
-DISK="$BUILD/herald-os.qcow2"
+DISK="$BUILD/bantu-os.qcow2"
 SEED="$BUILD/cidata.iso"
-# --image: a Herald OS disk from bootc-image-builder; it sets itself up on the first boot, no seed.
+# --image: a Bantu OS disk from bootc-image-builder; it sets itself up on the first boot, no seed.
 IMAGE=""
 if [[ "${1:-}" == "--image" ]]; then
   IMAGE="$(cd "$(dirname "${2:?--image needs a qcow2}")" && pwd)/$(basename "$2")"
   shift 2
   BASE="$IMAGE"
-  DISK="$BUILD/herald-os-image.qcow2"
+  DISK="$BUILD/bantu-os-image.qcow2"
 fi
 EFI_CODE="$(brew --prefix 2>/dev/null || echo /opt/homebrew)/share/qemu/edk2-aarch64-code.fd"
 EFI_VARS_SRC="$(dirname "$EFI_CODE")/edk2-arm-vars.fd"
@@ -32,14 +32,14 @@ EFI_VARS="$BUILD/efivars.fd"
 PIDFILE="$BUILD/qemu.pid"
 SERIAL="$BUILD/serial.log"
 MONITOR="$BUILD/monitor.sock"
-SSH_PORT="${HERALD_VM_PORT:-${NASTECH_VM_PORT:-2222}}"
+SSH_PORT="${BANTU_VM_PORT:-${NASTECH_VM_PORT:-2222}}"
 CPUS="${CPUS:-4}"
 MEM="${MEM:-8192}"
 DISK_SIZE="${DISK_SIZE:-64G}"
 # Guest framebuffer. The Cocoa window shows guest pixels 1:1 with the Mac's device pixels, so the
 # default fills the main display's width and leaves room for the menu bar and title bar (72 points,
-# 144 pixels on Retina). Pair a Retina-sized guest with HERALD_OS_SCALE=2 in
-# ~/.config/herald-os/session.env (and `scale 2` in ~/.config/niri/local.kdl) so text stays crisp.
+# 144 pixels on Retina). Pair a Retina-sized guest with BANTU_OS_SCALE=2 in
+# ~/.config/bantu-os/session.env (and `scale 2` in ~/.config/niri/local.kdl) so text stays crisp.
 DISPLAY_RES="$(system_profiler SPDisplaysDataType 2>/dev/null | awk '/Main Display: Yes/{main=1} /Resolution:/{res=$2" "$4} main && res{print res; exit}')"
 [[ -n "$DISPLAY_RES" ]] || DISPLAY_RES="$(system_profiler SPDisplaysDataType 2>/dev/null | awk '/Resolution:/{print $2" "$4; exit}')"
 read -r DISPLAY_W DISPLAY_H <<<"${DISPLAY_RES:-2048 1424}"
@@ -109,7 +109,7 @@ echo "==> Starting QEMU (ssh -p $SSH_PORT -i $BUILD/id_nastech nastech@127.0.0.1
 # it in its own session (perl setsid; macOS has no setsid binary) so closing this terminal or a
 # parent process group does not take the VM down.
 perl -e 'use POSIX qw(setsid); setsid(); exec @ARGV or die "exec: $!"' -- qemu-system-aarch64 \
-  -name herald-os \
+  -name bantu-os \
   -machine virt,highmem=on \
   -accel hvf \
   -cpu host \

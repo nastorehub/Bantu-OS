@@ -73,7 +73,7 @@ describe('matchIntent', () => {
 
   it('captures free text slots with the original casing', () => {
     expect(match('remember that I prefer short answers')).toMatchObject({ command: 'memory.add', args: { text: 'I prefer short answers' } })
-    expect(match('what do you remember about Herald')).toMatchObject({ command: 'memory.show', args: { query: 'Herald' } })
+    expect(match('what do you remember about Bantu')).toMatchObject({ command: 'memory.show', args: { query: 'Bantu' } })
     expect(match('pause the daily digest automation')).toMatchObject({ command: 'automation.pause', args: { name: 'daily digest' } })
     expect(match('start a mission to clean up my downloads')).toMatchObject({ command: 'mission.start', args: { goal: 'clean up my downloads' } })
   })
@@ -83,7 +83,7 @@ describe('matchIntent', () => {
   })
 
   it('hands reasoning and long requests to NasTech', () => {
-    expect(match('open the file I was editing yesterday afternoon in the herald project')).toBeNull()
+    expect(match('open the file I was editing yesterday afternoon in the bantu project')).toBeNull()
     expect(match('why is my disk full')).toBeNull()
     expect(match('write a summary of my missions')).toBeNull()
     expect(match('stop the dev server on port 3000')).toBeNull()
@@ -186,13 +186,13 @@ describe('Office requests', () => {
   const withOffice: CommandSummary[] = [
     ...commands,
     command('edit.undo', ['undo', 'undo that', 'undo it', 'take that back']),
-    command('docs.open', ['open herald docs', 'open docs', 'open the word processor']),
+    command('docs.open', ['open bantu docs', 'open docs', 'open the word processor']),
     command('docs.new', ['new document', 'start a new document', 'new doc']),
     command('docs.save', ['save the document']),
-    command('sheets.open', ['open herald sheets', 'open sheets', 'open the spreadsheet app']),
+    command('sheets.open', ['open bantu sheets', 'open sheets', 'open the spreadsheet app']),
     command('sheets.new', ['new spreadsheet', 'new workbook', 'start a new spreadsheet']),
     command('sheets.save', ['save the spreadsheet', 'save the workbook']),
-    command('slides.open', ['open herald slides', 'open slides', 'open the presentation app']),
+    command('slides.open', ['open bantu slides', 'open slides', 'open the presentation app']),
     command('slides.new', ['new presentation', 'new deck', 'new slideshow']),
     command('slides.addSlide', ['new slide', 'add a slide']),
     command('slides.save', ['save the presentation']),
@@ -243,7 +243,7 @@ describe('Office requests', () => {
     expect(route('Start a new document.')).toMatchObject({ command: 'docs.new' })
     expect(route('new spreadsheet')).toMatchObject({ command: 'sheets.new' })
     expect(route('start a new spreadsheet')).toMatchObject({ command: 'sheets.new' })
-    expect(route('Open Herald Docs')).toMatchObject({ command: 'docs.open' })
+    expect(route('Open Bantu Docs')).toMatchObject({ command: 'docs.open' })
     expect(route('open sheets')).toMatchObject({ command: 'sheets.open' })
     expect(route('open the word processor')).toMatchObject({ command: 'docs.open' })
     expect(route('save the document')).toMatchObject({ command: 'docs.save' })
@@ -261,8 +261,8 @@ describe('Office requests', () => {
     expect(route('hide the sidebar')).toMatchObject({ command: 'sidebar.toggle', args: { collapsed: true } })
   })
 
-  it('keeps the bare Herald Slides commands on the fast path and hands work on a deck to NasTech', () => {
-    expect(route('open Herald Slides')).toMatchObject({ command: 'slides.open' })
+  it('keeps the bare Bantu Slides commands on the fast path and hands work on a deck to NasTech', () => {
+    expect(route('open Bantu Slides')).toMatchObject({ command: 'slides.open' })
     expect(route('open slides')).toMatchObject({ command: 'slides.open' })
     expect(route('open the presentation app')).toMatchObject({ command: 'slides.open' })
     expect(route('new presentation')).toMatchObject({ command: 'slides.new' })

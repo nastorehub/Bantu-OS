@@ -79,7 +79,7 @@ export function SheetsEditor({ doc }: { doc: OfficeDocument<WorkbookSnapshot> })
     sheetsSession.attach(doc, handle)
 
     return () => {
-      // The workbook outlives its view (a closed window keeps it until Herald quits): it keeps what was typed.
+      // The workbook outlives its view (a closed window keeps it until Bantu quits): it keeps what was typed.
       if (mounted) {
         doc.initial = mounted.engine.snapshot()
       }

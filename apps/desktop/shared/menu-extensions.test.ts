@@ -5,14 +5,14 @@ describe('parseMenuExtensions', () => {
   it('reads every kind of entry', () => {
     const { entries, errors } = parseMenuExtensions({
       entries: [
-        { label: 'Notes', hint: 'Obsidian', icon: 'notes', 'herald-os': ['launch', 'obsidian'] },
+        { label: 'Notes', hint: 'Obsidian', icon: 'notes', 'bantu-os': ['launch', 'obsidian'] },
         { label: 'Back up photos', group: 'Trigger', exec: ['rsync', '-a', '~/Pictures/', '/mnt/backup/'] },
         { label: 'Standup doc', url: 'https://docs.example.com/standup' },
         { label: 'Missions', command: 'page.open', args: { name: 'missions' } }
       ]
     })
     expect(errors).toEqual([])
-    expect(entries.map(entry => entry.action.kind)).toEqual(['herald-os', 'exec', 'url', 'command'])
+    expect(entries.map(entry => entry.action.kind)).toEqual(['bantu-os', 'exec', 'url', 'command'])
     expect(entries[0]).toMatchObject({ id: 'yours-1-notes', hint: 'Obsidian', icon: 'notes' })
     expect(entries[1].group).toBe('trigger')
     expect(entries[3].action).toEqual({ kind: 'command', command: 'page.open', args: { name: 'missions' } })

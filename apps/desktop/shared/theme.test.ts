@@ -80,7 +80,7 @@ describe('themeFromPixels', () => {
     expect(themeFromPixels(pixels, { name: 'sage', scheme: 'dark' }).shell?.scheme).toBe('dark')
   })
 
-  it('falls back to the Herald blue for a greyscale image', () => {
+  it('falls back to the Bantu blue for a greyscale image', () => {
     const spec = themeFromPixels(
       image(20, 20, x => (x % 2 ? '#202020' : '#303030')),
       { name: 'mono' }
@@ -117,14 +117,14 @@ describe('themes on disk', () => {
 
 describe('NasTech skins', () => {
   it('writes a skin NasTech can load', () => {
-    const yaml = nastechSkinYaml('Herald Ocean', OCEAN)
+    const yaml = nastechSkinYaml('Bantu Ocean', OCEAN)
 
-    expect(yaml).toContain('name: herald-os')
+    expect(yaml).toContain('name: bantu-os')
     expect(yaml).toContain('  ui_accent: "#4d92ff"')
     expect(yaml).toContain('  status_bar_bg: "#0a2a96"')
   })
 
-  it('reads a NasTech skin back into Herald colours', () => {
+  it('reads a NasTech skin back into Bantu colours', () => {
     const colors = themeColorsFromSkin({ colors: { ui_accent: '#ffbf00', banner_text: '#fff8dc', status_bar_bg: '#1a1a2e', ui_error: '#ef5350' } })
 
     expect(colors?.accent).toBe('#ffbf00')

@@ -1,7 +1,7 @@
 import { app, BrowserWindow, Menu, type MenuItemConstructorOptions, type WebContents } from 'electron'
 
 /*
- * Spelling where a page asks for it (Herald Docs' pages; the shell keeps it off everywhere else):
+ * Spelling where a page asks for it (Bantu Docs' pages; the shell keeps it off everywhere else):
  * a right-click on a word Chromium marked offers its suggestions and Add to Dictionary, with Cut,
  * Copy and Paste. On the Mac the words come from the system's own spelling dictionary.
  */
@@ -28,7 +28,7 @@ export function spellingMenu(contents: WebContents, params: Electron.ContextMenu
   return items
 }
 
-/** The menu for every page Herald opens from now on. */
+/** The menu for every page Bantu opens from now on. */
 export function registerSpellingMenus(): void {
   app.on('web-contents-created', (_event, contents) => {
     contents.on('context-menu', (_menuEvent, params) => {

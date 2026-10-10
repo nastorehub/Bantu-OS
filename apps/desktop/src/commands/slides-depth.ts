@@ -2,7 +2,7 @@ import type { CommandArg, OsCommand } from '../store/os-commands.ts'
 import { color, elements, fill, gradient, height, masterLayout, presentation, run, sheetArgs, shapeKind, slide, slides, width, x, y } from './slides-shared.ts'
 
 /*
- * Herald Slides' depth for NasTech: the slide master and its layouts, backgrounds, the header and
+ * Bantu Slides' depth for NasTech: the slide master and its layouts, backgrounds, the header and
  * footer, custom themes, transitions, groups, connectors, table borders, fills and slides from a
  * sheet. Like the rest of slides.*, a command works on the presentation it names or the one in
  * front, and each change is one step to undo in an open presentation.
@@ -155,7 +155,7 @@ export const slidesDepthCommands: readonly OsCommand[] = [
   {
     id: 'slides.renameLayout',
     title: 'Rename a layout',
-    description: 'Give one of the slide master’s layouts a name of its own, as PowerPoint shows it, as one step to undo; default gives Herald’s back.',
+    description: 'Give one of the slide master’s layouts a name of its own, as PowerPoint shows it, as one step to undo; default gives Bantu’s back.',
     tier: 'act',
     args: [
       presentation,
@@ -168,7 +168,7 @@ export const slidesDepthCommands: readonly OsCommand[] = [
     id: 'slides.resetMaster',
     title: 'Reset the slide master',
     description:
-      'Put Herald’s own slide master and layouts back in place of the presentation’s, as one step to undo: the master’s and layouts’ backgrounds, logos and drawings go, and placeholders go back to Herald’s places and looks (what slides say stays). Slides’ own backgrounds and the theme stay.',
+      'Put Bantu’s own slide master and layouts back in place of the presentation’s, as one step to undo: the master’s and layouts’ backgrounds, logos and drawings go, and placeholders go back to Bantu’s places and looks (what slides say stays). Slides’ own backgrounds and the theme stay.',
     tier: 'mutate',
     args: [presentation],
     run: run('slides.resetMaster', async (args) => (await depth()).resetMaster(args))
@@ -193,7 +193,7 @@ export const slidesDepthCommands: readonly OsCommand[] = [
   {
     id: 'slides.listThemes',
     title: 'List the slide themes',
-    description: 'The themes a presentation can take: Herald’s own and the custom ones the person made (slides.makeTheme), each with its id, name, fonts, colours (background, text, accent1 to accent6) and background gradient.',
+    description: 'The themes a presentation can take: Bantu’s own and the custom ones the person made (slides.makeTheme), each with its id, name, fonts, colours (background, text, accent1 to accent6) and background gradient.',
     tier: 'read',
     args: [],
     run: run('slides.listThemes', async () => (await depth()).listThemes())
@@ -223,7 +223,7 @@ export const slidesDepthCommands: readonly OsCommand[] = [
   {
     id: 'slides.deleteTheme',
     title: 'Delete a custom theme',
-    description: 'Delete one of the person’s custom themes (by id or name, as slides.listThemes gives them); presentations that use it keep its colours and fonts. Herald’s own themes stay.',
+    description: 'Delete one of the person’s custom themes (by id or name, as slides.listThemes gives them); presentations that use it keep its colours and fonts. Bantu’s own themes stay.',
     tier: 'mutate',
     args: [{ name: 'theme', type: 'string', description: 'The custom theme’s id or name', required: true }],
     run: run('slides.deleteTheme', async (args) => (await depth()).deleteTheme(args))
@@ -338,7 +338,7 @@ export const slidesDepthCommands: readonly OsCommand[] = [
     id: 'slides.addSlideFromSheet',
     title: 'Make a slide of a sheet range',
     description:
-      'Make a slide of a range of a Herald Sheets workbook (open, or a file) as one step to undo: a Title Only slide titled with its sheet’s name (or title) holding the range as a table, as its cells show (formatted numbers and dates), going on over more slides with the header row repeated when it is long.',
+      'Make a slide of a range of a Bantu Sheets workbook (open, or a file) as one step to undo: a Title Only slide titled with its sheet’s name (or title) holding the range as a table, as its cells show (formatted numbers and dates), going on over more slides with the header row repeated when it is long.',
     tier: 'act',
     args: [
       presentation,

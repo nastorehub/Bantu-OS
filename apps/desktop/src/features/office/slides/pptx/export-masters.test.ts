@@ -118,7 +118,7 @@ function masterDeck() {
   let deck: Deck = {
     ...start,
     master: { background: { kind: 'solid', color: 'bg2' }, elements: [band, ...master, logo], layouts },
-    headerFooter: { date: true, dateFormat: 'datetime2', number: true, footer: true, footerText: 'Herald OS', skipTitle: true }
+    headerFooter: { date: true, dateFormat: 'datetime2', number: true, footer: true, footerText: 'Bantu OS', skipTitle: true }
   }
   deck = model.addSlide(deck, { layout: 'title-content', title: 'Plan', body: ['One'] }).deck
   deck = model.addSlide(deck, { layout: 'blank' }).deck
@@ -292,7 +292,7 @@ describe('writing the date, footer and slide number', () => {
     expect(find(date, 'p:txBody/a:p/a:fld')?.attrs).toMatchObject({ type: 'datetime2' })
     expect(textOf(find(date, 'p:txBody/a:p/a:fld/a:t'))).toBe('Friday, October 9, 2026')
     expect(find(footer, 'p:txBody/a:p/a:fld')).toBeUndefined()
-    expect(textOf(find(footer, 'p:txBody/a:p/a:r/a:t'))).toBe('Herald OS')
+    expect(textOf(find(footer, 'p:txBody/a:p/a:r/a:t'))).toBe('Bantu OS')
     expect(attr(find(number, 'p:txBody/a:p/a:fld'), 'type')).toBe('slidenum')
     expect(textOf(find(number, 'p:txBody/a:p/a:fld/a:t'))).toBe('2')
     expect(attr(find(number, 'p:txBody/a:p/a:fld/a:rPr'), 'sz')).toBe('1200')

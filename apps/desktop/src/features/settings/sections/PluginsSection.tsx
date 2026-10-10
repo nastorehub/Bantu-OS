@@ -10,7 +10,7 @@ import { openAsk } from '../../../store/surface.ts'
 import { openApp } from '../../../store/windows.ts'
 import { errorText, InlineNote, markSaved, SectionTitle, SettingsGroup, SettingsRow } from './shared.tsx'
 
-const MAKE_A_WIDGET = 'Make me a Herald OS widget that '
+const MAKE_A_WIDGET = 'Make me a Bantu OS widget that '
 
 /*
  * Settings > Plugins: widgets for the menu bar, the Overview and their own windows (ADR-019). Each
@@ -26,7 +26,7 @@ export function PluginsSection() {
     setAdding(true)
 
     try {
-      const added = await window.heraldOS.plugins.add(url.trim())
+      const added = await window.bantuOS.plugins.add(url.trim())
       setUrl('')
       notify({ title: `${added.manifest.name} installed`, body: 'It is off until you turn it on below.', level: 'success' })
     } catch (error) {
@@ -67,8 +67,8 @@ export function PluginsSection() {
             Make a widget
           </GlassButton>
         </SettingsRow>
-        <SettingsRow icon={<IconFolder />} label="Plugins folder" description={<span className="font-mono text-[11.5px]">~/.config/herald-os/plugins</span>} keywords="plugin folder files">
-          <GlassButton size="sm" variant="ghost" onClick={() => void window.heraldOS.fs.openPath('~/.config/herald-os/plugins')}>
+        <SettingsRow icon={<IconFolder />} label="Plugins folder" description={<span className="font-mono text-[11.5px]">~/.config/bantu-os/plugins</span>} keywords="plugin folder files">
+          <GlassButton size="sm" variant="ghost" onClick={() => void window.bantuOS.fs.openPath('~/.config/bantu-os/plugins')}>
             Open
           </GlassButton>
         </SettingsRow>
@@ -87,7 +87,7 @@ function PluginRow({ plugin }: { plugin: PluginView }) {
     setBusy(true)
 
     try {
-      await window.heraldOS.plugins.setEnabled(manifest.id, enabled)
+      await window.bantuOS.plugins.setEnabled(manifest.id, enabled)
       markSaved()
     } catch (error) {
       notify({ title: `Could not turn ${manifest.name} ${enabled ? 'on' : 'off'}`, body: errorText(error), level: 'error' })
@@ -101,7 +101,7 @@ function PluginRow({ plugin }: { plugin: PluginView }) {
     setBusy(true)
 
     try {
-      await (what === 'update' ? window.heraldOS.plugins.update(manifest.id) : window.heraldOS.plugins.remove(manifest.id))
+      await (what === 'update' ? window.bantuOS.plugins.update(manifest.id) : window.bantuOS.plugins.remove(manifest.id))
       notify({ title: `${manifest.name} ${what === 'update' ? 'updated' : 'removed'}`, level: 'success' })
     } catch (error) {
       notify({ title: `Could not ${what} ${manifest.name}`, body: errorText(error), level: 'error' })

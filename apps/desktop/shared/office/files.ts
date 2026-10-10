@@ -1,14 +1,14 @@
 /*
- * Which files Herald Docs, Sheets and Slides open and save. Main builds its dialogs from this, the
+ * Which files Bantu Docs, Sheets and Slides open and save. Main builds its dialogs from this, the
  * windows pick their reader and writer from it, and Files offers "Edit in" only for what an app
- * opens, so a format is switched on here once Herald can read or write it.
+ * opens, so a format is switched on here once Bantu can read or write it.
  */
 
 export type OfficeApp = 'docs' | 'sheets' | 'slides'
 
 export const OFFICE_APPS: readonly OfficeApp[] = ['docs', 'sheets', 'slides']
 
-export const OFFICE_APP_NAMES: Record<OfficeApp, string> = { docs: 'Herald Docs', sheets: 'Herald Sheets', slides: 'Herald Slides' }
+export const OFFICE_APP_NAMES: Record<OfficeApp, string> = { docs: 'Bantu Docs', sheets: 'Bantu Sheets', slides: 'Bantu Slides' }
 
 /** What each app calls one of its files, for dialogs and messages. */
 export const OFFICE_NOUNS: Record<OfficeApp, string> = { docs: 'document', sheets: 'spreadsheet', slides: 'presentation' }
@@ -32,15 +32,15 @@ export const OFFICE_FORMATS: readonly OfficeFormat[] = [
   { extension: '.md', app: 'docs', label: 'Markdown', kind: 'text', opens: true, saves: true },
   { extension: '.markdown', app: 'docs', label: 'Markdown', kind: 'text', opens: true, saves: false },
   { extension: '.txt', app: 'docs', label: 'Plain text', kind: 'text', opens: true, saves: true },
-  // Off until opening and saving go through LibreOffice: Herald reads only the .docx it converts to.
+  // Off until opening and saving go through LibreOffice: Bantu reads only the .docx it converts to.
   { extension: '.odt', app: 'docs', label: 'OpenDocument text', kind: 'converted', opens: false, saves: false, via: '.docx' },
   { extension: '.xlsx', app: 'sheets', label: 'Excel workbook', kind: 'office', opens: true, saves: true },
   { extension: '.xlsm', app: 'sheets', label: 'Excel macro-enabled workbook', kind: 'office', opens: true, saves: false },
   { extension: '.csv', app: 'sheets', label: 'CSV', kind: 'text', opens: true, saves: true },
-  // Off like .odt: Herald Sheets reads only the .xlsx LibreOffice converts to.
+  // Off like .odt: Bantu Sheets reads only the .xlsx LibreOffice converts to.
   { extension: '.ods', app: 'sheets', label: 'OpenDocument spreadsheet', kind: 'converted', opens: false, saves: false, via: '.xlsx' },
   { extension: '.pptx', app: 'slides', label: 'PowerPoint presentation', kind: 'office', opens: true, saves: true },
-  // Off like .odt: Herald Slides reads only the .pptx LibreOffice converts to.
+  // Off like .odt: Bantu Slides reads only the .pptx LibreOffice converts to.
   { extension: '.odp', app: 'slides', label: 'OpenDocument presentation', kind: 'converted', opens: false, saves: false, via: '.pptx' }
 ]
 
@@ -59,7 +59,7 @@ export const formatOf = (file: string): OfficeFormat | undefined => OFFICE_FORMA
 
 export const byExtension = (extension: string): OfficeFormat | undefined => OFFICE_FORMATS.find((format) => format.extension === extension)
 
-/** A converted format works when LibreOffice is here and Herald handles the format it converts through. */
+/** A converted format works when LibreOffice is here and Bantu handles the format it converts through. */
 function available(format: OfficeFormat, direction: 'opens' | 'saves', abilities: OfficeAbilities): boolean {
   if (!format[direction]) {
     return false

@@ -1,4 +1,4 @@
-"""Pure helpers in the herald-os CLI (linux/bin/herald-os), loaded as a module."""
+"""Pure helpers in the bantu-os CLI (linux/bin/bantu-os), loaded as a module."""
 
 import importlib.machinery
 import importlib.util
@@ -12,8 +12,8 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
-_LOADER = importlib.machinery.SourceFileLoader("herald_os_cli", str(ROOT / "linux" / "bin" / "herald-os"))
-_SPEC = importlib.util.spec_from_loader("herald_os_cli", _LOADER)
+_LOADER = importlib.machinery.SourceFileLoader("bantu_os_cli", str(ROOT / "linux" / "bin" / "bantu-os"))
+_SPEC = importlib.util.spec_from_loader("bantu_os_cli", _LOADER)
 cli = importlib.util.module_from_spec(_SPEC)
 _LOADER.exec_module(cli)
 
@@ -97,7 +97,7 @@ def test_docs_words_become_docs_commands(tmp_path, monkeypatch):
     assert cli.docs_request(["find", "next", "steps", "--document", "Report.docx"]) == ("docs.find", {"document": report, "text": "next steps"})
     assert cli.docs_request(["write", "##", "Summary", "--at", "heading", "--heading", "Costs", "--mode", "replace"]) == ("docs.write", {"content": "## Summary", "at": "heading", "heading": "Costs", "mode": "replace"})
     assert cli.docs_request(["replace", "DRAFT", "", "--first"]) == ("docs.replace", {"find": "DRAFT", "replacement": "", "all": False})
-    assert cli.docs_request(["format", "--at", "text", "--text", "Herald", "--bold", "--no-italic", "--color", "#1f6feb", "--size", "14"]) == ("docs.format", {"at": "text", "text": "Herald", "color": "#1f6feb", "bold": True, "italic": False, "size": 14.0})
+    assert cli.docs_request(["format", "--at", "text", "--text", "Bantu", "--bold", "--no-italic", "--color", "#1f6feb", "--size", "14"]) == ("docs.format", {"at": "text", "text": "Bantu", "color": "#1f6feb", "bold": True, "italic": False, "size": 14.0})
     assert cli.docs_request(["format", "--style", "heading2", "--align", "center", "--line-spacing", "1.5"]) == ("docs.format", {"style": "heading2", "align": "center", "lineSpacing": 1.5})
     command, payload = cli.docs_request(["table", '[["Item", "Cost"], ["Rent", "1200"]]', "--at", "after", "--no-header"])
     assert command == "docs.insertTable" and json.loads(payload.pop("cells")) == [["Item", "Cost"], ["Rent", "1200"]]
@@ -190,7 +190,7 @@ def test_docs_and_sheets_print_what_they_read(monkeypatch, capsys):
             {"name": "Untitled 2", "path": None, "modified": False, "active": False},
         ]}},
         "docs.read": {"ok": True, "summary": "Report.docx: 3 words, 2 headings", "data": {"outline": [{"level": 1, "text": "Report"}, {"level": 2, "text": "Costs"}], "content": "# Report\n\n## Costs\n\nRent."}},
-        "sheets.list": {"ok": True, "summary": "Nothing is open in Herald Sheets", "data": {"workbooks": []}},
+        "sheets.list": {"ok": True, "summary": "Nothing is open in Bantu Sheets", "data": {"workbooks": []}},
         "sheets.read": {"ok": True, "summary": "Budget.xlsx: Sheet1 (3×2)", "data": {"values": [["Item", "Cost"], ["Rent", 1200]], "text": [["Item", "Cost"], ["Rent", "$1,200.00"]]}},
     }
     timeouts = []
@@ -207,7 +207,7 @@ def test_docs_and_sheets_print_what_they_read(monkeypatch, capsys):
     cli.docs_cmd(["list", "--json"])
     assert json.loads(capsys.readouterr().out) == replies["docs.list"]["data"]
     cli.sheets_cmd(["list"])
-    assert capsys.readouterr().out == "Nothing is open in Herald Sheets\n"
+    assert capsys.readouterr().out == "Nothing is open in Bantu Sheets\n"
     # What the cells show when it differs from their values, else the values.
     cli.sheets_cmd(["read", "A1:B2"])
     assert capsys.readouterr().out == "Item\tCost\nRent\t$1,200.00\n"
@@ -299,8 +299,8 @@ def test_slides_print_what_they_read(monkeypatch, capsys):
     assert all(timeout >= 60 for timeout in timeouts)
 
 
-def test_herald_keymap_is_the_template():
-    assert cli.render_keymap(TEMPLATE, "herald") == TEMPLATE
+def test_bantu_keymap_is_the_template():
+    assert cli.render_keymap(TEMPLATE, "bantu") == TEMPLATE
 
 
 def test_template_keys_the_omarchy_keymap_moves_to_are_free():
@@ -315,9 +315,9 @@ def test_omarchy_keymap_rewrites_copy_cut_and_paste():
     assert '"-k" "Insert"' in keys["Mod+C"] and '"ctrl"' in keys["Mod+C"]
     assert '"shift" "-k" "Insert"' in keys["Mod+V"]
     assert '"ctrl" "x"' in keys["Mod+X"]
-    # Herald's binds are kept, one modifier over.
+    # Bantu's binds are kept, one modifier over.
     assert "center-column" in keys["Mod+Ctrl+C"]
-    assert '"herald-os" "voice"' in keys["Mod+Shift+V"]
+    assert '"bantu-os" "voice"' in keys["Mod+Shift+V"]
     # Nothing else changed.
     original = binds(TEMPLATE)
     for key, rest in original.items():
@@ -403,9 +403,9 @@ def omarchy_home(tmp_path, monkeypatch, version=3):
         "OMARCHY_MENU": home / ".config" / "omarchy" / "extensions" / "omarchy-menu.jsonc",
         "OMARCHY_CURRENT": (home / ".local" / "state" / "omarchy" / "current", home / ".config" / "omarchy" / "current"),
         "HYPR_DIR": home / ".config" / "hypr",
-        "HERALD_HYPR": home / ".config" / "hypr" / "herald-os.conf",
-        "HERALD_HYPR_LUA": home / ".config" / "hypr" / "herald-os.lua",
-        "APP_DESKTOP": home / ".local" / "share" / "applications" / "herald-os-app.desktop",
+        "BANTU_HYPR": home / ".config" / "hypr" / "bantu-os.conf",
+        "BANTU_HYPR_LUA": home / ".config" / "hypr" / "bantu-os.lua",
+        "APP_DESKTOP": home / ".local" / "share" / "applications" / "bantu-os-app.desktop",
         "APPS_DIR": home / ".local" / "share" / "applications",
     }.items():
         monkeypatch.setattr(cli, name, value)
@@ -421,14 +421,14 @@ def test_omarchy_4_gets_lua_keys_a_menu_row_and_no_dispatcher(tmp_path, monkeypa
     assert cli.omarchy_install() == 0
     assert all(cli.omarchy_status().values())
     assert cli.HYPR_REQUIRE in lua.read_text()
-    assert 'o.bind("SUPER + ALT + H", "Herald OS", "herald-os-app")' in (home / ".config" / "hypr" / "herald-os.lua").read_text()
+    assert 'o.bind("SUPER + ALT + H", "Bantu OS", "bantu-os-app")' in (home / ".config" / "hypr" / "bantu-os.lua").read_text()
     # Omarchy 4 runs theme-set.d itself: no dispatcher, so the hook runs once.
     assert not (home / ".config" / "omarchy" / "hooks" / "theme-set").exists()
-    assert (home / ".config" / "omarchy" / "hooks" / "theme-set.d" / "herald-os").exists()
-    # Omarchy's parser still reads the menu, with Herald as a root row.
-    assert omarchy_menu_parse(menu.read_text())["herald-os"]["action"] == "herald-os-app"
+    assert (home / ".config" / "omarchy" / "hooks" / "theme-set.d" / "bantu-os").exists()
+    # Omarchy's parser still reads the menu, with Bantu as a root row.
+    assert omarchy_menu_parse(menu.read_text())["bantu-os"]["action"] == "bantu-os-app"
     cli.omarchy_install()
-    assert menu.read_text().count('"herald-os"') == 1 and lua.read_text().count(cli.HYPR_REQUIRE) == 1
+    assert menu.read_text().count('"bantu-os"') == 1 and lua.read_text().count(cli.HYPR_REQUIRE) == 1
     assert cli.omarchy_remove() == 0
     assert lua.read_text() == before[lua] and menu.read_text() == before[menu]
 
@@ -458,12 +458,12 @@ def test_current_omarchy_theme_by_name(tmp_path, monkeypatch):
 
 def test_menu_row_adds_the_comma_the_entry_before_needs():
     text = '{\n  // Mine:\n  "mine": {"label": "Mine", "action": "x"}\n}\n'
-    updated = cli.menu_with_herald(text)
+    updated = cli.menu_with_bantu(text)
     assert updated.splitlines()[2] == '  "mine": {"label": "Mine", "action": "x"},'
-    assert list(omarchy_menu_parse(updated)) == ["mine", "herald-os"]
-    assert cli.menu_with_herald(updated) is None
-    assert omarchy_menu_parse(cli.menu_without_herald(updated)) == {"mine": {"label": "Mine", "action": "x"}}
-    assert cli.menu_with_herald("[ { \"label\": \"Mine\" } ]\n") is None
+    assert list(omarchy_menu_parse(updated)) == ["mine", "bantu-os"]
+    assert cli.menu_with_bantu(updated) is None
+    assert omarchy_menu_parse(cli.menu_without_bantu(updated)) == {"mine": {"label": "Mine", "action": "x"}}
+    assert cli.menu_with_bantu("[ { \"label\": \"Mine\" } ]\n") is None
     # A // inside a string is not a comment.
     assert cli.split_jsonc_comment('"url": "https://x"  // y') == ('"url": "https://x"  ', "// y")
 
@@ -474,11 +474,11 @@ def test_omarchy_install_and_remove_leave_things_as_they_were(tmp_path, monkeypa
     before = hyprland.read_text()
     assert cli.omarchy_install() == 0
     assert all(cli.omarchy_status().values())
-    hook = home / ".config" / "omarchy" / "hooks" / "theme-set.d" / "herald-os"
-    assert hook.stat().st_mode & 0o111 and "herald-os theme omarchy" in hook.read_text()
+    hook = home / ".config" / "omarchy" / "hooks" / "theme-set.d" / "bantu-os"
+    assert hook.stat().st_mode & 0o111 and "bantu-os theme omarchy" in hook.read_text()
     assert cli.HYPR_SOURCE in hyprland.read_text()
-    binds = (home / ".config" / "hypr" / "herald-os.conf").read_text()
-    assert "bindd = SUPER ALT, H, Herald OS keys, submap, herald" in binds and binds.rstrip().endswith("submap = reset")
+    binds = (home / ".config" / "hypr" / "bantu-os.conf").read_text()
+    assert "bindd = SUPER ALT, H, Bantu OS keys, submap, bantu" in binds and binds.rstrip().endswith("submap = reset")
     # Installing twice adds nothing twice.
     cli.omarchy_install()
     assert hyprland.read_text().count(cli.HYPR_SOURCE) == 1
@@ -498,7 +498,7 @@ def test_omarchy_install_never_overwrites_the_persons_files(tmp_path, monkeypatc
     cli.omarchy_install()
     out = capsys.readouterr().out
     assert hook.read_text() == "#!/bin/sh\nnotify-send theme \"$1\"\n" and "theme-set.d" in out
-    assert menu.read_text() == "[ { \"label\": \"Mine\" } ]\n" and '"herald-os"' in out
+    assert menu.read_text() == "[ { \"label\": \"Mine\" } ]\n" and '"bantu-os"' in out
     cli.omarchy_remove()
     assert hook.exists() and menu.exists()
 
@@ -526,7 +526,7 @@ class FakeNasTech:
 def nastech_setup(tmp_path, monkeypatch):
     bridge = tmp_path / "share" / "bridge"
     bridge.mkdir(parents=True)
-    (bridge / "plugin.yaml").write_text("name: herald-os-bridge\n")
+    (bridge / "plugin.yaml").write_text("name: bantu-os-bridge\n")
     nastech_home = tmp_path / ".nastech"
     monkeypatch.setattr(cli, "BRIDGE_DIRS", [tmp_path / "missing", bridge])
     monkeypatch.setattr(cli, "NASTECH_HOME", nastech_home)
@@ -544,23 +544,23 @@ def test_setup_links_the_bridge_enables_it_and_says_what_changed(nastech_setup, 
     bridge, nastech_home, install = nastech_setup
     nastech = install(FakeNasTech())
     assert cli.setup([]) == 0
-    link = nastech_home / "plugins" / "herald-os-bridge"
+    link = nastech_home / "plugins" / "bantu-os-bridge"
     assert link.is_symlink() and link.resolve() == bridge.resolve()
-    assert ["plugins", "enable", "herald-os-bridge"] in nastech.ran and ["tools", "enable", "herald_os"] in nastech.ran
+    assert ["plugins", "enable", "bantu-os-bridge"] in nastech.ran and ["tools", "enable", "bantu_os"] in nastech.ran
     assert ["config", "set", "tools.tool_search.enabled", "off"] in nastech.ran
-    assert (nastech_home / "herald-os" / "tool-search-before").read_text() == "auto\n"
+    assert (nastech_home / "bantu-os" / "tool-search-before").read_text() == "auto\n"
     out = capsys.readouterr().out
     assert "plugins.enabled" in out and "platform_toolsets.cli" in out and "it was auto" in out and "setup --undo" in out
-    # Running it again replaces its own link and keeps the value from before Herald OS.
+    # Running it again replaces its own link and keeps the value from before Bantu OS.
     assert cli.setup([]) == 0 and link.is_symlink()
     assert nastech.ran.count(["config", "set", "tools.tool_search.enabled", "off"]) == 1
-    assert (nastech_home / "herald-os" / "tool-search-before").read_text() == "auto\n"
+    assert (nastech_home / "bantu-os" / "tool-search-before").read_text() == "auto\n"
 
 
 @pytest.mark.parametrize("step, reply", [
-    ("plugins enable herald-os-bridge", (1, "No plugin named 'herald-os-bridge'.")),
+    ("plugins enable bantu-os-bridge", (1, "No plugin named 'bantu-os-bridge'.")),
     # An unknown toolset is a ✗ line with exit 0.
-    ("tools enable herald_os", (0, "✗ Unknown toolset 'herald_os'")),
+    ("tools enable bantu_os", (0, "✗ Unknown toolset 'bantu_os'")),
 ])
 def test_setup_stops_at_a_failed_nastech_step(nastech_setup, capsys, step, reply):
     _, nastech_home, install = nastech_setup
@@ -570,7 +570,7 @@ def test_setup_stops_at_a_failed_nastech_step(nastech_setup, capsys, step, reply
     assert stopped.value.code == 1
     assert ["config", "set", "tools.tool_search.enabled", "off"] not in nastech.ran
     assert reply[1] in capsys.readouterr().err
-    assert not (nastech_home / "herald-os" / "tool-search-before").exists()
+    assert not (nastech_home / "bantu-os" / "tool-search-before").exists()
 
 
 def test_setup_undo_takes_back_every_change(nastech_setup, capsys):
@@ -580,16 +580,16 @@ def test_setup_undo_takes_back_every_change(nastech_setup, capsys):
 
     assert cli.setup(["--undo"]) == 0
 
-    assert nastech.ran[-4:] == [["tools", "disable", "herald_os"], ["plugins", "disable", "herald-os-bridge"], ["config", "get", "tools.tool_search.enabled"], ["config", "set", "tools.tool_search.enabled", "on"]]
-    assert not (nastech_home / "plugins" / "herald-os-bridge").exists()
-    assert not (nastech_home / "herald-os" / "tool-search-before").exists()
+    assert nastech.ran[-4:] == [["tools", "disable", "bantu_os"], ["plugins", "disable", "bantu-os-bridge"], ["config", "get", "tools.tool_search.enabled"], ["config", "set", "tools.tool_search.enabled", "on"]]
+    assert not (nastech_home / "plugins" / "bantu-os-bridge").exists()
+    assert not (nastech_home / "bantu-os" / "tool-search-before").exists()
     # The app's first start must not turn it all back on.
-    assert (nastech_home / "herald-os" / "bridge-enabled").exists()
+    assert (nastech_home / "bantu-os" / "bridge-enabled").exists()
 
 
 def test_setup_undo_finishes_what_is_left(nastech_setup, capsys):
     _, nastech_home, install = nastech_setup
-    nastech = install(FakeNasTech({"tools disable herald_os": (0, "✗ Unknown toolset 'herald_os'"), "plugins disable herald-os-bridge": (1, "No plugin named 'herald-os-bridge'.")}, tool_search="off"))
+    nastech = install(FakeNasTech({"tools disable bantu_os": (0, "✗ Unknown toolset 'bantu_os'"), "plugins disable bantu-os-bridge": (1, "No plugin named 'bantu-os-bridge'.")}, tool_search="off"))
 
     assert cli.setup(["--undo"]) == 0
 
@@ -609,7 +609,7 @@ def test_setup_undo_leaves_tool_search_the_person_changed_since(nastech_setup, c
 
     assert nastech.ran.count(["config", "set", "tools.tool_search.enabled", "auto"]) == 0
     assert "left as it is" in capsys.readouterr().out
-    assert not (nastech_home / "herald-os" / "tool-search-before").exists()
+    assert not (nastech_home / "bantu-os" / "tool-search-before").exists()
 
 
 def nastech_checkout(root: Path, executables: list[str], serve: bool = True) -> Path:
@@ -630,7 +630,7 @@ def nastech_home(tmp_path, monkeypatch):
     monkeypatch.setattr(cli, "HOME", tmp_path)
     monkeypatch.setattr(cli, "NASTECH_HOME", tmp_path / ".nastech")
     monkeypatch.setenv("PATH", str(tmp_path / "empty"))
-    monkeypatch.delenv("HERALD_OS_NASTECH_ROOT", raising=False)
+    monkeypatch.delenv("BANTU_OS_NASTECH_ROOT", raising=False)
     monkeypatch.delenv("NASTECH_OS_NASTECH_ROOT", raising=False)
     return tmp_path
 
@@ -654,7 +654,7 @@ def test_nastech_is_found_where_the_shell_looks_and_nowhere_else(nastech_home, m
     (agent / "nastech_cli" / "subcommands" / "dashboard.py").write_text("")
     assert cli.nastech_install() == ("managed", [str(agent / ".nastech" / "bin" / "nastech")])
     own = nastech_checkout(nastech_home / "own", [".nastech/bin/nastech"])
-    monkeypatch.setenv("HERALD_OS_NASTECH_ROOT", str(own))
+    monkeypatch.setenv("BANTU_OS_NASTECH_ROOT", str(own))
     assert cli.nastech_install() == ("env", [str(own / ".nastech" / "bin" / "nastech")])
 
 
@@ -680,7 +680,7 @@ def test_nastech_command_tells_scripts_how_to_run_nastech(nastech_home, capsys):
     (local / "nastech").write_text("#!/bin/sh\n")
     (local / "nastech").chmod(0o755)
     assert cli.main(["nastech-command"]) == 0 and capsys.readouterr().out == f"{local / 'nastech'}\n"
-    # `herald-os update` updates only the checkout in ~/.nastech/nastech-agent.
+    # `bantu-os update` updates only the checkout in ~/.nastech/nastech-agent.
     assert cli.main(["nastech-command", "--managed"]) == 1
     agent = nastech_checkout(nastech_home / ".nastech" / "nastech-agent", [".nastech/bin/nastech"])
     assert cli.main(["nastech-command", "--managed"]) == 0 and capsys.readouterr().out == f"{agent / '.nastech' / 'bin' / 'nastech'}\n"
@@ -691,7 +691,7 @@ def no_nastech(tmp_path, monkeypatch):
     """setup on an account without NasTech; what it tried to install with, if anything."""
     bridge = tmp_path / "bridge"
     bridge.mkdir()
-    (bridge / "plugin.yaml").write_text("name: herald-os-bridge\n")
+    (bridge / "plugin.yaml").write_text("name: bantu-os-bridge\n")
     monkeypatch.setattr(cli, "BRIDGE_DIRS", [bridge])
     monkeypatch.setattr(cli, "NASTECH_HOME", tmp_path / ".nastech")
     monkeypatch.setattr(cli, "NASTECH_PENDING", tmp_path / "nastech-pending")
@@ -707,7 +707,7 @@ def test_setup_offers_to_install_nastech_even_without_a_terminal(no_nastech, mon
     with pytest.raises(SystemExit) as stopped:
         cli.setup([])
     assert stopped.value.code == 1 and installs == []
-    assert "`herald-os setup --yes` installs it and then sets it up" in capsys.readouterr().err
+    assert "`bantu-os setup --yes` installs it and then sets it up" in capsys.readouterr().err
     with pytest.raises(SystemExit):
         cli.setup(["--yes"])
     assert installs == [["bash", "-c", f"curl -fsSL {cli.NASTECH_INSTALLER} | bash"]]
@@ -720,28 +720,28 @@ def test_setup_leaves_the_image_s_install_to_the_service_already_at_it(no_nastec
         cli.setup(["--yes"])
     assert stopped.value.code == 1 and installs == []
     err = capsys.readouterr().err
-    assert "herald-os-nastech.service installs it once this computer is online" in err and "(offline now)" in err
+    assert "bantu-os-nastech.service installs it once this computer is online" in err and "(offline now)" in err
 
 
 def test_setup_leaves_a_foreign_plugin_folder_alone(tmp_path, monkeypatch):
     bridge = tmp_path / "bridge"
     bridge.mkdir()
-    (bridge / "plugin.yaml").write_text("name: herald-os-bridge\n")
+    (bridge / "plugin.yaml").write_text("name: bantu-os-bridge\n")
     nastech_home = tmp_path / ".nastech"
-    (nastech_home / "plugins" / "herald-os-bridge").mkdir(parents=True)
+    (nastech_home / "plugins" / "bantu-os-bridge").mkdir(parents=True)
     monkeypatch.setattr(cli, "BRIDGE_DIRS", [bridge])
     monkeypatch.setattr(cli, "NASTECH_HOME", nastech_home)
     monkeypatch.setattr(cli, "nastech_command", lambda: ["/usr/bin/nastech"])
     with pytest.raises(SystemExit):
         cli.setup([])
-    assert (nastech_home / "plugins" / "herald-os-bridge").is_dir()
+    assert (nastech_home / "plugins" / "bantu-os-bridge").is_dir()
 
 
-def test_unknown_keymap_falls_back_to_herald(tmp_path, monkeypatch):
+def test_unknown_keymap_falls_back_to_bantu(tmp_path, monkeypatch):
     monkeypatch.setattr(cli, "KEYMAP_FILE", tmp_path / "keymap")
-    assert cli.current_keymap() == "herald"
+    assert cli.current_keymap() == "bantu"
     (tmp_path / "keymap").write_text("vim\n")
-    assert cli.current_keymap() == "herald"
+    assert cli.current_keymap() == "bantu"
     (tmp_path / "keymap").write_text("omarchy\n")
     assert cli.current_keymap() == "omarchy"
 
@@ -829,7 +829,7 @@ def test_plugin_add_waits_for_the_clone_and_says_it_is_off(monkeypatch, capsys):
     monkeypatch.setattr(cli, "relay", lambda cmd, args, *rest, **kwargs: calls.append((cmd, args, kwargs.get("timeout"))) or reply)
     assert cli.plugin_cmd(["add", "https://example.com/weather-strip.git"]) == 0
     assert calls == [("plugin", ["add", "https://example.com/weather-strip.git"], 180)]
-    assert "turned off (herald-os plugin enable weather-strip)" in capsys.readouterr().out
+    assert "turned off (bantu-os plugin enable weather-strip)" in capsys.readouterr().out
     with pytest.raises(SystemExit) as stopped:
         cli.plugin_cmd(["remove"])
     assert stopped.value.code == 2

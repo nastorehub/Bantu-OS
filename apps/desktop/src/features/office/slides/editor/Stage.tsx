@@ -537,7 +537,7 @@ export function Stage({ doc, onContextMenu }: { doc: SlidesDocument; onContextMe
     }
 
     for (const file of decks) {
-      const path = window.heraldOS.fs.pathForFile(file)
+      const path = window.bantuOS.fs.pathForFile(file)
 
       if (path) {
         slidesSession.open(path).catch((error: unknown) => slidesSession.notify(`Could not open ${file.name}: ${error instanceof Error ? error.message : String(error)}`, 'error'))
@@ -545,7 +545,7 @@ export function Stage({ doc, onContextMenu }: { doc: SlidesDocument; onContextMe
     }
 
     if (!pictures.length && !decks.length) {
-      slidesSession.notify(`Herald Slides does not take ${files[0].name}`, 'error')
+      slidesSession.notify(`Bantu Slides does not take ${files[0].name}`, 'error')
     }
   }
 

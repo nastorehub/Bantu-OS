@@ -8,7 +8,7 @@ import { isViewable } from '../../shared/viewer.ts'
 import { log } from '../log.ts'
 
 /*
- * Embedded web pages. Herald OS is a whole environment, so a web page (the provider sign-in portal,
+ * Embedded web pages. Bantu OS is a whole environment, so a web page (the provider sign-in portal,
  * for now) opens inside it rather than in the system browser. In desktop mode the page is a
  * `WebContentsView` layered over the shell window; the renderer's window manager draws the frame and
  * streams the content rect here so the page sits exactly inside it. In panels mode (niri) there is
@@ -18,8 +18,8 @@ import { log } from '../log.ts'
  * every permission denied, http(s) only, popups denied (same-origin ones navigate the same view).
  */
 
-export const WEB_PARTITION = 'persist:herald-web'
-const VIEWER_PARTITION = 'persist:herald-viewer'
+export const WEB_PARTITION = 'persist:bantu-web'
+const VIEWER_PARTITION = 'persist:bantu-viewer'
 const DETACHED_SIZE = { width: 1000, height: 720 }
 
 const isHttp = (url: string): boolean => /^https?:\/\//i.test(url)
@@ -59,7 +59,7 @@ export const GUEST_PREFERENCES: Electron.WebPreferences = {
 const VIEWER_PREFERENCES: Electron.WebPreferences = { ...GUEST_PREFERENCES, plugins: true, partition: VIEWER_PARTITION }
 
 /** Studio previews of the site NasTech is building: same lockdown, own partition so dev-server state never mixes with browsing. */
-const PREVIEW_PARTITION = 'persist:herald-preview'
+const PREVIEW_PARTITION = 'persist:bantu-preview'
 const PREVIEW_PREFERENCES: Electron.WebPreferences = { ...GUEST_PREFERENCES, partition: PREVIEW_PARTITION }
 
 /** A preview may show http(s) pages and local files inside the project folder, nothing else. */
@@ -217,7 +217,7 @@ export class WebViews {
 
   open(owner: WebContents, url: string, options: WebOpenOptions): string {
     if (typeof url !== 'string' || !isHttp(url)) {
-      throw new Error('only http(s) URLs may be opened in a Herald OS web window')
+      throw new Error('only http(s) URLs may be opened in a Bantu OS web window')
     }
 
     lockDownPartition(WEB_PARTITION)
@@ -235,7 +235,7 @@ export class WebViews {
     return id
   }
 
-  /** Show a local file (PDF, image, text, media) inside Herald OS; the view can never navigate elsewhere. */
+  /** Show a local file (PDF, image, text, media) inside Bantu OS; the view can never navigate elsewhere. */
   openFile(owner: WebContents, filePath: string, options: WebOpenOptions): string {
     const resolved = typeof filePath === 'string' ? path.resolve(filePath.replace(/^~(?=\/|$)/, os.homedir())) : ''
     const stat = resolved ? fs.statSync(resolved, { throwIfNoEntry: false }) : undefined
@@ -245,7 +245,7 @@ export class WebViews {
     }
 
     if (!isViewable(resolved)) {
-      throw new Error(`Herald OS cannot display ${path.extname(resolved) || 'this kind of'} files yet`)
+      throw new Error(`Bantu OS cannot display ${path.extname(resolved) || 'this kind of'} files yet`)
     }
 
     this.hookOwner(owner)
@@ -364,7 +364,7 @@ export class WebViews {
     const win = new BrowserWindow({
       ...DETACHED_SIZE,
       frame: false,
-      title: title ?? 'Herald OS · Web',
+      title: title ?? 'Bantu OS · Web',
       backgroundColor: '#ffffff',
       webPreferences: { ...preferences }
     })

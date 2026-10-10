@@ -1,16 +1,16 @@
 {
-  "name": "herald-os",
+  "name": "bantu-os",
   "version": "0.1.0-alpha.3",
   "private": true,
-  "description": "Herald OS: an agent-native operating system built on NasTech Agent.",
+  "description": "Bantu OS: an agent-native operating system built on NasTech Agent.",
   "license": "MIT",
   "author": "nastorehub",
-  "homepage": "https://github.com/nastorehub/Herald-OS",
+  "homepage": "https://github.com/nastorehub/Bantu-OS",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nastorehub/Herald-OS.git"
+    "url": "https://github.com/nastorehub/Bantu-OS.git"
   },
-  "bugs": "https://github.com/nastorehub/Herald-OS/issues",
+  "bugs": "https://github.com/nastorehub/Bantu-OS/issues",
   "type": "module",
   "workspaces": [
     "apps/*",

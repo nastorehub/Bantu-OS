@@ -1,7 +1,7 @@
 import { quoteSheet } from '../address.ts'
 
 /*
- * Sheet names in the formulas of the parts Herald keeps (charts, sparklines, pivot caches, defined
+ * Sheet names in the formulas of the parts Bantu keeps (charts, sparklines, pivot caches, defined
  * names): a renamed sheet's new name is written in, and a formula naming a sheet that is gone is
  * found, since it no longer points at anything. References to other workbooks ([1]Sheet1!A1) stay
  * as they are.

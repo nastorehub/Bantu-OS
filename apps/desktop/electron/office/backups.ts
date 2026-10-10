@@ -3,8 +3,8 @@ import path from 'node:path'
 import { log } from '../log.ts'
 
 /*
- * The first time Herald saves over an Office file in a session, the file as it was goes into
- * `office-backups/<date>/<name>` under the Herald OS data folder, so a save that kept less than the
+ * The first time Bantu saves over an Office file in a session, the file as it was goes into
+ * `office-backups/<date>/<name>` under the Bantu OS data folder, so a save that kept less than the
  * file had can be undone by hand. Backups are kept for a month and to a total size, oldest out first.
  */
 

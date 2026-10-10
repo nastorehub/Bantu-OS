@@ -1,8 +1,8 @@
 import fs from 'node:fs'
 import net from 'node:net'
 import path from 'node:path'
-import { HERALD_EVENT_NAMES, isEventName } from '../../shared/events.ts'
-import type { HeraldOSPrefs, ShellCommand } from '../../shared/ipc.ts'
+import { BANTU_EVENT_NAMES, isEventName } from '../../shared/events.ts'
+import type { BantuOSPrefs, ShellCommand } from '../../shared/ipc.ts'
 import { isHexColor, THEME_COLOR_KEYS, type ThemeColors, type ThemeSpec } from '../../shared/theme.ts'
 import { events } from '../events/bus.ts'
 import { hostPlatform } from '../platform/index.ts'
@@ -33,7 +33,7 @@ interface ControlRequest {
 const OVERLAY_MODES = new Set(['ask', 'command', 'applications', 'menu', 'power', 'clipboard', 'emoji'])
 
 /**
- * Unix socket the `herald-os` CLI (and therefore every compositor hotkey) talks to:
+ * Unix socket the `bantu-os` CLI (and therefore every compositor hotkey) talks to:
  * one JSON object per line in, one JSON object per line out.
  */
 export class ControlSocket {
@@ -42,21 +42,21 @@ export class ControlSocket {
   constructor(
     private readonly shell: ShellHost,
     /** Called after the CLI changes preferences so windows and the wallpaper follow. */
-    private readonly onPrefsChanged?: (prefs: HeraldOSPrefs) => void,
+    private readonly onPrefsChanged?: (prefs: BantuOSPrefs) => void,
     /** Runs registry commands in the NasTech window (`ui`, `ui-list`, `ui-state`; token-protected). */
     private readonly osBridge?: OsCommandBridge,
     /** A theme was applied: NasTech's skin follows it. */
     private readonly onTheme?: (spec: ThemeSpec) => void,
     /** The CLI changed a switch (night light, staying awake): the menu bar follows. */
     private readonly onSwitches?: () => void,
-    /** `herald-os plugin …`: the same plugin host Settings uses. */
+    /** `bantu-os plugin …`: the same plugin host Settings uses. */
     private readonly plugins?: PluginHost
   ) {}
 
   get socketPath(): string {
     const runtime = process.env.XDG_RUNTIME_DIR || `/run/user/${process.getuid?.() ?? 1000}`
 
-    return path.join(runtime, 'herald-os', 'control.sock')
+    return path.join(runtime, 'bantu-os', 'control.sock')
   }
 
   start(): void {
@@ -141,7 +141,7 @@ export class ControlSocket {
     }
 
     if (cmd === 'os') {
-      // `herald-os os <command.id> [json]`: the CLI path to the registry (no token; same user).
+      // `bantu-os os <command.id> [json]`: the CLI path to the registry (no token; same user).
       const [id, json] = args
 
       if (!id) {
@@ -154,7 +154,7 @@ export class ControlSocket {
     }
 
     if (cmd === 'os-run') {
-      // Like `os`, but waits for the result (`herald-os bar list` prints it).
+      // Like `os`, but waits for the result (`bantu-os bar list` prints it).
       const [id, json] = args
 
       if (!id || !this.osBridge) {
@@ -206,10 +206,10 @@ export class ControlSocket {
           return { ok: false, error: 'open needs an app id (terminal, system, chat-popout)' }
         }
 
-        // Super+Return honours Settings > General > Terminal (Ghostty, Kitty, …); Herald's own otherwise.
+        // Super+Return honours Settings > General > Terminal (Ghostty, Kitty, …); Bantu's own otherwise.
         const external = appId === 'terminal' ? readPrefs().defaultTerminal : undefined
 
-        if (external && external !== 'herald') {
+        if (external && external !== 'bantu') {
           const launched = await this.launchByName(external)
 
           if (launched) {
@@ -255,7 +255,7 @@ export class ControlSocket {
         return { ok: true }
       }
       case 'update-available': {
-        // From herald-os-update --check: [pendingCount, summary]. The menu bar shows a dot when > 0.
+        // From bantu-os-update --check: [pendingCount, summary]. The menu bar shows a dot when > 0.
         this.shell.relay('menubar', { type: 'update-available', args })
 
         return { ok: true }
@@ -278,7 +278,7 @@ export class ControlSocket {
         return { ok: true, wallpaper: next.wallpaper ?? 'default' }
       }
       case 'theme': {
-        // herald-os-theme has already recoloured niri, swaylock, GTK and foot; this applies the
+        // bantu-os-theme has already recoloured niri, swaylock, GTK and foot; this applies the
         // shell's part (theme + accent preference, optional wallpaper) so everything switches together.
         const name = args[0]
 
@@ -289,7 +289,7 @@ export class ControlSocket {
         // The shell reads the same theme.json the engine applied; a theme only the engine can see
         // (an unusual folder) still applies from the fields it sent.
         const found = findTheme(name)
-        const patch: Partial<HeraldOSPrefs> = found ? prefsForTheme(found.spec, found.dir) : this.themeFromRequest(name, request)
+        const patch: Partial<BantuOSPrefs> = found ? prefsForTheme(found.spec, found.dir) : this.themeFromRequest(name, request)
 
         if (!found && typeof request.wallpaper === 'string') {
           patch.wallpaper = request.wallpaper || undefined
@@ -330,7 +330,7 @@ export class ControlSocket {
         }
       }
       case 'menu-check': {
-        // `herald-os menu check`: what the control menu makes of ~/.config/herald-os/menu.json.
+        // `bantu-os menu check`: what the control menu makes of ~/.config/bantu-os/menu.json.
         const { entries, errors } = readMenuExtensions()
 
         return { ok: true, file: menuFile(), entries: entries.map(entry => ({ label: entry.label, group: entry.group ?? 'yours', kind: entry.action.kind })), errors }
@@ -368,7 +368,7 @@ export class ControlSocket {
         }
       }
       case 'theme-omarchy': {
-        // Omarchy's theme-set hook (herald-os omarchy install): Herald's colours follow Omarchy's.
+        // Omarchy's theme-set hook (bantu-os omarchy install): Bantu's colours follow Omarchy's.
         const found = readOmarchyTheme()
 
         if (!found) {
@@ -388,12 +388,12 @@ export class ControlSocket {
 
         return { ok: true }
       case 'screensaver':
-        // swayidle's screensaver timeout (linux/bin/herald-os-idle) lands here.
+        // swayidle's screensaver timeout (linux/bin/bantu-os-idle) lands here.
         this.shell.open('screensaver')
 
         return { ok: true }
       case 'panel': {
-        // `herald-os panel wifi|bluetooth|audio|display|power|clock`: the menu bar's quick panels.
+        // `bantu-os panel wifi|bluetooth|audio|display|power|clock`: the menu bar's quick panels.
         const panel = args[0]
 
         if (!panel || !['wifi', 'bluetooth', 'audio', 'display', 'power', 'clock'].includes(panel)) {
@@ -405,11 +405,11 @@ export class ControlSocket {
         return { ok: true }
       }
       case 'event': {
-        // `herald-os event <name> [key=value ...]`: the updater and scripts report events here.
+        // `bantu-os event <name> [key=value ...]`: the updater and scripts report events here.
         const [name, ...pairs] = args
 
         if (!isEventName(name)) {
-          return { ok: false, error: `unknown event ${name ?? ''}; events: ${HERALD_EVENT_NAMES.join(', ')}` }
+          return { ok: false, error: `unknown event ${name ?? ''}; events: ${BANTU_EVENT_NAMES.join(', ')}` }
         }
 
         const detail: Record<string, string> = {}
@@ -450,7 +450,7 @@ export class ControlSocket {
     return match.name
   }
 
-  private themeFromRequest(name: string, request: ControlRequest): Partial<HeraldOSPrefs> {
+  private themeFromRequest(name: string, request: ControlRequest): Partial<BantuOSPrefs> {
     const shellSpec = (request.shell ?? {}) as { theme?: string; accent?: string }
 
     if (shellSpec.theme === 'ocean' || shellSpec.theme === 'graphite') {

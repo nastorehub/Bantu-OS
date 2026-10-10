@@ -40,7 +40,7 @@ export function osState(): Record<string, unknown> {
   }
 }
 
-/** The documents open in Herald Docs, Sheets and Slides, the one in front first, with what is selected in each. */
+/** The documents open in Bantu Docs, Sheets and Slides, the one in front first, with what is selected in each. */
 async function officeState(): Promise<Record<string, unknown>[]> {
   try {
     const { openEntries } = await import('../features/office/agent.ts')
@@ -54,7 +54,7 @@ async function officeState(): Promise<Record<string, unknown>[]> {
 let bound = false
 
 export function bindOsControl(): () => void {
-  const bridge = window.heraldOS?.osControl
+  const bridge = window.bantuOS?.osControl
 
   if (bound || !isMainSurface || !bridge) {
     return () => undefined

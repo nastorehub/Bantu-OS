@@ -133,7 +133,7 @@ export function assertWritable(target: string): string {
   const protectedRoots = [path.join(home, '.ssh'), path.join(home, 'Library', 'Keychains'), '/System', '/usr', '/bin', '/sbin', '/private/etc', '/Library']
 
   if (!file.startsWith(home + path.sep) && !file.startsWith('/tmp/') && !file.startsWith('/private/tmp/')) {
-    throw new Error('Herald OS only edits files inside your home folder')
+    throw new Error('Bantu OS only edits files inside your home folder')
   }
 
   if (protectedRoots.some(root => file === root || file.startsWith(root + path.sep))) {

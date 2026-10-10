@@ -23,7 +23,7 @@ export interface FilterTask {
 
 /** Run a filter on pixels in a worker; `origin` is where they sit in the layer. */
 export function runInWorker(pixels: Pixels, spec: FilterSpec, origin: Vec2 = [0, 0]): FilterTask {
-  const worker = new Worker(new URL('./filter-worker.ts', import.meta.url), { type: 'module', name: 'herald-canvas-filter' })
+  const worker = new Worker(new URL('./filter-worker.ts', import.meta.url), { type: 'module', name: 'bantu-canvas-filter' })
   let fail: (error: Error) => void = () => {}
   const done = new Promise<Uint8ClampedArray>((resolve, reject) => {
     fail = reject

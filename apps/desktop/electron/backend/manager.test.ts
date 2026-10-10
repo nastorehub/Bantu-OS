@@ -20,9 +20,9 @@ let manager: BackendManager
 const installed = (): BackendRuntime => ({ kind: 'managed', label: 'managed NasTech install', root: dir, command: [process.execPath, '-e', 'process.exit(3)'] })
 
 beforeEach(() => {
-  dir = fs.mkdtempSync(path.join(os.tmpdir(), 'herald-manager-'))
+  dir = fs.mkdtempSync(path.join(os.tmpdir(), 'bantu-manager-'))
   vi.stubEnv('NASTECH_HOME', dir)
-  vi.stubEnv('HERALD_OS_BACKEND_URL', undefined)
+  vi.stubEnv('BANTU_OS_BACKEND_URL', undefined)
   vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] })
   found.runtime = null
   found.install = null

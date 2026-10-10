@@ -31,7 +31,7 @@ export function GeneralSection() {
 
   const chooseFolder = async (key: 'defaultCwd' | 'projectsRoot' = 'defaultCwd') => {
     try {
-      const [path] = await window.heraldOS.fs.pickFiles({ directory: true })
+      const [path] = await window.bantuOS.fs.pickFiles({ directory: true })
 
       if (path) {
         await save({ [key]: path })
@@ -43,13 +43,13 @@ export function GeneralSection() {
 
   return (
     <>
-      <SectionTitle title="General" subtitle="How Herald OS starts and where it works." />
+      <SectionTitle title="General" subtitle="How Bantu OS starts and where it works." />
 
       <SettingsGroup title="Startup">
-        <SettingsRow icon={<IconMaximize />} label="Launch fullscreen" description="Herald OS takes over the screen when it starts. Cmd+Ctrl+F toggles at any time." keywords="full screen start">
+        <SettingsRow icon={<IconMaximize />} label="Launch fullscreen" description="Bantu OS takes over the screen when it starts. Cmd+Ctrl+F toggles at any time." keywords="full screen start">
           <Toggle checked={prefs.fullscreenOnLaunch} onChange={next => void save({ fullscreenOnLaunch: next })} label="Launch fullscreen" />
         </SettingsRow>
-        <SettingsRow icon={<IconStack2 />} label="Default Space" description="The Space Herald OS opens in.">
+        <SettingsRow icon={<IconStack2 />} label="Default Space" description="The Space Bantu OS opens in.">
           <MenuDropdown
             ariaLabel="Default Space"
             label={
@@ -91,14 +91,14 @@ export function GeneralSection() {
 
       <SettingsGroup title="Session">
         {hostPlatform() === 'linux' ? (
-          <SettingsRow icon={<IconPower />} label="Restart Herald OS" description="Stops the NasTech backend this shell started and starts a fresh session." keywords="exit close quit">
-            <GlassButton size="sm" variant="danger" onClick={() => void window.heraldOS.window.quit()} aria-label="Restart Herald OS">
+          <SettingsRow icon={<IconPower />} label="Restart Bantu OS" description="Stops the NasTech backend this shell started and starts a fresh session." keywords="exit close quit">
+            <GlassButton size="sm" variant="danger" onClick={() => void window.bantuOS.window.quit()} aria-label="Restart Bantu OS">
               Restart
             </GlassButton>
           </SettingsRow>
         ) : (
-          <SettingsRow icon={<IconPower />} label="Quit Herald OS" description="Stops the NasTech backend this shell started and returns to macOS." keywords="exit close">
-            <GlassButton size="sm" variant="danger" onClick={() => void window.heraldOS.window.quit()} aria-label="Quit Herald OS">
+          <SettingsRow icon={<IconPower />} label="Quit Bantu OS" description="Stops the NasTech backend this shell started and returns to macOS." keywords="exit close">
+            <GlassButton size="sm" variant="danger" onClick={() => void window.bantuOS.window.quit()} aria-label="Quit Bantu OS">
               Quit
             </GlassButton>
           </SettingsRow>
@@ -145,14 +145,14 @@ function TypingGroup() {
   const prefs = useStore($prefs)
   const linux = hostPlatform() === 'linux'
   const mod = linux ? 'Super' : 'Cmd'
-  const keymap = prefs.keymap === 'omarchy' ? 'omarchy' : 'herald'
+  const keymap = prefs.keymap === 'omarchy' ? 'omarchy' : 'bantu'
 
   return (
     <SettingsGroup title="Typing">
       <SettingsRow icon={<IconMicrophone />} label="Dictation" description='Speak in any app and the words are typed where the cursor is; it stops after a pause. Say "comma", "new line" or "press enter".' keywords="speech to text voice typing dictate">
         <Kbd>{mod}+Ctrl+X</Kbd>
       </SettingsRow>
-      <SettingsRow icon={<IconMoodSmile />} label="Emoji" description={linux ? 'Search and insert an emoji into the app you are typing in.' : 'The picker inside Herald OS; Ctrl+Cmd+Space opens the macOS one anywhere else.'} keywords="emoji picker smiley">
+      <SettingsRow icon={<IconMoodSmile />} label="Emoji" description={linux ? 'Search and insert an emoji into the app you are typing in.' : 'The picker inside Bantu OS; Ctrl+Cmd+Space opens the macOS one anywhere else.'} keywords="emoji picker smiley">
         <Kbd>{mod}+Ctrl+E</Kbd>
         <GlassButton size="sm" onClick={openEmojiPicker} aria-label="Open the emoji picker">
           Open
@@ -163,13 +163,13 @@ function TypingGroup() {
         <SettingsRow icon={<IconKeyboard />} label="Keymap" description="Omarchy: Super+C, X and V copy, cut and paste in every app, terminals included; voice moves to Super+Shift+V and centring a column to Super+Ctrl+C." keywords="keyboard shortcuts omarchy copy paste super hotkeys">
           <MenuDropdown
             ariaLabel="Keymap"
-            label={keymap === 'omarchy' ? 'Omarchy' : 'Herald'}
+            label={keymap === 'omarchy' ? 'Omarchy' : 'Bantu'}
             value={keymap}
             items={[
-              { id: 'herald', label: 'Herald' },
+              { id: 'bantu', label: 'Bantu' },
               { id: 'omarchy', label: 'Omarchy' }
             ]}
-            onSelect={id => void updatePrefs({ keymap: id === 'omarchy' ? 'omarchy' : 'herald' }).then(markSaved)}
+            onSelect={id => void updatePrefs({ keymap: id === 'omarchy' ? 'omarchy' : 'bantu' }).then(markSaved)}
           />
         </SettingsRow>
       )}
@@ -177,7 +177,7 @@ function TypingGroup() {
   )
 }
 
-/** Herald Docs and Sheets: the name on the comments and notes the person adds. */
+/** Bantu Docs and Sheets: the name on the comments and notes the person adds. */
 function OfficeGroup() {
   const saved = useStore($commentName)
   const [name, setName] = useState(saved)
@@ -197,7 +197,7 @@ function OfficeGroup() {
   }
 
   return (
-    <SettingsGroup title="Herald Office">
+    <SettingsGroup title="Bantu Office">
       <SettingsRow
         icon={<IconMessage />}
         label="Name on comments"
@@ -224,7 +224,7 @@ function OfficeGroup() {
   )
 }
 
-/** Herald OS Linux: what Super+Return opens; terminals installed from Software join the list. */
+/** Bantu OS Linux: what Super+Return opens; terminals installed from Software join the list. */
 function DefaultTerminalRow() {
   const prefs = useStore($prefs)
   const catalog = useStore($catalog)
@@ -237,8 +237,8 @@ function DefaultTerminalRow() {
   }, [])
 
   const installed = catalog.groups.flatMap(group => group.entries).filter(entry => entry.terminalApp && entry.installed)
-  const items = [{ id: 'herald', label: 'Herald OS Terminal' }, { id: 'foot', label: 'Foot' }, ...installed.map(entry => ({ id: entry.terminalApp as string, label: entry.label }))]
-  const current = prefs.defaultTerminal ?? 'herald'
+  const items = [{ id: 'bantu', label: 'Bantu OS Terminal' }, { id: 'foot', label: 'Foot' }, ...installed.map(entry => ({ id: entry.terminalApp as string, label: entry.label }))]
+  const current = prefs.defaultTerminal ?? 'bantu'
 
   return (
     <SettingsRow icon={<IconTerminal2 />} label="Terminal" description="What Super+Return opens. Install Ghostty, Alacritty or Kitty from Software to add them here." keywords="terminal default ghostty kitty alacritty foot">
@@ -247,7 +247,7 @@ function DefaultTerminalRow() {
   )
 }
 
-/** Herald OS Linux: the idle timings swayidle runs with. */
+/** Bantu OS Linux: the idle timings swayidle runs with. */
 function IdleGroup() {
   const prefs = useStore($prefs)
   const idle = { lockAfter: 10, screenOffAfter: 15, suspendAfter: 0, ...prefs.idle }

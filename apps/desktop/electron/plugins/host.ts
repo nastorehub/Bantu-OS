@@ -11,15 +11,15 @@ import type { OsCommandBridge } from '../shell/os-control.ts'
 import { WIDGET_SDK } from './sdk.ts'
 
 /*
- * Widget plugins (ADR-019). Each lives in ~/.config/herald-os/plugins/<id>; the shell shows enabled
- * ones in sandboxed frames served from herald-plugin://<id>/ under a strict CSP, and answers their
+ * Widget plugins (ADR-019). Each lives in ~/.config/bantu-os/plugins/<id>; the shell shows enabled
+ * ones in sandboxed frames served from bantu-plugin://<id>/ under a strict CSP, and answers their
  * messages here, checking the manifest's permissions (the renderer checks too, but main decides).
  */
 
 const MAX_VALUE_BYTES = 64 * 1024
 const MAX_STORE_BYTES = 256 * 1024
 
-const configDir = () => path.join(os.homedir(), '.config', 'herald-os')
+const configDir = () => path.join(os.homedir(), '.config', 'bantu-os')
 export const pluginsDir = (): string => path.join(configDir(), 'plugins')
 const stateFile = () => path.join(configDir(), 'plugins.json')
 const storeFile = (id: string) => path.join(configDir(), 'plugin-data', `${id}.json`)
@@ -140,7 +140,7 @@ export class PluginHost {
       throw new Error('Give an https or ssh git URL')
     }
 
-    const staging = fs.mkdtempSync(path.join(os.tmpdir(), 'herald-plugin-'))
+    const staging = fs.mkdtempSync(path.join(os.tmpdir(), 'bantu-plugin-'))
 
     try {
       const cloned = await git(['clone', '--depth', '1', '--', url, staging])
@@ -150,7 +150,7 @@ export class PluginHost {
       }
 
       if (!fs.existsSync(path.join(staging, 'manifest.json'))) {
-        throw new Error('Not a Herald OS plugin: there is no manifest.json at the top of the repository')
+        throw new Error('Not a Bantu OS plugin: there is no manifest.json at the top of the repository')
       }
 
       const raw = readJson<{ id?: unknown }>(path.join(staging, 'manifest.json'), {})
@@ -162,7 +162,7 @@ export class PluginHost {
       }
 
       if (errors.length) {
-        throw new Error(`Not a Herald OS plugin: ${errors.join('; ')}`)
+        throw new Error(`Not a Bantu OS plugin: ${errors.join('; ')}`)
       }
 
       const target = path.join(pluginsDir(), id)
@@ -329,9 +329,9 @@ export class PluginHost {
     return reply.result
   }
 
-  /** herald-plugin://<id>/<file>: an enabled plugin's own files, with its CSP; herald-plugin://sdk/widget.js. */
+  /** bantu-plugin://<id>/<file>: an enabled plugin's own files, with its CSP; bantu-plugin://sdk/widget.js. */
   registerProtocol(): void {
-    protocol.handle('herald-plugin', async request => {
+    protocol.handle('bantu-plugin', async request => {
       const url = new URL(request.url)
       const id = url.hostname
 

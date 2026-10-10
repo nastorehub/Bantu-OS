@@ -43,12 +43,12 @@ describe('the open Office documents', () => {
   })
 
   it('tells NasTech what is in front, what is selected, and what else is open', () => {
-    expect(describeOffice(officeEntries(presence), '/Users/sam')).toBe('Office: in front is Budget.xlsx in Herald Sheets (~/Budget.xlsx), selection Sheet1!B2:D9; also open: Notes.md (Herald Docs), Report.docx (Herald Docs).')
+    expect(describeOffice(officeEntries(presence), '/Users/sam')).toBe('Office: in front is Budget.xlsx in Bantu Sheets (~/Budget.xlsx), selection Sheet1!B2:D9; also open: Notes.md (Bantu Docs), Report.docx (Bantu Docs).')
     expect(describeOffice([])).toBeNull()
 
     const docsFirst = officeEntries([{ ...presence[1], at: 300, documents: [doc('docs-2', 'Report.docx', null, { selection: 'Q3 revenue grew' })] }])
 
-    expect(describeOffice(docsFirst)).toBe('Office: in front is Report.docx in Herald Docs (not saved yet), selected text “Q3 revenue grew”.')
+    expect(describeOffice(docsFirst)).toBe('Office: in front is Report.docx in Bantu Docs (not saved yet), selected text “Q3 revenue grew”.')
   })
 
   it('names new files without taking one that exists', async () => {

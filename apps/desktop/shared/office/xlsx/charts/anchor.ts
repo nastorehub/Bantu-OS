@@ -29,7 +29,7 @@ interface Span {
   size: number
 }
 
-/** A sheet's column widths and row heights in pixels, as Herald Sheets shows them (hidden ones take none). */
+/** A sheet's column widths and row heights in pixels, as Bantu Sheets shows them (hidden ones take none). */
 export interface SheetGeometry {
   /** Pixels from the left of the sheet's first column to the left of this one. */
   left(column: number): number

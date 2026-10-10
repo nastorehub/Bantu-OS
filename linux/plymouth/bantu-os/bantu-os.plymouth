@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=Bantu OS
+Description=Bantu OS boot splash: the NasTech mark on a deep-blue field with a soft pulse.
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/bantu-os
+ScriptFile=/usr/share/plymouth/themes/bantu-os/bantu-os.script

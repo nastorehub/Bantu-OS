@@ -6,7 +6,7 @@ import { attr, child, children, textOf, type XmlElement } from './xml.ts'
 /*
  * Tables of contents in Word files. Word writes one as a TOC field whose result is an entry per
  * heading, each linked to a bookmark on its heading and ending with its page number, usually in a
- * content control (a building block) with a "TOC Heading" title. Herald reads the field as one
+ * content control (a building block) with a "TOC Heading" title. Bantu reads the field as one
  * table of contents: the heading levels it lists, its title, and the page each entry was on; the
  * entries themselves are worked out from the headings. A table of figures (captions) is not one.
  */
@@ -75,7 +75,7 @@ export interface TocField {
   /** The index of the last element the field takes. */
   end: number
   attrs: TocAttrs
-  /** Whether it has options Herald does not keep, such as entries from other styles. */
+  /** Whether it has options Bantu does not keep, such as entries from other styles. */
   approximate: boolean
   /** The comment markers in the elements it takes, in order. */
   comments: CommentMark[]

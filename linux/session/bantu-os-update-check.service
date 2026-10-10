@@ -1,0 +1,6 @@
+[Unit]
+Description=Bantu OS: check for updates
+
+[Service]
+Type=oneshot
+ExecStart=bantu-os-update --check

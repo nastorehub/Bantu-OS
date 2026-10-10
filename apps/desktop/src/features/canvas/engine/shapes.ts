@@ -1,5 +1,5 @@
 /*
- * Shape layers for Herald Canvas: a rectangle (corners rounded or not), an ellipse or a line, kept
+ * Shape layers for Bantu Canvas: a rectangle (corners rounded or not), an ellipse or a line, kept
  * as a pixel layer with its shape in the manifest. A line's ends are fractions of the layer's box,
  * which leaves room around them for the line's width.
  */

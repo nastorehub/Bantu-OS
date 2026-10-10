@@ -1,5 +1,5 @@
 /*
- * The pure half of Herald Canvas's commands: reading paths, finding layers, describing them for
+ * The pure half of Bantu Canvas's commands: reading paths, finding layers, describing them for
  * NasTech and placing pictures. No window, no I/O, so it is tested directly.
  */
 
@@ -9,11 +9,11 @@ import {
   type BlendMode,
   checkAdjustment,
   checkEffects,
-  checkHeraldAdjustment,
+  checkBantuAdjustment,
   defaultEffect,
   EFFECT_KINDS,
   type EffectKind,
-  type HeraldAdjustment,
+  type BantuAdjustment,
   type LayerEffects,
   RANGES,
   type RangeName,
@@ -31,7 +31,7 @@ import type { FilterKind } from './engine/filters.ts'
 import { type CanvasLayer, childrenOf, type DocState, findLayer } from './engine/document.ts'
 import { boundsOf } from './engine/geometry.ts'
 import { GRADIENT_STYLES, type GradientStyle } from './engine/gradient.ts'
-import { heraldOf } from './engine/herald-adjust.ts'
+import { bantuOf } from './engine/bantu-adjust.ts'
 import type { HistoryStep } from './engine/history.ts'
 import { MASK_ACTIONS, type MaskAction } from './engine/masks.ts'
 import type { Rect } from './engine/raster.ts'
@@ -115,7 +115,7 @@ export function describeLayer(state: DocState, layer: CanvasLayer): Record<strin
     ...(layer.pixels ? { pixels: `${layer.pixels.width}×${layer.pixels.height}` } : {}),
     ...(layer.maskSourceID ? { clippedTo: findLayer(state, layer.maskSourceID)?.name ?? layer.maskSourceID } : {}),
     ...(layer.mask ? { mask: layer.maskEnabled === false ? 'off' : 'on', ...(layer.maskLinked === false ? { maskLinked: false } : {}) } : {}),
-    ...(layer.adjustment ? (heraldOf(layer) ? { adjustment: heraldOf(layer)!.kind, settings: heraldSettings(heraldOf(layer)!) } : { adjustment: layer.adjustment.kind, settings: adjustmentSettings(layer.adjustment) }) : {}),
+    ...(layer.adjustment ? (bantuOf(layer) ? { adjustment: bantuOf(layer)!.kind, settings: bantuSettings(bantuOf(layer)!) } : { adjustment: layer.adjustment.kind, settings: adjustmentSettings(layer.adjustment) }) : {}),
     ...(layer.effects && EFFECT_KINDS.some((kind) => layer.effects?.[kind]) ? { effects: Object.fromEntries(EFFECT_KINDS.filter((kind) => layer.effects?.[kind]).map((kind) => [kind, layer.effects![kind]])) } : {}),
     ...(layer.text ? { text: layer.text.content, font: layer.text.fontName, size: layer.text.fontSize, align: layer.text.alignment.toLowerCase() } : {}),
     ...(layer.shape
@@ -811,11 +811,11 @@ export function adjustmentWith(current: Adjustment, settings: Record<string, unk
 }
 
 /**
- * Herald-only adjustment settings with changes merged in, checked as strictly as a project file's:
+ * Bantu-only adjustment settings with changes merged in, checked as strictly as a project file's:
  * nested settings merge (a mixer row, a range's inks), and a Photo Filter's colour may be any CSS
  * colour. A Color Lookup's table (`table`, a file) is read by the caller; it is not a setting here.
  */
-export function heraldWith(current: HeraldAdjustment, settings: Record<string, unknown>, read?: ColourReader): HeraldAdjustment {
+export function bantuWith(current: BantuAdjustment, settings: Record<string, unknown>, read?: ColourReader): BantuAdjustment {
   if (settings.kind !== undefined && settings.kind !== current.kind) {
     throw new Error(`An adjustment keeps its kind (${current.kind}): add a new adjustment layer for another`)
   }
@@ -834,11 +834,11 @@ export function heraldWith(current: HeraldAdjustment, settings: Record<string, u
     throw new Error('A Color Lookup takes its table from a file: settings={"table": "~/LUTs/Film.cube"}')
   }
 
-  return checkHeraldAdjustment({ ...mergeSettings(current, prepared), kind: current.kind })
+  return checkBantuAdjustment({ ...mergeSettings(current, prepared), kind: current.kind })
 }
 
-/** Herald-only settings as NasTech reads and sets them: the record without its kind. */
-export const heraldSettings = (settings: HeraldAdjustment): Record<string, unknown> => {
+/** Bantu-only settings as NasTech reads and sets them: the record without its kind. */
+export const bantuSettings = (settings: BantuAdjustment): Record<string, unknown> => {
   const { kind: _kind, ...rest } = settings
 
   return rest

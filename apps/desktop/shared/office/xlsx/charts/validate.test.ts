@@ -9,12 +9,12 @@ import { readResource } from '../rules.ts'
 import { xlsxFromWorkbook } from '../write.ts'
 import { everyKindWorkbook, excelWorkbook } from './fixtures.ts'
 
-/* What other readers make of the charts Herald writes, and Univer of the charts Herald reads. */
+/* What other readers make of the charts Bantu writes, and Univer of the charts Bantu reads. */
 
 describe('charts other readers open', () => {
   it.skipIf(!hasOpenpyxl())('writes a chart of every kind that openpyxl reads, each as its kind, the way its categories run included', async () => {
     const { bytes } = await xlsxFromWorkbook(everyKindWorkbook())
-    const samples = process.env.HERALD_SHEETS_SAMPLES
+    const samples = process.env.BANTU_SHEETS_SAMPLES
 
     // A folder named here gets the workbook, to open in Excel by hand.
     if (samples) {
@@ -27,7 +27,7 @@ describe('charts other readers open', () => {
       'print(json.dumps({sheet.title: [[type(chart).__name__, getattr(chart, "type", None), getattr(chart, "grouping", None), order(chart, "x_axis"), order(chart, "y_axis")] for chart in sheet._charts] for sheet in book.worksheets}))'
     const read = JSON.parse(openpyxl(bytes, script))
 
-    // Herald's bars run from the top down where Excel's run from the bottom up (minMax).
+    // Bantu's bars run from the top down where Excel's run from the bottom up (minMax).
     expect(read).toEqual({
       'Q1 sales': [
         ['BarChart', 'col', 'stacked', 'minMax', 'minMax'],

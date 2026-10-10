@@ -1,20 +1,20 @@
 import type { FieldAttrs, FieldKind } from '../document.ts'
 
 /*
- * Word's field instructions ("PAGE", "DATE \@ "d MMMM yyyy"", "REF _Ref123 \h") as Herald Docs
- * fields and back. Page numbers, page counts, dates and times are fields Herald works out itself;
+ * Word's field instructions ("PAGE", "DATE \@ "d MMMM yyyy"", "REF _Ref123 \h") as Bantu Docs
+ * fields and back. Page numbers, page counts, dates and times are fields Bantu works out itself;
  * any other field is kept with its instruction and its last result, so Word can update it.
- * Links (HYPERLINK), tables of contents (TOC) and form fields are not fields in Herald Docs.
+ * Links (HYPERLINK), tables of contents (TOC) and form fields are not fields in Bantu Docs.
  */
 
 const KINDS: Readonly<Record<string, FieldKind>> = { PAGE: 'page', NUMPAGES: 'pages', SECTIONPAGES: 'pages', DATE: 'date', TIME: 'time' }
 
-/** The keywords each kind of field can be written with, the first being Herald's own. */
+/** The keywords each kind of field can be written with, the first being Bantu's own. */
 const KEYWORDS: Readonly<Record<Exclude<FieldKind, 'other'>, readonly string[]>> = { page: ['PAGE'], pages: ['NUMPAGES', 'SECTIONPAGES'], date: ['DATE'], time: ['TIME'] }
 
 export const FORM_FIELDS = new Set(['FORMTEXT', 'FORMCHECKBOX', 'FORMDROPDOWN'])
 
-/** Fields that show what is at a bookmark, which Herald Docs does not keep. */
+/** Fields that show what is at a bookmark, which Bantu Docs does not keep. */
 export const CROSS_REFERENCES = new Set(['REF', 'PAGEREF', 'NOTEREF'])
 
 const unquote = (token: string): string => (token.length > 1 && token.startsWith('"') && token.endsWith('"') ? token.slice(1, -1).replace(/\\(["\\])/g, '$1') : token)
@@ -50,7 +50,7 @@ export function numberFormatOf(instruction: string): string | null {
 
 const quoted = (text: string): string => `"${text.replace(/(["\\])/g, '\\$1')}"`
 
-/** The instruction Herald writes for a field of its own kinds. */
+/** The instruction Bantu writes for a field of its own kinds. */
 function canonical(kind: Exclude<FieldKind, 'other'>, format: string | null): string {
   const keyword = KEYWORDS[kind][0]
 
@@ -65,7 +65,7 @@ const plain = (instruction: string): string =>
 
 /**
  * A field from its instruction and its last result. A page or date field keeps its instruction only
- * when Herald could not write it the same way from its kind and format.
+ * when Bantu could not write it the same way from its kind and format.
  */
 export function fieldOf(instruction: string, text: string | null): FieldAttrs {
   const kind = KINDS[keywordOf(instruction)] ?? 'other'
@@ -80,7 +80,7 @@ export function fieldOf(instruction: string, text: string | null): FieldAttrs {
   return { kind, format, instruction: plain(instruction) === canonical(kind, format) ? null : instruction.trim(), text: result }
 }
 
-/** The instruction to write for a field: its own when it still says what the field is, else Herald's. */
+/** The instruction to write for a field: its own when it still says what the field is, else Bantu's. */
 export function instructionOf(attrs: FieldAttrs): string {
   if (attrs.kind === 'other') {
     return attrs.instruction?.trim() ?? ''

@@ -1,10 +1,10 @@
-import { ADJUSTMENT_KINDS, BLEND_MODES, HERALD_ADJUSTMENT_KINDS } from '../../shared/canvas/comp-format.ts'
+import { ADJUSTMENT_KINDS, BLEND_MODES, BANTU_ADJUSTMENT_KINDS } from '../../shared/canvas/comp-format.ts'
 import { MASK_ACTIONS } from '../features/canvas/mask-actions.ts'
 import { messageOf } from '../features/canvas/errors.ts'
 import { ok, type OsCommand } from '../store/os-commands.ts'
 
 /*
- * Herald Canvas for NasTech, voice, the command bar and `herald-os canvas`. A command works on the
+ * Bantu Canvas for NasTech, voice, the command bar and `bantu-os canvas`. A command works on the
  * `project` it names (a .comp folder) or on the image in front; edits are one undoable step each
  * and the person watches them land. The editor's code loads only when one of these runs.
  */
@@ -54,18 +54,18 @@ const done = async (work: Promise<{ summary: string; data?: Record<string, unkno
 export const canvasCommands: readonly OsCommand[] = [
   {
     id: 'canvas.open',
-    title: 'Open Herald Canvas',
+    title: 'Open Bantu Canvas',
     description:
-      'Open Herald Canvas, or open a .comp project in it so the person sees it. An image becomes a new project in ~/Pictures/Herald Canvas (the original is never changed); a Photoshop document (.psd, .psb) keeps its layers, and the answer lists anything approximated. The answer gives the project path to work on.',
+      'Open Bantu Canvas, or open a .comp project in it so the person sees it. An image becomes a new project in ~/Pictures/Bantu Canvas (the original is never changed); a Photoshop document (.psd, .psb) keeps its layers, and the answer lists anything approximated. The answer gives the project path to work on.',
     tier: 'act',
     args: [{ name: 'path', type: 'string', description: 'An image or a .comp project (full path or ~/…)' }],
-    phrases: ['open herald canvas', 'open canvas', 'open the image editor'],
+    phrases: ['open bantu canvas', 'open canvas', 'open the image editor'],
     run: async ({ path }) => done((await canvas()).open(path))
   },
   {
     id: 'canvas.new',
     title: 'Start a new image',
-    description: 'Make a new .comp project (in ~/Pictures/Herald Canvas unless a folder is given; the name is never reused) and open it. Answers with its path, which later commands take as project.',
+    description: 'Make a new .comp project (in ~/Pictures/Bantu Canvas unless a folder is given; the name is never reused) and open it. Answers with its path, which later commands take as project.',
     tier: 'act',
     args: [
       { name: 'name', type: 'string', description: 'The project name, e.g. "Spring poster"' },
@@ -80,8 +80,8 @@ export const canvasCommands: readonly OsCommand[] = [
   },
   {
     id: 'canvas.status',
-    title: 'What is open in Herald Canvas',
-    description: 'The images open in Herald Canvas (path, size, unsaved edits) and which one is in front.',
+    title: 'What is open in Bantu Canvas',
+    description: 'The images open in Bantu Canvas (path, size, unsaved edits) and which one is in front.',
     tier: 'read',
     args: [],
     run: async () => done((await canvas()).status())
@@ -299,11 +299,11 @@ export const canvasCommands: readonly OsCommand[] = [
   {
     id: 'canvas.addAdjustment',
     title: 'Add an adjustment layer',
-    description: `Add an adjustment layer, which changes everything below it (or only the layer below, with clip). Kinds: ${[...ADJUSTMENT_KINDS, ...HERALD_ADJUSTMENT_KINDS].join(', ')}. settings is JSON over the defaults, e.g. {"hue": 10, "saturation": 25} for Hue/Saturation, {"exposureSettings": {"exposure": 0.5}} for Exposure, {"brightness": 20, "contrast": 15} for Brightness/Contrast, {"vibrance": 30} for Vibrance, {"table": "~/LUTs/Film.cube"} for Color Lookup; the herald-canvas skill lists every field. The last eight are Herald's own: Compositor shows Brightness/Contrast (and Vibrance without vibrance, a Photo Filter without preserveLuminosity) the same, and the others as no change.`,
+    description: `Add an adjustment layer, which changes everything below it (or only the layer below, with clip). Kinds: ${[...ADJUSTMENT_KINDS, ...BANTU_ADJUSTMENT_KINDS].join(', ')}. settings is JSON over the defaults, e.g. {"hue": 10, "saturation": 25} for Hue/Saturation, {"exposureSettings": {"exposure": 0.5}} for Exposure, {"brightness": 20, "contrast": 15} for Brightness/Contrast, {"vibrance": 30} for Vibrance, {"table": "~/LUTs/Film.cube"} for Color Lookup; the bantu-canvas skill lists every field. The last eight are Bantu's own: Compositor shows Brightness/Contrast (and Vibrance without vibrance, a Photo Filter without preserveLuminosity) the same, and the others as no change.`,
     tier: 'act',
     args: [
       project,
-      { name: 'kind', type: 'string', description: 'The adjustment', required: true, enum: [...ADJUSTMENT_KINDS, ...HERALD_ADJUSTMENT_KINDS] },
+      { name: 'kind', type: 'string', description: 'The adjustment', required: true, enum: [...ADJUSTMENT_KINDS, ...BANTU_ADJUSTMENT_KINDS] },
       { name: 'settings', type: 'string', description: 'JSON object of settings' },
       { name: 'name', type: 'string', description: 'The layer name' },
       ...appearance,
@@ -330,7 +330,7 @@ export const canvasCommands: readonly OsCommand[] = [
     id: 'canvas.setAdjustment',
     title: 'Change an adjustment layer',
     description:
-      'Change an adjustment layer: settings is JSON merged over what it has now (nested settings merge too), e.g. {"saturation": -30}, {"exposureSettings": {"exposure": 0.5}} or {"reds": {"cyan": -20}} for Selective Color; a gradient map’s ends and a Photo Filter’s color take CSS colours, and a Color Lookup takes {"table": "<a .cube file>"}. canvas.layers shows each adjustment’s settings; the herald-canvas skill lists every field and range.',
+      'Change an adjustment layer: settings is JSON merged over what it has now (nested settings merge too), e.g. {"saturation": -30}, {"exposureSettings": {"exposure": 0.5}} or {"reds": {"cyan": -20}} for Selective Color; a gradient map’s ends and a Photo Filter’s color take CSS colours, and a Color Lookup takes {"table": "<a .cube file>"}. canvas.layers shows each adjustment’s settings; the bantu-canvas skill lists every field and range.',
     tier: 'act',
     args: [project, { name: 'layer', type: 'string', description: 'The adjustment layer (id or name)', required: true }, { name: 'settings', type: 'string', description: 'JSON object of the settings to change' }, ...appearance],
     run: async (args) => done((await canvas()).setAdjustment(args))
@@ -363,7 +363,7 @@ export const canvasCommands: readonly OsCommand[] = [
     id: 'canvas.placeImage',
     title: 'Place a picture in a box',
     description:
-      'Place a picture (a file, or an http(s) address) as a new layer in a box in canvas pixels (the rest of the canvas for what is left out): fit=cover fills the box and cuts what overflows (the default), contain fits inside it, stretch fills it exactly. mask is a grayscale image spread over the same box (white shows, black hides) that becomes the layer’s mask: Herald saves one for generative fill, so a generated picture is kept to the selection.',
+      'Place a picture (a file, or an http(s) address) as a new layer in a box in canvas pixels (the rest of the canvas for what is left out): fit=cover fills the box and cuts what overflows (the default), contain fits inside it, stretch fills it exactly. mask is a grayscale image spread over the same box (white shows, black hides) that becomes the layer’s mask: Bantu saves one for generative fill, so a generated picture is kept to the selection.',
     tier: 'act',
     args: [
       project,
@@ -381,7 +381,7 @@ export const canvasCommands: readonly OsCommand[] = [
     id: 'canvas.removeBackground',
     title: 'Remove the background of a layer',
     description:
-      'Find a layer’s subject with the on-device model and hide everything else: mode=mask (the default) adds a layer mask, so nothing is erased; mode=cutout puts just the subject on a new layer above and hides the original. threshold (0 to 1, 0.5 by default) moves the edge in or out, feather softens it in pixels. Needs the ISNet model on this computer: when it is missing, the answer says so, and only the person can allow its download in Herald Canvas.',
+      'Find a layer’s subject with the on-device model and hide everything else: mode=mask (the default) adds a layer mask, so nothing is erased; mode=cutout puts just the subject on a new layer above and hides the original. threshold (0 to 1, 0.5 by default) moves the edge in or out, feather softens it in pixels. Needs the ISNet model on this computer: when it is missing, the answer says so, and only the person can allow its download in Bantu Canvas.',
     tier: 'act',
     args: [
       project,
@@ -457,7 +457,7 @@ export const canvasCommands: readonly OsCommand[] = [
   },
   {
     id: 'canvas.undo',
-    title: 'Undo in Herald Canvas',
+    title: 'Undo in Bantu Canvas',
     description: 'Undo the last change to the image in front (or project), whoever made it; steps undoes several. canvas.history lists the steps.',
     tier: 'act',
     args: [project, { name: 'steps', type: 'number', description: 'How many steps to undo (1)' }],
@@ -466,7 +466,7 @@ export const canvasCommands: readonly OsCommand[] = [
   },
   {
     id: 'canvas.redo',
-    title: 'Redo in Herald Canvas',
+    title: 'Redo in Bantu Canvas',
     description: 'Redo what was last undone in the image in front (or project); steps redoes several.',
     tier: 'act',
     args: [project, { name: 'steps', type: 'number', description: 'How many steps to redo (1)' }],

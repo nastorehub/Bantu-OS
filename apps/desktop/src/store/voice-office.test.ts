@@ -1,13 +1,13 @@
-import type { GatewayEvent, GatewayEventHub } from '@herald-os/client'
+import type { GatewayEvent, GatewayEventHub } from '@bantu-os/client'
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
-// A spoken request with Herald Slides in front, through the voice store, the chained engine, the
+// A spoken request with Bantu Slides in front, through the voice store, the chained engine, the
 // matcher with the whole command registry, the chat store and the Office context line, all real.
 // Fake: NasTech's socket (below, a session that queues a prompt sent while a turn runs, as NasTech's
 // default busy mode does once that turn is told to stop), the microphone and the speakers.
 const edges = vi.hoisted(() => {
   const presence: unknown[] = []
-  const heraldOS = {
+  const bantuOS = {
     shell: { surface: 'desktop', mode: 'desktop' },
     prefs: { get: async () => ({}), set: async (patch: Record<string, unknown>) => patch, onChanged: () => () => undefined },
     office: { presence: async () => presence },
@@ -16,10 +16,10 @@ const edges = vi.hoisted(() => {
     notifications: { native: async () => undefined }
   }
 
-  Object.assign(globalThis, { window: { innerWidth: 1440, innerHeight: 900, heraldOS }, document: { activeElement: null } })
+  Object.assign(globalThis, { window: { innerWidth: 1440, innerHeight: 900, bantuOS }, document: { activeElement: null } })
 
   return {
-    heraldOS,
+    bantuOS,
     presence,
     spoken: [] as string[],
     requests: [] as Array<{ method: string; params: Record<string, unknown> }>,
@@ -32,7 +32,7 @@ const edges = vi.hoisted(() => {
 
 vi.mock('./gateway.ts', async () => {
   const { atom } = await import('nanostores')
-  const { GatewayEventHub } = await import('@herald-os/client')
+  const { GatewayEventHub } = await import('@bantu-os/client')
   const hub = new GatewayEventHub()
   let sessions = 0
 
@@ -281,7 +281,7 @@ afterEach(async () => {
   await endConversation('user')
 })
 
-describe('a spoken request with Herald Slides in front', () => {
+describe('a spoken request with Bantu Slides in front', () => {
   it('reaches NasTech with the deck in its context and speaks the reply', async () => {
     await startVoice('button')
     await submitVoiceTranscript(REQUEST)
@@ -289,7 +289,7 @@ describe('a spoken request with Herald Slides in front', () => {
 
     const submit = edges.requests.find(request => request.method === 'prompt.submit')
     expect(submit?.params).toMatchObject({ text: REQUEST, surface: 'voice-live' })
-    expect(String(submit?.params.voice_context)).toContain('Office: in front is Pitch.pptx in Herald Slides')
+    expect(String(submit?.params.voice_context)).toContain('Office: in front is Pitch.pptx in Bantu Slides')
     await vi.waitFor(() => expect($voice.get().state).toBe('listening'))
   })
 
@@ -376,7 +376,7 @@ describe('a spoken request with Herald Slides in front', () => {
   })
 
   it('says it could not make the words out when transcription fails', async () => {
-    edges.heraldOS.backend.rest = async () => {
+    edges.bantuOS.backend.rest = async () => {
       throw new Error('The transcription timed out')
     }
 
@@ -391,7 +391,7 @@ describe('a spoken request with Herald Slides in front', () => {
       expect(toasts()).toEqual(['Transcription failed: The transcription timed out'])
       expect(prompts()).toEqual([])
     } finally {
-      edges.heraldOS.backend.rest = async () => ({})
+      edges.bantuOS.backend.rest = async () => ({})
     }
   })
 })

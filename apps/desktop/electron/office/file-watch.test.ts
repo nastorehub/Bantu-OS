@@ -80,11 +80,11 @@ describe('FileWatcher', () => {
     const { watcher, seen } = await follow(file, (await stampOf(file))!.digest)
 
     await watcher.ownWrite(async () => {
-      await fs.writeFile(file, 'saved by Herald\n')
+      await fs.writeFile(file, 'saved by Bantu\n')
 
-      return digestOfBytes(new TextEncoder().encode('saved by Herald\n'))
+      return digestOfBytes(new TextEncoder().encode('saved by Bantu\n'))
     })
-    await fs.writeFile(file, 'saved by Herald\n')
+    await fs.writeFile(file, 'saved by Bantu\n')
     await new Promise((resolve) => setTimeout(resolve, 400))
     expect(seen).toEqual([])
   })

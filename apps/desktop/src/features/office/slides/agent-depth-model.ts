@@ -71,7 +71,7 @@ import { editTheme, sameBackground, THEMES } from './themes.ts'
 import { DIRECTIONS, TRANSITION_NAMES, transitionFor } from './transitions.ts'
 
 /*
- * Herald Slides' depth for NasTech, without a window: the slide master and its layouts, backgrounds
+ * Bantu Slides' depth for NasTech, without a window: the slide master and its layouts, backgrounds
  * and the header and footer, transitions, groups, connectors, table borders and fills, custom
  * themes and slides from a sheet, each change a pure step on the deck as the Phase 3 steps are, so
  * a batch takes them too. The master and its layouts are changed the way the master view changes
@@ -101,7 +101,7 @@ const sameSlides = (before: Deck, after: Deck): boolean => after.slides.length =
 /** The slide master, or one of its layouts. */
 export type MasterPlace = 'master' | LayoutId
 
-/** Where a master command works: the slide master ("master", or nothing), or one of its layouts by id, by Herald's name for it or by the name the deck gives it. */
+/** Where a master command works: the slide master ("master", or nothing), or one of its layouts by id, by Bantu's name for it or by the name the deck gives it. */
 export function masterPlaceOf(deck: Deck, value: unknown): MasterPlace {
   const asked = text(value)
 
@@ -397,10 +397,10 @@ export function renameLayoutStep(deck: Deck, args: Args): Step {
   const asked = text(args.name)
 
   if (!asked) {
-    throw new Error('Say the layout’s new name (name); default gives back Herald’s')
+    throw new Error('Say the layout’s new name (name); default gives back Bantu’s')
   }
 
-  const change = model.renameLayout(deck, where, /^(default|herald)$/i.test(asked) ? '' : asked)
+  const change = model.renameLayout(deck, where, /^(default|bantu)$/i.test(asked) ? '' : asked)
   const name = layoutIn(masterOf(change.deck), where).name
 
   return change.deck === deck ? unchanged(deck, change.label, `the ${LAYOUT_NAMES[where]} layout is already called “${name}”`) : { ...change, done: `named the ${LAYOUT_NAMES[where]} layout “${name}”`, info: { layout: where, name } }
@@ -410,8 +410,8 @@ export function resetMasterStep(deck: Deck): Step {
   const change = model.resetMaster(deck)
 
   return change.deck === deck
-    ? unchanged(deck, change.label, 'it already has Herald’s own master')
-    : { ...change, done: 'put Herald’s own master and layouts back in place of the presentation’s (their backgrounds, logos and drawings and the placeholders’ places and looks are gone)' }
+    ? unchanged(deck, change.label, 'it already has Bantu’s own master')
+    : { ...change, done: 'put Bantu’s own master and layouts back in place of the presentation’s (their backgrounds, logos and drawings and the placeholders’ places and looks are gone)' }
 }
 
 const DATE_FORMATS: Record<string, DateFormat> = {
@@ -1022,7 +1022,7 @@ export function themeFromArgs(args: Args, base: Theme, known: readonly Theme[]):
   })
 }
 
-/** Herald's themes and the person's, as NasTech reads them: id, name, fonts, colours and background. */
+/** Bantu's themes and the person's, as NasTech reads them: id, name, fonts, colours and background. */
 export function themesList(custom: readonly Theme[]) {
   const read = (theme: Theme) => ({
     id: theme.id,

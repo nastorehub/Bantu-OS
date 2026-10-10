@@ -1,8 +1,8 @@
-Herald OS
+Bantu OS
 Copyright (c) 2026 Luke The Dev (@iamlukethedev)
 Licensed under the MIT License; see LICENSE.
 
-Herald OS runs on NasTech Agent (https://github.com/nastechresearch/nastech-agent),
+Bantu OS runs on NasTech Agent (https://github.com/nastechresearch/nastech-agent),
 Copyright (c) 2025 NasTech Research, released under the MIT License. It uses
 NasTech Agent without modifying it, and includes the following material from it:
 
@@ -11,12 +11,12 @@ NasTech Agent without modifying it, and includes the following material from it:
 - The TypeScript gateway client and generated wire contract
   (apps/shared/src upstream). They are downloaded at build time into
   upstream/nastech-agent/ (pinned by upstream/UPSTREAM.lock), re-exported by
-  packages/nastech-client and compiled into the Herald OS shell.
+  packages/nastech-client and compiled into the Bantu OS shell.
 
-The NasTech Agent runtime itself is not distributed with Herald OS; users
+The NasTech Agent runtime itself is not distributed with Bantu OS; users
 install it separately.
 
-Herald OS is an independent project. It is not an official NasTech Agent or
+Bantu OS is an independent project. It is not an official NasTech Agent or
 NasTech Research product, and it is not affiliated with, sponsored by or endorsed
 by NasTech Research.
 
@@ -26,7 +26,7 @@ Copyright (c) Electron contributors and Copyright (c) 2013-2020 GitHub Inc., and
 Chromium, whose component licenses are listed in LICENSES.chromium.html in every
 Electron release. It also includes ONNX Runtime Web (MIT,
 https://github.com/microsoft/onnxruntime), Copyright (c) Microsoft Corporation,
-which runs Herald Canvas's on-device models, and ag-psd (MIT,
+which runs Bantu Canvas's on-device models, and ag-psd (MIT,
 https://github.com/Agamnentzar/ag-psd), Copyright (c) 2016 Agamnentzar, which
 reads and writes Photoshop documents, with its dependencies pako (MIT and Zlib,
 https://github.com/nodeca/pako), Copyright (C) 2014-2017 by Vitaly Puzrin and
@@ -39,21 +39,21 @@ notices for that code in licenses/onnxruntime-LICENSE.txt and
 licenses/onnxruntime-ThirdPartyNotices.txt. Eigen is released under the Mozilla
 Public License 2.0, and its source is available at
 https://gitlab.com/libeigen/eigen. The models themselves are not distributed
-with Herald OS: Herald Canvas downloads each from where its publisher put it,
+with Bantu OS: Bantu Canvas downloads each from where its publisher put it,
 only after the person allows it, and each keeps its own license (listed in
 apps/desktop/shared/canvas/models.ts).
 
-Herald Sheets is built on Univer (https://github.com/dream-num/univer),
+Bantu Sheets is built on Univer (https://github.com/dream-num/univer),
 Copyright 2023-present DreamNum Co., Ltd., released under the Apache License,
-Version 2.0. Herald OS uses Univer's open-source packages without modifying
+Version 2.0. Bantu OS uses Univer's open-source packages without modifying
 them. They are compiled into the renderer, and a packaged build carries their
 license in licenses/univer-LICENSE.txt. The @univerjs/icons package is released
 under the MIT License, Copyright (c) 2023-present, DreamNum Co., Ltd.
 
-Herald Docs, and the text in Herald Slides, are edited with TipTap (MIT,
+Bantu Docs, and the text in Bantu Slides, are edited with TipTap (MIT,
 https://github.com/ueberdosis/tiptap), Copyright (c) 2025, Tiptap GmbH, and
 ProseMirror (MIT, https://prosemirror.net), Copyright (C) 2015-2017 by Marijn
-Haverbeke <marijn@haverbeke.berlin> and others. Herald Office reads and writes
+Haverbeke <marijn@haverbeke.berlin> and others. Bantu Office reads and writes
 Office files with ExcelJS (MIT, https://github.com/exceljs/exceljs),
 Copyright (c) 2014-2019 Guyon Roche, docx (MIT,
 https://github.com/dolanmiu/docx), Copyright (c) 2016 Dolan, PptxGenJS (MIT,
@@ -65,7 +65,7 @@ which also brings in pako. PptxGenJS includes some code derived from officegen
 ExcelJS, docx and JSZip are compiled in from their prebuilt browser files, which
 contain further packages listed below.
 
-Herald Sheets draws its charts with Apache ECharts (https://echarts.apache.org),
+Bantu Sheets draws its charts with Apache ECharts (https://echarts.apache.org),
 Copyright 2017-2026 The Apache Software Foundation, released under the Apache
 License, Version 2.0. This product includes software developed at The Apache
 Software Foundation (https://www.apache.org/). ECharts brings in ZRender

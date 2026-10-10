@@ -2,27 +2,27 @@ import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 import { app } from 'electron'
-import type { HeraldOSPrefs } from '../../shared/ipc.ts'
-import { HERALD_SKIN, nastechSkinYaml, schemeOf, type ThemeSpec, type ThemeSummary, validateTheme } from '../../shared/theme.ts'
+import type { BantuOSPrefs } from '../../shared/ipc.ts'
+import { BANTU_SKIN, nastechSkinYaml, schemeOf, type ThemeSpec, type ThemeSummary, validateTheme } from '../../shared/theme.ts'
 import { log } from '../log.ts'
 import { nastechHome } from '../paths.ts'
 import { run } from '../platform/exec.ts'
 
 /** Where people's own themes live, on every platform (the Linux theme engine reads it too). */
 export function userThemesDir(): string {
-  return path.join(os.homedir(), '.config', 'herald-os', 'themes')
+  return path.join(os.homedir(), '.config', 'bantu-os', 'themes')
 }
 
-/** Theme folders shipped with Herald OS, first match wins (the same order as linux/bin/herald-os-theme). */
+/** Theme folders shipped with Bantu OS, first match wins (the same order as linux/bin/bantu-os-theme). */
 function builtinThemeDirs(): string[] {
   const candidates = [
-    process.env.HERALD_OS_THEMES,
+    process.env.BANTU_OS_THEMES,
     // Packaged builds carry linux/themes as a resource; a checkout reads the repository copy.
     process.resourcesPath ? path.join(process.resourcesPath, 'themes') : undefined,
     path.resolve(app.getAppPath(), '..', '..', 'linux', 'themes'),
-    path.join(os.homedir(), 'Herald-OS', 'linux', 'themes'),
-    '/usr/local/share/herald-os-linux/themes',
-    '/usr/share/herald-os/themes'
+    path.join(os.homedir(), 'Bantu-OS', 'linux', 'themes'),
+    '/usr/local/share/bantu-os-linux/themes',
+    '/usr/share/bantu-os/themes'
   ]
 
   return [...new Set(candidates.filter((dir): dir is string => Boolean(dir) && isDir(dir as string)))]
@@ -92,11 +92,11 @@ export function listThemes(): ThemeSummary[] {
 export function findTheme(name: string): FoundTheme | null {
   const themes = scan()
 
-  return themes.get(name) ?? themes.get(`herald-${name}`) ?? null
+  return themes.get(name) ?? themes.get(`bantu-${name}`) ?? null
 }
 
 /** The shell's part of a theme: a hand-tuned preset, or colours the shell derives its palette from. */
-export function prefsForTheme(spec: ThemeSpec, dir: string): Partial<HeraldOSPrefs> {
+export function prefsForTheme(spec: ThemeSpec, dir: string): Partial<BantuOSPrefs> {
   const wallpaper = !spec.wallpaper || spec.wallpaper === 'default' ? undefined : path.resolve(dir, spec.wallpaper)
   const preset = spec.shell?.theme
 
@@ -154,7 +154,7 @@ export async function installTheme(url: string): Promise<string[]> {
     throw new Error('Give the https address of a git repository')
   }
 
-  const scratch = fs.mkdtempSync(path.join(os.tmpdir(), 'herald-theme-'))
+  const scratch = fs.mkdtempSync(path.join(os.tmpdir(), 'bantu-theme-'))
 
   try {
     const clone = await run('git', ['clone', '--depth', '1', '--quiet', url.trim(), scratch], 120_000)
@@ -215,12 +215,12 @@ export async function installTheme(url: string): Promise<string[]> {
   }
 }
 
-/** Dress NasTech's own CLI and TUI in the theme: `~/.nastech/skins/herald-os.yaml`. */
+/** Dress NasTech's own CLI and TUI in the theme: `~/.nastech/skins/bantu-os.yaml`. */
 export function writeNasTechSkin(spec: ThemeSpec): void {
   try {
     const dir = path.join(nastechHome(), 'skins')
     fs.mkdirSync(dir, { recursive: true })
-    fs.writeFileSync(path.join(dir, `${HERALD_SKIN}.yaml`), nastechSkinYaml(spec.label || spec.name, spec.colors))
+    fs.writeFileSync(path.join(dir, `${BANTU_SKIN}.yaml`), nastechSkinYaml(spec.label || spec.name, spec.colors))
   } catch (error) {
     log('theme', `could not write the NasTech skin: ${(error as Error).message}`)
   }

@@ -1,7 +1,7 @@
 import { isPanels } from '../../store/shell.ts'
 import { openApp } from '../../store/windows.ts'
 
-/** Show Herald Canvas, opening a file in it when one is given; the editor loads only when needed. */
+/** Show Bantu Canvas, opening a file in it when one is given; the editor loads only when needed. */
 export function openInCanvas(file?: string): void {
   if (isPanels) {
     // Canvas runs in its own window process there: the file goes over as the window's payload.

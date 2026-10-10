@@ -3,7 +3,7 @@ import { $branding } from '../store/branding.ts'
 import { $env } from '../store/backend.ts'
 import { fail, ok, type OsCommand } from '../store/os-commands.ts'
 
-/* Branding: About's logo and name, and the lock-screen picture on Herald OS Linux. */
+/* Branding: About's logo and name, and the lock-screen picture on Bantu OS Linux. */
 
 const describe = () => {
   const view = $branding.get()
@@ -15,7 +15,7 @@ export const brandingCommands: readonly OsCommand[] = [
   {
     id: 'branding.show',
     title: 'Branding',
-    description: 'The logo and name About shows, and the lock-screen picture (Herald OS Linux).',
+    description: 'The logo and name About shows, and the lock-screen picture (Bantu OS Linux).',
     tier: 'read',
     args: [],
     run: () => {
@@ -30,7 +30,7 @@ export const brandingCommands: readonly OsCommand[] = [
   {
     id: 'branding.set',
     title: 'Set the branding',
-    description: 'Set the logo and name About shows, or the lock-screen picture (Herald OS Linux). Images are copied, so the originals can move.',
+    description: 'Set the logo and name About shows, or the lock-screen picture (Bantu OS Linux). Images are copied, so the originals can move.',
     tier: 'mutate',
     args: [
       { name: 'logo', type: 'string', description: 'Path to a PNG, JPEG, WebP or SVG logo' },
@@ -48,8 +48,8 @@ export const brandingCommands: readonly OsCommand[] = [
         return fail('Give a logo, a lock-screen picture or a name.')
       }
 
-      $branding.set(await window.heraldOS.branding.set(patch))
-      const note = patch.lock && $env.get()?.platform !== 'linux' ? ' (the lock-screen picture is used on Herald OS Linux)' : ''
+      $branding.set(await window.bantuOS.branding.set(patch))
+      const note = patch.lock && $env.get()?.platform !== 'linux' ? ' (the lock-screen picture is used on Bantu OS Linux)' : ''
 
       return ok(`Branding updated${note}`, { data: describe(), highlight: { kind: 'setting', id: 'about' } })
     }
@@ -63,7 +63,7 @@ export const brandingCommands: readonly OsCommand[] = [
     run: async ({ what }) => {
       const part = String(what ?? 'all')
       const patch: BrandingPatch = part === 'all' ? { logo: null, lock: null, name: null } : { [part]: null }
-      $branding.set(await window.heraldOS.branding.set(patch))
+      $branding.set(await window.bantuOS.branding.set(patch))
 
       return ok(part === 'all' ? 'Branding reset' : `Reset the ${part === 'lock' ? 'lock-screen picture' : part}`, { data: describe(), highlight: { kind: 'setting', id: 'about' } })
     }

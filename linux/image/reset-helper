@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# `herald-os reset` on the Herald OS image (as root, through sudo): erase the session user's account
+# `bantu-os reset` on the Bantu OS image (as root, through sudo): erase the session user's account
 # and files and run first-boot setup again. The system image is untouched. Two steps, because a
 # logged-in account cannot be deleted from under its own session:
 #
 #   reset-helper schedule <user>   mark the reset and restart
-#   reset-helper apply             on the next boot, before first-boot setup (herald-os-reset.service)
+#   reset-helper apply             on the next boot, before first-boot setup (bantu-os-reset.service)
 set -euo pipefail
 
-STATE=/var/lib/herald-os
+STATE=/var/lib/bantu-os
 PENDING="$STATE/reset-pending"
 
 case "${1:-}" in

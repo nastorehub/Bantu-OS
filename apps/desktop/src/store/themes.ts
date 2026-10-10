@@ -1,6 +1,6 @@
 import { atom } from 'nanostores'
-import type { HeraldOSPrefs } from '../../shared/ipc.ts'
-import { type ColorScheme, HERALD_SKIN, schemeOf, themeColorsFromSkin, themeFromPixels, themeSlug, type ThemeSummary } from '../../shared/theme.ts'
+import type { BantuOSPrefs } from '../../shared/ipc.ts'
+import { type ColorScheme, BANTU_SKIN, schemeOf, themeColorsFromSkin, themeFromPixels, themeSlug, type ThemeSummary } from '../../shared/theme.ts'
 import { $prefs, applyPrefsToDocument, updatePrefs } from './backend.ts'
 import { $gatewayReady, onGatewayEvent } from './gateway.ts'
 import { isMainSurface } from './shell.ts'
@@ -9,27 +9,27 @@ import { isMainSurface } from './shell.ts'
 export const $themes = atom<ThemeSummary[]>([])
 
 export async function loadThemes(): Promise<ThemeSummary[]> {
-  const themes = (await window.heraldOS.theme?.list().catch(() => [])) ?? []
+  const themes = (await window.bantuOS.theme?.list().catch(() => [])) ?? []
   $themes.set(themes)
 
   return themes
 }
 
-/** A theme by name, by its built-in short name ("ocean" for herald-ocean), or by its label. */
+/** A theme by name, by its built-in short name ("ocean" for bantu-ocean), or by its label. */
 export function findTheme(themes: readonly ThemeSummary[], query: string): ThemeSummary | undefined {
   const needle = query.trim().toLowerCase()
   const slug = themeSlug(needle)
 
   return (
     themes.find(theme => theme.name === needle || theme.name === slug) ??
-    themes.find(theme => theme.name === `herald-${slug}`) ??
+    themes.find(theme => theme.name === `bantu-${slug}`) ??
     themes.find(theme => theme.label.toLowerCase() === needle) ??
     themes.find(theme => theme.label.toLowerCase().includes(needle) || theme.name.includes(slug))
   )
 }
 
-export async function applyTheme(name: string): Promise<HeraldOSPrefs> {
-  const next = await window.heraldOS.theme.apply(name)
+export async function applyTheme(name: string): Promise<BantuOSPrefs> {
+  const next = await window.bantuOS.theme.apply(name)
   $prefs.set(next)
   applyPrefsToDocument(next)
 
@@ -38,10 +38,10 @@ export async function applyTheme(name: string): Promise<HeraldOSPrefs> {
 
 /** RGBA pixels of an image, through a small PNG main makes of it. */
 async function imagePixels(imagePath: string): Promise<Uint8ClampedArray> {
-  const dataUrl = await window.heraldOS.theme.sample(imagePath)
+  const dataUrl = await window.bantuOS.theme.sample(imagePath)
 
   if (!dataUrl) {
-    throw new Error(`${imagePath.split('/').pop() || imagePath} is not an image Herald OS can read (PNG or JPEG).`)
+    throw new Error(`${imagePath.split('/').pop() || imagePath} is not an image Bantu OS can read (PNG or JPEG).`)
   }
 
   const image = new Image()
@@ -74,7 +74,7 @@ export async function generateTheme(options: { image: string; name?: string; sch
   const pixels = await imagePixels(file)
   const label = options.name?.trim() || fileLabel(file) || 'My theme'
   const spec = themeFromPixels(pixels, { name: themeSlug(label), label, description: `Made from ${file.split('/').pop() ?? 'an image'}.`, scheme: options.scheme })
-  const name = await window.heraldOS.theme.save(spec, file)
+  const name = await window.bantuOS.theme.save(spec, file)
   await loadThemes()
   await applyTheme(name)
 
@@ -82,7 +82,7 @@ export async function generateTheme(options: { image: string; name?: string; sch
 }
 
 export async function installThemes(url: string): Promise<string[]> {
-  const names = await window.heraldOS.theme.install(url)
+  const names = await window.bantuOS.theme.install(url)
   await loadThemes()
 
   return names
@@ -90,9 +90,9 @@ export async function installThemes(url: string): Promise<string[]> {
 
 let lastSkinSignature = ''
 
-/** NasTech's skin changed (or the gateway reconnected): restyle Herald OS when the person asked for that. */
+/** NasTech's skin changed (or the gateway reconnected): restyle Bantu OS when the person asked for that. */
 async function followSkin(skin: { name?: string; colors?: Record<string, string> } | null | undefined): Promise<void> {
-  if (!skin || !$prefs.get().followNasTechSkin || !skin.name || skin.name === HERALD_SKIN) {
+  if (!skin || !$prefs.get().followNasTechSkin || !skin.name || skin.name === BANTU_SKIN) {
     return
   }
 

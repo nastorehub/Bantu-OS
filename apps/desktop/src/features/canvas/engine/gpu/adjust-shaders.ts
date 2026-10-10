@@ -22,8 +22,8 @@ export const SHADER_KIND = {
   'Add Noise': 9
 } as const
 
-/** The same for Herald's own kinds (engine/herald-adjust.ts); Brightness/Contrast runs as its tone curve. */
-export const HERALD_SHADER_KIND = {
+/** The same for Bantu's own kinds (engine/bantu-adjust.ts); Brightness/Contrast runs as its tone curve. */
+export const BANTU_SHADER_KIND = {
   'Brightness/Contrast': 1,
   Vibrance: 10,
   'Photo Filter': 11,

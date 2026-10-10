@@ -8,7 +8,7 @@ import { activeSheetOf, printHtml as printSheet } from './print.ts'
 import { readXlsx, writeXlsx } from './xlsx.ts'
 
 /*
- * Herald Sheets' files: Excel workbooks (.xlsx, and macro-enabled .xlsm opened without their
+ * Bantu Sheets' files: Excel workbooks (.xlsx, and macro-enabled .xlsm opened without their
  * macros) and CSV, and the print view of the sheet in front.
  */
 
@@ -23,7 +23,7 @@ export function formatterFor(workbook: WorkbookSnapshot): NumberFormatter {
 
 export const printHtml = (workbook: WorkbookSnapshot, title: string) => printSheet(workbook, title, formatterFor(workbook))
 
-const cannot = (extension: string, doing: string) => new Error(extension === '.ods' ? `Herald Sheets cannot ${doing} OpenDocument spreadsheets yet: LibreOffice can save this one as .xlsx first.` : `Herald Sheets cannot ${doing} ${extension || 'these'} files`)
+const cannot = (extension: string, doing: string) => new Error(extension === '.ods' ? `Bantu Sheets cannot ${doing} OpenDocument spreadsheets yet: LibreOffice can save this one as .xlsx first.` : `Bantu Sheets cannot ${doing} ${extension || 'these'} files`)
 
 export const sheetsAdapter: OfficeAdapter<WorkbookSnapshot> = {
   app: 'sheets',

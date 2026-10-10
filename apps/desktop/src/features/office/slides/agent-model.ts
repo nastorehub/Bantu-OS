@@ -38,10 +38,10 @@ import { plainText, tidyRuns } from './text.ts'
 import { sameTransition, transitionFor } from './transitions.ts'
 
 /*
- * Herald Slides for NasTech, without a window: the slide, layout, colour and theme a command names;
+ * Bantu Slides for NasTech, without a window: the slide, layout, colour and theme a command names;
  * every change as a pure step on the deck, so a batch is its steps one after another and lands as
  * one step to undo; a deck read the way NasTech wants it; find and replace over a deck's text; and
- * the slides a Herald Docs document makes and the tables a Herald Sheets range makes, as the
+ * the slides a Bantu Docs document makes and the tables a Bantu Sheets range makes, as the
  * editor's own File and Insert menus make them. Tested directly.
  */
 
@@ -600,7 +600,7 @@ export interface Picture {
 export interface SheetSource {
   name: string
   workbook: WorkbookSnapshot
-  /** What is selected in it, open in Herald Sheets: its sheet's name and the range in A1 style. */
+  /** What is selected in it, open in Bantu Sheets: its sheet's name and the range in A1 style. */
   selection: { sheet: string; range: string } | null
 }
 
@@ -609,7 +609,7 @@ export interface StepContext {
   front: string | null
   /** Pictures read for the steps that put one in, by their source as given. */
   pictures?: ReadonlyMap<string, Picture>
-  /** The custom themes the person made, besides Herald's own. */
+  /** The custom themes the person made, besides Bantu's own. */
   themes?: readonly Theme[]
   /** Workbooks read for the steps that take a range, by the workbook as given ('' for the one in front). */
   sheets?: ReadonlyMap<string, SheetSource>
@@ -840,7 +840,7 @@ export function addTableStep(deck: Deck, args: Args, context: StepContext): Step
   return elementStep(change, slideId, `a table of ${rows} row${rows === 1 ? '' : 's'} by ${columns} column${columns === 1 ? '' : 's'}`)
 }
 
-/** A theme (Herald's own or a custom one) for the whole deck, or as their own for the slides `slide` names. */
+/** A theme (Bantu's own or a custom one) for the whole deck, or as their own for the slides `slide` names. */
 export function setThemeStep(deck: Deck, args: Args, context: StepContext = { front: null }): Step {
   const theme = themeOf(args.theme, context.themes)
   const ids = given(args.slide) ? slideIdsOf(deck, args.slide, context.front) : []
@@ -1355,7 +1355,7 @@ function rangeIn(args: Args, source: SheetSource): { range?: string; sheet?: str
 
   if (range.toLowerCase() === 'selection') {
     if (!source.selection) {
-      throw new Error(`Only a workbook open in Herald Sheets has a selection: give a range of ${source.name}, like A1:D12`)
+      throw new Error(`Only a workbook open in Bantu Sheets has a selection: give a range of ${source.name}, like A1:D12`)
     }
 
     return { range: source.selection.range, sheet: source.selection.sheet }

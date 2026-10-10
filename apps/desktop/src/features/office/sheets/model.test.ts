@@ -33,11 +33,11 @@ async function changeAndUndo<T>(change: (target: SheetsTarget) => Promise<T>) {
 
 describe('reading', () => {
   it('reads the text of a cell Univer keeps as rich text alone, as it keeps text typed into a formatted cell', async () => {
-    const p = { id: 'cell', documentStyle: {}, body: { dataStream: 'Typed in Herald\r\n', textRuns: [{ st: 0, ed: 1, ts: { cl: { rgb: '#0c1431' } } }, { st: 1, ed: 15, ts: { ff: 'Calibri' } }], paragraphs: [{ startIndex: 15 }] } }
+    const p = { id: 'cell', documentStyle: {}, body: { dataStream: 'Typed in Bantu\r\n', textRuns: [{ st: 0, ed: 1, ts: { cl: { rgb: '#0c1431' } } }, { st: 1, ed: 15, ts: { ff: 'Calibri' } }], paragraphs: [{ startIndex: 15 }] } }
     const book = newWorkbook('rich', 'Rich', [newSheet('s', 'Rich', { 0: { 0: { v: null, p } } })])
     const { result } = await withHeadlessSheets(book, ({ univer, workbook }) => readRange({ univer, workbook }, { range: 'A1' }))
 
-    expect(result.values).toEqual([['Typed in Herald']])
+    expect(result.values).toEqual([['Typed in Bantu']])
   })
 
   it('reads values, formulas and what cells show', async () => {

@@ -5,7 +5,7 @@ import fs from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
 import type { BatteryStatus, CalendarEvent, CalendarResult, ControlAction, InstalledApp, NetworkStatus, ProcessInfo, RecentFile, StatusPanelId, StatusPanelState, SystemInfo, SystemStats } from '../../shared/ipc.ts'
-import { heraldOsDataDir } from '../paths.ts'
+import { bantuOsDataDir } from '../paths.ts'
 import { darwinControlAction, darwinControlStatus } from './darwin-controls.ts'
 import { run } from './exec.ts'
 import { normaliseFileQuery, rankFiles } from './find.ts'
@@ -339,7 +339,7 @@ export class DarwinPlatform implements HostPlatform {
   }
 
   async thumbnail(filePath: string, size: number): Promise<Buffer | null> {
-    const cacheDir = path.join(heraldOsDataDir(), 'cache', 'thumbs')
+    const cacheDir = path.join(bantuOsDataDir(), 'cache', 'thumbs')
     let stamp = ''
 
     try {
@@ -357,7 +357,7 @@ export class DarwinPlatform implements HostPlatform {
     }
 
     await fs.mkdir(cacheDir, { recursive: true })
-    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'herald-os-thumb-'))
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'bantu-os-thumb-'))
 
     try {
       const ql = await run('qlmanage', ['-t', '-s', String(size), '-o', tmpDir, filePath], 20_000)
@@ -386,7 +386,7 @@ export class DarwinPlatform implements HostPlatform {
    * catalog fall back to a QuickLook thumbnail (`qlmanage`).
    */
   async appIcon(appPath: string): Promise<Buffer | null> {
-    const cacheDir = path.join(heraldOsDataDir(), 'cache', 'icons')
+    const cacheDir = path.join(bantuOsDataDir(), 'cache', 'icons')
     const cacheFile = path.join(cacheDir, `${crypto.createHash('sha1').update(appPath).digest('hex')}.png`)
 
     try {
@@ -408,7 +408,7 @@ export class DarwinPlatform implements HostPlatform {
       }
     }
 
-    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'herald-os-icon-'))
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'bantu-os-icon-'))
 
     try {
       const ql = await run('qlmanage', ['-t', '-s', '256', '-o', tmpDir, appPath], 15_000)

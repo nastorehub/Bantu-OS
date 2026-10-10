@@ -1,25 +1,25 @@
 #!/usr/bin/env bash
-# Herald OS Linux, the per-machine half: the session user and everything in a home folder. Runs as
+# Bantu OS Linux, the per-machine half: the session user and everything in a home folder. Runs as
 # root and is safe to re-run. The shell's first-boot setup then lets the person choose a name and a
 # password, join Wi-Fi and sign in to NasTech.
 #
 #   firstboot.sh system   the user, the home folder, NasTech Agent: before the login screen
-#                         (herald-os-firstboot.service)
+#                         (bantu-os-firstboot.service)
 #   firstboot.sh nastech   NasTech Agent alone, when the first boot could not install it: waits for
-#                         the network, then installs and sets it up (herald-os-nastech.service)
+#                         the network, then installs and sets it up (bantu-os-nastech.service)
 #   firstboot.sh apps     the omakase Flatpaks, after the login screen is up
-#                         (herald-os-firstboot-apps.service)
+#                         (bantu-os-firstboot-apps.service)
 #   firstboot.sh          system and apps, in order (the development VM's provisioner)
 set -euo pipefail
 
 PHASE="${1:-all}"
 NASTECH_USER="${NASTECH_USER:-nastech}"
-STATE=/var/lib/herald-os
+STATE=/var/lib/bantu-os
 # There while NasTech Agent waits to be installed: one word for how it goes (offline, installing,
-# retrying), which the shell's boot screen shows; herald-os-nastech.service runs while it is there.
+# retrying), which the shell's boot screen shows; bantu-os-nastech.service runs while it is there.
 PENDING="$STATE/nastech-pending"
-NASTECH_UNIT=/usr/lib/systemd/system/herald-os-nastech.service
-BRIDGE=/usr/share/herald-os/bridge
+NASTECH_UNIT=/usr/lib/systemd/system/bantu-os-nastech.service
+BRIDGE=/usr/share/bantu-os/bridge
 OFFLINE_WAIT=30
 RETRY_WAIT=600
 mkdir -p "$STATE"
@@ -33,20 +33,20 @@ online() { curl -fsI --connect-timeout 10 --max-time 30 -o /dev/null https://git
 # How the shell's boot screen describes the wait, while there is one.
 note() { [[ ! -f "$PENDING" ]] || echo "$1" >"$PENDING"; }
 
-# Where packages.sh put the shared files: the image's /usr/share/herald-os or the VM's /usr/local share.
+# Where packages.sh put the shared files: the image's /usr/share/bantu-os or the VM's /usr/local share.
 SHARE=""
-for candidate in /usr/share/herald-os /usr/local/share/herald-os-linux "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"; do
+for candidate in /usr/share/bantu-os /usr/local/share/bantu-os-linux "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"; do
   if [[ -f "$candidate/niri/config.kdl" && -d "$candidate/session" ]]; then
     SHARE="$candidate"
     break
   fi
 done
-[[ -n "$SHARE" ]] || { echo "firstboot: the Herald OS files are missing (run packages.sh first)" >&2; exit 1; }
+[[ -n "$SHARE" ]] || { echo "firstboot: the Bantu OS files are missing (run packages.sh first)" >&2; exit 1; }
 
 system_phase() {
   step "The session user ($NASTECH_USER)"
   if ! id "$NASTECH_USER" >/dev/null 2>&1; then
-    # No password yet: the lock screen refuses until one is set (first-boot setup or herald-os password).
+    # No password yet: the lock screen refuses until one is set (first-boot setup or bantu-os password).
     useradd -m -G wheel "$NASTECH_USER"
     passwd -d "$NASTECH_USER" >/dev/null
   fi
@@ -68,11 +68,11 @@ system_phase() {
   fi
 
   step "Home folder"
-  as_user mkdir -p "$HOME_DIR/.local/bin" "$HOME_DIR/.local/share" "$HOME_DIR/.local/state" "$HOME_DIR/.config/herald-os" "$HOME_DIR/.config/niri" "$HOME_DIR/.config/swaylock" "$HOME_DIR/.config/systemd/user"
-  as_user env XDG_RUNTIME_DIR="/run/user/$(id -u "$NASTECH_USER")" systemctl --user enable herald-os-update-check.timer 2>/dev/null || true
-  as_user herald-os-theme set "$(as_user herald-os-theme current)" || true
-  # Herald's niri config, rendered with the person's keymap (managed; local.kdl is theirs).
-  as_user herald-os keymap apply || install -m 0644 -o "$NASTECH_USER" -g "$NASTECH_USER" "$SHARE/niri/config.kdl" "$HOME_DIR/.config/niri/herald-os.kdl"
+  as_user mkdir -p "$HOME_DIR/.local/bin" "$HOME_DIR/.local/share" "$HOME_DIR/.local/state" "$HOME_DIR/.config/bantu-os" "$HOME_DIR/.config/niri" "$HOME_DIR/.config/swaylock" "$HOME_DIR/.config/systemd/user"
+  as_user env XDG_RUNTIME_DIR="/run/user/$(id -u "$NASTECH_USER")" systemctl --user enable bantu-os-update-check.timer 2>/dev/null || true
+  as_user bantu-os-theme set "$(as_user bantu-os-theme current)" || true
+  # Bantu's niri config, rendered with the person's keymap (managed; local.kdl is theirs).
+  as_user bantu-os keymap apply || install -m 0644 -o "$NASTECH_USER" -g "$NASTECH_USER" "$SHARE/niri/config.kdl" "$HOME_DIR/.config/niri/bantu-os.kdl"
   install -m 0644 -o "$NASTECH_USER" -g "$NASTECH_USER" "$SHARE/session/swaylock.conf" "$HOME_DIR/.config/swaylock/config"
 
   if nastech_step; then
@@ -84,16 +84,16 @@ system_phase() {
 }
 
 # NasTech Agent for the session user: installed unless it is there already, in whichever layout
-# (`herald-os nastech-command` looks for it the way the shell does), given the voice extras, and set
-# up for Herald OS. Fails while there is still no NasTech.
+# (`bantu-os nastech-command` looks for it the way the shell does), given the voice extras, and set
+# up for Bantu OS. Fails while there is still no NasTech.
 nastech_step() {
   step "NasTech Agent for $NASTECH_USER"
-  if [[ -f /etc/herald-os/ref ]]; then
+  if [[ -f /etc/bantu-os/ref ]]; then
     # shellcheck disable=SC1091
-    source /etc/herald-os/ref
+    source /etc/bantu-os/ref
   fi
   local ref="${NASTECH_REF:-main}" agent="$HOME_DIR/.nastech/nastech-agent" nastech
-  if nastech="$(as_user herald-os nastech-command)"; then
+  if nastech="$(as_user bantu-os nastech-command)"; then
     echo "already installed: ${nastech%%$'\n'*}"
   else
     as_user bash -euo pipefail -c "
@@ -112,7 +112,7 @@ nastech_step() {
       # Older setup-nastech.sh asks two yes/no questions (ripgrep, setup wizard): no to both.
       printf 'n\nn\n' | bash ./setup-nastech.sh
     " || true
-    nastech="$(as_user herald-os nastech-command)" || return 1
+    nastech="$(as_user bantu-os nastech-command)" || return 1
   fi
   # Voice: local transcription, free neural voices and the "hey nastech" wake word. Today's layout
   # takes them through NasTech's own package manager, which keeps them across `nastech update`.
@@ -124,12 +124,12 @@ nastech_step() {
   # The bridge plugin that lets NasTech use the system. The image ships it with the shell; the
   # development VM links the repo's copy when it builds the shell.
   if [[ -d "$BRIDGE" ]]; then
-    as_user herald-os setup --yes || echo "WARNING: herald-os setup did not finish"
+    as_user bantu-os setup --yes || echo "WARNING: bantu-os setup did not finish"
   fi
 }
 
 # The first boot could not install NasTech, usually for want of a network (Wi-Fi is joined later, in
-# the shell's setup). On the image herald-os-nastech.service installs it once the computer is online,
+# the shell's setup). On the image bantu-os-nastech.service installs it once the computer is online,
 # and the shell waits for it; the development VM has no such unit.
 nastech_later() {
   if [[ ! -f "$NASTECH_UNIT" ]]; then
@@ -137,10 +137,10 @@ nastech_later() {
     return 0
   fi
   if online; then echo retrying; else echo offline; fi >"$PENDING"
-  echo "WARNING: NasTech Agent did not install (offline?); herald-os-nastech.service installs it once this computer is online, and Herald OS starts it then"
+  echo "WARNING: NasTech Agent did not install (offline?); bantu-os-nastech.service installs it once this computer is online, and Bantu OS starts it then"
 }
 
-# herald-os-nastech.service: wait for the network, then install and set up NasTech; a failed try is
+# bantu-os-nastech.service: wait for the network, then install and set up NasTech; a failed try is
 # repeated ten minutes later. The note goes once NasTech is set up, which is what the shell waits for.
 nastech_phase() {
   HOME_DIR="$(getent passwd "$NASTECH_USER" | cut -d: -f6)"
@@ -162,10 +162,10 @@ nastech_phase() {
 }
 
 apps_phase() {
-  step "Omakase apps (HERALD_OS_OMAKASE=0 to skip)"
-  if [[ "${HERALD_OS_OMAKASE:-1}" == "1" ]]; then
-    as_user herald-os-omakase install --flatpaks || echo "WARNING: omakase flatpaks incomplete"
-    # Web apps need the shell's icon fetch; herald-os-session installs them on the first login.
+  step "Omakase apps (BANTU_OS_OMAKASE=0 to skip)"
+  if [[ "${BANTU_OS_OMAKASE:-1}" == "1" ]]; then
+    as_user bantu-os-omakase install --flatpaks || echo "WARNING: omakase flatpaks incomplete"
+    # Web apps need the shell's icon fetch; bantu-os-session installs them on the first login.
   fi
   date -Is >"$STATE/firstboot-apps-done"
 }

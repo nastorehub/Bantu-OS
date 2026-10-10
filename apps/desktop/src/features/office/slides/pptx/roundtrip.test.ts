@@ -8,7 +8,7 @@ import { writePptx } from './export.ts'
 import { importPresentation } from './import.ts'
 
 /*
- * Decks written as PowerPoint files without Herald's own copy and read back by the DrawingML
+ * Decks written as PowerPoint files without Bantu's own copy and read back by the DrawingML
  * reader, as a file from another app would be: what each part of this phase writes must come back.
  */
 
@@ -94,12 +94,12 @@ describe('round trips through PowerPoint files: masters and layouts', () => {
     let deck = model.newDeck('Footers')
     deck = model.addSlide(deck, { title: 'One' }).deck
     deck = model.addSlide(deck, { title: 'Two' }).deck
-    deck = model.setHeaderFooter(deck, { number: true, footer: true, footerText: 'Herald OS', date: true, dateFormat: 'datetime2', skipTitle: true }).deck
+    deck = model.setHeaderFooter(deck, { number: true, footer: true, footerText: 'Bantu OS', date: true, dateFormat: 'datetime2', skipTitle: true }).deck
     deck = model.setShowMasterOnSlides(deck, [deck.slides[2].id], false).deck
 
     const { deck: read } = await again(deck)
 
-    expect(read.headerFooter).toMatchObject({ number: true, footer: true, footerText: 'Herald OS', date: true, dateFormat: 'datetime2', skipTitle: true })
+    expect(read.headerFooter).toMatchObject({ number: true, footer: true, footerText: 'Bantu OS', date: true, dateFormat: 'datetime2', skipTitle: true })
     expect(read.slides.map((slide) => slide.showMaster)).toEqual([undefined, undefined, false])
     expect(read.slides.flatMap((slide) => slide.elements).some((element) => ['date', 'footer', 'number'].includes(element.placeholder?.role ?? ''))).toBe(false)
   })
@@ -256,7 +256,7 @@ const sideOf = (table: TableElement, borders: CellBorders | undefined, side: key
   return line && line.width > 0 ? { color: line.color, width: line.width, dash: line.dash } : null
 }
 
-describe('round trips through Herald’s own copy', () => {
+describe('round trips through Bantu’s own copy', () => {
   it('reopens a deck with every part of this phase exactly as it was', async () => {
     const { deck: start, slideId, ids } = shapes()
     let deck = model.addLogo(start, { src: DOT, natural: { width: 1, height: 1 }, corner: 'bottom-left' }).deck
@@ -278,7 +278,7 @@ describe('round trips through Herald’s own copy', () => {
 })
 
 describe('round trips through PowerPoint files: kept objects', () => {
-  it('keeps a chart Herald does not edit, with its parts, where it was moved to', async () => {
+  it('keeps a chart Bantu does not edit, with its parts, where it was moved to', async () => {
     const chartXml =
       '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><c:chartSpace xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><c:chart><c:plotArea><c:layout/></c:plotArea></c:chart></c:chartSpace>'
     const frame =

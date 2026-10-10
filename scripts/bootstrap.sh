@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# One-shot developer bootstrap for Herald OS (macOS and Linux). Safe to re-run after every pull.
+# One-shot developer bootstrap for Bantu OS (macOS and Linux). Safe to re-run after every pull.
 #   1. Fetch the pinned upstream snapshot (types for the gateway wire).
 #   2. Install Node workspaces.
 #   3. Link the system-bridge plugin into the user's NasTech plugins directory.
@@ -9,7 +9,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 NASTECH_HOME="${NASTECH_HOME:-$HOME/.nastech}"
-HERALD_OS_NASTECH_ROOT="${HERALD_OS_NASTECH_ROOT:-${NASTECH_OS_NASTECH_ROOT:-}}"
+BANTU_OS_NASTECH_ROOT="${BANTU_OS_NASTECH_ROOT:-${NASTECH_OS_NASTECH_ROOT:-}}"
 OS="$(uname -s)"
 export PATH="$HOME/.local/bin:$PATH"
 
@@ -36,7 +36,7 @@ echo "==> Fetching the Electron binary"
 helper="$ROOT/node_modules/node-pty/prebuilds/$(node -p 'process.platform + "-" + process.arch')/spawn-helper"
 [[ -f "$helper" ]] && chmod 755 "$helper"
 
-echo "==> Linking herald-os-bridge plugin into $NASTECH_HOME/plugins"
+echo "==> Linking bantu-os-bridge plugin into $NASTECH_HOME/plugins"
 mkdir -p "$NASTECH_HOME/plugins"
 # The pre-rename link points at a folder that no longer exists; remove it only when it is ours.
 legacy="$NASTECH_HOME/plugins/nastech-os-bridge"
@@ -44,11 +44,11 @@ if [[ -L "$legacy" && "$(readlink "$legacy")" == "$ROOT/plugins/"* ]]; then
   rm -f "$legacy"
   echo "    removed the pre-rename nastech-os-bridge link"
 fi
-link="$NASTECH_HOME/plugins/herald-os-bridge"
+link="$NASTECH_HOME/plugins/bantu-os-bridge"
 if [[ -L "$link" || -e "$link" ]]; then
   rm -rf "$link"
 fi
-ln -s "$ROOT/plugins/herald-os-bridge" "$link"
+ln -s "$ROOT/plugins/bantu-os-bridge" "$link"
 
 echo "==> Verifying NasTech runtime"
 NASTECH_CMD=()
@@ -64,8 +64,8 @@ checkout_runtime() {
     return 1
   fi
 }
-if [[ -n "$HERALD_OS_NASTECH_ROOT" ]] && checkout_runtime "$HERALD_OS_NASTECH_ROOT"; then
-  echo "    HERALD_OS_NASTECH_ROOT=$HERALD_OS_NASTECH_ROOT"
+if [[ -n "$BANTU_OS_NASTECH_ROOT" ]] && checkout_runtime "$BANTU_OS_NASTECH_ROOT"; then
+  echo "    BANTU_OS_NASTECH_ROOT=$BANTU_OS_NASTECH_ROOT"
 elif checkout_runtime "$NASTECH_HOME/nastech-agent"; then
   echo "    managed install: $NASTECH_HOME/nastech-agent"
 elif command -v nastech >/dev/null 2>&1; then
@@ -79,7 +79,7 @@ else
   echo "      curl -fsSL https://raw.githubusercontent.com/nastechresearch/nastech-agent/main/scripts/install.sh | bash" >&2
 fi
 [[ -n "$NASTECH_PY" && ${#NASTECH_CMD[@]} -eq 0 ]] && NASTECH_CMD=("$NASTECH_PY" -m nastech_cli.main)
-runtime_root="${HERALD_OS_NASTECH_ROOT:-$NASTECH_HOME/nastech-agent}"
+runtime_root="${BANTU_OS_NASTECH_ROOT:-$NASTECH_HOME/nastech-agent}"
 
 # From the runtime checkout, like the `nastech` entry point: an editable install does not map
 # top-level modules added after it was created.
@@ -112,8 +112,8 @@ if [[ ${#NASTECH_CMD[@]} -gt 0 ]]; then
   # User plugins are opt-in (plugins.enabled) and a saved platform toolset list is authoritative, so
   # both must be recorded. The override prompt is answered "no" (stdin closed): the bridge never
   # replaces built-in tools.
-  nastech_step "adds it to plugins.enabled in $NASTECH_HOME/config.yaml" plugins enable herald-os-bridge
-  nastech_step "saves platform_toolsets.cli with herald_os in it (the tools run only in Herald OS sessions)" tools enable herald_os
+  nastech_step "adds it to plugins.enabled in $NASTECH_HOME/config.yaml" plugins enable bantu-os-bridge
+  nastech_step "saves platform_toolsets.cli with bantu_os in it (the tools run only in Bantu OS sessions)" tools enable bantu_os
   # Upstream defers plugin tools behind its tool-search bridge; with the system tools hidden the
   # agent falls back to shell commands. Keep them direct (Settings -> NasTech & agents -> Tool search
   # turns it back on), writing down the value it had the first time so it can be put back.
@@ -122,7 +122,7 @@ if [[ ${#NASTECH_CMD[@]} -gt 0 ]]; then
     exit 1
   fi
   before="$(tail -n 1 <<<"$before" | tr -d '[:space:]')"
-  record="$NASTECH_HOME/herald-os/tool-search-before"
+  record="$NASTECH_HOME/bantu-os/tool-search-before"
   if [[ "$before" == "off" ]]; then
     echo "    tools.tool_search.enabled is off already"
   else
@@ -157,4 +157,4 @@ PY
   fi
 fi
 
-echo "==> Done. Start Herald OS with: npm run dev"
+echo "==> Done. Start Bantu OS with: npm run dev"

@@ -8,8 +8,8 @@ import { type Presentation, press } from './state.ts'
  * in applied to it, and the audience window on another display, opened and drawn from here.
  */
 
-/** The name the audience window opens under; Herald's main process lets only it open, on another display. */
-export const AUDIENCE_WINDOW_NAME = 'herald-slides-audience'
+/** The name the audience window opens under; Bantu's main process lets only it open, on another display. */
+export const AUDIENCE_WINDOW_NAME = 'bantu-slides-audience'
 
 /** The audience window, while the slides show on another display. */
 export const $audience = atom<Window | null>(null)
@@ -19,7 +19,7 @@ export function canUseTwoDisplays(): boolean {
   return typeof window !== 'undefined' && (window.screen as Screen & { isExtended?: boolean }).isExtended === true
 }
 
-/** Open the audience window, which Herald puts full screen on another display; null when it cannot. */
+/** Open the audience window, which Bantu puts full screen on another display; null when it cannot. */
 export function openAudienceWindow(): Window | null {
   const open = $audience.get()
 

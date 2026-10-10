@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { aspectFor, editRequest, generatedLayerRequest, generationBox, generativeFillRequest, layerLine, promptName } from './nastech-requests.ts'
 
-const poster = { project: '/Users/me/Pictures/Herald Canvas/Poster.comp', name: 'Poster', width: 1080, height: 1350 }
+const poster = { project: '/Users/me/Pictures/Bantu Canvas/Poster.comp', name: 'Poster', width: 1080, height: 1350 }
 
-describe('what Herald Canvas asks NasTech for', () => {
+describe('what Bantu Canvas asks NasTech for', () => {
   it('picks the image tool aspect nearest a box, and names layers from prompts', () => {
     expect(aspectFor(1920, 1080)).toBe('landscape')
     expect(aspectFor(1080, 1920)).toBe('portrait')
@@ -23,16 +23,16 @@ describe('what Herald Canvas asks NasTech for', () => {
       image: poster,
       prompt: 'a red umbrella',
       box: { x: 40, y: 600, width: 500, height: 300 },
-      context: '/tmp/herald-canvas-ai/a/context.png',
-      mask: '/tmp/herald-canvas-ai/a/mask.png',
-      result: '/tmp/herald-canvas-ai/a/result.png'
+      context: '/tmp/bantu-canvas-ai/a/context.png',
+      mask: '/tmp/bantu-canvas-ai/a/mask.png',
+      result: '/tmp/bantu-canvas-ai/a/result.png'
     })
     expect(text).toContain('generative fill: "a red umbrella"')
-    expect(text).toContain('project /Users/me/Pictures/Herald Canvas/Poster.comp, 1080×1350 pixels')
+    expect(text).toContain('project /Users/me/Pictures/Bantu Canvas/Poster.comp, 1080×1350 pixels')
     expect(text).toContain('aspect_ratio "landscape"')
-    expect(text).toContain('Save the picture as a PNG at /tmp/herald-canvas-ai/a/result.png')
+    expect(text).toContain('Save the picture as a PNG at /tmp/bantu-canvas-ai/a/result.png')
     expect(text).toContain(
-      'canvas action=place_image project="/Users/me/Pictures/Herald Canvas/Poster.comp" source="/tmp/herald-canvas-ai/a/result.png" x=40 y=600 width=500 height=300 fit=cover mask_image="/tmp/herald-canvas-ai/a/mask.png" name="Generative Fill: a red umbrella"'
+      'canvas action=place_image project="/Users/me/Pictures/Bantu Canvas/Poster.comp" source="/tmp/bantu-canvas-ai/a/result.png" x=40 y=600 width=500 height=300 fit=cover mask_image="/tmp/bantu-canvas-ai/a/mask.png" name="Generative Fill: a red umbrella"'
     )
     expect(text).toContain('If you have no image generation tool, or it fails, say so plainly')
     expect(text).toContain('place nothing')
@@ -66,7 +66,7 @@ describe('what Herald Canvas asks NasTech for', () => {
     expect(text).toContain('- Headline: text, 80%, Multiply')
     expect(text).toContain('selected 30×40 pixels from x 10, y 20')
     expect(text).toContain('The image as it is now: /tmp/p.png')
-    expect(text).toContain('with the canvas tool on project="/Users/me/Pictures/Herald Canvas/Poster.comp"')
+    expect(text).toContain('with the canvas tool on project="/Users/me/Pictures/Bantu Canvas/Poster.comp"')
     expect(text).toContain('Prefer adjustment layers')
     expect(text).toContain('canvas action=preview before you start')
     expect(text).toContain('tell the person briefly what you changed')

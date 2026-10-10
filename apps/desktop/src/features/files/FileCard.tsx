@@ -32,7 +32,7 @@ function buildMenu(item: FileItem, onAction: (action: CardAction) => void): Menu
 
   return [
     { id: 'open', label: 'Open', icon: <IconExternalLink />, onSelect: () => onAction('open') },
-    ...(editable ? [{ id: 'edit-canvas', label: 'Edit in Herald Canvas', icon: <IconPhotoEdit />, onSelect: () => onAction('edit-canvas') }] : []),
+    ...(editable ? [{ id: 'edit-canvas', label: 'Edit in Bantu Canvas', icon: <IconPhotoEdit />, onSelect: () => onAction('edit-canvas') }] : []),
     ...(office ? [{ id: 'edit-office', label: `Edit in ${OFFICE_APP_NAMES[office]}`, icon: OFFICE_ICONS[office], onSelect: () => onAction('edit-office') }] : []),
     { id: 'reveal', label: revealLabel(), icon: <IconFolderOpen />, onSelect: () => onAction('reveal') },
     { id: 'rename', label: 'Rename', icon: <IconPencil />, onSelect: () => onAction('rename') },

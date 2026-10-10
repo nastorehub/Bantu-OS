@@ -132,7 +132,7 @@ function SwitchIndicators() {
         </button>
       )}
       {recording.recording && (
-        <button type="button" aria-label="Stop recording" title="Recording the screen: click to stop" onClick={() => void window.heraldOS.capture.record('stop').catch(() => undefined)} className="flex h-6 items-center gap-1.5 rounded-md px-1.5 text-[12px] text-danger hover:bg-white/10">
+        <button type="button" aria-label="Stop recording" title="Recording the screen: click to stop" onClick={() => void window.bantuOS.capture.record('stop').catch(() => undefined)} className="flex h-6 items-center gap-1.5 rounded-md px-1.5 text-[12px] text-danger hover:bg-white/10">
           <span className="size-2 animate-pulse-soft rounded-full bg-danger" />
           Recording
         </button>
@@ -219,8 +219,8 @@ export function MenuBar() {
     <header className="drag-region absolute inset-x-0 top-0 z-(--z-menubar) flex h-(--menubar-h) items-center justify-between px-3 text-[12.5px] text-fg select-none" style={{ background: 'linear-gradient(180deg, var(--menubar-from, rgba(3,10,40,.55)), var(--menubar-to, rgba(3,10,40,.15)))' }}>
       <div className="flex items-center gap-2.5 pl-[74px]">
         <NasTechLogo height={12} />
-        <span className="font-semibold">Herald OS</span>
-        {title !== 'Herald OS' && (
+        <span className="font-semibold">Bantu OS</span>
+        {title !== 'Bantu OS' && (
           <>
             <span className="text-fg-4">·</span>
             <span className="text-fg-2">{title}</span>

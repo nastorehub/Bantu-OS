@@ -2,7 +2,7 @@ import type JSZip from 'jszip'
 import { attr, childrenNamed, parseXml, serializeXml, xml, type XmlElement } from './xml.ts'
 
 /*
- * The package around the parts Herald writes: each part's relationships, a content type for every
+ * The package around the parts Bantu writes: each part's relationships, a content type for every
  * part, and fresh names for parts copied in, so a file stays whole however its parts were made.
  */
 

@@ -50,7 +50,7 @@ export function grantCovers(grant: PluginGrant | undefined, manifest: PluginMani
   return Boolean(grant) && manifest.permissions.every(permission => grant?.permissions.includes(permission)) && manifest.hosts.every(host => grant?.hosts.includes(host))
 }
 
-/** What a widget sends: `{ herald: 1, id, method, params }`; the reply carries the same id. */
+/** What a widget sends: `{ bantu: 1, id, method, params }`; the reply carries the same id. */
 export type PluginMethod = 'stats' | 'notify' | 'storage.get' | 'storage.set' | 'run' | 'theme'
 
 const ID = /^[a-z0-9][a-z0-9-]{1,47}$/
@@ -137,12 +137,12 @@ export function validateManifest(value: unknown, folder: string): { manifest: Pl
 
 /** The CSP a widget page runs under: its own files, and fetches only to the hosts it was granted. */
 export function pluginCsp(id: string, hosts: readonly string[]): string {
-  const self = `herald-plugin://${id}`
+  const self = `bantu-plugin://${id}`
   const connect = hosts.length ? hosts.map(host => `https://${host}`).join(' ') : "'none'"
 
   return [
     `default-src 'none'`,
-    `script-src ${self} herald-plugin://sdk`,
+    `script-src ${self} bantu-plugin://sdk`,
     `style-src ${self} 'unsafe-inline'`,
     `img-src ${self} data: ${hosts.map(host => `https://${host}`).join(' ')}`.trim(),
     `font-src ${self}`,
@@ -187,7 +187,7 @@ export function describePermissions(manifest: PluginManifest): string[] {
 
   for (const permission of manifest.permissions) {
     if (permission.startsWith('run:')) {
-      lines.push(`Run the Herald OS command ${permission.slice(4)} (changes still ask you first)`)
+      lines.push(`Run the Bantu OS command ${permission.slice(4)} (changes still ask you first)`)
     }
   }
 

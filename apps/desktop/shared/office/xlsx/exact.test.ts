@@ -75,7 +75,7 @@ describe('what an open and save keeps exactly', () => {
     expect(columnA(second.workbook, 6)).toEqual(['#N/A', ...errors])
   })
 
-  it('keeps formulas whose functions Excel prefixes, even ones Herald has no name for', async () => {
+  it('keeps formulas whose functions Excel prefixes, even ones Bantu has no name for', async () => {
     const formulas = ['SUM(_xlfn.ANCHORARRAY(B1))', 'IFERROR(_xlfn.XLOOKUP(B1,B2:B3,C2:C3),"")', '_xlfn.SINGLE(B1:B3)', '_xlfn.ENCODEURL("a b")', '_xlfn.SOMEDAY(B1)', '_xludf.MYADDIN(B1)', 'SUM(_xlfn._xlws.SORT(B1:B3))']
     const { first, written } = await roundTrip(await bookWith(formulas.map((formula, row): [string, ExcelJS.CellValue] => [`A${row + 1}`, { formula, result: 1 }])))
     const sheet = await partOf(written.bytes, 'xl/worksheets/sheet1.xml')

@@ -32,8 +32,8 @@ interface Margins {
   footer: number
 }
 
-/** Herald's margins for a sheet without a page setup, and Excel's for one whose file left them as they come. */
-const HERALD_MARGINS: Margins = { left: 0.5, right: 0.5, top: 0.5, bottom: 0.5, header: 0.3, footer: 0.3 }
+/** Bantu's margins for a sheet without a page setup, and Excel's for one whose file left them as they come. */
+const BANTU_MARGINS: Margins = { left: 0.5, right: 0.5, top: 0.5, bottom: 0.5, header: 0.3, footer: 0.3 }
 const EXCEL_MARGINS: Margins = { left: 0.7, right: 0.7, top: 0.75, bottom: 0.75, header: 0.3, footer: 0.3 }
 
 // The page's size, turn and margins come from its CSS (main prints with the page's own size); `boxes` are its header and footer.
@@ -50,7 +50,7 @@ interface PageSetup {
 }
 
 /** What the sheet brought from its file: page setup, margins (inches) and header and footer, as read kept them. */
-const pageOf = (sheet: SheetSnapshot): { pageSetup?: PageSetup; margins?: Partial<Margins>; headerFooter?: { oddHeader?: string; oddFooter?: string } } | null => (sheet.custom as { herald?: { page?: object } } | undefined)?.herald?.page ?? null
+const pageOf = (sheet: SheetSnapshot): { pageSetup?: PageSetup; margins?: Partial<Margins>; headerFooter?: { oddHeader?: string; oddFooter?: string } } | null => (sheet.custom as { bantu?: { page?: object } } | undefined)?.bantu?.page ?? null
 
 /** Excel's header and footer codes for the page number, the page count, the date and so on, as CSS content. */
 function headerContent(text: string, fields: { file: string; sheet: string; now: Date }): string {
@@ -240,7 +240,7 @@ export function printHtml(workbook: WorkbookSnapshot, title: string, format?: Nu
   const sheet = workbook.sheets[activeSheetOf(workbook) ?? ''] ?? workbook.sheets[workbook.sheetOrder[0]]
 
   if (!sheet) {
-    return { html: printPage(title, `${pageCss('A4', false, HERALD_MARGINS)}${CSS}`, ''), landscape: false }
+    return { html: printPage(title, `${pageCss('A4', false, BANTU_MARGINS)}${CSS}`, ''), landscape: false }
   }
 
   const { rows, columns } = usedRange(sheet)
@@ -298,7 +298,7 @@ export function printHtml(workbook: WorkbookSnapshot, title: string, format?: Nu
 
   const page = pageOf(sheet)
   const setup = page?.pageSetup ?? {}
-  const margins: Margins = { ...(page ? EXCEL_MARGINS : HERALD_MARGINS), ...page?.margins }
+  const margins: Margins = { ...(page ? EXCEL_MARGINS : BANTU_MARGINS), ...page?.margins }
   const paper = PAPERS[setup.paperSize ?? 9] ?? PAPERS[9]
   const scale = setup.scale ?? 100
   const landscape = setup.orientation === 'landscape' || (!setup.fitToPage && scale === 100 && width > (paper.width - margins.left - margins.right) * 96)

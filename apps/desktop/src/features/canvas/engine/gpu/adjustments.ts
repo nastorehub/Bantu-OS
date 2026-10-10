@@ -10,11 +10,11 @@ import { curvesTables, levelsTables, pcg, resolved } from '../adjust-math.ts'
 import type { ColorTable } from '../color-table.ts'
 import type { CanvasLayer } from '../document.ts'
 import { invert, toMat3, unitToDocument } from '../geometry.ts'
-import { filterScale, heraldOf } from '../herald-adjust.ts'
+import { filterScale, bantuOf } from '../bantu-adjust.ts'
 import type { Compositor, FrameInfo, LayerCoverage, LayerPass } from './compositor.ts'
 import type { Scaled } from './filters.ts'
 import type { Program, Target } from './gl.ts'
-import { ADJUST_FRAGMENT, HERALD_SHADER_KIND, SHADER_KIND } from './adjust-shaders.ts'
+import { ADJUST_FRAGMENT, BANTU_SHADER_KIND, SHADER_KIND } from './adjust-shaders.ts'
 import { blendModeIndex, FULL_VERTEX, WHOLE } from './shaders.ts'
 
 /** The texture unit colour tables sit on, apart from every 2D sampler's. */
@@ -39,11 +39,11 @@ export class AdjustmentPass implements LayerPass {
       return false
     }
 
-    const herald = heraldOf(layer)
+    const bantu = bantuOf(layer)
 
-    // Brightness/Contrast is its stand-in tone curve; a kind from a newer Herald shows its stand-in too.
-    if (herald && herald.kind !== 'Brightness/Contrast') {
-      return this.drawHerald(layer, herald, backdrop, into, frame, coverage)
+    // Brightness/Contrast is its stand-in tone curve; a kind from a newer Bantu shows its stand-in too.
+    if (bantu && bantu.kind !== 'Brightness/Contrast') {
+      return this.drawBantu(layer, bantu, backdrop, into, frame, coverage)
     }
 
     const { gpu, filters, blank } = this.compositor
@@ -88,10 +88,10 @@ export class AdjustmentPass implements LayerPass {
     return true
   }
 
-  /** A Herald-only adjustment (all but Brightness/Contrast): no tables or blurs, each kind's own settings. */
-  private drawHerald(layer: CanvasLayer, herald: NonNullable<ReturnType<typeof heraldOf>>, backdrop: Target, into: Target, frame: FrameInfo, coverage: LayerCoverage): boolean {
+  /** A Bantu-only adjustment (all but Brightness/Contrast): no tables or blurs, each kind's own settings. */
+  private drawBantu(layer: CanvasLayer, bantu: NonNullable<ReturnType<typeof bantuOf>>, backdrop: Target, into: Target, frame: FrameInfo, coverage: LayerCoverage): boolean {
     const { gpu, blank } = this.compositor
-    const table = herald.kind === 'Color Lookup' && herald.size > 0 && layer.table ? layer.table : null
+    const table = bantu.kind === 'Color Lookup' && bantu.size > 0 && layer.table ? layer.table : null
     gpu.bindTarget(into, frame.width, frame.height, false)
     const program = this.program
       .use()
@@ -100,7 +100,7 @@ export class AdjustmentPass implements LayerPass {
       .texture('u_tables', 5, blank)
       .texture3d('u_table', TABLE_UNIT, table ? this.tableFor(table) : this.emptyTable())
       // A Color Lookup without its table yet changes nothing.
-      .int('u_kind', herald.kind === 'Color Lookup' && !table ? -1 : HERALD_SHADER_KIND[herald.kind])
+      .int('u_kind', bantu.kind === 'Color Lookup' && !table ? -1 : BANTU_SHADER_KIND[bantu.kind])
       .int('u_mode', blendModeIndex(layer.blendMode))
       .vec2('u_size', frame.width, frame.height)
       .float('u_scale', frame.scale)
@@ -108,30 +108,30 @@ export class AdjustmentPass implements LayerPass {
       .float('u_opacity', coverage.opacity)
     this.setCoverage(program, layer, coverage)
 
-    switch (herald.kind) {
+    switch (bantu.kind) {
       case 'Vibrance':
-        program.float('u_vibrance', herald.vibrance).float('u_hue', 0).float('u_saturation', herald.saturation).float('u_lightness', 0).int('u_colorize', false)
+        program.float('u_vibrance', bantu.vibrance).float('u_hue', 0).float('u_saturation', bantu.saturation).float('u_lightness', 0).int('u_colorize', false)
         break
       case 'Photo Filter':
-        program.vec3('u_filter', ...filterScale(herald)).int('u_preserve', herald.preserveLuminosity)
+        program.vec3('u_filter', ...filterScale(bantu)).int('u_preserve', bantu.preserveLuminosity)
         break
       case 'Channel Mixer': {
         const row = (name: string, entry: { red: number; green: number; blue: number; constant: number }) => program.vec4(name, entry.red / 100, entry.green / 100, entry.blue / 100, entry.constant / 100)
-        row('u_mixRed', herald.red)
-        row('u_mixGreen', herald.green)
-        row('u_mixBlue', herald.blue)
-        row('u_mixGray', herald.gray)
-        program.int('u_monochrome', herald.monochrome)
+        row('u_mixRed', bantu.red)
+        row('u_mixGreen', bantu.green)
+        row('u_mixBlue', bantu.blue)
+        row('u_mixGray', bantu.gray)
+        program.int('u_monochrome', bantu.monochrome)
         break
       }
       case 'Selective Color':
-        program.vec4s('u_inks', SELECTIVE_RANGES.flatMap((range) => [herald[range].cyan / 100, herald[range].magenta / 100, herald[range].yellow / 100, herald[range].black / 100])).int('u_absolute', herald.absolute)
+        program.vec4s('u_inks', SELECTIVE_RANGES.flatMap((range) => [bantu[range].cyan / 100, bantu[range].magenta / 100, bantu[range].yellow / 100, bantu[range].black / 100])).int('u_absolute', bantu.absolute)
         break
       case 'Posterize':
-        program.float('u_levels', herald.levels)
+        program.float('u_levels', bantu.levels)
         break
       case 'Threshold':
-        program.float('u_level', herald.level)
+        program.float('u_level', bantu.level)
         break
       case 'Color Lookup':
         if (table) {

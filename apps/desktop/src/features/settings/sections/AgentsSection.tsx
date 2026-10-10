@@ -435,7 +435,7 @@ function RememberPreferencesRow() {
 // ---- Ask before sending messages (bridge `act` tier) ---------------------------------------
 
 function AskBeforeSendingRow() {
-  const policy = useLocalData(() => window.heraldOS.bridge.readPolicy())
+  const policy = useLocalData(() => window.bantuOS.bridge.readPolicy())
   const [override, setOverride] = useState<{ base: unknown; confirm: boolean } | null>(null)
   const [busy, setBusy] = useState(false)
   const tier = policy.data ? readTier(policy.data, 'act') : null
@@ -450,7 +450,7 @@ function AskBeforeSendingRow() {
     setBusy(true)
 
     try {
-      await window.heraldOS.bridge.writePolicy(withTier(policy.data, 'act', next ? 'confirm' : 'allow'))
+      await window.bantuOS.bridge.writePolicy(withTier(policy.data, 'act', next ? 'confirm' : 'allow'))
       markSaved()
     } catch (error) {
       setOverride(null)
@@ -473,7 +473,7 @@ function AskBeforeSendingRow() {
 function ActivityHistoryRow() {
   const [open, setOpen] = useState(false)
   // Only read the log while the panel is open; `open` in deps refetches on every expand.
-  const audit = useLocalData(() => (open ? window.heraldOS.bridge.readAudit(200) : Promise.resolve<AuditEntry[]>([])), [open])
+  const audit = useLocalData(() => (open ? window.bantuOS.bridge.readAudit(200) : Promise.resolve<AuditEntry[]>([])), [open])
 
   return (
     <SettingsRow

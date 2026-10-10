@@ -3,7 +3,7 @@ import { slidesDepthCommands } from './slides-depth.ts'
 import { fill, gradient, height, office, presentation, run, sheetArgs, shapeKind, slide, slides, theme, width, x, y } from './slides-shared.ts'
 
 /*
- * Herald Slides for NasTech, voice, the command bar and `herald-os slides`. A command works on the
+ * Bantu Slides for NasTech, voice, the command bar and `bantu-os slides`. A command works on the
  * `presentation` it names (a file, or an open presentation's name) or on the one in front; open in
  * a window, each change is one step to undo there (a batch of edits too), and the person watches it
  * land. The editor's code loads only when one of these runs.
@@ -20,18 +20,18 @@ const overwrite: CommandArg = { name: 'overwrite', type: 'boolean', description:
 export const slidesCommands: readonly OsCommand[] = [
   {
     id: 'slides.open',
-    title: 'Open Herald Slides',
-    description: 'Open Herald Slides, or open a PowerPoint presentation (.pptx) in it so the person sees it. The answer lists its slides, and anything Herald shows differently from the file.',
+    title: 'Open Bantu Slides',
+    description: 'Open Bantu Slides, or open a PowerPoint presentation (.pptx) in it so the person sees it. The answer lists its slides, and anything Bantu shows differently from the file.',
     tier: 'act',
     args: [{ name: 'path', type: 'string', description: 'A PowerPoint presentation (full path or ~/…)' }],
-    phrases: ['open herald slides', 'open slides', 'open the presentation app'],
+    phrases: ['open bantu slides', 'open slides', 'open the presentation app'],
     run: async ({ path }) => (await office()).done((await agent()).open({ path }))
   },
   {
     id: 'slides.new',
     title: 'Start a new presentation',
     description:
-      'Start a new presentation in Herald Slides and show it: an empty title slide, or a whole deck from a brief in one call with slides (write the titles, bullets and notes yourself). With path it is saved there at once (never over a file that exists).',
+      'Start a new presentation in Bantu Slides and show it: an empty title slide, or a whole deck from a brief in one call with slides (write the titles, bullets and notes yourself). With path it is saved there at once (never over a file that exists).',
     tier: 'act',
     args: [
       { name: 'name', type: 'string', description: 'The tab’s name, and the file name it is offered when saved' },
@@ -45,8 +45,8 @@ export const slidesCommands: readonly OsCommand[] = [
   },
   {
     id: 'slides.list',
-    title: 'What is open in Herald Slides',
-    description: 'The presentations open in Herald Slides (name, path, unsaved edits), which one is in front, and the slide in front and what is selected on it in each.',
+    title: 'What is open in Bantu Slides',
+    description: 'The presentations open in Bantu Slides (name, path, unsaved edits), which one is in front, and the slide in front and what is selected on it in each.',
     tier: 'read',
     args: [],
     run: async () => (await office()).done((await agent()).list())
@@ -184,7 +184,7 @@ export const slidesCommands: readonly OsCommand[] = [
     id: 'slides.setTheme',
     title: 'Change a presentation’s theme',
     description:
-      'Give a presentation another theme, Herald’s own or a custom one, as one step to undo: its colours and fonts change everywhere they come from the theme; what was picked by hand stays. With slide, only those slides take it, as a theme of their own.',
+      'Give a presentation another theme, Bantu’s own or a custom one, as one step to undo: its colours and fonts change everywhere they come from the theme; what was picked by hand stays. With slide, only those slides take it, as a theme of their own.',
     tier: 'act',
     args: [presentation, { ...theme, required: true }, slides('the whole deck')],
     run: run('slides.setTheme', async (args) => (await agent()).setTheme(args))
@@ -224,10 +224,10 @@ export const slidesCommands: readonly OsCommand[] = [
     id: 'slides.fromDocument',
     title: 'Make slides from a document',
     description:
-      'Turn a Herald Docs document (open, or a file) into slides as one step, as File > New from Document does: a title slide from its title, then each heading’s slides of bullets (its paragraphs and list items, list levels kept), going on over “(continued)” slides as they need; a top heading with headings under it, or a heading with nothing under it, makes a section header; pictures go beside their text or on slides of their own, and tables, quotes and code on slides of their own. Fields read as the text they show, and notes as their numbers with their text in the speaker notes. Into a new presentation named after the document, or added to the end of one.',
+      'Turn a Bantu Docs document (open, or a file) into slides as one step, as File > New from Document does: a title slide from its title, then each heading’s slides of bullets (its paragraphs and list items, list levels kept), going on over “(continued)” slides as they need; a top heading with headings under it, or a heading with nothing under it, makes a section header; pictures go beside their text or on slides of their own, and tables, quotes and code on slides of their own. Fields read as the text they show, and notes as their numbers with their text in the speaker notes. Into a new presentation named after the document, or added to the end of one.',
     tier: 'act',
     args: [
-      { name: 'document', type: 'string', description: 'The document: a .docx, .md or .txt file (full path or ~/…) or the name of an open document as its tab shows it; the one in front in Herald Docs when left out' },
+      { name: 'document', type: 'string', description: 'The document: a .docx, .md or .txt file (full path or ~/…) or the name of an open document as its tab shows it; the one in front in Bantu Docs when left out' },
       { ...presentation, description: 'Add the slides to this presentation (an open one’s name, or a .pptx file); a new presentation named after the document when left out' },
       { name: 'level', type: 'number', description: 'The heading level that starts a slide, 1 to 6: deeper headings become bullets of it and higher ones section headers; every heading starts slides when left out' },
       { name: 'notes', type: 'boolean', description: 'Put every paragraph in the speaker notes and keep the bullets short (a talk with a script)' }
@@ -238,7 +238,7 @@ export const slidesCommands: readonly OsCommand[] = [
     id: 'slides.insertRange',
     title: 'Put a sheet range on a slide',
     description:
-      'Put a range of a Herald Sheets workbook (open, or a file) on a slide as a table, as its cells show (formatted numbers and dates), as one step to undo: in place of the slide’s empty text placeholder, else under its title, at a text size its rows fit, or in the box x, y and width give. slide=new puts it on a new slide after the one in front (slides.addSlideFromSheet makes one anywhere, with a title).',
+      'Put a range of a Bantu Sheets workbook (open, or a file) on a slide as a table, as its cells show (formatted numbers and dates), as one step to undo: in place of the slide’s empty text placeholder, else under its title, at a text size its rows fit, or in the box x, y and width give. slide=new puts it on a new slide after the one in front (slides.addSlideFromSheet makes one anywhere, with a title).',
     tier: 'act',
     args: [presentation, { ...slide, description: `${slide.description}; new for a new slide after it` }, ...sheetArgs, { ...x, description: 'Left edge in points from the slide’s left; centred when left out' }, { ...y, description: 'Top edge in points; under the title when left out' }, { ...width, description: 'Width in points; the slide’s text width when left out' }],
     run: run('slides.insertRange', async (args) => (await agent()).insertRange(args))
@@ -247,7 +247,7 @@ export const slidesCommands: readonly OsCommand[] = [
     id: 'slides.save',
     title: 'Save a presentation',
     description:
-      'Save a presentation open in Herald Slides: over its own file, or as a new .pptx with to (an existing file is replaced only with overwrite=true). Saving over a file follows Herald’s policy: the first time, the person sees what Herald cannot keep, and the original goes to Herald’s Office backups. A file that is not open is saved as another file with to.',
+      'Save a presentation open in Bantu Slides: over its own file, or as a new .pptx with to (an existing file is replaced only with overwrite=true). Saving over a file follows Bantu’s policy: the first time, the person sees what Bantu cannot keep, and the original goes to Bantu’s Office backups. A file that is not open is saved as another file with to.',
     tier: 'mutate',
     args: [presentation, to('Save as this .pptx file instead'), overwrite],
     phrases: ['save the presentation'],
@@ -263,16 +263,16 @@ export const slidesCommands: readonly OsCommand[] = [
   },
   {
     id: 'slides.undo',
-    title: 'Undo in Herald Slides',
-    description: 'Undo the last change to a presentation open in Herald Slides, whoever made it (each NasTech change is one step, a batch of edits too); steps undoes several.',
+    title: 'Undo in Bantu Slides',
+    description: 'Undo the last change to a presentation open in Bantu Slides, whoever made it (each NasTech change is one step, a batch of edits too); steps undoes several.',
     tier: 'act',
     args: [presentation, { name: 'steps', type: 'number', description: 'How many steps (1)' }],
     run: run('slides.undo', async (args) => (await agent()).step('undo', args))
   },
   {
     id: 'slides.redo',
-    title: 'Redo in Herald Slides',
-    description: 'Redo what was last undone in a presentation open in Herald Slides; steps redoes several.',
+    title: 'Redo in Bantu Slides',
+    description: 'Redo what was last undone in a presentation open in Bantu Slides; steps redoes several.',
     tier: 'act',
     args: [presentation, { name: 'steps', type: 'number', description: 'How many steps (1)' }],
     run: run('slides.redo', async (args) => (await agent()).step('redo', args))

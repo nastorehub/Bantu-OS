@@ -1,9 +1,9 @@
-// Herald OS: niri compositor configuration.
-// The template `herald-os keymap apply` renders into ~/.config/niri/herald-os.kdl, the config the
-// Herald OS session starts niri with (managed; edits are overwritten; `herald-os keymap omarchy`
+// Bantu OS: niri compositor configuration.
+// The template `bantu-os keymap apply` renders into ~/.config/niri/bantu-os.kdl, the config the
+// Bantu OS session starts niri with (managed; edits are overwritten; `bantu-os keymap omarchy`
 // rewrites Super+C, X and V as copy, cut and paste). A personal ~/.config/niri/config.kdl is left
 // alone. Put machine-specific settings (output scale, extra binds) in ~/.config/niri/local.kdl,
-// which is included at the end and never touched by Herald OS.
+// which is included at the end and never touched by Bantu OS.
 //
 // Reference: /usr/share/doc/niri/default-config.kdl and the niri wiki.
 
@@ -24,7 +24,7 @@ input {
     warp-mouse-to-focus
 }
 
-// Every window is a client of Herald OS: no client-side decorations, NasTech draws the frame.
+// Every window is a client of Bantu OS: no client-side decorations, NasTech draws the frame.
 prefer-no-csd
 
 // The shell owns the wallpaper (swaybg with a rendered frame); this shows until it is up.
@@ -91,7 +91,7 @@ cursor {
     hide-when-typing
 }
 
-// Spaces. The Herald OS shell mirrors these in the menu bar and sidebar.
+// Spaces. The Bantu OS shell mirrors these in the menu bar and sidebar.
 workspace "personal"
 workspace "work"
 workspace "ideas"
@@ -103,8 +103,8 @@ hotkey-overlay {
 screenshot-path "~/Pictures/Screenshots/Screenshot %Y-%m-%d %H-%M-%S.png"
 
 environment {
-    XDG_CURRENT_DESKTOP "HeraldOS"
-    XDG_SESSION_DESKTOP "herald-os"
+    XDG_CURRENT_DESKTOP "BantuOS"
+    XDG_SESSION_DESKTOP "bantu-os"
     ELECTRON_OZONE_PLATFORM_HINT "wayland"
     MOZ_ENABLE_WAYLAND "1"
     // Firefox: let the compositor decorate instead of drawing a CSD title bar over the tile.
@@ -115,15 +115,15 @@ environment {
     // No DISPLAY: there is no XWayland here yet; a set DISPLAY makes Chromium try X11 and hang.
 }
 
-// The Herald OS shell (menu bar, dock, main window) and its wallpaper.
-spawn-at-startup "herald-os-session"
+// The Bantu OS shell (menu bar, dock, main window) and its wallpaper.
+spawn-at-startup "bantu-os-session"
 
 // ---------------------------------------------------------------------------------------------
 // Window rules: shell surfaces are floating panels; everything else is a tile NasTech decorates.
 
 // Menu bar: full width, top, never focused on open, no frame.
 window-rule {
-    match app-id=r#"^(herald-os|Herald OS)$"# title="^Herald OS · Menu Bar$"
+    match app-id=r#"^(bantu-os|Bantu OS)$"# title="^Bantu OS · Menu Bar$"
     open-floating true
     open-focused false
     default-floating-position x=0 y=0 relative-to="top"
@@ -136,7 +136,7 @@ window-rule {
 
 // Dock: bottom centre, no frame; the shell slides it in and out.
 window-rule {
-    match app-id=r#"^(herald-os|Herald OS)$"# title="^Herald OS · Dock$"
+    match app-id=r#"^(bantu-os|Bantu OS)$"# title="^Bantu OS · Dock$"
     open-floating true
     open-focused false
     default-floating-position x=0 y=0 relative-to="bottom"
@@ -149,7 +149,7 @@ window-rule {
 
 // Command bar / launcher / ask: centred overlay, focused, no frame.
 window-rule {
-    match app-id=r#"^(herald-os|Herald OS)$"# title="^Herald OS · Command$"
+    match app-id=r#"^(bantu-os|Bantu OS)$"# title="^Bantu OS · Command$"
     open-floating true
     open-focused true
     default-floating-position x=0 y=96 relative-to="top"
@@ -162,7 +162,7 @@ window-rule {
 
 // Quick panels (Wi-Fi, Bluetooth, sound, displays, power, calendar): under the menu bar, top right.
 window-rule {
-    match app-id=r#"^(herald-os|Herald OS)$"# title="^Herald OS · Panel$"
+    match app-id=r#"^(bantu-os|Bantu OS)$"# title="^Bantu OS · Panel$"
     open-floating true
     open-focused true
     default-floating-position x=10 y=36 relative-to="top-right"
@@ -175,7 +175,7 @@ window-rule {
 
 // Camera bubble: a round floating window in the bottom-right corner, never taking focus.
 window-rule {
-    match app-id=r#"^(herald-os|Herald OS)$"# title="^Herald OS · Camera$"
+    match app-id=r#"^(bantu-os|Bantu OS)$"# title="^Bantu OS · Camera$"
     open-floating true
     open-focused false
     default-floating-position x=24 y=24 relative-to="bottom-right"
@@ -187,7 +187,7 @@ window-rule {
 
 // Screensaver: fullscreen over everything until the next key or pointer move.
 window-rule {
-    match app-id=r#"^(herald-os|Herald OS)$"# title="^Herald OS · Screensaver$"
+    match app-id=r#"^(bantu-os|Bantu OS)$"# title="^Bantu OS · Screensaver$"
     open-fullscreen true
     open-focused true
     border { off; }
@@ -195,11 +195,11 @@ window-rule {
     shadow { off; }
 }
 
-// Herald Slides' audience window: the slides full screen while the presenter view keeps the focus
-// and the keys. Herald opens it for the display the presenter view is not on and asks for that
+// Bantu Slides' audience window: the slides full screen while the presenter view keeps the focus
+// and the keys. Bantu opens it for the display the presenter view is not on and asks for that
 // output when it goes full screen; a rule cannot name "the other output", so the request decides.
 window-rule {
-    match app-id=r#"^(herald-os|Herald OS)$"# title="^Herald Slides Audience$"
+    match app-id=r#"^(bantu-os|Bantu OS)$"# title="^Bantu Slides Audience$"
     open-fullscreen true
     open-focused false
     border { off; }
@@ -209,7 +209,7 @@ window-rule {
 
 // Wallpaper renderer: an offscreen helper that must never be shown.
 window-rule {
-    match app-id=r#"^(herald-os|Herald OS)$"# title="^Herald OS · Wallpaper$"
+    match app-id=r#"^(bantu-os|Bantu OS)$"# title="^Bantu OS · Wallpaper$"
     open-floating true
     open-focused false
     opacity 0.0
@@ -221,44 +221,44 @@ window-rule {
 
 // The NasTech window and its floating apps: rounded glass tiles.
 window-rule {
-    match app-id=r#"^(herald-os|Herald OS)$"#
+    match app-id=r#"^(bantu-os|Bantu OS)$"#
     geometry-corner-radius 14
     clip-to-geometry true
 }
 // The NasTech window shares the screen with one app by default (its pages adapt to a half column).
 window-rule {
-    match app-id=r#"^(herald-os|Herald OS)$"# title="^Herald OS$"
+    match app-id=r#"^(bantu-os|Bantu OS)$"# title="^Bantu OS$"
     default-column-width { proportion 0.5; }
 }
 window-rule {
-    match app-id=r#"^(herald-os|Herald OS)$"# title="^Herald OS · System$"
+    match app-id=r#"^(bantu-os|Bantu OS)$"# title="^Bantu OS · System$"
     default-column-width { proportion 0.5; }
 }
 // The Studio and its site preview side by side fill the screen while NasTech builds.
 window-rule {
-    match app-id=r#"^(herald-os|Herald OS)$"# title="^Herald OS · Studio$"
+    match app-id=r#"^(bantu-os|Bantu OS)$"# title="^Bantu OS · Studio$"
     default-column-width { proportion 0.6; }
 }
 window-rule {
-    match app-id=r#"^(herald-os|Herald OS)$"# title="^Preview$"
+    match app-id=r#"^(bantu-os|Bantu OS)$"# title="^Preview$"
     default-column-width { proportion 0.4; }
 }
-// Herald Canvas wants room for the image and its panels; NasTech's half stays beside it.
+// Bantu Canvas wants room for the image and its panels; NasTech's half stays beside it.
 window-rule {
-    match app-id=r#"^(herald-os|Herald OS)$"# title="^Herald OS · Canvas$"
+    match app-id=r#"^(bantu-os|Bantu OS)$"# title="^Bantu OS · Canvas$"
     default-column-width { proportion 0.75; }
 }
-// Herald Docs, Sheets and Slides want the same room for the page, the grid or the slide.
+// Bantu Docs, Sheets and Slides want the same room for the page, the grid or the slide.
 window-rule {
-    match app-id=r#"^(herald-os|Herald OS)$"# title="^Herald OS · (Docs|Sheets|Slides)$"
+    match app-id=r#"^(bantu-os|Bantu OS)$"# title="^Bantu OS · (Docs|Sheets|Slides)$"
     default-column-width { proportion 0.75; }
 }
 // The shell's file and print dialogs float over the app. niri floats a dialog whose parent it
 // knows, but the first one each window opens maps before GTK has named its parent. GTK names
-// them after the binary: electron in a checkout, herald-os packaged.
+// them after the binary: electron in a checkout, bantu-os packaged.
 window-rule {
     match app-id="^electron$"
-    match app-id=r#"^(herald-os|Herald OS)$"# title=r#"^(Open a (document|spreadsheet|presentation)|Open in Herald Canvas|Save as|Save project|Export|Export as PDF|Print|Print to File)$"#
+    match app-id=r#"^(bantu-os|Bantu OS)$"# title=r#"^(Open a (document|spreadsheet|presentation)|Open in Bantu Canvas|Save as|Save project|Export|Export as PDF|Print|Print to File)$"#
     open-floating true
     open-focused true
 }
@@ -266,7 +266,7 @@ window-rule {
 // Foreign apps get the same rounding and open as tiles even when they remember being maximized
 // or fullscreen elsewhere (apps that genuinely need fullscreen can still ask for it later).
 window-rule {
-    exclude app-id=r#"^(herald-os|Herald OS)$"#
+    exclude app-id=r#"^(bantu-os|Bantu OS)$"#
     geometry-corner-radius 12
     clip-to-geometry true
     open-maximized false
@@ -283,22 +283,22 @@ window-rule {
 // Keyboard grammar. Super is the NasTech key: alone with Space it talks to NasTech about whatever is
 // focused; with a letter it does the thing. Mod+K lists everything.
 binds {
-    Mod+Space hotkey-overlay-title="Ask NasTech about this window" repeat=false { spawn "herald-os" "ask"; }
-    Mod+Shift+Space hotkey-overlay-title="NasTech command bar" repeat=false { spawn "herald-os" "command"; }
-    Mod+A hotkey-overlay-title="Applications" repeat=false { spawn "herald-os" "applications"; }
-    Mod+Alt+Space hotkey-overlay-title="Herald OS menu" repeat=false { spawn "herald-os" "menu"; }
+    Mod+Space hotkey-overlay-title="Ask NasTech about this window" repeat=false { spawn "bantu-os" "ask"; }
+    Mod+Shift+Space hotkey-overlay-title="NasTech command bar" repeat=false { spawn "bantu-os" "command"; }
+    Mod+A hotkey-overlay-title="Applications" repeat=false { spawn "bantu-os" "applications"; }
+    Mod+Alt+Space hotkey-overlay-title="Bantu OS menu" repeat=false { spawn "bantu-os" "menu"; }
     // Nested niri (a VM without GPU acceleration) uses Alt as Mod, where Mod+Alt+Space is just Mod+Space.
-    Mod+M hotkey-overlay-title="Herald OS menu" repeat=false { spawn "herald-os" "menu"; }
-    Mod+V hotkey-overlay-title="Talk to NasTech" repeat=false { spawn "herald-os" "voice"; }
+    Mod+M hotkey-overlay-title="Bantu OS menu" repeat=false { spawn "bantu-os" "menu"; }
+    Mod+V hotkey-overlay-title="Talk to NasTech" repeat=false { spawn "bantu-os" "voice"; }
     Mod+K hotkey-overlay-title="Show these hotkeys" { show-hotkey-overlay; }
 
-    Mod+Return hotkey-overlay-title="Terminal" { spawn "herald-os" "open" "terminal"; }
-    Mod+E hotkey-overlay-title="Files" { spawn "herald-os" "page" "files"; }
-    Mod+Shift+Return hotkey-overlay-title="Browser" { spawn "herald-os" "launch" "firefox"; }
-    Mod+I hotkey-overlay-title="System monitor" { spawn "herald-os" "open" "system"; }
-    Mod+Comma hotkey-overlay-title="Settings" { spawn "herald-os" "page" "settings"; }
-    Mod+Shift+M hotkey-overlay-title="Missions" { spawn "herald-os" "page" "missions"; }
-    Mod+Grave hotkey-overlay-title="NasTech window" { spawn "herald-os" "page" "overview"; }
+    Mod+Return hotkey-overlay-title="Terminal" { spawn "bantu-os" "open" "terminal"; }
+    Mod+E hotkey-overlay-title="Files" { spawn "bantu-os" "page" "files"; }
+    Mod+Shift+Return hotkey-overlay-title="Browser" { spawn "bantu-os" "launch" "firefox"; }
+    Mod+I hotkey-overlay-title="System monitor" { spawn "bantu-os" "open" "system"; }
+    Mod+Comma hotkey-overlay-title="Settings" { spawn "bantu-os" "page" "settings"; }
+    Mod+Shift+M hotkey-overlay-title="Missions" { spawn "bantu-os" "page" "missions"; }
+    Mod+Grave hotkey-overlay-title="NasTech window" { spawn "bantu-os" "page" "overview"; }
 
     Mod+Q repeat=false hotkey-overlay-title="Close window" { close-window; }
     Mod+F hotkey-overlay-title="Maximize column" { maximize-column; }
@@ -342,31 +342,31 @@ binds {
     Mod+Tab repeat=false hotkey-overlay-title="Previous window" { focus-window-previous; }
     Mod+Shift+Tab { focus-workspace-previous; }
 
-    Mod+Ctrl+L hotkey-overlay-title="Lock" { spawn "herald-os" "lock"; }
-    Mod+Escape hotkey-overlay-title="Power menu" { spawn "herald-os" "power"; }
-    Mod+Shift+Escape hotkey-overlay-title="Quit Herald OS session" { quit; }
+    Mod+Ctrl+L hotkey-overlay-title="Lock" { spawn "bantu-os" "lock"; }
+    Mod+Escape hotkey-overlay-title="Power menu" { spawn "bantu-os" "power"; }
+    Mod+Shift+Escape hotkey-overlay-title="Quit Bantu OS session" { quit; }
 
-    Print hotkey-overlay-title="Screenshot (select)" { spawn "herald-os" "capture" "screenshot" "region"; }
-    Mod+Print hotkey-overlay-title="Screenshot window" { spawn "herald-os" "capture" "screenshot" "window"; }
-    Mod+Shift+Print hotkey-overlay-title="Screenshot screen" { spawn "herald-os" "capture" "screenshot" "screen"; }
-    Mod+Alt+Print hotkey-overlay-title="Record the screen (again to stop)" { spawn "herald-os" "capture" "record"; }
-    Mod+Ctrl+Print hotkey-overlay-title="Pick a colour" { spawn "herald-os" "capture" "color"; }
-    Mod+Shift+S hotkey-overlay-title="Ask NasTech about part of the screen" { spawn "herald-os" "capture" "region" "--ask"; }
-    Mod+Ctrl+Shift+S hotkey-overlay-title="Screenshot to NasTech" { spawn "herald-os" "screenshot"; }
+    Print hotkey-overlay-title="Screenshot (select)" { spawn "bantu-os" "capture" "screenshot" "region"; }
+    Mod+Print hotkey-overlay-title="Screenshot window" { spawn "bantu-os" "capture" "screenshot" "window"; }
+    Mod+Shift+Print hotkey-overlay-title="Screenshot screen" { spawn "bantu-os" "capture" "screenshot" "screen"; }
+    Mod+Alt+Print hotkey-overlay-title="Record the screen (again to stop)" { spawn "bantu-os" "capture" "record"; }
+    Mod+Ctrl+Print hotkey-overlay-title="Pick a colour" { spawn "bantu-os" "capture" "color"; }
+    Mod+Shift+S hotkey-overlay-title="Ask NasTech about part of the screen" { spawn "bantu-os" "capture" "region" "--ask"; }
+    Mod+Ctrl+Shift+S hotkey-overlay-title="Screenshot to NasTech" { spawn "bantu-os" "screenshot"; }
 
-    Mod+Ctrl+V hotkey-overlay-title="Clipboard history" { spawn "herald-os" "clipboard"; }
-    Mod+Ctrl+X hotkey-overlay-title="Dictate into the focused app (again to stop)" repeat=false { spawn "herald-os" "dictate"; }
-    Mod+Ctrl+E hotkey-overlay-title="Emoji" repeat=false { spawn "herald-os" "emoji"; }
+    Mod+Ctrl+V hotkey-overlay-title="Clipboard history" { spawn "bantu-os" "clipboard"; }
+    Mod+Ctrl+X hotkey-overlay-title="Dictate into the focused app (again to stop)" repeat=false { spawn "bantu-os" "dictate"; }
+    Mod+Ctrl+E hotkey-overlay-title="Emoji" repeat=false { spawn "bantu-os" "emoji"; }
 
-    Mod+Ctrl+N hotkey-overlay-title="Night light on or off" repeat=false { spawn "herald-os" "toggle" "nightlight"; }
-    Mod+Ctrl+I hotkey-overlay-title="Stay awake on or off" repeat=false { spawn "herald-os" "toggle" "idle"; }
-    Mod+Ctrl+Comma hotkey-overlay-title="Do not disturb on or off" repeat=false { spawn "herald-os" "toggle" "dnd"; }
+    Mod+Ctrl+N hotkey-overlay-title="Night light on or off" repeat=false { spawn "bantu-os" "toggle" "nightlight"; }
+    Mod+Ctrl+I hotkey-overlay-title="Stay awake on or off" repeat=false { spawn "bantu-os" "toggle" "idle"; }
+    Mod+Ctrl+Comma hotkey-overlay-title="Do not disturb on or off" repeat=false { spawn "bantu-os" "toggle" "dnd"; }
 
-    Mod+Ctrl+W hotkey-overlay-title="Wi-Fi" { spawn "herald-os" "panel" "wifi"; }
-    Mod+Ctrl+B hotkey-overlay-title="Bluetooth" { spawn "herald-os" "panel" "bluetooth"; }
-    Mod+Ctrl+A hotkey-overlay-title="Sound" { spawn "herald-os" "panel" "audio"; }
-    Mod+Ctrl+D hotkey-overlay-title="Displays" { spawn "herald-os" "panel" "display"; }
-    Mod+Ctrl+P hotkey-overlay-title="Battery and power" { spawn "herald-os" "panel" "power"; }
+    Mod+Ctrl+W hotkey-overlay-title="Wi-Fi" { spawn "bantu-os" "panel" "wifi"; }
+    Mod+Ctrl+B hotkey-overlay-title="Bluetooth" { spawn "bantu-os" "panel" "bluetooth"; }
+    Mod+Ctrl+A hotkey-overlay-title="Sound" { spawn "bantu-os" "panel" "audio"; }
+    Mod+Ctrl+D hotkey-overlay-title="Displays" { spawn "bantu-os" "panel" "display"; }
+    Mod+Ctrl+P hotkey-overlay-title="Battery and power" { spawn "bantu-os" "panel" "power"; }
 
     XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05+ -l 1.0"; }
     XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.05-"; }
@@ -381,8 +381,8 @@ binds {
     Mod+Shift+P { power-off-monitors; }
 }
 
-// Colours from the active theme (written by herald-os-theme), then machine-specific overrides
-// (output scale, extra binds; created by herald-os-compositor and never overwritten).
+// Colours from the active theme (written by bantu-os-theme), then machine-specific overrides
+// (output scale, extra binds; created by bantu-os-compositor and never overwritten).
 include "theme.kdl"
 // Display settings chosen in the shell's Display panel (resolution, scale, on or off).
 include "outputs.kdl"

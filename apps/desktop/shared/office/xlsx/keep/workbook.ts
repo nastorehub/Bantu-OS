@@ -4,7 +4,7 @@ import type { ChartSheet, Keep } from './context.ts'
 import { appendToChild, childNamed, innerElements, placeChild, withAttribute, withExtensions, withNamespace, WORKBOOK_ORDER } from './markup.ts'
 
 /*
- * What the source file holds for the whole workbook that Herald keeps: its theme (over ExcelJS's
+ * What the source file holds for the whole workbook that Bantu keeps: its theme (over ExcelJS's
  * default, so theme colours in kept parts and in the Normal font look as they did), its custom
  * properties and sensitivity labels, its links to other workbooks (formulas name them by their
  * place in the list), and its chart sheets, put back among the sheets where they were. Then the
@@ -14,7 +14,7 @@ import { appendToChild, childNamed, innerElements, placeChild, withAttribute, wi
 const OFFICE = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships'
 const THEME = `${OFFICE}/theme`
 
-/** The package's own parts Herald keeps: custom document properties, and sensitivity labels as Office writes them now. */
+/** The package's own parts Bantu keeps: custom document properties, and sensitivity labels as Office writes them now. */
 const DOCUMENT_PARTS = [`${OFFICE}/custom-properties`, 'http://schemas.microsoft.com/office/2020/02/relationships/classificationlabels']
 
 /** Write the source's theme over the one ExcelJS wrote. */

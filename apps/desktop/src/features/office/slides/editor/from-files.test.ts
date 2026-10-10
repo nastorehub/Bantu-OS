@@ -14,7 +14,7 @@ const h = (level: number, text: string): DocNode => ({ type: 'heading', attrs: {
 const p = (text: string): DocNode => paragraphNode([textNode(text)])
 const ul = (...items: string[]): DocNode => ({ type: 'bulletList', content: items.map((item) => ({ type: 'listItem', content: [p(item)] })) })
 
-/** Herald's open dialog and file reading, standing in: what each app's dialog picks and the files there are, noting which dialogs opened and which files were read. */
+/** Bantu's open dialog and file reading, standing in: what each app's dialog picks and the files there are, noting which dialogs opened and which files were read. */
 function access(files: Record<string, Uint8Array | string>, picked: Partial<Record<'docs' | 'sheets', string[]>>): FileAccess & { asked: string[]; reads: string[] } {
   const asked: string[] = []
   const reads: string[] = []
@@ -49,7 +49,7 @@ const tablesOn = (deck: Deck, slideId: string): TableElement[] => findSlide(deck
 const texts = (table: TableElement) => table.cells.map((row) => row.map((cell) => plainText(cell.body)))
 
 describe('decks from documents', () => {
-  it('reads Markdown, plain text and Word documents as Herald Docs does, each a deck titled by its file in the theme given', async () => {
+  it('reads Markdown, plain text and Word documents as Bantu Docs does, each a deck titled by its file in the theme given', async () => {
     const word = await docxFromDocument(doc(h(1, 'Report'), p('Quarterly numbers.'), h(2, 'Sales'), ul('North is up', 'South is flat')))
     const files = access({ '/notes/Plan.md': PLAN, '/notes/Ideas.txt': 'Ideas\n\nA faster start.', '/notes/Report.docx': word.bytes }, { docs: ['/notes/Plan.md', '/notes/Ideas.txt', '/notes/Report.docx'] })
     const reported: string[] = []
@@ -74,7 +74,7 @@ describe('decks from documents', () => {
     expect(reported).toHaveLength(3)
     expect(reported[0]).toMatch(/^Could not read Broken\.docx: /)
     expect(reported[1]).toMatch(/^Could not read Gone\.md: There is no file/)
-    expect(reported[2]).toBe('Could not read Old.odt: Herald Slides cannot make slides from .odt files')
+    expect(reported[2]).toBe('Could not read Old.odt: Bantu Slides cannot make slides from .odt files')
   })
 
   it('puts the slides of documents after the slide in front, one document after another, as one step', async () => {
@@ -104,7 +104,7 @@ describe('decks from documents', () => {
 describe('tables from spreadsheets', () => {
   const sales = () => newWorkbook('book', 'Sales', [newSheet('s1', 'Sales', { 0: { 0: { v: 'Region', t: CELL_TYPE.string }, 1: { v: 'Units', t: CELL_TYPE.string } }, 1: { 0: { v: 'North', t: CELL_TYPE.string }, 1: { v: 120, t: CELL_TYPE.number } }, 2: { 0: { v: 'South', t: CELL_TYPE.string }, 1: { v: 80, t: CELL_TYPE.number } } }), newSheet('s2', 'Empty')])
 
-  it('reads a CSV file and an Excel workbook as Herald Sheets does, the first picked only', async () => {
+  it('reads a CSV file and an Excel workbook as Bantu Sheets does, the first picked only', async () => {
     const xlsx = await xlsxFromWorkbook(sales())
     const files = access({ '/books/Sales.csv': 'Region,Units\nNorth,120\nSouth,80\n', '/books/Sales.xlsx': xlsx.bytes }, { sheets: ['/books/Sales.csv', '/books/Sales.xlsx'] })
     const csv = await pickWorkbook(files, () => {})

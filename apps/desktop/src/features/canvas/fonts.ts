@@ -1,6 +1,6 @@
 /*
  * The fonts on this computer, for the Type tool and for reading font names. Chromium's Local Font
- * Access API lists every face with its real PostScript name (main grants Herald's own pages the
+ * Access API lists every face with its real PostScript name (main grants Bantu's own pages the
  * permission), so a text layer names exactly the face it uses, as Compositor and Photoshop expect.
  * Without it, the families come from the system's font list and names are put together.
  */
@@ -40,7 +40,7 @@ export function loadFonts(): Promise<string[]> {
     }
 
     if (!families.length) {
-      families = await window.heraldOS.fonts.list().catch(() => [] as string[])
+      families = await window.bantuOS.fonts.list().catch(() => [] as string[])
     }
 
     families.sort((a, b) => a.localeCompare(b))

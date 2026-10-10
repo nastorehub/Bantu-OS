@@ -4,10 +4,10 @@ import type { Repack } from './repack.ts'
 import { attr, children, localName, textOf, type XmlElement } from './xml.ts'
 
 /*
- * What Herald keeps of a Word file without showing it, to write back when it saves: custom XML
+ * What Bantu keeps of a Word file without showing it, to write back when it saves: custom XML
  * data parts (with their properties), the file's custom properties, the people who commented, and
- * the title, subject, author, keywords and description. Nothing Herald writes refers to these, so
- * they stay whole. Parts tied to what Herald writes anew are dropped on purpose: the glossary
+ * the title, subject, author, keywords and description. Nothing Bantu writes refers to these, so
+ * they stay whole. Parts tied to what Bantu writes anew are dropped on purpose: the glossary
  * (building blocks), comment ids and dates of Word's own, embedded fonts, web settings, macros.
  */
 
@@ -56,7 +56,7 @@ export async function readKept(pkg: WordPackage, relationships: Map<string, Rela
   const candidates = [...[...own.values()].map((item) => ({ item, from: 'package' as const })), ...[...relationships.values()].map((item) => ({ item, from: 'document' as const }))].filter(
     ({ item, from }) => !item.external && KEPT_KINDS[relationshipKind(item)] === from && pkg.has(item.target)
   )
-  // Custom properties without a property, as Herald itself writes them, are nothing to keep.
+  // Custom properties without a property, as Bantu itself writes them, are nothing to keep.
   const empty = await Promise.all(candidates.map(async ({ item }) => relationshipKind(item) === 'custom-properties' && !children((await pkg.xml(item.target)) ?? undefined).length))
   const found = candidates.filter((_, index) => !empty[index])
   const types = await pkg.xml('[Content_Types].xml')
@@ -106,7 +106,7 @@ export async function readKept(pkg: WordPackage, relationships: Map<string, Rela
   return kept.parts.length || Object.keys(properties).length ? kept : null
 }
 
-/** The kept parts of a document, if its attrs hold any in the shape Herald gave them. */
+/** The kept parts of a document, if its attrs hold any in the shape Bantu gave them. */
 export function keptOf(value: unknown): KeptWord | null {
   const kept = value as Partial<KeptWord> | null | undefined
 
@@ -126,7 +126,7 @@ export function keptOf(value: unknown): KeptWord | null {
 /** The part the docx package always writes, empty, which a kept one replaces. */
 const CUSTOM_PROPERTIES = 'docProps/custom.xml'
 
-/** Writes kept parts back into a package, with their content types and the relationships that lead to them; never over a part Herald wrote. */
+/** Writes kept parts back into a package, with their content types and the relationships that lead to them; never over a part Bantu wrote. */
 export async function writeKept(repack: Repack, kept: KeptWord, main: string): Promise<void> {
   const written = kept.parts.filter((part) => part.path === CUSTOM_PROPERTIES || !repack.has(part.path))
 

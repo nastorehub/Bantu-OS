@@ -2,17 +2,17 @@ import JSZip from 'jszip'
 import { describe, expect, it } from 'vitest'
 import { type ChartDrawing, type ChartSpec, DRAWING_RESOURCE } from '../../charts.ts'
 import { tinted } from '../colors.ts'
-import { readHeraldPart } from '../herald-part.ts'
+import { readBantuPart } from '../bantu-part.ts'
 import { parseRelationships, relsPathOf } from '../opc.ts'
 import { openPackage } from '../package.ts'
 import { workbookFromXlsx } from '../read.ts'
 import { readResource } from '../rules.ts'
 import { xlsxFromWorkbook } from '../write.ts'
 import { CHART_REL, CHART_TYPE, chartFrame, chartPackage, COLUMN_CHART, excelAxes, excelBarWorkbook, excelChart, excelWorkbook, numRef, strRef, twoCellAnchor } from './fixtures.ts'
-import { type FiledCharts, HERALD_SECTION, shownAnchors } from './index.ts'
+import { type FiledCharts, BANTU_SECTION, shownAnchors } from './index.ts'
 import { NOTES } from './read.ts'
 
-/* Charts as Excel writes them, read into the charts Herald draws, and the ones Herald leaves in the file. */
+/* Charts as Excel writes them, read into the charts Bantu draws, and the ones Bantu leaves in the file. */
 
 type Drawings = Record<string, { data: Record<string, ChartDrawing>; order: string[] }>
 
@@ -49,7 +49,7 @@ describe('charts Excel made', () => {
     expect(column.data.source).toMatchObject({ part: 'xl/charts/chart1.xml', anchor: 1 })
   })
 
-  it('places a chart over its cells as Herald Sheets sizes them: custom widths, hidden columns, tall rows', async () => {
+  it('places a chart over its cells as Bantu Sheets sizes them: custom widths, hidden columns, tall rows', async () => {
     const { charts } = await readExcel(await excelWorkbook())
     const [column, pie] = charts(SALES)
 
@@ -57,7 +57,7 @@ describe('charts Excel made', () => {
       unitId: 'book',
       subUnitId: SALES,
       drawingType: 8,
-      componentKey: 'herald-chart',
+      componentKey: 'bantu-chart',
       anchorType: '1',
       allowTransform: true,
       sheetTransform: { from: { column: 4, columnOffset: 32, row: 1, rowOffset: 1 }, to: { column: 11, columnOffset: 64, row: 16, rowOffset: 10 } },
@@ -147,7 +147,7 @@ describe('charts Excel made, saved again', () => {
     change?.(workbook)
     const { bytes, losses } = await xlsxFromWorkbook(workbook, { original })
     const pkg = await openPackage(bytes)
-    const filed = ((await readHeraldPart(pkg))?.[HERALD_SECTION] ?? {}) as FiledCharts
+    const filed = ((await readBantuPart(pkg))?.[BANTU_SECTION] ?? {}) as FiledCharts
 
     return { original: await JSZip.loadAsync(original), zip: await JSZip.loadAsync(bytes), bytes, losses, filed }
   }
@@ -215,7 +215,7 @@ describe('charts Excel made, saved again', () => {
     const { workbook } = await readExcel(original)
     const { bytes } = await xlsxFromWorkbook(workbook, { original })
     const pkg = await openPackage(bytes)
-    const filed = ((await readHeraldPart(pkg))?.[HERALD_SECTION] ?? {}) as FiledCharts
+    const filed = ((await readBantuPart(pkg))?.[BANTU_SECTION] ?? {}) as FiledCharts
     const column = Object.values(filed['Q1 sales'])[0].part
 
     expect(await pkg.read(column)).toContain('<a:t>Quarterly sales</a:t>')
@@ -249,7 +249,7 @@ describe('charts Excel made, saved again', () => {
   })
 })
 
-describe('what Herald shows of an Excel chart', () => {
+describe('what Bantu shows of an Excel chart', () => {
   const sheet = { name: 'Data', rows: [['Item', 'Value', 'Group'], ['A', 1, 'X'], ['B', 2, 'X'], ['C', 3, 'Y']] as (string | number)[][] }
   const read = async (xml: string) => {
     const bytes = await chartPackage({ sheets: [{ ...sheet, anchors: [twoCellAnchor(2, [4, 0, 1, 0], [10, 0, 15, 0], chartFrame(0, 'Chart 1'))], related: [{ type: CHART_REL, path: 'xl/charts/chart1.xml' }] }], parts: { 'xl/charts/chart1.xml': { content: xml, type: CHART_TYPE } } })
@@ -297,7 +297,7 @@ describe('what Herald shows of an Excel chart', () => {
   })
 })
 
-describe('charts Herald does not read', () => {
+describe('charts Bantu does not read', () => {
   const sheet = { name: 'Data', rows: [['Item', 'Value'], ['A', 1], ['B', 2]] as (string | number)[][] }
   const single = (series: string) =>
     excelChart({ plot: `<c:barChart><c:barDir val="col"/><c:grouping val="clustered"/><c:varyColors val="0"/><c:ser><c:idx val="0"/><c:order val="0"/>${series}</c:ser><c:gapWidth val="150"/><c:axId val="1"/><c:axId val="2"/></c:barChart>${excelAxes(1, 2)}` })

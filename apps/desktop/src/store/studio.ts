@@ -107,7 +107,7 @@ export function bindStudioEvents(): () => void {
 
 const release = (watchId: string | null): void => {
   if (watchId) {
-    void window.heraldOS.fs.unwatchTree(watchId)
+    void window.bantuOS.fs.unwatchTree(watchId)
   }
 }
 
@@ -118,7 +118,7 @@ let treeListenerBound = false
 export function watchStudioFolder(sessionId: string, root: string): () => void {
   if (!treeListenerBound) {
     treeListenerBound = true
-    window.heraldOS.fs.onTreeChanged(event => {
+    window.bantuOS.fs.onTreeChanged(event => {
       for (const [sid, watch] of watches) {
         void watch.watchId.then(id => {
           if (id === event.watchId) {
@@ -139,7 +139,7 @@ export function watchStudioFolder(sessionId: string, root: string): () => void {
       void existing.watchId.then(release)
     }
 
-    watches.set(key, { watchId: window.heraldOS.fs.watchTree(root).catch(() => null), users: 1, root })
+    watches.set(key, { watchId: window.bantuOS.fs.watchTree(root).catch(() => null), users: 1, root })
   }
 
   return () => {

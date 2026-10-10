@@ -145,7 +145,7 @@ export function createSheetsEngine(container: HTMLElement, workbook: WorkbookSna
     container,
     locales: [DocsUIEnUS, SheetsEnUS, SheetsUIEnUS, SheetsFormulaEnUS, SheetsFormulaUIEnUS, SheetsNumfmtUIEnUS, SheetsFilterUIEnUS, SheetsSortUIEnUS, SheetsConditionalFormattingUIEnUS, SheetsDataValidationUIEnUS, FindReplaceEnUS, SheetsHyperLinkEnUS, SheetsHyperLinkUIEnUS, DrawingUIEnUS, SheetsDrawingUIEnUS, ThreadCommentUIEnUS, SheetsThreadCommentUIEnUS, SheetsNoteUIEnUS]
   })
-  const remote = options.worker ? new Worker(new URL('./formula-worker.ts', import.meta.url), { type: 'module', name: 'herald-sheets-formulas' }) : null
+  const remote = options.worker ? new Worker(new URL('./formula-worker.ts', import.meta.url), { type: 'module', name: 'bantu-sheets-formulas' }) : null
   univer.registerPlugin(UniverDocsPlugin)
   univer.registerPlugin(UniverDocsUIPlugin)
 
@@ -177,7 +177,7 @@ export function createSheetsEngine(container: HTMLElement, workbook: WorkbookSna
   univer.registerPlugin(UniverDocsDrawingPlugin)
   univer.registerPlugin(UniverDrawingUIPlugin)
   univer.registerPlugin(UniverSheetsDrawingPlugin)
-  // Herald's charts float over the grid through this plugin; pictures added here would not be saved yet.
+  // Bantu's charts float over the grid through this plugin; pictures added here would not be saved yet.
   univer.registerPlugin(UniverSheetsDrawingUIPlugin, { menu: Object.fromEntries(['sheet.menu.image', 'sheet.menu.worksheet-background-image', 'sheet.menu.save-cell-images'].map((id) => [id, { hidden: true }])) })
   univer.registerPlugin(UniverThreadCommentPlugin)
   univer.registerPlugin(UniverThreadCommentUIPlugin)

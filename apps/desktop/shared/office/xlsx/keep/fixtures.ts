@@ -2,9 +2,9 @@ import JSZip from 'jszip'
 import { relsPathOf } from '../opc.ts'
 
 /*
- * Workbooks as Excel writes them, with the parts Herald keeps without showing: a pivot table on a
+ * Workbooks as Excel writes them, with the parts Bantu keeps without showing: a pivot table on a
  * summary sheet over a data sheet, with a slicer; a table and sparklines on the data sheet; a
- * picture, a shape, a radar chart and a funnel (chartEx) Herald does not draw, beside a bar chart, on
+ * picture, a shape, a radar chart and a funnel (chartEx) Bantu does not draw, beside a bar chart, on
  * a dashboard; and a chart sheet between them. Made here part by part, with made-up data.
  */
 

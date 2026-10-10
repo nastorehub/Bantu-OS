@@ -4,14 +4,14 @@ import { chartValues } from './data.ts'
 import type { PlacedChart } from './drawings.ts'
 import { loadECharts } from './load.ts'
 import { chartOption } from './option.ts'
-import { heraldChartTheme } from './theme.ts'
+import { bantuChartTheme } from './theme.ts'
 
 /* A chart as a picture on the clipboard: drawn again off screen at twice its size, on its own background. */
 
 /** The chart's PNG at twice its size. */
 export async function chartPicture(target: SheetsTarget, { drawing }: PlacedChart): Promise<Blob> {
   const echarts = await loadECharts()
-  const theme = heraldChartTheme()
+  const theme = bantuChartTheme()
   const { spec } = drawing.data
   const values = chartValues(spec, (range) => readGrid(target.workbook, range))
   const width = Math.max(80, Math.round(drawing.transform?.width ?? 480))

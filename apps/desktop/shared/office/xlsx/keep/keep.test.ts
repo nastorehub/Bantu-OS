@@ -17,7 +17,7 @@ async function read(bytes: Uint8Array): Promise<WorkbookSnapshot> {
   return (await workbookFromXlsx(bytes, { id: 'book', name: 'Book' })).workbook
 }
 
-describe('keeping the parts of a file that Herald does not show', () => {
+describe('keeping the parts of a file that Bantu does not show', () => {
   it('keeps a pivot table refreshed on opening, its slicer, a table, sparklines, pictures, shapes, charts and a chart sheet when a cell changes', async () => {
     const original = await keptWorkbook()
     const { snapshot } = await withHeadlessSheets(await read(original), ({ workbook }) => {
@@ -40,7 +40,7 @@ describe('keeping the parts of a file that Herald does not show', () => {
     expect(cacheXml).toContain('<worksheetSource ref="A1:C7" sheet="Sales"/>')
     expect(await file.related(cache, 'pivotCacheRecords')).toHaveLength(1)
 
-    // The pivot table's number format and bold values, in Herald's style sheet.
+    // The pivot table's number format and bold values, in Bantu's style sheet.
     const styles = await file.text('xl/styles.xml')
     const format = /<numFmt numFmtId="(\d+)" formatCode="#,##0&quot; kg&quot;"\/>/.exec(styles)?.[1]
     expect(format).toBeDefined()
@@ -57,7 +57,7 @@ describe('keeping the parts of a file that Herald does not show', () => {
     expect(await file.related(file.sheet('Summary'), 'slicer')).toHaveLength(1)
     expect(await file.text(file.sheet('Summary'))).toMatch(/<x14:slicerList><x14:slicer r:id="rId\d+"\/><\/x14:slicerList>/)
 
-    // The table, its column's format in Herald's style sheet, and the sparklines.
+    // The table, its column's format in Bantu's style sheet, and the sparklines.
     const sales = await file.text(file.sheet('Sales'))
     const [table] = await file.related(file.sheet('Sales'), 'table')
     expect(sales).toMatch(/<tableParts count="1"><tablePart r:id="rId\d+"\/><\/tableParts>/)
@@ -88,7 +88,7 @@ describe('keeping the parts of a file that Herald does not show', () => {
 })
 
 describe('second saves', () => {
-  it('keeps each part once when a file Herald saved is saved again', async () => {
+  it('keeps each part once when a file Bantu saved is saved again', async () => {
     const original = await keptWorkbook()
     const once = await xlsxFromWorkbook(await read(original), { original })
     const again = await workbookFromXlsx(once.bytes, { id: 'book', name: 'Book' })
@@ -208,8 +208,8 @@ describe('tables', () => {
   })
 })
 
-describe('charts Herald shows', () => {
-  it('leaves an anchor Herald reads as a chart to the charts it writes', async () => {
+describe('charts Bantu shows', () => {
+  it('leaves an anchor Bantu reads as a chart to the charts it writes', async () => {
     const original = await keptWorkbook()
     charts.shown = new Set([DASHBOARD.indexOf('bar')])
 

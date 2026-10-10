@@ -1,5 +1,5 @@
 /*
- * The units Word files measure in, against Herald's points (1/72 inch) and CSS pixels (1/96
+ * The units Word files measure in, against Bantu's points (1/72 inch) and CSS pixels (1/96
  * inch): twips (twentieths of a point) for spacing, indents, pages and table grids, half-points
  * for font sizes, and EMUs (914,400 an inch) for pictures. Strict files may also write a measure
  * with its unit ("1.5in", "12pt").

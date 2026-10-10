@@ -4,7 +4,7 @@ import { addComments, applyLive, type CommentSpec, comments } from './model.ts'
 import { editorOf } from './store.ts'
 
 /**
- * A review of a document by an AI, which another part of Herald offers by setting this: while it
+ * A review of a document by an AI, which another part of Bantu offers by setting this: while it
  * is set, the Review menu has an item named `label` that runs `run` with the key of the document in
  * front. The review adds its comments with `addReviewComments` (or the document API's
  * `addComments(list, 'NasTech')`), all of them one step to undo. Null takes the item away.

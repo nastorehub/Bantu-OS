@@ -39,7 +39,7 @@ describe('fidelity report', () => {
 
     expect(workbook.sheets[workbook.sheetOrder[0]].cellData[1][0]).toEqual({ v: 10, t: 2 })
     expect(notes).toEqual([
-      'Macros (VBA) are not kept: Herald Sheets does not run them, and a copy it saves has none.',
+      'Macros (VBA) are not kept: Bantu Sheets does not run them, and a copy it saves has none.',
       'Protection (locked sheets, structure or a password to open for editing) is not kept: a saved copy is unprotected.',
       'Print areas, print titles and page breaks are not kept; page size, orientation, margins, scaling and headers stay.',
       'Pictures in page headers and footers are not kept.',
@@ -52,7 +52,7 @@ describe('fidelity report', () => {
     ])
   })
 
-  it('has nothing to say about what Herald keeps: charts, pictures, shapes, pivot tables, slicers, tables, sparklines, chart sheets, comments and the rest', async () => {
+  it('has nothing to say about what Bantu keeps: charts, pictures, shapes, pivot tables, slicers, tables, sparklines, chart sheets, comments and the rest', async () => {
     const bytes = await handmadePackage({
       extraParts: {
         'xl/drawings/drawing1.xml': DRAWING,
@@ -89,7 +89,7 @@ describe('fidelity report', () => {
     })
     const { workbook, notes } = await workbookFromXlsx(bytes, { id: 'f', name: 'F', extension: '.xlsm' })
 
-    expect(notes).toEqual(['Macros (VBA) are not kept: Herald Sheets does not run them, and a copy it saves has none.', 'One dialog or Excel 4.0 macro sheet is left out.'])
+    expect(notes).toEqual(['Macros (VBA) are not kept: Bantu Sheets does not run them, and a copy it saves has none.', 'One dialog or Excel 4.0 macro sheet is left out.'])
     expect(workbook.sheetOrder).toHaveLength(1)
   })
 

@@ -12,7 +12,7 @@ import type { PanelShell } from './panels.ts'
  * frame of its procedural wallpaper offscreen, writes a PNG, and hands it to swaybg (a layer-shell
  * client the compositor keeps beneath every window). A custom image wallpaper is passed straight through.
  */
-const UNIT = 'herald-os-wallpaper'
+const UNIT = 'bantu-os-wallpaper'
 
 export class WallpaperService {
   private swaybg: ChildProcess | null = null
@@ -22,7 +22,7 @@ export class WallpaperService {
   constructor(private readonly shell: PanelShell) {}
 
   get file(): string {
-    return path.join(os.homedir(), '.local', 'share', 'herald-os', 'wallpaper.png')
+    return path.join(os.homedir(), '.local', 'share', 'bantu-os', 'wallpaper.png')
   }
 
   start(customImage: string | undefined): void {

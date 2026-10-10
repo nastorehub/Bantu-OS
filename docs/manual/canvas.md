@@ -1,18 +1,18 @@
-# Herald Canvas
+# Bantu Canvas
 
-Herald Canvas is the image editor built into Herald OS: layers, folders, masks, blend modes,
+Bantu Canvas is the image editor built into Bantu OS: layers, folders, masks, blend modes,
 adjustment layers, layer effects, editable text and shapes, drawn on the GPU. It has the tools you
 know from photo editors, a few that run AI models on your computer, and NasTech can work in it with
 you: ask for a poster, a thumbnail or "make this photo warmer", and watch each change land as a
 step you can undo.
 
 Open it from the Dock, from Applications (`Cmd+Shift+A`, `Super+A` on Linux), from Files ("Edit in
-Herald Canvas" on an image), or by asking NasTech. On Herald OS Linux it opens in its own window,
+Bantu Canvas" on an image), or by asking NasTech. On Bantu OS Linux it opens in its own window,
 three quarters of the screen wide.
 
 ## Opening and saving
 
-- **Projects.** Herald Canvas saves `.comp` projects: a folder holding `manifest.json` and an
+- **Projects.** Bantu Canvas saves `.comp` projects: a folder holding `manifest.json` and an
   `images/` folder of PNGs (on a Mac the folder shows as one file). The same projects open in
   Compositor on a Mac. A saved project saves itself shortly after each change; File > Save
   Automatically turns that off.
@@ -58,7 +58,7 @@ the brush size (the Clone Stamp's, the healing brushes' and the Refine Edge brus
 `Shift` its hardness; the number keys set opacity (`5` is 50%, `4` then `5` quickly is 45%); the
 arrow keys nudge the picked layers with the Move tool (`Shift` for 10 pixels).
 
-| Command | macOS | Herald OS Linux |
+| Command | macOS | Bantu OS Linux |
 | --- | --- | --- |
 | New, Open, Save, Save As | `Cmd+N`, `Cmd+O`, `Cmd+S`, `Cmd+Shift+S` | `Ctrl` with the same keys |
 | Undo, Redo, Toggle Last State | `Cmd+Z`, `Cmd+Shift+Z`, `Cmd+Alt+Z` | `Ctrl` with the same keys |
@@ -189,7 +189,7 @@ Click the gradient in the Gradient tool's options to open the editor:
   Color Lookup; Invert, Posterize, Threshold, Gradient Map, Selective Color; Grain, Gaussian Blur,
   Motion Blur and Add Noise. They change everything under them (only the layer below when clipped)
   and stay editable in the Properties panel. Color Lookup loads a 3D `.cube` table (2 to 65 entries
-  a side), as grading tools save them, and keeps it in the project. Eight of these are Herald
+  a side), as grading tools save them, and keeps it in the project. Eight of these are Bantu
   Canvas's own: see [Compositor compatibility](#compositor-compatibility) for how Compositor shows
   them.
 - **Auto Tone, Auto Contrast and Auto Color.** The Image menu reads the picture under the active
@@ -215,10 +215,10 @@ Click the gradient in the Gradient tool's options to open the editor:
 
 ## AI on your computer
 
-These tools run on your computer; nothing is uploaded. None of the models ships with Herald OS: the
-first time you use a tool that needs one, Herald Canvas asks before downloading it, shows its size
+These tools run on your computer; nothing is uploaded. None of the models ships with Bantu OS: the
+first time you use a tool that needs one, Bantu Canvas asks before downloading it, shows its size
 and licence, and checks every file against its published SHA-256 before it runs. Models are stored
-in `~/.nastech/herald-os/models`, and Edit > AI Models lists them, with Resume for a stopped download
+in `~/.nastech/bantu-os/models`, and Edit > AI Models lists them, with Resume for a stopped download
 and Remove. They run on the GPU through WebGPU where there is one, and on the processor otherwise
 (slower, but they work).
 
@@ -226,10 +226,10 @@ and Remove. They run on the GPU through WebGPU where there is one, and on the pr
 | --- | --- | --- | --- |
 | Layer > Remove Background, Select > Subject | ISNet (general use) | 179 MB | Apache-2.0 |
 | Object Select (`W`) | EfficientSAM (tiny) | 41 MB | Apache-2.0 |
-| Edit > Content-Aware Fill, Spot Healing Brush (`J`) | none: PatchMatch, written for Herald Canvas | | |
+| Edit > Content-Aware Fill, Spot Healing Brush (`J`) | none: PatchMatch, written for Bantu Canvas | | |
 
 ISNet's weights are published under Apache-2.0, but the DIS5K images it was trained on were released
-for research use. The file Herald downloads is the rembg project's ONNX conversion of the authors'
+for research use. The file Bantu downloads is the rembg project's ONNX conversion of the authors'
 weights, as the authors publish only PyTorch ones.
 
 **Generative fill.** Edit > Generative Fill (on a selection) and Layer > New Generated Layer ask
@@ -257,29 +257,29 @@ open, layers, text, shapes, adjustments (Auto Tone, Contrast and Color too), eff
 them between layers), masks, aligning and distributing, guides, filters, resizing, cropping and
 straightening, previews, exports, the history, and the on-device tools. Each change lands in the
 open window as you watch, as one step: `Cmd+Z` undoes it, or ask NasTech to undo (several steps at
-once if you like). On Herald OS Linux, `herald-os canvas` does the same from a terminal
-(`herald-os canvas new Poster 1080x1350`, `herald-os canvas text "Night market"`,
-`herald-os canvas align bottom --layers Logo,Badge`, `herald-os canvas filter unsharp mask --amount
-120`, `herald-os canvas export ~/Desktop/poster.png`, `herald-os canvas undo --steps 2`). NasTech
+once if you like). On Bantu OS Linux, `bantu-os canvas` does the same from a terminal
+(`bantu-os canvas new Poster 1080x1350`, `bantu-os canvas text "Night market"`,
+`bantu-os canvas align bottom --layers Logo,Badge`, `bantu-os canvas filter unsharp mask --amount
+120`, `bantu-os canvas export ~/Desktop/poster.png`, `bantu-os canvas undo --steps 2`). NasTech
 never downloads a model: when one is missing it asks you to allow it in the window.
 
 ## Compositor compatibility
 
-Herald Canvas reads and writes the `.comp` format (version 11), so a project moves between Herald
-Canvas on Linux or a Mac and Compositor on a Mac. Herald holds every value to
+Bantu Canvas reads and writes the `.comp` format (version 11), so a project moves between Bantu
+Canvas on Linux or a Mac and Compositor on a Mac. Bantu holds every value to
 the ranges Compositor accepts (it refuses a whole project over one value outside them) and says
 which field is wrong when a change would leave a range. Fields it does not use, such as
 Compositor's own settings, are kept as they were. Text keeps Compositor's per-letter colour and
-font runs: Herald Canvas draws them and keeps them through edits where the edited range allows
+font runs: Bantu Canvas draws them and keeps them through edits where the edited range allows
 (typed letters take the colour of the letter before them). Compositor's Hue/Saturation settings for
-single colour ranges are kept in the file, but Herald Canvas draws only the master setting.
+single colour ranges are kept in the file, but Bantu Canvas draws only the master setting.
 
-Eight adjustments are Herald Canvas's own: Brightness/Contrast, Vibrance, Photo Filter, Channel
+Eight adjustments are Bantu Canvas's own: Brightness/Contrast, Vibrance, Photo Filter, Channel
 Mixer, Selective Color, Posterize, Threshold and Color Lookup. Compositor refuses a project with an
-adjustment kind it does not know, so Herald keeps their settings in a field of their own, which
+adjustment kind it does not know, so Bantu keeps their settings in a field of their own, which
 Compositor passes by, beside one of Compositor's kinds that it does read:
 
-| Herald's adjustment | What Compositor shows |
+| Bantu's adjustment | What Compositor shows |
 | --- | --- |
 | Brightness/Contrast | The same change, as Curves |
 | Vibrance | With Vibrance at 0, the same change as Hue/Saturation; otherwise the picture unchanged |
@@ -287,24 +287,24 @@ Compositor passes by, beside one of Compositor's kinds that it does read:
 | Channel Mixer, Selective Color, Posterize, Threshold, Color Lookup | The picture unchanged (Levels that change nothing) |
 
 A Color Lookup's table is saved in the project as `images/<layer id>.cube`, which Compositor does
-not read. If you save the project in Compositor, it keeps the Compositor kinds and drops Herald's
-settings and tables, so those layers come back to Herald Canvas as the Curves, Hue/Saturation or
+not read. If you save the project in Compositor, it keeps the Compositor kinds and drops Bantu's
+settings and tables, so those layers come back to Bantu Canvas as the Curves, Hue/Saturation or
 Levels layers Compositor showed.
 
 ## Photoshop documents
 
-Herald Canvas reads and writes PSD and PSB files itself (with the ag-psd library, in the
+Bantu Canvas reads and writes PSD and PSB files itself (with the ag-psd library, in the
 background), and lists anything it approximated once the file is open or written.
 
 - **What opens:** pixel layers with their position, opacity, visibility and blend mode; folders;
   layer and folder masks; clipping; text layers (Photoshop's pixels, and the text, font, size,
   colour, alignment, tracking, leading and colour and font runs, so they can be edited); and the
-  layer effects Herald draws (drop and inner shadow, outer and inner glow, colour overlay, stroke).
+  layer effects Bantu draws (drop and inner shadow, outer and inner glow, colour overlay, stroke).
   Every adjustment layer opens: Brightness/Contrast, Levels, Curves, Exposure, Vibrance,
   Hue/Saturation, Color Balance, Black & White, Photo Filter, Channel Mixer, Color Lookup (with a
-  `.cube` table), Invert, Posterize, Threshold, Gradient Map and Selective Color. Herald draws its own
+  `.cube` table), Invert, Posterize, Threshold, Gradient Map and Selective Color. Bantu draws its own
   adjustments with its own maths, so they look close to Photoshop's rather than identical.
-- **What changes:** blend modes Herald lacks (Dissolve, Darker Color, Lighter Color) become Normal; a
+- **What changes:** blend modes Bantu lacks (Dissolve, Darker Color, Lighter Color) become Normal; a
   folder's own blend mode becomes Pass Through; Color Lookup layers with a `.3dl` or `.look` table
   or a colour profile, and effects (bevel and emboss, satin, gradient and pattern overlays) are left
   out; smart objects,
@@ -313,32 +313,32 @@ background), and lists anything it approximated once the file is open or written
   or set in a font this computer lacks stays a picture; 16-bit colour becomes 8-bit.
 - **What exports:** layers, folders, masks, clipping, blend modes, opacity, text (as pixels with its
   text, so Photoshop can set it again when you choose Update), the adjustments Photoshop has (all of
-  Herald's own among them, a Color Lookup with its table), layer effects, and the flattened image. Grain, Gaussian Blur, Motion Blur and Add Noise are filters in
+  Bantu's own among them, a Color Lookup with its table), layer effects, and the flattened image. Grain, Gaussian Blur, Motion Blur and Add Noise are filters in
   Photoshop, not adjustment layers, so they show only in the flattened image. Shapes become pixels,
   and turned, flipped or scaled layers are drawn into the document's pixel grid with their masks
   applied. Files past 30,000 pixels a side are written as PSB.
-- **Size:** files up to 2 GB, images up to Herald Canvas's own limits.
+- **Size:** files up to 2 GB, images up to Bantu Canvas's own limits.
 
 ## Linux notes
 
-- **Converting HEIC, TIFF and RAW.** Herald OS Linux ships libheif's tools and ImageMagick. HEIF and
+- **Converting HEIC, TIFF and RAW.** Bantu OS Linux ships libheif's tools and ImageMagick. HEIF and
   AVIF stills, TIFF and camera RAW files open. HEIC photos from phones are compressed with HEVC,
   which Fedora's libheif cannot decode: install `libheif-freeworld` from RPM Fusion for those, or
   export them as JPEG first. On other distributions install `libheif-tools` or `libheif-examples`
   (with `libheif-plugin-libde265` for HEVC), and ImageMagick or libvips; when nothing can convert a
   file, the message says which packages to install.
-- **Without a graphics chip Herald Canvas knows.** In a virtual machine, or with a graphics driver
-  Chromium does not trust, Herald turns on SwiftShader, Chromium's software renderer, so the editor
-  still draws. Herald Canvas notices and draws less while things move: a half-resolution draft
+- **Without a graphics chip Bantu Canvas knows.** In a virtual machine, or with a graphics driver
+  Chromium does not trust, Bantu turns on SwiftShader, Chromium's software renderer, so the editor
+  still draws. Bantu Canvas notices and draws less while things move: a half-resolution draft
   while you paint, drag or move a slider, the full frame once you stop, 8-bit blending, and layer
-  thumbnails that update less often. In the Herald OS virtual machine a 3,000 × 2,000 image with
+  thumbnails that update less often. In the Bantu OS virtual machine a 3,000 × 2,000 image with
   seven layers paints at about 15 frames a second and pans and zooms at about 40.
 
 ## Troubleshooting
 
-- **"Herald Canvas needs WebGL2, which this system does not provide."** The graphics stack offers
-  no WebGL at all. On a Mac, check that the GPU is not disabled for Herald OS. On Linux, Herald falls
-  back to SwiftShader; if this still appears, `~/.local/state/herald-os/shell.log` says why.
+- **"Bantu Canvas needs WebGL2, which this system does not provide."** The graphics stack offers
+  no WebGL at all. On a Mac, check that the GPU is not disabled for Bantu OS. On Linux, Bantu falls
+  back to SwiftShader; if this still appears, `~/.local/state/bantu-os/shell.log` says why.
 - **It is slow in a virtual machine.** That is the software renderer. A smaller window, a lower zoom
   or fewer adjustment layers and blurs over the area you work on all help; the full-quality frame
   comes a moment after you stop.

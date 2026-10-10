@@ -80,10 +80,10 @@ describe('shouldOffer', () => {
     expect(shouldOffer(report, { ...base, lastNotified: new Map([['firefox', base.now - CRASH_QUIET_MS]]) })).toBe(true)
   })
 
-  it('stays quiet for muted programs, Herald OS itself and the NasTech backend', () => {
+  it('stays quiet for muted programs, Bantu OS itself and the NasTech backend', () => {
     expect(shouldOffer(report, { ...base, muted: ['firefox'] })).toBe(false)
     expect(shouldOffer(report, { ...base, muted: ['/usr/bin/firefox'] })).toBe(false)
-    expect(shouldOffer({ ...report, app: 'Herald OS Helper (Renderer)' }, base)).toBe(false)
+    expect(shouldOffer({ ...report, app: 'Bantu OS Helper (Renderer)' }, base)).toBe(false)
     expect(shouldOffer(report, { ...base, ownPids: [10] })).toBe(false)
   })
 })

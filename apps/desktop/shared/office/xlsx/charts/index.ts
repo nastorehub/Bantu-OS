@@ -5,7 +5,7 @@ import { OFFICE_THEME, themeColors } from '../colors.ts'
 import { drawingOf } from '../drawing.ts'
 import type { ReadContext } from '../extras.ts'
 import type { FinishContext } from '../finish.ts'
-import { fingerprint, readHeraldPart, stableJson } from '../herald-part.ts'
+import { fingerprint, readBantuPart, stableJson } from '../bantu-part.ts'
 import { CONTENT_TYPE, REL } from '../opc.ts'
 import type { PackageSheet, XlsxPackage } from '../package.ts'
 import { readResource, type Resource } from '../rules.ts'
@@ -18,12 +18,12 @@ import { type ChartReading, dataExtent, type DataExtent, readChartXml, type Read
 import { type ChartCells, chartXml, hasSeries } from './write.ts'
 
 /*
- * Herald Sheets' charts in .xlsx files: each chart floating over a sheet written as an Excel chart
+ * Bantu Sheets' charts in .xlsx files: each chart floating over a sheet written as an Excel chart
  * (a DrawingML chart part and an anchor in the sheet's drawing), and charts of the common kinds read
- * back from any file into charts Herald draws.
+ * back from any file into charts Bantu draws.
  */
 
-/** A chart a sheet's drawing shows that Herald reads. */
+/** A chart a sheet's drawing shows that Bantu reads. */
 interface FoundChart {
   /** The anchor's place in the sheet's drawing (see drawingOf). */
   index: number
@@ -33,18 +33,18 @@ interface FoundChart {
   reading: ChartReading
 }
 
-/** A chart as Herald's part keeps it: its exact spec (ranges naming their sheets as the file does), the chart part written for it, and that part's fingerprint. */
+/** A chart as Bantu's part keeps it: its exact spec (ranges naming their sheets as the file does), the chart part written for it, and that part's fingerprint. */
 export interface FiledChart {
   spec: ChartSpec
   part: string
   fingerprint: string
 }
 
-/** Herald's part's charts: sheet name in the file → drawing id → chart. */
+/** Bantu's part's charts: sheet name in the file → drawing id → chart. */
 export type FiledCharts = Record<string, Record<string, FiledChart>>
 
-/** The section of Herald's part with the charts. */
-export const HERALD_SECTION = 'charts'
+/** The section of Bantu's part with the charts. */
+export const BANTU_SECTION = 'charts'
 
 /** How the charts of a package are read: its sheets as formulas name them, its theme, and where its sheets hold values. */
 function readingContext(pkg: XlsxPackage): ReadingContext {
@@ -79,7 +79,7 @@ async function findCharts(pkg: XlsxPackage, sheet: PackageSheet, context: Readin
     const related = anchor ? drawing!.relationships.get(anchor.chart) : undefined
     const part = related && !related.external && related.type.endsWith('/chart') ? related.target : undefined
     const chartXml = part ? await pkg.read(part) : undefined
-    // A chart Herald fails to read stays in the file as it is, like one it does not draw.
+    // A chart Bantu fails to read stays in the file as it is, like one it does not draw.
     const reading = chartXml ? await readChartXml(chartXml, context).catch(() => null) : null
 
     if (anchor && part && chartXml && reading) {
@@ -103,7 +103,7 @@ function cacheOf(pkg: XlsxPackage): { context: ReadingContext; sheets: Map<strin
 
 const chartsContext = (pkg: XlsxPackage): ReadingContext => cacheOf(pkg).context
 
-/** The charts Herald reads from a sheet's drawing; readCharts and shownAnchors both go through here, so they agree. */
+/** The charts Bantu reads from a sheet's drawing; readCharts and shownAnchors both go through here, so they agree. */
 function chartsOf(pkg: XlsxPackage, sheet: PackageSheet): Promise<FoundChart[]> {
   const entry = cacheOf(pkg)
   let charts = entry.sheets.get(sheet.path)
@@ -140,9 +140,9 @@ export function withSheets(spec: ChartSpec, rename: (sheet: string) => string): 
 const isSpec = (value: unknown): value is ChartSpec =>
   Boolean(value) && typeof value === 'object' && (CHART_KINDS as readonly string[]).includes((value as ChartSpec).kind) && Array.isArray((value as ChartSpec).series)
 
-/** The charts Herald's part keeps for a sheet, each matched once: by its part and fingerprint, else by its fingerprint alone. */
-function filedFor(herald: Record<string, unknown> | null, sheetName: string): (part: string, xml: string) => { id: string; spec: ChartSpec } | null {
-  const section = (herald?.[HERALD_SECTION] ?? {}) as FiledCharts
+/** The charts Bantu's part keeps for a sheet, each matched once: by its part and fingerprint, else by its fingerprint alone. */
+function filedFor(bantu: Record<string, unknown> | null, sheetName: string): (part: string, xml: string) => { id: string; spec: ChartSpec } | null {
+  const section = (bantu?.[BANTU_SECTION] ?? {}) as FiledCharts
   const sheet = section && typeof section === 'object' ? section[sheetName] : undefined
   const entries = Object.entries(sheet && typeof sheet === 'object' ? sheet : {}).filter(([, chart]) => chart && typeof chart.fingerprint === 'string' && isSpec(chart.spec))
   const used = new Set<string>()
@@ -161,24 +161,24 @@ function filedFor(herald: Record<string, unknown> | null, sheetName: string): (p
   }
 }
 
-const heralds = new WeakMap<XlsxPackage, Promise<Record<string, unknown> | null>>()
+const bantus = new WeakMap<XlsxPackage, Promise<Record<string, unknown> | null>>()
 
-const heraldOf = (pkg: XlsxPackage): Promise<Record<string, unknown> | null> => {
-  let herald = heralds.get(pkg)
+const bantuOf = (pkg: XlsxPackage): Promise<Record<string, unknown> | null> => {
+  let bantu = bantus.get(pkg)
 
-  if (!herald) {
-    herald = readHeraldPart(pkg)
-    heralds.set(pkg, herald)
+  if (!bantu) {
+    bantu = readBantuPart(pkg)
+    bantus.set(pkg, bantu)
   }
 
-  return herald
+  return bantu
 }
 
-/** The chart a part of a file holds as Herald reads it: the spec Herald's part keeps for it, else its XML read. */
+/** The chart a part of a file holds as Bantu reads it: the spec Bantu's part keeps for it, else its XML read. */
 async function specOfPart(pkg: XlsxPackage, part: string, xml: string): Promise<ChartSpec | null> {
-  const herald = await heraldOf(pkg)
+  const bantu = await bantuOf(pkg)
   const print = fingerprint(xml)
-  const section = (herald?.[HERALD_SECTION] ?? {}) as FiledCharts
+  const section = (bantu?.[BANTU_SECTION] ?? {}) as FiledCharts
   const filed = Object.values(section && typeof section === 'object' ? section : {})
     .flatMap((sheet) => Object.values(sheet && typeof sheet === 'object' ? sheet : {}))
     .find((chart) => chart?.part === part && chart.fingerprint === print && isSpec(chart.spec))
@@ -231,7 +231,7 @@ async function unchangedChart(ctx: FinishContext, data: ChartData): Promise<{ pa
 const OFFICE_ACCENTS = OFFICE_THEME.slice(4, 10).map((hex) => `#${hex.toLowerCase()}`)
 
 const LOSSES = {
-  percent: 'Excel labels columns, bars, lines and areas with their values where Herald Sheets shows each one’s share of its category.',
+  percent: 'Excel labels columns, bars, lines and areas with their values where Bantu Sheets shows each one’s share of its category.',
   gone: 'Charts whose cells were all on sheets since deleted are left out of the file.',
   failed: (title: string | undefined, error: unknown) => `The chart ${title?.trim() ? `“${title.trim()}” ` : ''}could not be saved, so the file leaves it out (${error instanceof Error ? error.message : String(error)}).`
 }
@@ -315,11 +315,11 @@ export async function finishCharts(ctx: FinishContext): Promise<void> {
   }
 
   if (Object.keys(filed).length) {
-    ctx.herald[HERALD_SECTION] = filed
+    ctx.bantu[BANTU_SECTION] = filed
   }
 }
 
-/** The sheet drawings resource with the charts of a file, when it has any Herald can draw. */
+/** The sheet drawings resource with the charts of a file, when it has any Bantu can draw. */
 export async function readCharts(ctx: ReadContext): Promise<Resource[]> {
   const resource: Record<string, { data: Record<string, ChartDrawing>; order: string[] }> = {}
   const taken = new Set<string>()
@@ -334,7 +334,7 @@ export async function readCharts(ctx: ReadContext): Promise<Resource[]> {
     }
 
     const geometry = await sheetGeometry(ctx.pkg, sheet)
-    const filed = filedFor(ctx.herald, sheet.name)
+    const filed = filedFor(ctx.bantu, sheet.name)
     const data: Record<string, ChartDrawing> = {}
     const order: string[] = []
 
@@ -366,7 +366,7 @@ export async function readCharts(ctx: ReadContext): Promise<Resource[]> {
         transform,
         anchorType,
         allowTransform: true,
-        data: { herald: 'chart', version: 1, spec, source: { part: chart.part, fingerprint: fingerprint(stableJson(spec)), anchor: chart.index } }
+        data: { bantu: 'chart', version: 1, spec, source: { part: chart.part, fingerprint: fingerprint(stableJson(spec)), anchor: chart.index } }
       }
       order.push(drawingId)
     }
@@ -378,7 +378,7 @@ export async function readCharts(ctx: ReadContext): Promise<Resource[]> {
 }
 
 /**
- * Which anchors of a sheet's drawing in a file Herald reads as charts, by their place in the drawing
+ * Which anchors of a sheet's drawing in a file Bantu reads as charts, by their place in the drawing
  * (see drawingOf): those come back from the workbook's charts, and every other anchor is kept as it is.
  */
 export async function shownAnchors(pkg: XlsxPackage, sheet: PackageSheet): Promise<Set<number>> {

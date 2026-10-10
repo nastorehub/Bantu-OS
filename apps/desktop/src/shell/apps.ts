@@ -62,7 +62,7 @@ export const FLOATING_APPS: readonly NasTechAppDef<FloatingAppId>[] = [
   { id: 'system', name: 'System', tagline: 'Monitor and control your Mac.', category: 'system', kind: 'window', icon: 'system', defaultSize: { width: 980, height: 640 }, shortcut: '9' },
   { id: 'chat-popout', name: 'NasTech', tagline: 'A conversation in its own window.', category: 'productivity', kind: 'window', icon: 'nastech', defaultSize: { width: 820, height: 620 } },
   // Opened by the shell for a specific page (e.g. the provider sign-in); not launchable on its own.
-  { id: 'web', name: 'Web', tagline: 'A page inside Herald OS.', category: 'productivity', kind: 'window', icon: 'grid', defaultSize: { width: 960, height: 680 } },
+  { id: 'web', name: 'Web', tagline: 'A page inside Bantu OS.', category: 'productivity', kind: 'window', icon: 'grid', defaultSize: { width: 960, height: 680 } },
   // One per NasTech session; opened with "build …" or "show me the code".
   { id: 'studio', name: 'Studio', tagline: 'Watch NasTech build.', category: 'development', kind: 'window', icon: 'studio', defaultSize: { width: 1280, height: 800 } },
   // Opens on a screenshot (the capture preview's Edit).
@@ -70,10 +70,10 @@ export const FLOATING_APPS: readonly NasTechAppDef<FloatingAppId>[] = [
   { id: 'camera', name: 'Camera', tagline: 'Your camera in a bubble, for screen recordings.', category: 'creative', kind: 'window', icon: 'system', defaultSize: { width: 260, height: 290 } },
   // A widget plugin in its own window (its `panel` placement); opened with plugin.open.
   { id: 'widget', name: 'Widget', tagline: 'A widget plugin in a window.', category: 'productivity', kind: 'window', icon: 'grid', defaultSize: { width: 360, height: 280 } },
-  { id: 'canvas', name: 'Herald Canvas', tagline: 'Edit images in layers, with NasTech.', category: 'creative', kind: 'window', icon: 'canvas', defaultSize: { width: 1320, height: 840 } },
-  { id: 'docs', name: 'Herald Docs', tagline: 'Write and edit documents, with NasTech.', category: 'productivity', kind: 'window', icon: 'docs', defaultSize: { width: 1120, height: 840 } },
-  { id: 'sheets', name: 'Herald Sheets', tagline: 'Spreadsheets and formulas, with NasTech.', category: 'productivity', kind: 'window', icon: 'sheets', defaultSize: { width: 1280, height: 820 } },
-  { id: 'slides', name: 'Herald Slides', tagline: 'Make presentations, with NasTech.', category: 'productivity', kind: 'window', icon: 'slides', defaultSize: { width: 1280, height: 820 } }
+  { id: 'canvas', name: 'Bantu Canvas', tagline: 'Edit images in layers, with NasTech.', category: 'creative', kind: 'window', icon: 'canvas', defaultSize: { width: 1320, height: 840 } },
+  { id: 'docs', name: 'Bantu Docs', tagline: 'Write and edit documents, with NasTech.', category: 'productivity', kind: 'window', icon: 'docs', defaultSize: { width: 1120, height: 840 } },
+  { id: 'sheets', name: 'Bantu Sheets', tagline: 'Spreadsheets and formulas, with NasTech.', category: 'productivity', kind: 'window', icon: 'sheets', defaultSize: { width: 1280, height: 820 } },
+  { id: 'slides', name: 'Bantu Slides', tagline: 'Make presentations, with NasTech.', category: 'productivity', kind: 'window', icon: 'slides', defaultSize: { width: 1280, height: 820 } }
 ]
 
 /** Floating apps the launcher and command bar offer; the rest open only with a payload. */
@@ -104,8 +104,8 @@ export const FEATURED_NATIVE: readonly NativeAppAlias[] = [
 ]
 
 /**
- * An installed app's label beside Herald's own: GNOME Files becomes "Files (Nautilus)" next to
- * Herald's Files, named after the last part of its id. `taken` holds lowercase labels already shown.
+ * An installed app's label beside Bantu's own: GNOME Files becomes "Files (Nautilus)" next to
+ * Bantu's Files, named after the last part of its id. `taken` holds lowercase labels already shown.
  */
 export function distinctAppLabel(app: Pick<InstalledApp, 'name' | 'bundleId'>, taken: ReadonlySet<string>): string {
   const tail = app.bundleId?.split('.').pop() ?? ''

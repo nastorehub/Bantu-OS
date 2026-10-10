@@ -1,4 +1,4 @@
-/* Which files Herald Canvas opens: its `.comp` projects and the images it can start a project from. */
+/* Which files Bantu Canvas opens: its `.comp` projects and the images it can start a project from. */
 
 export const PROJECT_EXTENSION = '.comp'
 
@@ -8,7 +8,7 @@ export const DIRECT_IMAGE_EXTENSIONS: ReadonlySet<string> = new Set(['.png', '.j
 /** Converted to PNG by the system first (macOS reads all of them; Linux uses the tools it has). */
 export const CONVERTED_IMAGE_EXTENSIONS: ReadonlySet<string> = new Set(['.heic', '.heif', '.tif', '.tiff', '.dng', '.cr2', '.cr3', '.nef', '.arw', '.raf', '.orf', '.rw2'])
 
-/** Photoshop documents, read by Herald Canvas itself: they open with their layers. */
+/** Photoshop documents, read by Bantu Canvas itself: they open with their layers. */
 export const LAYERED_IMAGE_EXTENSIONS: ReadonlySet<string> = new Set(['.psd', '.psb'])
 
 export const CANVAS_IMAGE_EXTENSIONS: ReadonlySet<string> = new Set([...DIRECT_IMAGE_EXTENSIONS, ...CONVERTED_IMAGE_EXTENSIONS, ...LAYERED_IMAGE_EXTENSIONS])

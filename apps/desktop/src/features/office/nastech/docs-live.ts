@@ -3,7 +3,7 @@ import { markedRangeOf, setMarked } from '../docs/marked.ts'
 import { docsSession, editorOf } from '../docs/store.ts'
 import type { LiveDoc } from './ask.ts'
 
-/** A Herald Docs document open in this window, for a request to NasTech: its selection, marked first when asked, and its history. */
+/** A Bantu Docs document open in this window, for a request to NasTech: its selection, marked first when asked, and its history. */
 export function docsLive(docKey: string, mark: boolean): LiveDoc | null {
   const doc = docsSession.find(docKey)
   const editor = editorOf(docKey)

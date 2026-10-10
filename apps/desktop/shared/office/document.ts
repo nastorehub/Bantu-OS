@@ -1,5 +1,5 @@
 /*
- * A Herald Docs document as plain data: the JSON of its TipTap (ProseMirror) document. The editor,
+ * A Bantu Docs document as plain data: the JSON of its TipTap (ProseMirror) document. The editor,
  * the converters (Word, Markdown, plain text, the print view) and NasTech's commands all read and
  * write this one shape. The document node carries the page (its size and margins, in points) and
  * the looks of its styles, the way a Word file keeps them in its section and its styles part.
@@ -87,12 +87,12 @@ export type StyleLooks = Partial<Record<StyleName, StyleLook>>
 
 export interface DocAttrs {
   page: PageSettings | null
-  /** Looks that differ from Herald's own (a Word file's styles); null keeps Herald's. */
+  /** Looks that differ from Bantu's own (a Word file's styles); null keeps Bantu's. */
   styles: StyleLooks | null
   headers: PageHeaders | null
   /** Review comments; the text each one is on carries a `comment` mark with its id. */
   comments: CommentThread[] | null
-  /** Parts of a Word file Herald keeps without showing them, to write back; only the Word converters read it. */
+  /** Parts of a Word file Bantu keeps without showing them, to write back; only the Word converters read it. */
   kept: unknown
 }
 
@@ -123,7 +123,7 @@ export const DEFAULT_MARGIN = 72
 
 export const DEFAULT_HEADER_DISTANCE = 36
 
-/** The monospace face Herald gives code in Word documents. */
+/** The monospace face Bantu gives code in Word documents. */
 export const CODE_FONT = 'Consolas'
 
 /** Single line spacing as a CSS line height: what Word's "single" and Google Docs' 1.0 look like on screen. */
@@ -131,8 +131,8 @@ export const SINGLE_LINE = 1.2
 
 export const cssLineHeight = (multiple: number): number => round(multiple * SINGLE_LINE, 3)
 
-/** Herald's own look for each style: what a new document has, and what a style missing from a file falls back on. */
-export const HERALD_LOOKS: Readonly<Record<StyleName, StyleLook>> = {
+/** Bantu's own look for each style: what a new document has, and what a style missing from a file falls back on. */
+export const BANTU_LOOKS: Readonly<Record<StyleName, StyleLook>> = {
   normal: { font: 'Arial', size: 11, lineHeight: 1.15, spaceBefore: 0, spaceAfter: 6 },
   title: { size: 26, spaceBefore: 0, spaceAfter: 3 },
   subtitle: { size: 15, color: '#666666', spaceBefore: 0, spaceAfter: 16 },
@@ -207,7 +207,7 @@ export function pagePart(headers: PageHeaders | null, part: 'header' | 'footer',
 
 /**
  * A field's attrs. Page, page count, date and time are worked out where they are shown; `other` is a
- * Word field Herald does not work out, kept with its instruction and shown as its last result.
+ * Word field Bantu does not work out, kept with its instruction and shown as its last result.
  */
 export type FieldKind = 'page' | 'pages' | 'date' | 'time' | 'other'
 
@@ -368,11 +368,11 @@ export const commentsOf = (doc: DocNode): CommentThread[] => (doc.attrs?.comment
 
 export const pageOf = (doc: DocNode): PageSettings => ((doc.attrs?.page as PageSettings | null | undefined) ?? defaultPage())
 
-/** Each style's look in this document: its own over Herald's. */
+/** Each style's look in this document: its own over Bantu's. */
 export function looksOf(doc: DocNode): Record<StyleName, StyleLook> {
   const own = (doc.attrs?.styles as StyleLooks | null | undefined) ?? {}
 
-  return Object.fromEntries(STYLE_NAMES.map((name) => [name, { ...HERALD_LOOKS[name], ...own[name] }])) as Record<StyleName, StyleLook>
+  return Object.fromEntries(STYLE_NAMES.map((name) => [name, { ...BANTU_LOOKS[name], ...own[name] }])) as Record<StyleName, StyleLook>
 }
 
 /** The style a block shows in: a heading's level, a paragraph's `docStyle`, or what it is. */

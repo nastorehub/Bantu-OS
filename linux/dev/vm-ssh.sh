@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Run a command in the Herald OS VM (or open a shell). Finds the VM whichever runner started it:
-# vfkit (NAT address) or QEMU (127.0.0.1:2222). Override with HERALD_VM_HOST / HERALD_VM_PORT.
+# Run a command in the Bantu OS VM (or open a shell). Finds the VM whichever runner started it:
+# vfkit (NAT address) or QEMU (127.0.0.1:2222). Override with BANTU_VM_HOST / BANTU_VM_PORT.
 #
 #   bash linux/dev/vm-ssh.sh                      # interactive shell
 #   bash linux/dev/vm-ssh.sh 'systemctl is-active greetd'
@@ -10,8 +10,8 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BUILD="$HERE/../vm/build"
 KEY="$BUILD/id_nastech"
 
-HOST="${HERALD_VM_HOST:-${NASTECH_VM_HOST:-}}"
-PORT="${HERALD_VM_PORT:-${NASTECH_VM_PORT:-}}"
+HOST="${BANTU_VM_HOST:-${NASTECH_VM_HOST:-}}"
+PORT="${BANTU_VM_PORT:-${NASTECH_VM_PORT:-}}"
 
 if [[ -z "$HOST" ]]; then
   if [[ -f "$BUILD/vfkit.pid" ]] && kill -0 "$(cat "$BUILD/vfkit.pid")" 2>/dev/null; then

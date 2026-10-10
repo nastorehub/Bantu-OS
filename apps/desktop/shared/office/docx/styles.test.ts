@@ -26,7 +26,7 @@ describe('readStyles', () => {
     <w:style w:type="paragraph" w:styleId="Subtitle"><w:name w:val="Subtitle"/><w:basedOn w:val="Normal"/></w:style>
     <w:style w:type="paragraph" w:styleId="ListParagraph"><w:name w:val="List Paragraph"/><w:basedOn w:val="Normal"/><w:pPr><w:ind w:left="720"/></w:pPr></w:style>
     <w:style w:type="paragraph" w:styleId="QuoteBox"><w:name w:val="Quote Box"/></w:style>
-    <w:style w:type="paragraph" w:styleId="HeraldCalloutNote"><w:name w:val="Callout Note"/></w:style>
+    <w:style w:type="paragraph" w:styleId="BantuCalloutNote"><w:name w:val="Callout Note"/></w:style>
     <w:style w:type="paragraph" w:styleId="SourceCode"><w:name w:val="Source Code"/></w:style>
     <w:style w:type="character" w:styleId="Strong"><w:name w:val="Strong"/><w:rPr><w:b/></w:rPr></w:style>
     <w:style w:type="character" w:styleId="Heading1Char"><w:name w:val="Heading 1 Char"/><w:link w:val="Heading1"/><w:rPr><w:sz w:val="32"/></w:rPr></w:style>
@@ -52,14 +52,14 @@ describe('readStyles', () => {
     expect(styles.paragraph('Loop1').run).toEqual({ italic: true })
   })
 
-  it('tells which of Herald’s styles each one is', () => {
+  it('tells which of Bantu’s styles each one is', () => {
     expect(styles.paragraph('Normal').role).toEqual({ kind: 'normal' })
     expect(styles.paragraph('Heading2').role).toEqual({ kind: 'heading', level: 2 })
     expect(styles.paragraph('Chapter').role).toEqual({ kind: 'heading', level: 1 })
     expect(styles.paragraph('Subtitle').role).toEqual({ kind: 'subtitle' })
     expect(styles.paragraph('ListParagraph').role).toEqual({ kind: 'normal' })
     expect(styles.paragraph('QuoteBox').role).toEqual({ kind: 'custom' })
-    expect(styles.paragraph('HeraldCalloutNote').role).toEqual({ kind: 'callout', callout: 'note' })
+    expect(styles.paragraph('BantuCalloutNote').role).toEqual({ kind: 'callout', callout: 'note' })
     expect(styles.paragraph('SourceCode').role).toEqual({ kind: 'code' })
     expect(styles.character('Strong')?.role).toBe('custom')
     expect(styles.character('Heading1Char')?.role).toBe('quiet')
@@ -67,11 +67,11 @@ describe('readStyles', () => {
     expect(styles.character('Missing')).toBeNull()
   })
 
-  it('finds the style each of Herald’s styles takes its look from', () => {
-    const herald = styles.heraldStyles()
+  it('finds the style each of Bantu’s styles takes its look from', () => {
+    const bantu = styles.bantuStyles()
 
-    expect(Object.keys(herald).sort()).toEqual(['code', 'heading1', 'heading2', 'normal', 'subtitle'])
-    expect(herald.heading1?.id).toBe('Heading1')
+    expect(Object.keys(bantu).sort()).toEqual(['code', 'heading1', 'heading2', 'normal', 'subtitle'])
+    expect(bantu.heading1?.id).toBe('Heading1')
   })
 
   it('merges table borders through the table style chain, and finds numbering styles', () => {
@@ -81,7 +81,7 @@ describe('readStyles', () => {
     expect(styles.numberingOf('Normal')).toBeUndefined()
   })
 
-  it('gives each style a complete look, so Herald’s own looks do not leak in', () => {
+  it('gives each style a complete look, so Bantu’s own looks do not leak in', () => {
     expect(lookOf(styles.paragraph('Heading2'), styles, 'heading2')).toEqual({ font: 'Calibri Light', size: 13, color: '#2f5496', bold: false, italic: false, spaceBefore: 12, spaceAfter: 0, lineHeight: 1.079 })
     expect(lookOf(styles.paragraph('Subtitle'), styles, 'subtitle')).toEqual({ font: 'Calibri', size: 11, color: '#000000', bold: false, italic: false, spaceBefore: 0, spaceAfter: 8, lineHeight: 1.079 })
     expect(lookOf(stylesOf('').paragraph(undefined), stylesOf(''), 'normal')).toEqual({ font: 'Times New Roman', size: 10, bold: false, italic: false, spaceBefore: 0, spaceAfter: 0, lineHeight: 1 })

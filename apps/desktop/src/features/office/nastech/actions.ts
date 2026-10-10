@@ -6,9 +6,9 @@ import { $nastechState, askNasTech, askOf, draftAsk } from './ask.ts'
 import type { CleanKind, DocsAction, NasTechAction, OpenDocument, SheetsAction, SlidesAction } from './prompts.ts'
 
 /*
- * The inline actions: NasTech rewrites, shortens, translates or summarises the selection in Herald
- * Docs; explains a formula, fills a column from its examples or cleans data in Herald Sheets; writes
- * speaker notes, tightens a slide, picks layouts or makes slides from a document or cells in Herald
+ * The inline actions: NasTech rewrites, shortens, translates or summarises the selection in Bantu
+ * Docs; explains a formula, fills a column from its examples or cleans data in Bantu Sheets; writes
+ * speaker notes, tightens a slide, picks layouts or makes slides from a document or cells in Bantu
  * Slides. Each goes through the Ask NasTech bar with a prompt that names the call landing the change
  * as a step to undo. A window gives what only it reads cheaply: the document in front and what is
  * selected in it.
@@ -83,7 +83,7 @@ export interface DocsSource {
   hasSelection: () => boolean
 }
 
-/** Herald Docs' way to the bar and actions on the selection, for the NasTech menu and the selection bubble. */
+/** Bantu Docs' way to the bar and actions on the selection, for the NasTech menu and the selection bubble. */
 export function docsActions(source: DocsSource): OfficeCommand[] {
   const enabled = () => free(source.docKey()) && source.hasSelection()
   const action = (id: string, label: string, chosen: DocsAction, extra: Partial<OfficeCommand> = {}): OfficeCommand => ({ id: `nastech-${id}`, label, enabled, run: () => runAction('docs', source.docKey(), chosen), ...extra })
@@ -109,7 +109,7 @@ export function docsActions(source: DocsSource): OfficeCommand[] {
   ]
 }
 
-/** Herald Docs' NasTech menu. */
+/** Bantu Docs' NasTech menu. */
 export function docsNasTechMenu(source: DocsSource): OfficeMenu {
   return { id: 'nastech', label: 'NasTech', items: docsActions(source) }
 }
@@ -121,7 +121,7 @@ export interface SheetsSource {
   cell: () => { cell: string; formula: string | null } | null
 }
 
-/** Herald Sheets' NasTech menu: the bar, and the actions on the selection or the active cell. */
+/** Bantu Sheets' NasTech menu: the bar, and the actions on the selection or the active cell. */
 export function sheetsNasTechMenu(source: SheetsSource): OfficeMenu {
   const enabled = () => free(source.docKey())
   const action = (id: string, label: string, chosen: SheetsAction, extra: Partial<OfficeCommand> = {}): OfficeCommand => ({ id: `nastech-${id}`, label, enabled, run: () => runAction('sheets', source.docKey(), chosen), ...extra })
@@ -155,10 +155,10 @@ export async function refreshOpenDocuments(): Promise<void> {
 function openIn(app: 'docs' | 'sheets', item: (doc: OpenDocument, index: number) => OfficeCommand): OfficeCommand[] {
   const docs = $openDocuments.get().filter((doc) => doc.app === app)
 
-  return docs.length ? docs.map(item) : [{ id: `nastech-none-${app}`, label: app === 'docs' ? 'No document is open in Herald Docs' : 'No workbook is open in Herald Sheets', enabled: () => false, run: () => {} }]
+  return docs.length ? docs.map(item) : [{ id: `nastech-none-${app}`, label: app === 'docs' ? 'No document is open in Bantu Docs' : 'No workbook is open in Bantu Sheets', enabled: () => false, run: () => {} }]
 }
 
-/** Herald Slides' NasTech menu: the bar, the actions on the slide in front or the whole deck, and slides made from a topic, a document or cells. */
+/** Bantu Slides' NasTech menu: the bar, the actions on the slide in front or the whole deck, and slides made from a topic, a document or cells. */
 export function slidesNasTechMenu(source: { docKey: () => string | null }): OfficeMenu {
   const enabled = () => free(source.docKey())
   const action = (id: string, label: string, chosen: SlidesAction, extra: Partial<OfficeCommand> = {}): OfficeCommand => ({ id: `nastech-${id}`, label, enabled, run: () => runAction('slides', source.docKey(), chosen), ...extra })

@@ -4,7 +4,7 @@ import { slidesAdapter } from './adapter.ts'
 import type { SlidesDocument } from './document.ts'
 import type { Presentation } from './present/state.ts'
 
-/** Herald Slides' open decks in this window. */
+/** Bantu Slides' open decks in this window. */
 export const slidesSession = createSession(slidesAdapter)
 
 /** The live deck of each open document, by its key, while its editor is mounted. */

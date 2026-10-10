@@ -216,7 +216,7 @@ export function SlideEditor({ doc: officeDoc }: { doc: OfficeDocument<Deck> }) {
 
     return () => {
       off()
-      // The deck outlives its view (a closed window keeps it until Herald quits).
+      // The deck outlives its view (a closed window keeps it until Bantu quits).
       officeDoc.initial = doc.presentation
 
       if (officeDoc.editor === handle) {

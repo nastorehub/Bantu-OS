@@ -3,11 +3,11 @@
 # directory (native modules must be installed on Linux, so the tree is not used in place), build,
 # and restart the shell.
 #
-#   herald-os-sync              # /mnt/herald-os -> ~/Herald-OS, build, restart
+#   bantu-os-sync              # /mnt/bantu-os -> ~/Bantu-OS, build, restart
 set -euo pipefail
 
-SRC="${HERALD_OS_SHARE:-/mnt/herald-os}"
-REPO="${HERALD_OS_REPO:-$HOME/Herald-OS}"
+SRC="${BANTU_OS_SHARE:-/mnt/bantu-os}"
+REPO="${BANTU_OS_REPO:-$HOME/Bantu-OS}"
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 mountpoint -q "$SRC" || [[ -d "$SRC/apps/desktop" ]] || { echo "shared folder not mounted at $SRC" >&2; exit 1; }

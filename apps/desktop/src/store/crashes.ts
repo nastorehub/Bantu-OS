@@ -6,11 +6,11 @@ import { createChat, sendPrompt } from './chat.ts'
 import { notify } from './notifications.ts'
 import { showPage } from './windows.ts'
 
-/** Crashes seen since Herald OS started, newest first (main keeps the list; this caches it). */
+/** Crashes seen since Bantu OS started, newest first (main keeps the list; this caches it). */
 export const $crashes = atom<CrashReport[]>([])
 
 export async function loadCrashes(): Promise<CrashReport[]> {
-  const reports = (await window.heraldOS.crash?.recent().catch(() => [])) ?? []
+  const reports = (await window.bantuOS.crash?.recent().catch(() => [])) ?? []
   $crashes.set(reports)
 
   return reports

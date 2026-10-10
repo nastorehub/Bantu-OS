@@ -4,10 +4,10 @@ import { CELL_TYPE, type CellMatrix, newSheet, newWorkbook, type WorkbookSnapsho
 import { encodeXml } from '../xml.ts'
 
 /*
- * Workbooks with charts for the chart tests, made here: workbooks made in Herald with a chart of
+ * Workbooks with charts for the chart tests, made here: workbooks made in Bantu with a chart of
  * each kind, and workbooks as Excel writes them, part by part (Excel's chart parts with their style
  * and colour parts and extensions, anchors of each kind, a picture, a chartEx waterfall and kinds
- * Herald does not draw beside the ones it reads).
+ * Bantu does not draw beside the ones it reads).
  */
 
 export const range = (sheet: string, startRow: number, startColumn: number, endRow = startRow, endColumn = startColumn): ChartRange => ({ sheet, startRow, startColumn, endRow, endColumn })
@@ -64,11 +64,11 @@ export function chartDrawing(id: string, sheet: string, spec: ChartSpec, options
     transform: { left: 0, top: 0, width: 0, height: 0 },
     ...(options.anchorType ? { anchorType: options.anchorType } : {}),
     allowTransform: true,
-    data: { herald: 'chart', version: 1, spec }
+    data: { bantu: 'chart', version: 1, spec }
   }
 }
 
-/** A workbook made in Herald with sheets "Q1 sales" and "Points" (or other names), and these charts over them. */
+/** A workbook made in Bantu with sheets "Q1 sales" and "Points" (or other names), and these charts over them. */
 export function chartWorkbook(drawings: ChartDrawing[], names: [string, string] = ['Q1 sales', 'Points']): WorkbookSnapshot {
   const book = newWorkbook('book', 'Book', [newSheet('s1', names[0], structuredClone(SALES_CELLS)), newSheet('s2', names[1], structuredClone(POINTS_CELLS))])
   const resource: Record<string, { data: Record<string, ChartDrawing>; order: string[] }> = {}
@@ -187,7 +187,7 @@ export const EITHER_WAY: ChartSpec[] = [
 ]
 
 /**
- * A workbook made in Herald with a chart of every kind, one under another (the scatter charts on sheet
+ * A workbook made in Bantu with a chart of every kind, one under another (the scatter charts on sheet
  * "Points"), then the charts with an axis the other way round: bars from the bottom up, columns from
  * the right, values decreasing along their axis.
  */
@@ -500,13 +500,13 @@ export function excelBarWorkbook(): Promise<Uint8Array> {
   })
 }
 
-/** A 3D clustered column chart, which Herald does not draw. */
+/** A 3D clustered column chart, which Bantu does not draw. */
 export const COLUMN_3D_CHART = excelChart({
   title: 'In depth',
   plot: `<c:bar3DChart><c:barDir val="col"/><c:grouping val="clustered"/><c:varyColors val="0"/>${barSeries(0, 'North', 'B', NORTH, '<a:schemeClr val="accent1"/>')}<c:gapWidth val="150"/><c:shape val="box"/><c:axId val="61"/><c:axId val="62"/><c:axId val="0"/></c:bar3DChart>${excelAxes(61, 62)}`
 }).replace('<c:autoTitleDeleted val="0"/><c:plotArea>', '<c:autoTitleDeleted val="0"/><c:view3D><c:rotX val="15"/><c:rotY val="20"/><c:rAngAx val="1"/></c:view3D><c:plotArea>')
 
-/** A radar chart, which Herald does not draw. */
+/** A radar chart, which Bantu does not draw. */
 export const RADAR_CHART = excelChart({
   title: 'Around',
   plot: `<c:radarChart><c:radarStyle val="marker"/><c:varyColors val="0"/><c:ser><c:idx val="0"/><c:order val="0"/><c:tx>${strRef("'Q1 sales'!$B$1", ['North'])}</c:tx><c:cat>${strRef("'Q1 sales'!$A$2:$A$5", MONTHS)}</c:cat><c:val>${numRef("'Q1 sales'!$B$2:$B$5", NORTH)}</c:val></c:ser><c:axId val="71"/><c:axId val="72"/></c:radarChart>${excelAxes(71, 72)}`
@@ -560,7 +560,7 @@ export const EXCEL_ANCHORS = {
 /**
  * A workbook as Excel writes it: sheet "Q1 sales" (months, two regions and a margin; a picture, a
  * clustered column chart with a user shape, a pie, a column and line combo with a secondary axis,
- * then a 3D column chart, a radar chart and a waterfall Herald does not draw), and sheet "Points"
+ * then a 3D column chart, a radar chart and a waterfall Bantu does not draw), and sheet "Points"
  * with a scatter chart placed absolutely.
  */
 export async function excelWorkbook(): Promise<Uint8Array> {

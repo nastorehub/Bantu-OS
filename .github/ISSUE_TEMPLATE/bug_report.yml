@@ -1,5 +1,5 @@
 name: Bug report
-description: Something in Herald OS does not work as it should.
+description: Something in Bantu OS does not work as it should.
 labels: [bug]
 body:
   - type: markdown
@@ -32,8 +32,8 @@ body:
       options:
         - macOS (npm run dev)
         - macOS (built app)
-        - Herald OS Linux (niri)
-        - Herald OS Linux (cage)
+        - Bantu OS Linux (niri)
+        - Bantu OS Linux (cage)
         - Other
     validations:
       required: true
@@ -41,7 +41,7 @@ body:
     id: versions
     attributes:
       label: Versions
-      description: macOS or distro version, `node --version`, `nastech --version`, and the Herald OS commit (`git rev-parse --short HEAD`).
+      description: macOS or distro version, `node --version`, `nastech --version`, and the Bantu OS commit (`git rev-parse --short HEAD`).
     validations:
       required: true
   - type: textarea
@@ -49,6 +49,6 @@ body:
     attributes:
       label: Logs
       description: |
-        The end of `~/.nastech/logs/herald-os.log` (on Linux, also `~/.local/state/herald-os/shell.log`).
+        The end of `~/.nastech/logs/bantu-os.log` (on Linux, also `~/.local/state/bantu-os/shell.log`).
         Remove anything private (API keys, file names, conversation text) before pasting.
       render: text

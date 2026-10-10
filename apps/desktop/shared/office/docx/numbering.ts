@@ -144,7 +144,7 @@ export function readNumbering(xml: XmlElement | null, numberingOf: (styleId: str
 
 const TYPES: Record<string, ListType> = { decimal: '1', lowerLetter: 'a', upperLetter: 'A', lowerRoman: 'i', upperRoman: 'I' }
 
-/** What a level shows: bullets, numbers Herald can show as they are, or nothing. */
+/** What a level shows: bullets, numbers Bantu can show as they are, or nothing. */
 export function listKind(level: Level): ListKind {
   if (level.format === 'bullet') {
     return { kind: 'bullet' }
@@ -193,7 +193,7 @@ function roman(value: number): string {
 /** Word's letters go a…z, then aa, bb, cc. */
 const letters = (value: number): string => String.fromCharCode(97 + ((value - 1) % 26)).repeat(Math.floor((value - 1) / 26) + 1)
 
-/** A number as a level's format writes it; formats Herald has no way to show come out as plain numbers. */
+/** A number as a level's format writes it; formats Bantu has no way to show come out as plain numbers. */
 export function formatNumber(value: number, format: string): string {
   if (value < 1) {
     return String(value)

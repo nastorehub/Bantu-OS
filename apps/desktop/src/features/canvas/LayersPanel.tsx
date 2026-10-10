@@ -31,7 +31,7 @@ import { useRevision } from './hooks.ts'
 import { isMac } from './platform.ts'
 import { softwareRendering } from './tools/screen.ts'
 
-const DRAG_TYPE = 'application/x-herald-canvas-layer'
+const DRAG_TYPE = 'application/x-bantu-canvas-layer'
 
 /** How close to the line between two rows (in pixels) an Alt-click clips the upper layer to the lower. */
 const CLIP_EDGE = 6

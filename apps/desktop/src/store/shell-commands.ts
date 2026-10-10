@@ -1,7 +1,7 @@
 import type { CrashReport, ShellCommand } from '../../shared/ipc.ts'
 import { NASTECH_APPS, type NasTechAppId, PAGES, type PageId } from '../shell/apps.ts'
 import { composePrompt } from '../shell/surfaces/shell-utils.ts'
-import { runHeraldOsWithToast } from '../lib/herald-os-cli.ts'
+import { runBantuOsWithToast } from '../lib/bantu-os-cli.ts'
 import { updatePrefs } from './backend.ts'
 import { openStoredSession, runSlash, sendPrompt } from './chat.ts'
 import { offerCrashHelp } from './crashes.ts'
@@ -16,7 +16,7 @@ import { openWebWindow } from './web-windows.ts'
 import { openApp, showPage } from './windows.ts'
 
 /*
- * `ShellCommand`s addressed to the NasTech window: from the `herald-os` CLI (compositor hotkeys), the
+ * `ShellCommand`s addressed to the NasTech window: from the `bantu-os` CLI (compositor hotkeys), the
  * command overlay (panels mode) and the Electron control server. One handler serves the macOS
  * desktop window and the panels-mode main surface alike, so every hotkey the Linux session has works
  * on the Mac too. Voice commands are handled by store/voice.ts on the same bus.
@@ -27,7 +27,7 @@ const isPageId = (value: string | undefined): value is PageId => PAGES.some(page
 /** Style > Wallpaper: the NasTech window owns the file dialog because the overlay closes when it loses focus. */
 async function pickWallpaper(): Promise<void> {
   try {
-    const [wallpaper] = await window.heraldOS.fs.pickFiles({ multiple: false })
+    const [wallpaper] = await window.bantuOS.fs.pickFiles({ multiple: false })
 
     if (!wallpaper) {
       return
@@ -142,12 +142,12 @@ export function handleShellCommand(command: ShellCommand): void {
 
       return
     }
-    case 'herald-os': {
+    case 'bantu-os': {
       // The overlay hands off commands that must run after it closed (screenshot, OCR, hotkey overlay).
       const args = command.args ?? []
 
       if (args.length > 0) {
-        void runHeraldOsWithToast(args, command.text || args.join(' '))
+        void runBantuOsWithToast(args, command.text || args.join(' '))
       }
 
       return
@@ -172,7 +172,7 @@ export function handleShellCommand(command: ShellCommand): void {
       return
     }
     case 'os': {
-      // `herald-os os <command.id> [json args]`: run a registry command from the CLI.
+      // `bantu-os os <command.id> [json args]`: run a registry command from the CLI.
       const id = command.args?.[0]
 
       if (id) {

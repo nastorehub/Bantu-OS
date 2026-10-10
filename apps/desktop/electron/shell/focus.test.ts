@@ -2,14 +2,14 @@ import { describe, expect, it } from 'vitest'
 import type { WmState, WmWindow } from '../../shared/ipc.ts'
 import { FocusHistory } from './focus.ts'
 
-const PANELS = new Set(['Herald OS · Menu Bar', 'Herald OS · Dock', 'Herald OS · Command'])
+const PANELS = new Set(['Bantu OS · Menu Bar', 'Bantu OS · Dock', 'Bantu OS · Command'])
 
-const win = (id: number, title: string, workspaceId = 1): WmWindow => ({ id, title, appId: 'herald-os', pid: 1, workspaceId, focused: false, floating: false, urgent: false, ours: true })
+const win = (id: number, title: string, workspaceId = 1): WmWindow => ({ id, title, appId: 'bantu-os', pid: 1, workspaceId, focused: false, floating: false, urgent: false, ours: true })
 
-const MENUBAR = win(1, 'Herald OS · Menu Bar')
-const DOCK = win(2, 'Herald OS · Dock')
-const NASTECH = win(3, 'Herald OS')
-const DOCS = win(4, 'Herald OS · Docs')
+const MENUBAR = win(1, 'Bantu OS · Menu Bar')
+const DOCK = win(2, 'Bantu OS · Dock')
+const NASTECH = win(3, 'Bantu OS')
+const DOCS = win(4, 'Bantu OS · Docs')
 const DIALOG = win(5, 'Save as')
 
 function state(windows: WmWindow[], focusedWindowId: number | null, workspace = 1): WmState {
@@ -75,7 +75,7 @@ describe('FocusHistory', () => {
 
   it('skips windows that closed or sit on another workspace', () => {
     const focus = history()
-    const away = win(6, 'Herald OS · Sheets', 2)
+    const away = win(6, 'Bantu OS · Sheets', 2)
     const all = [MENUBAR, DOCK, NASTECH, DOCS, away]
 
     focus.follow(state(all, NASTECH.id))
@@ -100,7 +100,7 @@ describe('FocusHistory', () => {
 
     focus.follow(state(all, NASTECH.id))
     focus.follow(state(all, DOCS.id))
-    focus.follow(state([...all, win(7, 'Herald OS · Command')], 7))
+    focus.follow(state([...all, win(7, 'Bantu OS · Command')], 7))
 
     expect(focus.follow(state(all, MENUBAR.id))).toBeNull()
     expect(focus.back(state(all, MENUBAR.id))).toBe(DOCS.id)

@@ -335,7 +335,7 @@ describe('comments', () => {
     expect(view.state.doc.eq(before)).toBe(true)
   })
 
-  it('adds the same to a file, by the name the person gave Herald for anyone but NasTech', () => {
+  it('adds the same to a file, by the name the person gave Bantu for anyone but NasTech', () => {
     $commentName.set('Ann Example')
     const items = commentItemsOf(REVIEW)
     const byNasTech = onFile(addCommentsChange(items, commentAuthor({ source: 'agent' })), report())
@@ -484,7 +484,7 @@ describe('templates', () => {
     expect(builtInTemplate('novel')).toBeNull()
     expect(templateChoice('Board Pack', saved)).toMatchObject({ saved: true, id: 'mine-1', name: 'Board pack' })
     expect(templateChoice('mine-1', saved)).toMatchObject({ saved: true, name: 'Board pack' })
-    expect(() => templateChoice('novel', saved)).toThrow(/^Herald Docs has no template “novel”: its own are blank, letter, .*, and the person’s “Board pack” \(docs.listTemplates says what each holds\)$/)
+    expect(() => templateChoice('novel', saved)).toThrow(/^Bantu Docs has no template “novel”: its own are blank, letter, .*, and the person’s “Board pack” \(docs.listTemplates says what each holds\)$/)
     expect(templateLabel(templateChoice('Cover letter', []))).toBe('the cover letter template')
     expect(templateLabel(templateChoice('cv', []))).toBe('the CV template')
     expect(templateLabel(templateChoice('board pack', saved))).toBe('the person’s template “Board pack”')
@@ -514,7 +514,7 @@ describe('templates', () => {
     expect(copy).toEqual(saved[0].doc)
     expect(copy).not.toBe(saved[0].doc)
     expect(pageOf(newDocumentModel(templateChoice('Board pack', saved), 'letter'))).toMatchObject({ width: PAGE_SIZES.letter.width })
-    expect(listed.summary).toMatch(/^Herald Docs has 13 templates \(blank, letter, cover-letter, cv, .*\), and the person saved 1 more: “Board pack”$/)
+    expect(listed.summary).toMatch(/^Bantu Docs has 13 templates \(blank, letter, cover-letter, cv, .*\), and the person saved 1 more: “Board pack”$/)
     expect(listed.data?.builtIn).toHaveLength(13)
     expect(listed.data?.saved).toEqual([{ id: 'mine-1', name: 'Board pack', savedAt: '2026-10-01T09:00:00.000Z' }])
   })
@@ -534,7 +534,7 @@ describe('statistics', () => {
     expect(section.data).not.toHaveProperty('pages')
     expect(section.summary).toMatch(/^Report\.docx \(the section “Results”\): 9 words/)
     expect(selected.data).toMatchObject({ scope: 'selection', words: 3, sentences: 1 })
-    expect(() => statisticsOutcome(stateOf(json), { selection: true }, false, { name: 'Report.docx', path: null })).toThrow(/Only a document open in Herald Docs has a selection/)
+    expect(() => statisticsOutcome(stateOf(json), { selection: true }, false, { name: 'Report.docx', path: null })).toThrow(/Only a document open in Bantu Docs has a selection/)
   })
 })
 

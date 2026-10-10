@@ -1,7 +1,7 @@
 /*
- * Herald Canvas's model runner: ONNX Runtime in a worker, on the GPU through WebGPU when the
+ * Bantu Canvas's model runner: ONNX Runtime in a worker, on the GPU through WebGPU when the
  * system has it and on the CPU (WebAssembly) otherwise. Model files come from the main process
- * over herald-model:, which serves only files that match their published digests.
+ * over bantu-model:, which serves only files that match their published digests.
  */
 
 import * as ort from 'onnxruntime-web/webgpu'

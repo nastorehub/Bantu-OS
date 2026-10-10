@@ -50,7 +50,7 @@ const key = (sheet: string, name: string): string => `${sheet.toLowerCase()}\n${
 export class Keep {
   /** The pivot tables kept, by the source name of their sheet and their own. */
   private readonly pivotTables = new Set<string>()
-  /** The ids (x14 pivotCacheId) of the pivot caches kept, which slicers and timelines name, and of those Herald would keep had their pivot tables stayed. */
+  /** The ids (x14 pivotCacheId) of the pivot caches kept, which slicers and timelines name, and of those Bantu would keep had their pivot tables stayed. */
   readonly pivotCacheIds = new Set<string>()
   readonly keepablePivotCacheIds = new Set<string>()
   /** Each kept pivot cache by its workbook cacheId: its definition in the source, and where it went. */

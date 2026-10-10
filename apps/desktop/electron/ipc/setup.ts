@@ -7,19 +7,19 @@ import { log } from '../log.ts'
 import { loadPty } from './terminal.ts'
 
 /*
- * First-boot setup on the Herald OS image: the image's first boot made the account (no password)
+ * First-boot setup on the Bantu OS image: the image's first boot made the account (no password)
  * and installed NasTech; the person names it, sets a password, joins Wi-Fi and signs in to NasTech.
  * Nothing here needs root: `passwd` changes the person's own password (the current one is empty on
- * a new account), and the name Herald greets with lives in ~/.config/herald-os/name.
+ * a new account), and the name Bantu greets with lives in ~/.config/bantu-os/name.
  */
 
-const FIRSTBOOT_DONE = '/var/lib/herald-os/firstboot-done'
-const configDir = () => path.join(os.homedir(), '.config', 'herald-os')
+const FIRSTBOOT_DONE = '/var/lib/bantu-os/firstboot-done'
+const configDir = () => path.join(os.homedir(), '.config', 'bantu-os')
 const doneFile = () => path.join(configDir(), 'setup-done')
 export const nameFile = (): string => path.join(configDir(), 'name')
 
 export function setupState(): SetupState {
-  const image = fs.existsSync(FIRSTBOOT_DONE) || process.env.HERALD_OS_FORCE_SETUP === '1'
+  const image = fs.existsSync(FIRSTBOOT_DONE) || process.env.BANTU_OS_FORCE_SETUP === '1'
   let name = ''
 
   try {

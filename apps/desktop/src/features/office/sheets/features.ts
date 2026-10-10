@@ -6,7 +6,7 @@ import { setupComments } from './comments/attach.ts'
 import { attachNames } from './names/attach.ts'
 import { attachValidation } from './validation/attach.ts'
 
-/* What Herald Sheets' features add to a workbook's Univer when its window shows it. */
+/* What Bantu Sheets' features add to a workbook's Univer when its window shows it. */
 
 /** Before the workbook loads: what features register with its Univer (the chart component, the comments' author). */
 export function setupFeatures(univer: Univer, api: FUniver): void {

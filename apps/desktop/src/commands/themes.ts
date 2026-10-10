@@ -18,7 +18,7 @@ export const themeCommands: readonly OsCommand[] = [
     phrases: ['what themes are there', 'list themes', 'show me the themes'],
     run: async () => {
       const list = await loadThemes()
-      const current = $prefs.get().themeName ?? `herald-${$prefs.get().theme}`
+      const current = $prefs.get().themeName ?? `bantu-${$prefs.get().theme}`
 
       return ok(`${list.length} themes: ${list.map(theme => theme.label).join(', ')}`, {
         highlight: { kind: 'setting', id: 'appearance' },
@@ -30,7 +30,7 @@ export const themeCommands: readonly OsCommand[] = [
   {
     id: 'theme.set',
     title: 'Set the theme',
-    description: 'Switch to an installed theme by name; it restyles the shell, NasTech and, on Herald OS Linux, the whole session.',
+    description: 'Switch to an installed theme by name; it restyles the shell, NasTech and, on Bantu OS Linux, the whole session.',
     tier: 'mutate',
     args: [{ name: 'theme', type: 'string', description: 'Theme name (see theme.list)', required: true }],
     phrases: ['set the theme to {theme}', 'switch to the {theme} theme', 'use the {theme} theme', 'change the theme to {theme}'],
@@ -61,7 +61,7 @@ export const themeCommands: readonly OsCommand[] = [
       const source = image ? String(image) : $prefs.get().wallpaper
 
       if (!source) {
-        return fail('Name an image to make the theme from (the drawn Herald wallpaper is not an image file).')
+        return fail('Name an image to make the theme from (the drawn Bantu wallpaper is not an image file).')
       }
 
       const theme = await generateTheme({ image: source, name: name ? String(name) : undefined, scheme: scheme as 'auto' | 'dark' | 'light' | undefined })
@@ -85,7 +85,7 @@ export const themeCommands: readonly OsCommand[] = [
   {
     id: 'theme.followNasTech',
     title: 'Follow NasTech skins',
-    description: "Restyle Herald OS whenever NasTech's skin changes (/skin in a chat).",
+    description: "Restyle Bantu OS whenever NasTech's skin changes (/skin in a chat).",
     tier: 'mutate',
     args: [{ name: 'enabled', type: 'boolean', description: 'true to follow the skin', required: true }],
     phrases: [
@@ -101,16 +101,16 @@ export const themeCommands: readonly OsCommand[] = [
   {
     id: 'wallpaper.set',
     title: 'Set the wallpaper',
-    description: 'Use an image as the wallpaper, or "default" for the drawn Herald wallpaper.',
+    description: 'Use an image as the wallpaper, or "default" for the drawn Bantu wallpaper.',
     tier: 'mutate',
     args: [{ name: 'image', type: 'string', description: 'Image path, or "default"', required: true }],
     phrases: [{ phrase: 'use the default wallpaper', args: { image: 'default' } }],
     run: async ({ image }) => {
       const value = String(image).trim()
-      const reset = /^(default|none|herald)$/i.test(value)
+      const reset = /^(default|none|bantu)$/i.test(value)
       await updatePrefs({ wallpaper: reset ? undefined : value.replace(/^~(?=\/)/, $env.get()?.homeDir ?? '~') })
 
-      return ok(reset ? 'Back to the Herald wallpaper' : 'Wallpaper updated', { highlight: { kind: 'setting', id: 'appearance' } })
+      return ok(reset ? 'Back to the Bantu wallpaper' : 'Wallpaper updated', { highlight: { kind: 'setting', id: 'appearance' } })
     }
   },
   {
@@ -121,7 +121,7 @@ export const themeCommands: readonly OsCommand[] = [
     args: [{ name: 'filter', type: 'string', description: 'Only families containing this' }],
     run: async ({ filter }) => {
       const needle = filter ? String(filter).toLowerCase() : ''
-      const families = (await window.heraldOS.fonts.list()).filter(family => !needle || family.toLowerCase().includes(needle))
+      const families = (await window.bantuOS.fonts.list()).filter(family => !needle || family.toLowerCase().includes(needle))
 
       return ok(`${families.length} font famil${families.length === 1 ? 'y' : 'ies'}`, { items: families.slice(0, 200) })
     }

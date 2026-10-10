@@ -4,7 +4,7 @@ import { attributesOf, elementsOf, firstElement } from '../xml.ts'
 import { childrenOf, localName, WORKBOOK_ORDER, WORKSHEET_ORDER } from './markup.ts'
 
 /*
- * What Excel would repair in a package, for the tests of what Herald keeps: relationships to parts
+ * What Excel would repair in a package, for the tests of what Bantu keeps: relationships to parts
  * that are missing, parts without a content type, relationship ids a part names that it does not
  * have, an id given twice, worksheet and workbook elements out of the schema's order or inside
  * other elements, shape ids given twice in a drawing, sheets a defined name counts past, and pivot

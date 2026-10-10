@@ -1,5 +1,5 @@
 /*
- * Undo and redo for Herald Canvas. Document changes are snapshots of the (immutable) document state;
+ * Undo and redo for Bantu Canvas. Document changes are snapshots of the (immutable) document state;
  * pixel edits keep only the tiles a tool touched, before and after. History is bounded by memory,
  * not by a step count, so a few big edits and many small ones both fit.
  */

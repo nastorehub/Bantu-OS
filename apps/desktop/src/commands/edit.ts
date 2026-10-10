@@ -23,7 +23,7 @@ async function edit(run: () => Promise<{ target: string }>, done: (target: strin
   }
 }
 
-/** The Herald Docs page, Sheets cell or Slides text box in front takes the words itself (one step to undo); null leaves them to the focused field. */
+/** The Bantu Docs page, Sheets cell or Slides text box in front takes the words itself (one step to undo); null leaves them to the focused field. */
 async function typeInOffice(text: string, submit: boolean): Promise<string | null> {
   try {
     const { typeIntoOffice } = await import('../features/office/typing.ts')
@@ -67,7 +67,7 @@ export const editCommands: readonly OsCommand[] = [
   {
     id: 'text.type',
     title: 'Type text',
-    description: 'Type text into the focused field, the terminal or the web page; with Herald Docs, Sheets or Slides in front, at the caret, into the active cell (then down the column) or into the text box being edited or selected (else a new one). Say "comma", "question mark", "new line" for punctuation; end with "and press enter" to submit.',
+    description: 'Type text into the focused field, the terminal or the web page; with Bantu Docs, Sheets or Slides in front, at the caret, into the active cell (then down the column) or into the text box being edited or selected (else a new one). Say "comma", "question mark", "new line" for punctuation; end with "and press enter" to submit.',
     tier: 'mutate',
     args: [
       { name: 'text', type: 'string', description: 'What to type', required: true },

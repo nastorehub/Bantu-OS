@@ -3,7 +3,7 @@ import { range, run, sheet, workbook } from './sheets-shared.ts'
 import { sheetsDepthCommands } from './sheets-depth.ts'
 
 /*
- * Herald Sheets for NasTech, voice, the command bar and `herald-os sheets`. A command works on the
+ * Bantu Sheets for NasTech, voice, the command bar and `bantu-os sheets`. A command works on the
  * `workbook` it names (a file, or an open workbook's name) or on the one in front; open in a
  * window, each change is one step to undo there, and the person watches it land. Univer loads only
  * when one of these runs. Charts, summaries, data tools, names, validation, comments and notes are
@@ -16,17 +16,17 @@ const office = () => import('../features/office/agent.ts')
 export const sheetsCommands: readonly OsCommand[] = [
   {
     id: 'sheets.open',
-    title: 'Open Herald Sheets',
-    description: 'Open Herald Sheets, or open a workbook in it (.xlsx or .csv) so the person sees it. The answer lists its sheets and how much of each holds data, and anything Herald shows differently from the file.',
+    title: 'Open Bantu Sheets',
+    description: 'Open Bantu Sheets, or open a workbook in it (.xlsx or .csv) so the person sees it. The answer lists its sheets and how much of each holds data, and anything Bantu shows differently from the file.',
     tier: 'act',
     args: [{ name: 'path', type: 'string', description: 'An Excel workbook or CSV file (full path or ~/…)' }],
-    phrases: ['open herald sheets', 'open sheets', 'open the spreadsheet app'],
+    phrases: ['open bantu sheets', 'open sheets', 'open the spreadsheet app'],
     run: async ({ path }) => (await office()).done((await agent()).open({ path }))
   },
   {
     id: 'sheets.new',
     title: 'Start a new workbook',
-    description: 'Start a new workbook in Herald Sheets and show it: blank, from a template, or with values written from A1 (rows; text starting with = is a formula). With path it is saved there at once (.xlsx or .csv, never over a file that exists).',
+    description: 'Start a new workbook in Bantu Sheets and show it: blank, from a template, or with values written from A1 (rows; text starting with = is a formula). With path it is saved there at once (.xlsx or .csv, never over a file that exists).',
     tier: 'act',
     args: [
       { name: 'name', type: 'string', description: 'The tab’s name, and the file name it is offered when saved' },
@@ -39,8 +39,8 @@ export const sheetsCommands: readonly OsCommand[] = [
   },
   {
     id: 'sheets.list',
-    title: 'What is open in Herald Sheets',
-    description: 'The workbooks open in Herald Sheets (name, path, unsaved edits), which one is in front, and the sheet and range selected in each.',
+    title: 'What is open in Bantu Sheets',
+    description: 'The workbooks open in Bantu Sheets (name, path, unsaved edits), which one is in front, and the sheet and range selected in each.',
     tier: 'read',
     args: [],
     run: async () => (await office()).done((await agent()).list())
@@ -214,7 +214,7 @@ export const sheetsCommands: readonly OsCommand[] = [
     id: 'sheets.save',
     title: 'Save a workbook',
     description:
-      'Save a workbook open in Herald Sheets: over its own file, or as a new one with to (.xlsx or .csv; an existing file is replaced only with overwrite=true). Saving over a file follows Herald’s policy: the first time, the person sees what Herald cannot keep, and the original goes to Herald’s Office backups. A file that is not open is saved as another format with to.',
+      'Save a workbook open in Bantu Sheets: over its own file, or as a new one with to (.xlsx or .csv; an existing file is replaced only with overwrite=true). Saving over a file follows Bantu’s policy: the first time, the person sees what Bantu cannot keep, and the original goes to Bantu’s Office backups. A file that is not open is saved as another format with to.',
     tier: 'mutate',
     args: [workbook, { name: 'to', type: 'string', description: 'Save as this file instead (full path or ~/…)' }, { name: 'overwrite', type: 'boolean', description: 'Replace a file at to' }],
     phrases: ['save the spreadsheet', 'save the workbook'],
@@ -230,16 +230,16 @@ export const sheetsCommands: readonly OsCommand[] = [
   },
   {
     id: 'sheets.undo',
-    title: 'Undo in Herald Sheets',
-    description: 'Undo the last change to a workbook open in Herald Sheets, whoever made it (each NasTech change is one step); steps undoes several.',
+    title: 'Undo in Bantu Sheets',
+    description: 'Undo the last change to a workbook open in Bantu Sheets, whoever made it (each NasTech change is one step); steps undoes several.',
     tier: 'act',
     args: [workbook, { name: 'steps', type: 'number', description: 'How many steps (1)' }],
     run: run('sheets.undo', async (args) => (await agent()).step('undo', args))
   },
   {
     id: 'sheets.redo',
-    title: 'Redo in Herald Sheets',
-    description: 'Redo what was last undone in a workbook open in Herald Sheets; steps redoes several.',
+    title: 'Redo in Bantu Sheets',
+    description: 'Redo what was last undone in a workbook open in Bantu Sheets; steps redoes several.',
     tier: 'act',
     args: [workbook, { name: 'steps', type: 'number', description: 'How many steps (1)' }],
     run: run('sheets.redo', async (args) => (await agent()).step('redo', args))

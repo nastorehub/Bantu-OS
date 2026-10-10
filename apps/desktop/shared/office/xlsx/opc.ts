@@ -28,7 +28,7 @@ export const REL = {
   person: 'http://schemas.microsoft.com/office/2017/10/relationships/person'
 } as const
 
-/** The content types of the parts Herald writes itself. */
+/** The content types of the parts Bantu writes itself. */
 export const CONTENT_TYPE = {
   drawing: 'application/vnd.openxmlformats-officedocument.drawing+xml',
   chart: 'application/vnd.openxmlformats-officedocument.drawingml.chart+xml',

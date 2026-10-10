@@ -5,7 +5,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      '@herald-os/client': fileURLToPath(new URL('../../packages/nastech-client/src/index.ts', import.meta.url))
+      '@bantu-os/client': fileURLToPath(new URL('../../packages/nastech-client/src/index.ts', import.meta.url))
     }
   },
   test: {

@@ -1,7 +1,7 @@
 import type { SectionKind } from '../../../../../shared/office/document.ts'
 
 /*
- * Where Herald Docs' pages end, worked out on the text as it lies in one long column: each box's
+ * Where Bantu Docs' pages end, worked out on the text as it lies in one long column: each box's
  * top and bottom in CSS pixels from the top of the text. A page takes boxes while they fit. One
  * that does not fit splits where it may, between lines (two lines of a paragraph kept on each
  * side), between table rows, or between the items and blocks of a list or a box; otherwise it

@@ -59,7 +59,7 @@ afterEach(() => {
   $systemInfo.set(null)
 })
 
-describe('who writes comments and notes in Herald Sheets', () => {
+describe('who writes comments and notes in Bantu Sheets', () => {
   it('makes the confirmed name Univer’s current user, the neutral name until there is one, and never the account’s', async () => {
     $systemInfo.set({ fullName: 'Pat Example', userName: 'pat' } as SystemInfo)
     const users = await inSheets(async ({ user }) => {

@@ -5,7 +5,7 @@ import { readResource, RESOURCES } from './rules.ts'
 
 /*
  * Workbooks for the converter tests, made here rather than taken from anywhere: one built with
- * ExcelJS with every feature Herald maps, and small packages written part by part, as other apps
+ * ExcelJS with every feature Bantu maps, and small packages written part by part, as other apps
  * write them (shared strings, custom number formats, theme colours, shared formulas).
  */
 
@@ -129,7 +129,7 @@ export function normalized(workbook: WorkbookSnapshot): Json {
   })
   const names = Object.values(readResource<Record<string, Json>>(workbook.resources, RESOURCES.definedNames) ?? {}).map(({ id: _id, ...name }) => name)
   // A saved file always has a creation date: the original's, or the day it was first saved.
-  const { created: _created, ...properties } = ((workbook.custom as { herald?: { properties?: Json } } | undefined)?.herald?.properties ?? {}) as Json
+  const { created: _created, ...properties } = ((workbook.custom as { bantu?: { properties?: Json } } | undefined)?.bantu?.properties ?? {}) as Json
   const filters = readResource<Record<string, { cachedFilteredOut?: number[] }>>(workbook.resources, RESOURCES.filter)
 
   return {

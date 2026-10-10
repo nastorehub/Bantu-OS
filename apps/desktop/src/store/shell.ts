@@ -7,8 +7,8 @@ import type { ShellCommand, ShellMode, ShellSurface, WmAction, WmState, WmWindow
  * - `panels` mode (niri): the menu bar, dock, NasTech window, command overlay and floating apps are
  *   separate windows; stores that act on another window go through `relay`.
  */
-export const surface: ShellSurface = window.heraldOS?.shell?.surface ?? 'desktop'
-export const shellMode: ShellMode = window.heraldOS?.shell?.mode ?? 'desktop'
+export const surface: ShellSurface = window.bantuOS?.shell?.surface ?? 'desktop'
+export const shellMode: ShellMode = window.bantuOS?.shell?.mode ?? 'desktop'
 export const isPanels = shellMode === 'panels'
 export const isMainSurface = surface === 'desktop' || surface === 'main'
 
@@ -16,7 +16,7 @@ export const isMainSurface = surface === 'desktop' || surface === 'main'
 export const $wm = atom<WmState>({ available: false, windows: [], workspaces: [], focusedWindowId: null })
 
 export function wmAction(action: WmAction): Promise<void> {
-  return window.heraldOS.wm.action(action).catch(() => undefined)
+  return window.bantuOS.wm.action(action).catch(() => undefined)
 }
 
 /** The compositor's focused window, if it is not one of ours. */
@@ -44,7 +44,7 @@ function dispatch(command: ShellCommand): void {
   }
 }
 
-/** Receive commands addressed to this surface (from the `herald-os` CLI or another surface). */
+/** Receive commands addressed to this surface (from the `bantu-os` CLI or another surface). */
 export function onShellCommand(handler: CommandHandler): () => void {
   handlers.add(handler)
 
@@ -67,15 +67,15 @@ export function relayToMain(command: ShellCommand): void {
     return
   }
 
-  window.heraldOS.shell.relay('main', command).catch(() => undefined)
+  window.bantuOS.shell.relay('main', command).catch(() => undefined)
 }
 
 export function openSurface(target: ShellSurface, command?: ShellCommand): void {
-  window.heraldOS.shell.open(target, command).catch(() => undefined)
+  window.bantuOS.shell.open(target, command).catch(() => undefined)
 }
 
 export function closeThisSurface(): void {
-  window.heraldOS.shell.close().catch(() => undefined)
+  window.bantuOS.shell.close().catch(() => undefined)
 }
 
 let bound = false
@@ -89,12 +89,12 @@ export function bindShell(): void {
   bound = true
 
   if (isPanels) {
-    window.heraldOS.wm
+    window.bantuOS.wm
       .getState()
       .then(state => $wm.set(state))
       .catch(() => undefined)
-    window.heraldOS.wm.onState(state => $wm.set(state))
+    window.bantuOS.wm.onState(state => $wm.set(state))
   }
 
-  window.heraldOS.shell.onCommand(dispatch)
+  window.bantuOS.shell.onCommand(dispatch)
 }

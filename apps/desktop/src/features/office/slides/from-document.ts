@@ -11,7 +11,7 @@ import { MAX_COLUMNS, MAX_ROWS } from './tables.ts'
 import { DEFAULT_INSET, LIST_INDENT, MAX_LEVEL, textBody, tidyRuns } from './text.ts'
 
 /*
- * Decks from Herald Docs documents, laid out by rule: the document's title makes a title slide, its
+ * Decks from Bantu Docs documents, laid out by rule: the document's title makes a title slide, its
  * headings make section headers and slides of bullets, and its pictures, tables, quotes and code
  * get slides in the layouts made for them. How much text a slide holds is estimated from its
  * placeholder's width and text size, so a long section goes on over further slides rather than

@@ -261,7 +261,7 @@ describe('summaries in .xlsx files', () => {
     expect(losses).toEqual([])
     expect(parts.join('')).toContain('<f>IF(COUNTIFS(Sales!$A:$A,$A3,Sales!$C:$C,B$1,Sales!$B:$B,&quot;&lt;&gt;Mixed~*&quot;)=0,&quot;&quot;,_xlfn.MAXIFS(Sales!$D:$D,Sales!$A:$A,$A3,Sales!$C:$C,B$1,Sales!$B:$B,&quot;&lt;&gt;Mixed~*&quot;))</f>')
     expect(summary.cellData[2][1].f).toBe('=IF(COUNTIFS(Sales!$A:$A,$A3,Sales!$C:$C,B$1,Sales!$B:$B,"<>Mixed~*")=0,"",MAXIFS(Sales!$D:$D,Sales!$A:$A,$A3,Sales!$C:$C,B$1,Sales!$B:$B,"<>Mixed~*"))')
-    expect((summary.custom as { herald?: { summaries?: unknown[] } }).herald?.summaries).toEqual([
+    expect((summary.custom as { bantu?: { summaries?: unknown[] } }).bantu?.summaries).toEqual([
       {
         id: 'summary-1',
         at: 'A1',

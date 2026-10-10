@@ -20,11 +20,11 @@ function read(rel: string): string | null {
 }
 
 function locations() {
-  return { nastechHome: path.join(root, '.nastech'), appData: path.join(root, 'appData'), userData: path.join(root, 'appData', 'Herald OS') }
+  return { nastechHome: path.join(root, '.nastech'), appData: path.join(root, 'appData'), userData: path.join(root, 'appData', 'Bantu OS') }
 }
 
 beforeEach(() => {
-  root = fs.mkdtempSync(path.join(os.tmpdir(), 'herald-migrate-'))
+  root = fs.mkdtempSync(path.join(os.tmpdir(), 'bantu-migrate-'))
 })
 
 afterEach(() => {
@@ -42,43 +42,43 @@ describe('migrateLegacyData', () => {
     const moved = migrateLegacyData(locations())
 
     expect(moved.some(line => line.startsWith('failed'))).toBe(false)
-    expect(read('.nastech/herald-os/prefs.json')).toBe('{"theme":"ice"}')
-    expect(read('.nastech/herald-os/permissions.yaml')).toBe('tiers: {}')
+    expect(read('.nastech/bantu-os/prefs.json')).toBe('{"theme":"ice"}')
+    expect(read('.nastech/bantu-os/permissions.yaml')).toBe('tiers: {}')
     expect(fs.existsSync(path.join(root, '.nastech/nastech-os'))).toBe(false)
-    expect(read('appData/Herald OS/Local Storage/leveldb/000003.log')).toBe('ls')
-    expect(read('appData/Herald OS/Partitions/herald-web/Cookies')).toBe('cookies')
-    expect(read('appData/Herald OS/Partitions/herald-preview/Cookies')).toBe('preview')
+    expect(read('appData/Bantu OS/Local Storage/leveldb/000003.log')).toBe('ls')
+    expect(read('appData/Bantu OS/Partitions/bantu-web/Cookies')).toBe('cookies')
+    expect(read('appData/Bantu OS/Partitions/bantu-preview/Cookies')).toBe('preview')
   })
 
   it('merges into a folder another process already created, keeping its files', () => {
     write('.nastech/nastech-os/permissions.yaml', 'custom policy')
     write('.nastech/nastech-os/audit.jsonl', 'old audit')
-    write('.nastech/herald-os/audit.jsonl', 'new audit')
+    write('.nastech/bantu-os/audit.jsonl', 'new audit')
 
     migrateLegacyData(locations())
 
-    expect(read('.nastech/herald-os/permissions.yaml')).toBe('custom policy')
-    expect(read('.nastech/herald-os/audit.jsonl')).toBe('new audit')
+    expect(read('.nastech/bantu-os/permissions.yaml')).toBe('custom policy')
+    expect(read('.nastech/bantu-os/audit.jsonl')).toBe('new audit')
     expect(read('.nastech/nastech-os/audit.jsonl')).toBe('old audit')
   })
 
   it('moves the profile into the empty folder Electron creates when asked for userData', () => {
     write('appData/NasTech OS/Local Storage/leveldb/000003.log', 'ls')
-    fs.mkdirSync(path.join(root, 'appData/Herald OS'), { recursive: true })
+    fs.mkdirSync(path.join(root, 'appData/Bantu OS'), { recursive: true })
 
     migrateLegacyData(locations())
 
-    expect(read('appData/Herald OS/Local Storage/leveldb/000003.log')).toBe('ls')
+    expect(read('appData/Bantu OS/Local Storage/leveldb/000003.log')).toBe('ls')
     expect(fs.existsSync(path.join(root, 'appData/NasTech OS'))).toBe(false)
   })
 
   it('never replaces an existing profile', () => {
     write('appData/NasTech OS/Preferences', 'old')
-    write('appData/Herald OS/Preferences', 'new')
+    write('appData/Bantu OS/Preferences', 'new')
 
     migrateLegacyData(locations())
 
-    expect(read('appData/Herald OS/Preferences')).toBe('new')
+    expect(read('appData/Bantu OS/Preferences')).toBe('new')
     expect(read('appData/NasTech OS/Preferences')).toBe('old')
   })
 

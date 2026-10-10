@@ -4,7 +4,7 @@ import { childNamed, grown, placeChild, STYLESHEET_ORDER, withAttribute } from '
 
 /*
  * What kept parts name in the style sheet: number formats by id (pivot fields), differential formats
- * by index (pivot table formats, table areas) and table styles by name. Herald writes a style sheet
+ * by index (pivot table formats, table areas) and table styles by name. Bantu writes a style sheet
  * of its own, so each one a kept part uses is added to it and the part is given its new id.
  */
 

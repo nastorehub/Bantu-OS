@@ -9,7 +9,7 @@ import type { SheetsTarget } from './model.ts'
 /*
  * Where a command's change lands: the workbook open in a window (live, one step to undo, saved as
  * the person's own edits are), or a file on disk, loaded with nothing drawn, changed and written
- * back. A file holding something Herald Sheets cannot keep is not rewritten behind the person's
+ * back. A file holding something Bantu Sheets cannot keep is not rewritten behind the person's
  * back: it has to be opened, so the fidelity report comes first.
  */
 
@@ -65,14 +65,14 @@ export async function changeFile<T>(path: string, change: (target: SheetsTarget)
   const read = await adapter.read((await io.read(path)).bytes, extension, name)
 
   if (read.notes.length) {
-    throw new Error(`${name}${extension} has things Herald Sheets cannot keep (${read.notes[0].replace(/\.$/, '')}${read.notes.length > 1 ? `, and ${read.notes.length - 1} more` : ''}): open it in Herald Sheets to change it`)
+    throw new Error(`${name}${extension} has things Bantu Sheets cannot keep (${read.notes[0].replace(/\.$/, '')}${read.notes.length > 1 ? `, and ${read.notes.length - 1} more` : ''}): open it in Bantu Sheets to change it`)
   }
 
   const { result, snapshot } = await withHeadlessSheets(read.model, ({ univer, workbook }) => change({ univer, workbook }))
   const written = await adapter.write(snapshot, extension, read.layout)
 
   if (written.losses.length) {
-    throw new Error(`Saving ${name}${extension} would lose something (${written.losses[0].replace(/\.$/, '')}): open it in Herald Sheets to change it`)
+    throw new Error(`Saving ${name}${extension} would lose something (${written.losses[0].replace(/\.$/, '')}): open it in Bantu Sheets to change it`)
   }
 
   await io.write(path, written.bytes)

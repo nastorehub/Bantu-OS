@@ -98,7 +98,7 @@ export function DockSurface() {
     setTimeout(() => setBouncing(null), 450)
 
     try {
-      await window.heraldOS.apps.launch(app.path)
+      await window.bantuOS.apps.launch(app.path)
     } catch (error) {
       notify({ title: `Could not open ${app.name}`, body: error instanceof Error ? error.message : String(error), level: 'error' })
     }
@@ -130,7 +130,7 @@ export function DockSurface() {
 
     for (const pin of pinnedFor(platform)) {
       if (pin.label === 'Files') {
-        // Files is always Herald OS's own page, in Herald's own tile: a running file manager gets an entry
+        // Files is always Bantu OS's own page, in Bantu's own tile: a running file manager gets an entry
         // of its own here, and a borrowed icon would make the two look like the same app.
         list.push({ id: 'files', label: 'Files', render: () => <AppTile id="files" size={44} />, onClick: () => showPage('files') })
 
@@ -158,7 +158,7 @@ export function DockSurface() {
     const canvasWindows = ours.filter(w => ourFloatingAppId(w) === 'canvas')
     list.push({
       id: 'nastech:canvas',
-      label: 'Herald Canvas',
+      label: 'Bantu Canvas',
       render: () => <AppTile id="canvas" size={44} />,
       onClick: () => (canvasWindows.length > 0 ? focusGroup('nastech:canvas', canvasWindows) : openInCanvas()),
       running: canvasWindows.length > 0,
@@ -170,7 +170,7 @@ export function DockSurface() {
     const officeWindows = ours.filter(w => isOfficeApp(ourFloatingAppId(w) ?? ''))
     list.push({
       id: 'nastech:office',
-      label: 'Herald Office',
+      label: 'Bantu Office',
       render: () => <AppTile id="office" size={44} />,
       onClick: () => (officeWindows.length > 0 ? focusGroup('nastech:office', officeWindows) : void openSurface('command', { type: 'applications' })),
       running: officeWindows.length > 0,
@@ -232,7 +232,7 @@ export function DockSurface() {
 
     const fixed: DockEntry[] = [
       { id: 'applications', label: 'Applications', render: () => <span className="icon-tile size-11 rounded-[11px]"><AppGlyph id="grid" size={22} /></span>, onClick: () => openSurface('command', { type: 'applications' }) },
-      { id: 'trash', label: 'Trash', render: () => <span className="flex size-11 items-center justify-center rounded-[11px] bg-white/6 text-fg-2"><AppGlyph id="trash" size={22} /></span>, onClick: () => window.heraldOS.fs.openPath(trashPath).catch(() => undefined) }
+      { id: 'trash', label: 'Trash', render: () => <span className="flex size-11 items-center justify-center rounded-[11px] bg-white/6 text-fg-2"><AppGlyph id="trash" size={22} /></span>, onClick: () => window.bantuOS.fs.openPath(trashPath).catch(() => undefined) }
     ]
 
     return [...list.slice(0, MAX_ITEMS - fixed.length), ...fixed]

@@ -38,7 +38,7 @@ const TIERS: Record<string, string> = {
 
 const command = (id: string) => docsCommands.find((entry) => entry.id === id)!
 
-describe('Herald Docs’ page and review commands', () => {
+describe('Bantu Docs’ page and review commands', () => {
   it('each read, change or take away at their tier, once each', () => {
     const ids = docsCommands.map((entry) => entry.id)
 

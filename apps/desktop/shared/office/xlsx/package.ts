@@ -4,7 +4,7 @@ import { attributesOf, decodeXml, elementsOf, firstElement } from './xml.ts'
 /*
  * An .xlsx file as the package of parts it is (OPC): the workbook and its sheets found through
  * their relationships, plus the parts ExcelJS does not read, for the fidelity report and for what
- * Herald maps itself (data validation, filter criteria, defined names, the theme).
+ * Bantu maps itself (data validation, filter criteria, defined names, the theme).
  */
 
 export interface PackageSheet {

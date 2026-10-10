@@ -105,7 +105,7 @@ describe('words a command uses', () => {
 
     expect(setThemeStep(model.newDeck('T'), { theme: 'Midnight' }).deck.theme.id).toBe('midnight')
     expect(setThemeStep(model.newDeck('T'), { theme: 'paper theme' }).deck.theme.id).toBe('paper')
-    expect(() => setThemeStep(model.newDeck('T'), { theme: 'neon' })).toThrow('theme is one of herald, midnight, paper')
+    expect(() => setThemeStep(model.newDeck('T'), { theme: 'neon' })).toThrow('theme is one of bantu, midnight, paper')
 
     expect(sizeOf('4:3')).toEqual(SLIDE_SIZES.standard)
     expect(sizeOf('')).toEqual(SLIDE_SIZES.wide)
@@ -331,7 +331,7 @@ describe('reading, finding and replacing', () => {
     deck = addTextStep(deck, { slide: 2, text: 'Draft', x: 10.4, y: 20.6, width: 100, height: 30 }, none).deck
     const read = readDeck(deck)
 
-    expect(read).toMatchObject({ title: 'Pitch', size: 'wide (16:9)', theme: 'Herald', transition: 'fade', slideCount: 3 })
+    expect(read).toMatchObject({ title: 'Pitch', size: 'wide (16:9)', theme: 'Bantu', transition: 'fade', slideCount: 3 })
     expect(read.slides[0]).toMatchObject({ number: 1, layout: 'title', title: 'Pitch', body: 'Seed round' })
     expect(read.slides[1]).toMatchObject({ number: 2, title: 'Plan', body: 'Research\n  Interviews', notes: 'Slow down', hidden: true })
     expect(read.slides[1].elements.map((element) => ('text' in element ? element.text : element.kind))).toEqual(['Title', 'Text', 'Draft'])

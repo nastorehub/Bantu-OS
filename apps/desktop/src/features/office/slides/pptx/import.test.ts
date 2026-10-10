@@ -441,7 +441,7 @@ describe('importPresentation: text', () => {
       { text: 'Seven' }
     ])
     expect(report.counts.text).toEqual({ imported: 0, approximated: 1, skipped: 0 })
-    expect(report.reasons).toEqual({ 'list numbers shown in the nearest style Herald has': 1 })
+    expect(report.reasons).toEqual({ 'list numbers shown in the nearest style Bantu has': 1 })
   })
 
   it('reads alignment, line spacing, paragraph spacing and the body properties', async () => {
@@ -459,7 +459,7 @@ describe('importPresentation: text', () => {
     expect(report.reasons).toEqual({ 'exact line spacing shown as a multiple': 1 })
   })
 
-  it('notes text Herald shows differently, once per text box with every reason', async () => {
+  it('notes text Bantu shows differently, once per text box with every reason', async () => {
     const shadow = `<a:effectLst><a:outerShdw blurRad="38100" dist="38100" dir="2700000">${srgb('000000')}</a:outerShdw></a:effectLst>`
     const text = paragraph(run('Link', '', '<a:hlinkClick r:id="rIdLink"/>') + run(' up', ' baseline="30000"') + run(' loud', ' cap="all"') + run(' shadowed', '', shadow))
     const { slide, report } = await shapes(sp({ name: 'Odd', textBox: true, props: xfrm(0, 0, 100, 100), bodyPr: '<a:bodyPr vert="vert270" numCol="2"/>', text }), {
@@ -615,7 +615,7 @@ describe('importPresentation: the master and its layouts', () => {
     expect(counts(report)).toEqual({ picture: { imported: 1, approximated: 0, skipped: 0 }, shape: { imported: 1, approximated: 0, skipped: 0 } })
   })
 
-  it('keeps a layout for each of Herald’s, the first the file has for it, placed and styled over the master, and Herald’s own for the rest', async () => {
+  it('keeps a layout for each of Bantu’s, the first the file has for it, placed and styled over the master, and Bantu’s own for the rest', async () => {
     const layouts: LayoutSpec[] = [
       { type: 'title', name: 'Cover', attrs: ' showMasterSp="0"', tree: `<p:bg><p:bgPr>${solid(srgb('112233'))}<a:effectLst/></p:bgPr></p:bg>${TITLE_LAYOUT}` },
       {
@@ -658,10 +658,10 @@ describe('importPresentation: the master and its layouts', () => {
     expect(layout('picture-caption')?.elements[1]).toMatchObject({ kind: 'image', src: '', x: 400, y: 50, width: 450, height: 400 })
     expect(layout('two-content')).toEqual(defaultMaster(deck.size).layouts.find((entry) => entry.id === 'two-content'))
     expect(counts(report)).toEqual({ shape: { imported: 1, approximated: 0, skipped: 0 } })
-    expect(report.dropped).toEqual({ 'slide layouts Herald has no place for': 1 })
+    expect(report.dropped).toEqual({ 'slide layouts Bantu has no place for': 1 })
   })
 
-  it('gives a slide on a layout Herald does not keep that layout’s drawings and background as its own', async () => {
+  it('gives a slide on a layout Bantu does not keep that layout’s drawings and background as its own', async () => {
     const stripe = (name: string, color: string) => sp({ id: 20, name, props: xfrm(0, 0, 960, 20) + geometry('rect') + solid(srgb(color)) })
     const layouts: LayoutSpec[] = [
       { type: 'obj', tree: tree(stripe('First stripe', 'FF0000')) },
@@ -675,7 +675,7 @@ describe('importPresentation: the master and its layouts', () => {
     expect(deck.slides[1].elements.map((element) => element.name)).toEqual(['Second stripe'])
     expect(counts(report)).toEqual({ shape: { imported: 2, approximated: 0, skipped: 0 } })
     expect(report.reasons).toEqual({ 'background graphics shown on slides that did not show them': 1 })
-    expect(report.dropped).toEqual({ 'slide layouts Herald has no place for': 1 })
+    expect(report.dropped).toEqual({ 'slide layouts Bantu has no place for': 1 })
   })
 })
 
@@ -901,7 +901,7 @@ describe('importPresentation: shapes and lines', () => {
     expect(counts(report)).toEqual({ shape: { imported: 3, approximated: 0, skipped: 0 } })
   })
 
-  it('keeps the presets Herald draws with their adjust values, others as the nearest it draws, and freeforms as their paths', async () => {
+  it('keeps the presets Bantu draws with their adjust values, others as the nearest it draws, and freeforms as their paths', async () => {
     const content = [
       filled('Star', solid(srgb('FF0000')), 'star16'),
       filled('Cube', solid(srgb('FF0000')), 'cube'),
@@ -922,7 +922,7 @@ describe('importPresentation: shapes and lines', () => {
     expect(named<ShapeElement>(slide, 'Unknown').paths).toBeUndefined()
     expect(named(slide, 'Invisible').kind).toBe('text')
     expect(counts(report)).toEqual({ text: { imported: 1, approximated: 0, skipped: 0 }, shape: { imported: 4, approximated: 2, skipped: 0 } })
-    expect(report.reasons).toEqual({ 'shapes Herald does not draw shown as the nearest shape it does': 1, 'custom shapes drawn as rectangles': 1 })
+    expect(report.reasons).toEqual({ 'shapes Bantu does not draw shown as the nearest shape it does': 1, 'custom shapes drawn as rectangles': 1 })
   })
 
   it('reads a freeform’s arcs as curves, its guides worked out, and the parts of it drawn without a fill or outline', async () => {
@@ -987,7 +987,7 @@ describe('importPresentation: shapes and lines', () => {
     expect(named<LineElement>(slide, 'Loose').connector).toEqual({ preset: 'curvedConnector3', start: { element: named(slide, 'Left').id, site: 3 } })
     expect(named<LineElement>(slide, 'Odd').connector).toEqual({ preset: 'straightConnector1' })
     expect(counts(report)).toEqual({ shape: { imported: 2, approximated: 0, skipped: 0 }, line: { imported: 2, approximated: 1, skipped: 0 }, group: { imported: 1, approximated: 0, skipped: 0 } })
-    expect(report.reasons).toEqual({ 'connectors Herald does not draw shown straight': 1 })
+    expect(report.reasons).toEqual({ 'connectors Bantu does not draw shown straight': 1 })
   })
 
   it('keeps groups, their members placed from the coordinates of their group and told the groups they are in', async () => {
@@ -1069,7 +1069,7 @@ describe('importPresentation: pictures and media', () => {
     expect(named<ImageElement>(slide, 'Inset').crop).toBeUndefined()
     expect(counts(report)).toEqual({ picture: { imported: 0, approximated: 3, skipped: 3 } })
     expect(report.reasons).toEqual({
-      'pictures in formats Herald cannot show': 1,
+      'pictures in formats Bantu cannot show': 1,
       'pictures missing from the file left out': 1,
       'pictures linked from outside the file left out': 1,
       'pictures cut to shapes shown as rectangles': 1,
@@ -1452,7 +1452,7 @@ describe('importPresentation: charts, SmartArt and embedded objects', () => {
   })
 })
 
-describe('importPresentation: what Herald leaves out', () => {
+describe('importPresentation: what Bantu leaves out', () => {
   it('counts charts, SmartArt and embedded objects whose parts are missing, ink, hidden objects and tables without cells as left out', async () => {
     const content = [
       frame('http://schemas.openxmlformats.org/drawingml/2006/table', '<a:tbl/>'),
@@ -1504,7 +1504,7 @@ describe('importPresentation: what Herald leaves out', () => {
       { kind: 'push', duration: 2000, direction: 'right' },
       { kind: 'none', duration: 500 }
     ])
-    expect(report.reasons).toEqual({ 'transitions shown as the nearest one Herald plays': 1 })
+    expect(report.reasons).toEqual({ 'transitions shown as the nearest one Bantu plays': 1 })
     expect(report.dropped).toEqual({
       animations: 1,
       'automatic slide timings': 1,
@@ -1529,7 +1529,7 @@ describe('importPresentation: what Herald leaves out', () => {
     expect(report.dropped).toEqual({})
   })
 
-  it('reads the way each transition goes and how long it takes, the effects Herald does not play as the nearest it does', async () => {
+  it('reads the way each transition goes and how long it takes, the effects Bantu does not play as the nearest it does', async () => {
     const choice = (inner: string, fallback = '<p:fade/>') => `${MASTER_MAPPING}<mc:AlternateContent ${MC}><mc:Choice Requires="p14"><p:transition spd="slow" p14:dur="1600">${inner}</p:transition></mc:Choice><mc:Fallback><p:transition spd="slow">${fallback}</p:transition></mc:Fallback></mc:AlternateContent>`
     const plain = (attrs: string, inner: string) => `${MASTER_MAPPING}<p:transition${attrs}>${inner}</p:transition>`
     const effects = [
@@ -1564,7 +1564,7 @@ describe('importPresentation: what Herald leaves out', () => {
       { kind: 'none', duration: 500 },
       { kind: 'wipe', duration: 500, direction: 'left' }
     ])
-    expect(report.reasons).toEqual({ 'transitions shown as the nearest one Herald plays': 6 })
+    expect(report.reasons).toEqual({ 'transitions shown as the nearest one Bantu plays': 6 })
     expect(report.dropped).toEqual({ 'automatic slide timings': 1, 'transition sounds': 1 })
   })
 
@@ -1662,7 +1662,7 @@ describe('importPresentation: PptxGenJS decks', () => {
     ])
   })
 
-  it('gives back the layouts and placeholder roles of a deck Herald wrote', async () => {
+  it('gives back the layouts and placeholder roles of a deck Bantu wrote', async () => {
     const comparison = ['title', 'heading', 'body', 'heading2', 'body2']
     const section = ['title', 'subtitle']
     const master = (names: string[]) =>

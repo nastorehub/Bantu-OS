@@ -16,7 +16,7 @@ import { CALLOUT_KINDS, type CalloutKind, cssLineHeight, hexColor, points, round
 import { CommentMark, Field, Note, SectionBreak, TableOfContents, TextBox } from './nodes.ts'
 
 /*
- * Herald Docs' document schema: TipTap's own nodes and marks, with a document that keeps its page
+ * Bantu Docs' document schema: TipTap's own nodes and marks, with a document that keeps its page
  * and styles, paragraphs with spacing, indents and a Title or Subtitle style, callouts, page
  * breaks, tables with borders on or off and shaded cells, pictures in the line of text, and the
  * fields, notes, tables of contents, section breaks, text boxes and comments of nodes.ts. The
@@ -231,7 +231,7 @@ export interface SchemaOptions {
   views?: { image?: NodeViewRenderer; table?: TableOptions['View'] }
 }
 
-/** The extensions that make up a Herald Docs document. */
+/** The extensions that make up a Bantu Docs document. */
 export function docsExtensions(options: SchemaOptions = {}): AnyExtension[] {
   const { image, table } = options.views ?? {}
 
@@ -281,7 +281,7 @@ export function docsExtensions(options: SchemaOptions = {}): AnyExtension[] {
 
 let cached: Schema | null = null
 
-/** The schema of a Herald Docs document, for working on one without an editor. */
+/** The schema of a Bantu Docs document, for working on one without an editor. */
 export function docsSchema(): Schema {
   cached ??= getSchema(docsExtensions({ history: false }))
 

@@ -9,7 +9,7 @@ import { documentOf } from './documents.ts'
 import { loadECharts } from './load.ts'
 import { chartOption } from './option.ts'
 import { openChartPanel } from './panel.tsx'
-import { heraldChartTheme } from './theme.ts'
+import { bantuChartTheme } from './theme.ts'
 import { rangesOf, watchCells } from './watch.ts'
 
 /* A chart in its floating object over the grid: ECharts drawing the spec in the drawing's data with the numbers in its cells, redrawn as they change. */
@@ -23,12 +23,12 @@ interface FloatDomProps {
 
 /** The component Univer draws in each chart's floating object, reading the workbooks of `univer`. */
 export function chartComponent(univer: Univer, api: FUniver) {
-  return function HeraldChart({ data, unitId, floatDomId }: FloatDomProps) {
+  return function BantuChart({ data, unitId, floatDomId }: FloatDomProps) {
     const spec = isChartData(data) ? data.spec : null
     const box = useRef<HTMLDivElement>(null)
     const chart = useRef<ECharts | null>(null)
     const drawn = useRef<ChartSpec | null>(null)
-    const theme = useMemo(heraldChartTheme, [])
+    const theme = useMemo(bantuChartTheme, [])
     const [changes, setChanges] = useState(0)
     const last = useRef<{ json: string; values: ChartValues | null } | null>(null)
     const [ready, setReady] = useState(false)

@@ -6,7 +6,7 @@ import { parseJsonArg } from '../agent-model.ts'
 import { type BlockStyle, BLOCK_STYLES, counts, documentText, findHeading, findText, jsonOf, type MarkChange, type Op, outline, type PageChange, type Place, type SearchOptions, sectionOf, type Target } from './model.ts'
 
 /*
- * Herald Docs for NasTech, without a window: where a command's content goes and what it changes,
+ * Bantu Docs for NasTech, without a window: where a command's content goes and what it changes,
  * read from its arguments; a document read the way NasTech wants it; and the batch of edits that
  * lands as one step. Tested directly.
  */
@@ -54,7 +54,7 @@ export interface Marked {
 
 /**
  * Where a write's content goes in a document, from `at`, `heading` and `mode`; `marked` is the text
- * Herald marked for the request, which `after` goes under too while there is one, since the person
+ * Bantu marked for the request, which `after` goes under too while there is one, since the person
  * may have clicked elsewhere since asking.
  */
 export function placeFor(state: EditorState | null, args: Args, marked: Marked | null): Place {
@@ -75,7 +75,7 @@ export function placeFor(state: EditorState | null, args: Args, marked: Marked |
   }
 
   if (!state) {
-    throw new Error(`at=${where} needs the document open in Herald Docs, where it has a selection: open it first (docs.open)`)
+    throw new Error(`at=${where} needs the document open in Bantu Docs, where it has a selection: open it first (docs.open)`)
   }
 
   const range = where === 'marked' || (where === 'after' && marked) ? marked : { from: state.selection.from, to: state.selection.to }
@@ -134,7 +134,7 @@ export function targetFor(state: EditorState | null, args: Args, marked: Marked 
   }
 
   if (!state) {
-    throw new Error(`at=${at} needs the document open in Herald Docs: open it first (docs.open), or say which text, heading or all`)
+    throw new Error(`at=${at} needs the document open in Bantu Docs: open it first (docs.open), or say which text, heading or all`)
   }
 
   if (at === 'marked') {

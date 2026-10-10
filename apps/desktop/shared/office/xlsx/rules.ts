@@ -436,7 +436,7 @@ function ruleText(formulae: unknown[], attribute: string | undefined): string {
   return quoted ? quoted[1].replace(/""/g, '"') : ''
 }
 
-/** A formula rule that is one of Excel's text rules written out (as Herald writes them): its operator and text. */
+/** A formula rule that is one of Excel's text rules written out (as Bantu writes them): its operator and text. */
 function textRule(formula: string, corner: string): { operator: string; value: string } | null {
   const cell = corner.replace(/\$/g, '')
   const quoted = '"((?:[^"]|"")*)"'

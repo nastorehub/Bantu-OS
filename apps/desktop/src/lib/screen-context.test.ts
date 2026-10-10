@@ -21,8 +21,8 @@ describe('describeScreen', () => {
     expect(withScreenContext(undefined, null)).toBeUndefined()
   })
 
-  it('carries what Herald Office has open between the exchange and the screen line', () => {
-    const office = 'Office: in front is Budget.xlsx in Herald Sheets (~/Budget.xlsx), selection Sheet1!B2:D9; also open: Report.docx (Herald Docs).'
+  it('carries what Bantu Office has open between the exchange and the screen line', () => {
+    const office = 'Office: in front is Budget.xlsx in Bantu Sheets (~/Budget.xlsx), selection Sheet1!B2:D9; also open: Report.docx (Bantu Docs).'
 
     expect(withScreenContext('User: add a total row', 'Screen: the Files page shows recent files.', office)).toBe(`User: add a total row\n${office}\nScreen: the Files page shows recent files.`)
     expect(withScreenContext(undefined, null, office)).toBe(office)
@@ -40,7 +40,7 @@ describe('describeScreen', () => {
     )
 
     expect(withScreenContext('User: make this slide a comparison', null, office)).toBe(
-      'User: make this slide a comparison\nOffice: in front is Pitch in Herald Slides (~/Pitch.pptx, unsaved edits), selection Slide 3: “Pricing”, text box “Starter plan” selected; also open: Report (Herald Docs).'
+      'User: make this slide a comparison\nOffice: in front is Pitch in Bantu Slides (~/Pitch.pptx, unsaved edits), selection Slide 3: “Pricing”, text box “Starter plan” selected; also open: Report (Bantu Docs).'
     )
   })
 })

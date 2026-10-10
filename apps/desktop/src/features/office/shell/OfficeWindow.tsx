@@ -191,7 +191,7 @@ export interface OfficeWindowProps<Model> {
   toolbar?: (doc: OfficeDocument<Model>) => ReactNode
 }
 
-/** The frame Herald Docs, Sheets and Slides share: menus, tabs, the editors, the status bar and dialogs. */
+/** The frame Bantu Docs, Sheets and Slides share: menus, tabs, the editors, the status bar and dialogs. */
 export function OfficeWindow<Model>({ session, menus, payload, start, noun, canOpen, onDropFile, onNew, renderEditor, mountWhenShown = false, toolbar }: OfficeWindowProps<Model>) {
   const documents = useStore(session.$documents)
   const activeKey = useStore(session.$activeKey)
@@ -213,7 +213,7 @@ export function OfficeWindow<Model>({ session, menus, payload, start, noun, canO
   const requestedAt = payload?.at
   const newDocument = onNew ?? (() => session.create())
 
-  // A file handed over by Herald (Files, the viewer, NasTech), or a new document asked for.
+  // A file handed over by Bantu (Files, the viewer, NasTech), or a new document asked for.
   useEffect(() => {
     if (requested) {
       session.open(requested).catch((error: unknown) => session.notify(`Could not open ${requested.split('/').pop()}: ${messageOf(error)}`, 'error'))
@@ -232,7 +232,7 @@ export function OfficeWindow<Model>({ session, menus, payload, start, noun, canO
 
     return () => {
       element?.removeEventListener('focusin', focused)
-      window.heraldOS.office.report({ app: session.adapter.app, active: null, documents: [] })
+      window.bantuOS.office.report({ app: session.adapter.app, active: null, documents: [] })
     }
   }, [])
 
@@ -242,7 +242,7 @@ export function OfficeWindow<Model>({ session, menus, payload, start, noun, canO
     return () => clearTimeout(timer)
   }, [documents, activeKey])
 
-  // The name on the person's comments, with the one Herald Docs kept before, ready before their first comment.
+  // The name on the person's comments, with the one Bantu Docs kept before, ready before their first comment.
   useEffect(() => {
     loadCommentName().catch(() => {})
   }, [])
@@ -279,7 +279,7 @@ export function OfficeWindow<Model>({ session, menus, payload, start, noun, canO
       }
     }
     const onDrop = (event: DragEvent) => {
-      const files = [...(event.dataTransfer?.files ?? [])].map((file) => window.heraldOS.fs.pathForFile(file)).filter(Boolean)
+      const files = [...(event.dataTransfer?.files ?? [])].map((file) => window.bantuOS.fs.pathForFile(file)).filter(Boolean)
 
       if (files.length) {
         event.preventDefault()

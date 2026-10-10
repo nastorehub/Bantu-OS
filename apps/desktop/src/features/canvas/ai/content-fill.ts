@@ -1,5 +1,5 @@
 /*
- * Content-aware fill on a Herald Canvas layer: a hole on the layer's own pixel grid (from the
+ * Content-aware fill on a Bantu Canvas layer: a hole on the layer's own pixel grid (from the
  * selection, a box or a healing stroke) is filled from the pixels around it, in a worker. The fill
  * goes into the layer as one undoable step, or into a new layer above it.
  */
@@ -92,7 +92,7 @@ export function fillRaster(pixels: Raster, hole: Hole, options: { sampling?: Fil
   }
 
   const kept = values.slice()
-  const worker = new Worker(new URL('./inpaint-worker.ts', import.meta.url), { type: 'module', name: 'herald-canvas-fill' })
+  const worker = new Worker(new URL('./inpaint-worker.ts', import.meta.url), { type: 'module', name: 'bantu-canvas-fill' })
   let fail: (error: Error) => void = () => {}
   const done = new Promise<Filled>((resolve, reject) => {
     fail = reject

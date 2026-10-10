@@ -1,4 +1,4 @@
-import type { HeraldOSPrefs, VoiceEngine } from '../../shared/ipc.ts'
+import type { BantuOSPrefs, VoiceEngine } from '../../shared/ipc.ts'
 import { $prefs, updatePrefs } from '../store/backend.ts'
 import { $nativeApps, loadNativeApps } from '../store/native-apps.ts'
 import { delegate, fail, ok, type OsCommand } from '../store/os-commands.ts'
@@ -95,7 +95,7 @@ export const systemCommands: readonly OsCommand[] = [
         return fail(`No installed app called "${String(name)}".`)
       }
 
-      await window.heraldOS.apps.launch(app.path)
+      await window.bantuOS.apps.launch(app.path)
 
       return ok(`Launched ${app.name}`, { spoken: `Opening ${app.name}.`, data: { path: app.path } })
     }
@@ -103,7 +103,7 @@ export const systemCommands: readonly OsCommand[] = [
   {
     id: 'web.open',
     title: 'Open a web page',
-    description: 'Open a URL in a window inside Herald OS.',
+    description: 'Open a URL in a window inside Bantu OS.',
     tier: 'act',
     args: [
       { name: 'url', type: 'string', description: 'URL or domain (https is assumed)', required: true },
@@ -164,7 +164,7 @@ export const systemCommands: readonly OsCommand[] = [
     run: async ({ accent }) => {
       // An accent belongs to the Ocean and Graphite presets; a theme with its own colours steps aside.
       const preset = $prefs.get().theme
-      await updatePrefs({ accent: accent as HeraldOSPrefs['accent'], themeColors: undefined, themeScheme: undefined, themeName: `herald-${preset}` })
+      await updatePrefs({ accent: accent as BantuOSPrefs['accent'], themeColors: undefined, themeScheme: undefined, themeName: `bantu-${preset}` })
 
       return ok(`Accent set to ${String(accent)}`, { highlight: { kind: 'setting', id: 'appearance' } })
     }

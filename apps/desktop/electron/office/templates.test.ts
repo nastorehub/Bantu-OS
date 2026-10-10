@@ -12,7 +12,7 @@ describe('OfficeTemplates', () => {
   let templates: OfficeTemplates
 
   beforeEach(async () => {
-    root = await fs.mkdtemp(path.join(os.tmpdir(), 'herald-office-templates-'))
+    root = await fs.mkdtemp(path.join(os.tmpdir(), 'bantu-office-templates-'))
     templates = new OfficeTemplates(root, () => new Date('2026-10-09T08:00:00Z'))
   })
 
@@ -53,7 +53,7 @@ describe('OfficeTemplates', () => {
     await expect(templates.remove('docs', '../../outside')).rejects.toThrow(/no such template/)
     await expect(templates.save('docs', 'Letter', doc, '../letter')).rejects.toThrow(/no such template/)
     await expect(templates.rename('docs', 'letter.json', 'x')).rejects.toThrow(/no such template/)
-    await expect(templates.list('../docs' as never)).rejects.toThrow(/not a Herald Office app/)
+    await expect(templates.list('../docs' as never)).rejects.toThrow(/not a Bantu Office app/)
     await expect(templates.rename('docs', crypto.randomUUID(), 'x')).rejects.toThrow(/no such template/)
   })
 

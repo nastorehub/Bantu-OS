@@ -1,6 +1,6 @@
 /*
  * What opening a PowerPoint file kept: each element counted by kind as kept, shown approximately or
- * left out, why each approximation was made, and what of the deck Herald does not keep (animations,
+ * left out, why each approximation was made, and what of the deck Bantu does not keep (animations,
  * macros…). Its notes are what the fidelity report lists before the first save over the file.
  */
 
@@ -18,7 +18,7 @@ export interface ImportReport {
   counts: Record<ReportKind, KindCount>
   /** Why elements were approximated or left out, with how many times each. */
   reasons: Record<string, number>
-  /** What the deck had that Herald does not keep, with how many (slides, fonts, comments…). */
+  /** What the deck had that Bantu does not keep, with how many (slides, fonts, comments…). */
   dropped: Record<string, number>
 }
 

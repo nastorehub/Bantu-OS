@@ -7,7 +7,7 @@ import { promisify } from 'node:util'
 /*
  * Images Chromium cannot decode (HEIC, TIFF, camera RAW) become a PNG through whatever the system
  * has: `sips` on the Mac (ImageIO reads all of them), and on Linux libheif, darktable, ImageMagick
- * or libvips, tried in turn. Photoshop documents are read by Herald Canvas itself, and only come
+ * or libvips, tried in turn. Photoshop documents are read by Bantu Canvas itself, and only come
  * here when one is wanted as a single picture.
  */
 
@@ -64,7 +64,7 @@ export function converterHint(file: string, output = ''): string {
 }
 
 export async function convertToPng(file: string): Promise<Uint8Array> {
-  const folder = await fs.mkdtemp(path.join(os.tmpdir(), 'herald-canvas-'))
+  const folder = await fs.mkdtemp(path.join(os.tmpdir(), 'bantu-canvas-'))
   const out = path.join(folder, 'image.png')
   let tried = 0
   let said = ''

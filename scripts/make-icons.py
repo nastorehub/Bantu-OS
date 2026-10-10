@@ -1,12 +1,12 @@
-"""Regenerate the Herald OS icons from the master mark. Needs Pillow; the .icns step needs macOS.
+"""Regenerate the Bantu OS icons from the master mark. Needs Pillow; the .icns step needs macOS.
 
     python3 scripts/make-icons.py
 
 Source: apps/desktop/src/assets/brand/nastech-mark.png (the exact NasTech Bantu mark, shared with
-the Herald mobile app). Writes:
+the Bantu mobile app). Writes:
   apps/desktop/build/icon.png, icon.icns     app icon (macOS squircle grid: 824 px body on 1024 canvas)
   apps/desktop/public/brand/nastech-icon.png  256 px icon (window icon, favicon)
-  linux/plymouth/herald-os/logo.png     boot splash mark
+  linux/plymouth/bantu-os/logo.png     boot splash mark
 """
 
 from __future__ import annotations
@@ -72,7 +72,7 @@ def main() -> int:
     icon.resize((256, 256), Image.LANCZOS).save(APP / "public" / "brand" / "nastech-icon.png")
 
     splash = mark.resize((240, round(mark.height * 240 / mark.width)), Image.LANCZOS)
-    splash.save(ROOT / "linux" / "plymouth" / "herald-os" / "logo.png")
+    splash.save(ROOT / "linux" / "plymouth" / "bantu-os" / "logo.png")
     print("icons written")
     return 0
 

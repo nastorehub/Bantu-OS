@@ -116,7 +116,7 @@ export function Dock() {
     setTimeout(() => setBouncing(null), 450)
 
     try {
-      await window.heraldOS.apps.launch(app.path)
+      await window.bantuOS.apps.launch(app.path)
     } catch (error) {
       notify({ title: `Could not open ${app.name}`, body: error instanceof Error ? error.message : String(error), level: 'error' })
     }
@@ -137,7 +137,7 @@ export function Dock() {
 
     for (const pin of pinnedFor(platform)) {
       if (pin.label === 'Files') {
-        // Files is always Herald OS's own page; borrow the host file manager's icon when it has one.
+        // Files is always Bantu OS's own page; borrow the host file manager's icon when it has one.
         list.push({ id: 'files', label: 'Files', render: () => <NativeIcon src={iconFor(findApp(pin.names)?.path)} fallback="files" />, onClick: () => showPage('files') })
 
         continue
@@ -151,11 +151,11 @@ export function Dock() {
     }
 
     // A shortcut beside the one in Applications.
-    list.push({ id: 'canvas', label: 'Herald Canvas', render: () => <span className="icon-tile size-11 rounded-[11px]"><AppGlyph id="canvas" size={22} /></span>, onClick: () => openInCanvas(), running: canvasOpen })
+    list.push({ id: 'canvas', label: 'Bantu Canvas', render: () => <span className="icon-tile size-11 rounded-[11px]"><AppGlyph id="canvas" size={22} /></span>, onClick: () => openInCanvas(), running: canvasOpen })
     // Docs, Sheets and Slides share one entry, so three icons do not crowd the Dock.
     list.push({
       id: 'office',
-      label: 'Herald Office',
+      label: 'Bantu Office',
       render: () => <span className="icon-tile size-11 rounded-[11px]"><AppGlyph id="office" size={22} /></span>,
       onClick: event => {
         const rect = event.currentTarget.getBoundingClientRect()
@@ -164,7 +164,7 @@ export function Dock() {
       running: officeKey !== ''
     })
     list.push({ id: 'applications', label: 'Applications', render: () => <span className="icon-tile size-11 rounded-[11px]"><AppGlyph id="grid" size={22} /></span>, onClick: () => $applicationsOpen.set(true) })
-    list.push({ id: 'trash', label: 'Trash', render: () => <span className="flex size-11 items-center justify-center rounded-[11px] bg-white/6 text-fg-2"><AppGlyph id="trash" size={22} /></span>, onClick: () => void window.heraldOS.fs.openPath(trashPath) })
+    list.push({ id: 'trash', label: 'Trash', render: () => <span className="flex size-11 items-center justify-center rounded-[11px] bg-white/6 text-fg-2"><AppGlyph id="trash" size={22} /></span>, onClick: () => void window.bantuOS.fs.openPath(trashPath) })
 
     return list
     // eslint-disable-next-line react-hooks/exhaustive-deps

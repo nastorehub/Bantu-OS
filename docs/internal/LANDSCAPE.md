@@ -1,6 +1,6 @@
 # Landscape: AI-native operating environments (September 2026)
 
-What else exists, what each does well, and which ideas are worth carrying into Herald OS. Kept
+What else exists, what each does well, and which ideas are worth carrying into Bantu OS. Kept
 short and opinionated; revisit quarterly.
 
 ## Projects
@@ -18,13 +18,13 @@ short and opinionated; revisit quarterly.
 | [Sai](https://github.com/GodlyDonuts/sai) | Voice-first, screenshot-driven macOS control, one verified action at a time | Experimental | Verify-after-each-action loop and cycle detection for GUI automation |
 | [AIOS](https://github.com/agiresearch/AIOS) | Academic "agent kernel": scheduling, memory, tool management for agents | Research | Vocabulary for resource scheduling across agents |
 | ChatGPT Work (OpenAI) | Desktop app mode that uses local files/apps/browser with permission; cloud continuation | Shipping | Local-or-cloud execution toggle per task; task-shaped (deliverable) framing |
-| Siri AI / App Intents (Apple, macOS 27) | System assistant acting inside apps via developer-declared intents | Shipping later 2026 | Structured per-app actions; Herald OS can call Shortcuts/App Intents as a bridge target |
+| Siri AI / App Intents (Apple, macOS 27) | System assistant acting inside apps via developer-declared intents | Shipping later 2026 | Structured per-app actions; Bantu OS can call Shortcuts/App Intents as a bridge target |
 
-NasTech Desktop itself already ships a HUD overlay, pet, Starmap and Command Center; Herald OS
+NasTech Desktop itself already ships a HUD overlay, pet, Starmap and Command Center; Bantu OS
 deliberately does not copy those (different product), but their existence means the runtime has the
 hooks (events, RPCs) to build equivalents when wanted.
 
-## What Herald OS already has that most of these lack
+## What Bantu OS already has that most of these lack
 
 - A real, mature agent runtime underneath (memory, skills self-improvement, cron, subagents, 20
   messaging platforms) instead of a bespoke agent.
@@ -42,7 +42,7 @@ Ranked by value to the "NasTech is the OS" thesis divided by cost, given the cur
    one skill + `system_logs`.
 2. **Whole-environment themes driven by NasTech skins** (Omarchy). The runtime already sends a
    `skin` payload on `gateway.ready`; map its colour tokens onto our CSS tokens so `/skin` in chat
-   restyles the entire environment, and ship a `herald-os-theme` skill so the agent can author
+   restyles the entire environment, and ship a `bantu-os-theme` skill so the agent can author
    themes. Small to medium.
 3. **Agent Task Manager** (OpenNeo). Extend the Agents surface with per-session CPU/memory of the
    backend and subagent workers, tokens used, approvals granted, and a "stop" control; surface the
@@ -53,10 +53,10 @@ Ranked by value to the "NasTech is the OS" thesis divided by cost, given the cur
 5. **Agent-as-co-user with a live "hands" indicator** (SomaOS). When the agent uses
    `computer_use`/browser tools, show a persistent banner with the current action and a big
    Interrupt button; never let GUI automation run without visible presence. Small UI, high trust.
-6. **The OS as an editable surface + tailoring skill** (Omarchy). A `herald-os-tailor` skill that
-   teaches the agent how to change Herald OS itself: prefs, policy file, surfaces order, accent,
+6. **The OS as an editable surface + tailoring skill** (Omarchy). A `bantu-os-tailor` skill that
+   teaches the agent how to change Bantu OS itself: prefs, policy file, surfaces order, accent,
    default cwd, keybindings. Small (docs + skill).
-7. **Opt-in environment bundles** (vinOS). `herald os bundle dev` installs a curated set (VS Code,
+7. **Opt-in environment bundles** (vinOS). `bantu os bundle dev` installs a curated set (VS Code,
    Homebrew packages, dotfiles) through the bridge with one approval; ties into "start my
    development environment". Medium.
 8. **Local-or-cloud execution per task** (ChatGPT Work). NasTech already supports remote backends
@@ -70,7 +70,7 @@ Ranked by value to the "NasTech is the OS" thesis divided by cost, given the cur
     `computer_use`; propose there.
 11. **Keychain-backed secrets** (OpenPawz). NasTech keeps secrets in `.env`; the shell could offer
     to move them into the macOS Keychain via the runtime's vault hooks. Medium; upstream-facing.
-12. **Always-alive presence** (Naia). Herald OS already runs the cron ticker; add a menu-bar
+12. **Always-alive presence** (Naia). Bantu OS already runs the cron ticker; add a menu-bar
     companion so NasTech keeps receiving and acting when the fullscreen shell is closed. Medium.
 
 ## Not adopting

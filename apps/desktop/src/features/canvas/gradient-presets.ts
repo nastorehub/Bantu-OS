@@ -6,7 +6,7 @@
 import { atom } from 'nanostores'
 import type { ColourStop, Gradient, OpacityStop } from './engine/gradient.ts'
 
-const SAVED_KEY = 'herald-canvas.gradients'
+const SAVED_KEY = 'bantu-canvas.gradients'
 const LIMIT = 60
 
 const isFraction = (value: unknown): value is number => typeof value === 'number' && Number.isFinite(value) && value >= 0 && value <= 1

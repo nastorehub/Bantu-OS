@@ -15,16 +15,16 @@ import { attributesOf, elementsOf, firstElement } from './xml.ts'
 /*
  * An .xlsx file as a Univer workbook snapshot. ExcelJS reads the cells, styles and layout; the
  * package itself gives what ExcelJS leaves out or mishandles (data validation, filter conditions,
- * links, defined names, the theme) and what Herald Sheets cannot keep, for the fidelity report.
+ * links, defined names, the theme) and what Bantu Sheets cannot keep, for the fidelity report.
  */
 
 export interface XlsxReadResult {
   workbook: WorkbookSnapshot
-  /** What Herald Sheets shows differently or drops, for the fidelity report. */
+  /** What Bantu Sheets shows differently or drops, for the fidelity report. */
   notes: string[]
 }
 
-/** What a sheet has that Herald Sheets does not show but writes back as it was, kept in the sheet's custom data. */
+/** What a sheet has that Bantu Sheets does not show but writes back as it was, kept in the sheet's custom data. */
 export interface SheetExtras {
   page?: { pageSetup?: Record<string, unknown>; margins?: Record<string, unknown>; headerFooter?: Record<string, unknown> }
 }
@@ -364,7 +364,7 @@ function convertSheet(worksheet: ExcelJS.Worksheet, source: PackageSheet, id: st
   }
 
   if (formulasWithBrackets) {
-    notes.add('Formulas that refer to tables by column name, or to other workbooks, do not work in Herald Sheets; they keep their last values until worked out again.')
+    notes.add('Formulas that refer to tables by column name, or to other workbooks, do not work in Bantu Sheets; they keep their last values until worked out again.')
   }
 
   // Links: the address from the package, the text the cell shows.
@@ -445,7 +445,7 @@ function convertSheet(worksheet: ExcelJS.Worksheet, source: PackageSheet, id: st
   const { rules: conditional, dropped: droppedRules } = conditionalFromExcel(formats, source.tail, palette)
 
   if (droppedRules) {
-    notes.add(`${droppedRules === 1 ? 'One conditional format is' : `${droppedRules} conditional formats are`} not kept: Herald Sheets has no equivalent.`)
+    notes.add(`${droppedRules === 1 ? 'One conditional format is' : `${droppedRules} conditional formats are`} not kept: Bantu Sheets has no equivalent.`)
   }
 
   const extras: SheetExtras = {}
@@ -477,7 +477,7 @@ function convertSheet(worksheet: ExcelJS.Worksheet, source: PackageSheet, id: st
     defaultColumnWidth: defaultColumnPixels(Number(formatAttributes.defaultColWidth) || undefined, Number(formatAttributes.baseColWidth) || 8),
     defaultRowHeight: pointsToPixels(defaultRowPoints),
     defaultStyle: baseStyle(base),
-    ...(Object.keys(extras).length ? { custom: { herald: extras } } : {})
+    ...(Object.keys(extras).length ? { custom: { bantu: extras } } : {})
   }
 
   return { sheet, validations: validationsFromXml(source.tail), filter, conditional }
@@ -485,11 +485,11 @@ function convertSheet(worksheet: ExcelJS.Worksheet, source: PackageSheet, id: st
 
 const toBytes = (input: Uint8Array | ArrayBuffer): Uint8Array => (input instanceof Uint8Array ? input : new Uint8Array(input))
 
-/** Parts Herald Sheets does not keep, which ExcelJS still reads (and can fail on). */
+/** Parts Bantu Sheets does not keep, which ExcelJS still reads (and can fail on). */
 const UNKEPT_PART = /^xl\/(tables|drawings|pivotTables|pivotCache|threadedComments)\/|^xl\/comments\d*\.xml$/i
 const UNKEPT_RELATIONSHIP = /\/(table|drawing|vmlDrawing|comments|pivotTable|pivotCacheDefinition|threadedComment)"/
 
-/** The package without the parts Herald does not keep, and without what points at them. */
+/** The package without the parts Bantu does not keep, and without what points at them. */
 async function withoutUnkeptParts(bytes: Uint8Array): Promise<Uint8Array> {
   const zip = await JSZip.loadAsync(bytes)
 
@@ -511,7 +511,7 @@ async function withoutUnkeptParts(bytes: Uint8Array): Promise<Uint8Array> {
   return zip.generateAsync({ type: 'uint8array', compression: 'STORE' })
 }
 
-/** ExcelJS's reading of the package; when it fails on a part Herald does not keep, a second try without those parts. */
+/** ExcelJS's reading of the package; when it fails on a part Bantu does not keep, a second try without those parts. */
 async function loadBook(bytes: Uint8Array): Promise<ExcelJS.Workbook> {
   // Data validation is read from the package: ExcelJS lists every cell of each rule's ranges.
   const options = { ignoreNodes: ['dataValidations'] } as never
@@ -527,7 +527,7 @@ async function loadBook(bytes: Uint8Array): Promise<ExcelJS.Workbook> {
     try {
       await book.xlsx.load((await withoutUnkeptParts(bytes)) as unknown as ArrayBuffer, options)
     } catch {
-      throw new Error(`Herald Sheets could not read this workbook: ${error instanceof Error ? error.message : String(error)}`)
+      throw new Error(`Bantu Sheets could not read this workbook: ${error instanceof Error ? error.message : String(error)}`)
     }
 
     return book
@@ -577,7 +577,7 @@ export async function workbookFromXlsx(input: Uint8Array | ArrayBuffer, options:
   })
 
   if (!sheets.length) {
-    throw new Error('This workbook has no worksheets Herald Sheets can show (only charts or macro sheets).')
+    throw new Error('This workbook has no worksheets Bantu Sheets can show (only charts or macro sheets).')
   }
 
   const { names, print } = definedNamesFromPackage(pkg.definedNames, ids)
@@ -600,10 +600,10 @@ export async function workbookFromXlsx(input: Uint8Array | ArrayBuffer, options:
   resources.push(...extras.resources)
 
   for (const sheet of sheets) {
-    const custom = sheet.custom as { herald?: Record<string, unknown> } | undefined
+    const custom = sheet.custom as { bantu?: Record<string, unknown> } | undefined
 
     if (extras.sheets[sheet.id]) {
-      sheet.custom = { ...custom, herald: { ...extras.sheets[sheet.id], ...custom?.herald } }
+      sheet.custom = { ...custom, bantu: { ...extras.sheets[sheet.id], ...custom?.bantu } }
     }
   }
 
@@ -630,7 +630,7 @@ export async function workbookFromXlsx(input: Uint8Array | ArrayBuffer, options:
     ...(resources.length ? { resources } : {}),
     ...(activeTab >= 0 && ids[activeTab] ? { activeSheetId: ids[activeTab] } : {}),
     custom: {
-      herald: {
+      bantu: {
         ...(Object.keys(properties).length || created ? { properties: { ...properties, ...(created ? { created } : {}) } } : {}),
         // Charts made later take the file's theme colours, which the cells only hold resolved.
         theme: { accents: palette.theme.slice(4, 10).map((rgb) => `#${rgb}`) }

@@ -6,7 +6,7 @@ import path from 'node:path'
 import type { AudioWsKind, BackendRuntime, BackendState, RestRequest } from '../../shared/ipc.ts'
 import { osEnv } from '../env.ts'
 import { log } from '../log.ts'
-import { nastechHome, heraldOsDataDir } from '../paths.ts'
+import { nastechHome, bantuOsDataDir } from '../paths.ts'
 import { ensureBridgePlugin } from './bridge-plugin.ts'
 import { type AttachTarget, attachTarget, foreignGateway } from './coexist.ts'
 import { waitForStatus } from './probe.ts'
@@ -27,15 +27,15 @@ export const WAIT_POLL_MS = 3_000
 export function waitingReason(install: string | null): string {
   switch (install) {
     case null:
-      return 'No NasTech runtime found. Install NasTech Agent (curl -fsSL https://raw.githubusercontent.com/nastechresearch/nastech-agent/main/scripts/install.sh | bash) or set HERALD_OS_NASTECH_ROOT; Herald OS starts it as soon as it is installed.'
+      return 'No NasTech runtime found. Install NasTech Agent (curl -fsSL https://raw.githubusercontent.com/nastechresearch/nastech-agent/main/scripts/install.sh | bash) or set BANTU_OS_NASTECH_ROOT; Bantu OS starts it as soon as it is installed.'
     case 'offline':
-      return 'NasTech Agent comes from the internet, and this computer was offline when it first started. Join a network and it installs by itself, which takes a few minutes; Herald OS starts it then.'
+      return 'NasTech Agent comes from the internet, and this computer was offline when it first started. Join a network and it installs by itself, which takes a few minutes; Bantu OS starts it then.'
     case 'installing':
-      return 'Installing NasTech Agent. It takes a few minutes; Herald OS starts it when it is ready.'
+      return 'Installing NasTech Agent. It takes a few minutes; Bantu OS starts it when it is ready.'
     case 'retrying':
-      return 'NasTech Agent did not install, so it tries again in a few minutes (journalctl -u herald-os-nastech says why). Herald OS starts it when it is ready.'
+      return 'NasTech Agent did not install, so it tries again in a few minutes (journalctl -u bantu-os-nastech says why). Bantu OS starts it when it is ready.'
     default:
-      return 'NasTech Agent is not installed yet. It installs by itself once this computer is online; Herald OS starts it then.'
+      return 'NasTech Agent is not installed yet. It installs by itself once this computer is online; Bantu OS starts it then.'
   }
 }
 
@@ -251,7 +251,7 @@ export class BackendManager {
     }, WAIT_POLL_MS)
   }
 
-  /** Use a backend that is already running (HERALD_OS_BACKEND_URL) instead of starting a second one. */
+  /** Use a backend that is already running (BANTU_OS_BACKEND_URL) instead of starting a second one. */
   private async attach(target: AttachTarget, attempt: number, generation: number): Promise<void> {
     this.token = target.token
     this.update({ runtime: { kind: 'attached', label: `the NasTech backend at ${target.baseUrl}`, command: [] }, phase: 'starting' })
@@ -265,8 +265,8 @@ export class BackendManager {
 
       // It did not get our control socket in its environment; the bridge plugin reads this instead.
       if (this.control) {
-        const file = path.join(heraldOsDataDir(), 'control.json')
-        fs.mkdirSync(heraldOsDataDir(), { recursive: true })
+        const file = path.join(bantuOsDataDir(), 'control.json')
+        fs.mkdirSync(bantuOsDataDir(), { recursive: true })
         fs.writeFileSync(file, JSON.stringify({ socket: this.control.socketPath, token: this.control.token }), { mode: 0o600 })
         fs.chmodSync(file, 0o600)
       }
@@ -291,7 +291,7 @@ export class BackendManager {
     this.token = crypto.randomBytes(32).toString('base64url')
     const [command, ...head] = runtime.command
     const args = [...head, 'serve', '--host', '127.0.0.1', '--port', '0']
-    const dataDir = heraldOsDataDir()
+    const dataDir = bantuOsDataDir()
     const readyFile = path.join(dataDir, readyFileName(process.pid))
     fs.mkdirSync(dataDir, { recursive: true })
     fs.rmSync(readyFile, { force: true })
@@ -307,9 +307,9 @@ export class BackendManager {
       TERMINAL_CWD: osEnv('DEFAULT_CWD') || os.homedir(),
       NASTECH_DASHBOARD_SESSION_TOKEN: this.token,
       // The loopback token exemption, in-process cron ticker and orphan reaping upstream key on
-      // this flag; Herald OS spawns and owns the backend exactly the way Desktop does.
+      // this flag; Bantu OS spawns and owns the backend exactly the way Desktop does.
       NASTECH_DESKTOP: '1',
-      HERALD_OS: '1',
+      BANTU_OS: '1',
       NASTECH_PARENT_PID: String(process.pid),
       // Remove parent-identity markers inherited from an outer NasTech session
       // (the app may have been launched from a running NasTech CLI or Desktop
@@ -323,7 +323,7 @@ export class BackendManager {
       NASTECH_SPAWN: undefined,
       NASTECH_DESKTOP_READY_FILE: readyFile,
       PYTHONUNBUFFERED: '1',
-      ...(this.control ? { HERALD_OS_CONTROL_SOCKET: this.control.socketPath, HERALD_OS_CONTROL_TOKEN: this.control.token } : {})
+      ...(this.control ? { BANTU_OS_CONTROL_SOCKET: this.control.socketPath, BANTU_OS_CONTROL_TOKEN: this.control.token } : {})
     })
 
     log('backend', `spawning ${[command, ...args].join(' ')} (cwd ${runtime.root ?? process.cwd()})`)

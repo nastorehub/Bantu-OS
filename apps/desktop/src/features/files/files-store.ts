@@ -35,7 +35,7 @@ export type ViewMode = 'grid' | 'list'
 export type KindFilter = 'all' | 'folders' | 'images' | 'documents'
 
 /** MIME type used for dragging cards onto sidebar folders. */
-export const DRAG_MIME = 'application/x-herald-os-path'
+export const DRAG_MIME = 'application/x-bantu-os-path'
 
 export const $home = atom<string | null>(null)
 export const $location = atom<Location | null>(null)
@@ -101,7 +101,7 @@ let homeRequest: Promise<string> | null = null
 /** Resolve the home folder once and land on the root when nothing is open yet. */
 export function ensureHome(): Promise<string> {
   if (!homeRequest) {
-    homeRequest = window.heraldOS.fs
+    homeRequest = window.bantuOS.fs
       .home()
       .then(home => {
         $home.set(home)
@@ -213,7 +213,7 @@ const MAX_HIDDEN_RECENTS = 500
 /** Recent files minus the ones the user removed from Recents. */
 export async function loadRecents(limit: number): Promise<RecentFile[]> {
   const hidden = new Set($prefs.get().hiddenRecents ?? [])
-  const recent = await window.heraldOS.fs.recent(Math.min(200, limit + hidden.size))
+  const recent = await window.bantuOS.fs.recent(Math.min(200, limit + hidden.size))
 
   return recent.filter(entry => !hidden.has(entry.path)).slice(0, limit)
 }
@@ -264,7 +264,7 @@ async function loadFavorites(paths: string[]): Promise<FileItem[]> {
   await Promise.all(
     [...byParent.entries()].map(async ([parent, wanted]) => {
       try {
-        const entries = await window.heraldOS.fs.readDir(parent)
+        const entries = await window.bantuOS.fs.readDir(parent)
 
         for (const entry of entries) {
           if (wanted.includes(entry.path)) {
@@ -283,7 +283,7 @@ async function loadFavorites(paths: string[]): Promise<FileItem[]> {
 export async function loadLocation(location: Location, favorites: string[]): Promise<FileItem[]> {
   switch (location.kind) {
     case 'dir':
-      return sortItems((await window.heraldOS.fs.readDir(location.path)).map(fromDirEntry))
+      return sortItems((await window.bantuOS.fs.readDir(location.path)).map(fromDirEntry))
     case 'recent':
       return (await loadRecents(40)).map(fromRecent)
     case 'favorites':
@@ -501,7 +501,7 @@ export function loadThumbnail(path: string, size: number): Promise<string | null
   let pending = thumbnails.get(key)
 
   if (!pending) {
-    pending = window.heraldOS.fs.thumbnail(path, size).catch(() => null)
+    pending = window.bantuOS.fs.thumbnail(path, size).catch(() => null)
     thumbnails.set(key, pending)
   }
 
@@ -512,7 +512,7 @@ export function loadDirCount(path: string): Promise<number | null> {
   let pending = dirCounts.get(path)
 
   if (!pending) {
-    pending = window.heraldOS.fs
+    pending = window.bantuOS.fs
       .readDir(path)
       .then(entries => entries.filter(entry => !entry.hidden).length)
       .catch(() => null)
@@ -642,7 +642,7 @@ export async function trashItems(items: FileItem[]): Promise<boolean> {
   }
 
   try {
-    await window.heraldOS.fs.trash(items.map(item => item.path))
+    await window.bantuOS.fs.trash(items.map(item => item.path))
     items.forEach(item => invalidatePath(item.path))
 
     if (items.some(item => item.path === $selectedPath.get())) {
@@ -677,7 +677,7 @@ export async function renameItem(item: FileItem, name: string): Promise<boolean>
   const to = joinPath(parent, trimmed)
 
   try {
-    await window.heraldOS.fs.rename(item.path, to)
+    await window.bantuOS.fs.rename(item.path, to)
     invalidatePath(item.path)
     invalidatePath(to)
     $selectedPath.set(to)
@@ -704,7 +704,7 @@ export async function moveItem(from: string, dir: string, dirLabel: string): Pro
   }
 
   try {
-    await window.heraldOS.fs.rename(from, to)
+    await window.bantuOS.fs.rename(from, to)
     invalidatePath(from)
     invalidatePath(to)
 
@@ -733,7 +733,7 @@ export async function createFolder(dir: string, name: string): Promise<string | 
   const path = joinPath(dir, trimmed)
 
   try {
-    await window.heraldOS.fs.mkdir(path)
+    await window.bantuOS.fs.mkdir(path)
     invalidatePath(path)
     refresh()
     $selectedPath.set(path)
@@ -760,7 +760,7 @@ export async function createTextFile(dir: string, name: string): Promise<string 
   const path = joinPath(dir, trimmed)
 
   try {
-    await window.heraldOS.fs.writeText(path, '')
+    await window.bantuOS.fs.writeText(path, '')
     invalidatePath(path)
     refresh()
     $selectedPath.set(path)
@@ -774,7 +774,7 @@ export async function createTextFile(dir: string, name: string): Promise<string 
 }
 
 export function openItem(item: FileItem): void {
-  // A Herald Canvas project is a folder on Linux (a package on the Mac): it opens in Canvas.
+  // A Bantu Canvas project is a folder on Linux (a package on the Mac): it opens in Canvas.
   if (isProjectPath(item.path)) {
     openInCanvas(item.path)
 
@@ -787,18 +787,18 @@ export function openItem(item: FileItem): void {
     return
   }
 
-  // PDFs, images, text and media open inside Herald OS; other types go to the app that owns them.
+  // PDFs, images, text and media open inside Bantu OS; other types go to the app that owns them.
   if (isViewable(item.path)) {
     openFileWindow(item.path).catch(error => notify({ title: `Could not open "${item.name}"`, body: messageOf(error), level: 'error' }))
 
     return
   }
 
-  window.heraldOS.fs.openPath(item.path).catch(error => notify({ title: `Could not open "${item.name}"`, body: messageOf(error), level: 'error' }))
+  window.bantuOS.fs.openPath(item.path).catch(error => notify({ title: `Could not open "${item.name}"`, body: messageOf(error), level: 'error' }))
 }
 
 export function revealItem(path: string): void {
-  window.heraldOS.fs.reveal(path).catch(error => notify({ title: `Could not show in ${fileManagerName()}`, body: messageOf(error), level: 'error' }))
+  window.bantuOS.fs.reveal(path).catch(error => notify({ title: `Could not show in ${fileManagerName()}`, body: messageOf(error), level: 'error' }))
 }
 
 export function copyPath(path: string): void {

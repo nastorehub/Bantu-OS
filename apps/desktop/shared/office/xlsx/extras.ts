@@ -1,12 +1,12 @@
 import { readCharts } from './charts/index.ts'
 import { readComments } from './comments/index.ts'
-import { readHeraldPart } from './herald-part.ts'
+import { readBantuPart } from './bantu-part.ts'
 import type { XlsxPackage } from './package.ts'
 import type { Resource } from './rules.ts'
 
 /*
- * What Herald reads from an .xlsx package beside the cells ExcelJS reads: charts, comments and
- * notes, and Herald's own part, as Univer resources and Herald data for each sheet.
+ * What Bantu reads from an .xlsx package beside the cells ExcelJS reads: charts, comments and
+ * notes, and Bantu's own part, as Univer resources and Bantu data for each sheet.
  */
 
 export interface ReadContext {
@@ -15,24 +15,24 @@ export interface ReadContext {
   unitId: string
   /** The snapshot id of each of the file's sheets, in the file's order; null where a sheet is not read (chart sheets). */
   ids: (string | null)[]
-  /** The sections of Herald's own part, when the file has one Herald saved. */
-  herald: Record<string, unknown> | null
-  /** What Herald Sheets shows differently or drops, for the fidelity report. */
+  /** The sections of Bantu's own part, when the file has one Bantu saved. */
+  bantu: Record<string, unknown> | null
+  /** What Bantu Sheets shows differently or drops, for the fidelity report. */
   notes: Set<string>
 }
 
 export interface ReadExtras {
   resources: Resource[]
-  /** Herald data for sheets' custom data, by sheet id. */
+  /** Bantu data for sheets' custom data, by sheet id. */
   sheets: Record<string, Record<string, unknown>>
 }
 
 export async function readExtras(pkg: XlsxPackage, options: { unitId: string; ids: (string | null)[]; notes: Set<string> }): Promise<ReadExtras> {
-  const herald = await readHeraldPart(pkg)
-  const ctx: ReadContext = { pkg, unitId: options.unitId, ids: options.ids, herald, notes: options.notes }
+  const bantu = await readBantuPart(pkg)
+  const ctx: ReadContext = { pkg, unitId: options.unitId, ids: options.ids, bantu, notes: options.notes }
   const resources = [...(await readComments(ctx)), ...(await readCharts(ctx))]
   const sheets: Record<string, Record<string, unknown>> = {}
-  const saved = (herald?.sheets ?? {}) as Record<string, Record<string, unknown>>
+  const saved = (bantu?.sheets ?? {}) as Record<string, Record<string, unknown>>
 
   options.ids.forEach((id, index) => {
     const data = saved[pkg.sheets[index]?.name ?? '']

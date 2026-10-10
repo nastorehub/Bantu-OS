@@ -5,7 +5,7 @@ import { freshPart, type PackageWriter, relativeTarget, Relationships } from './
 import { elements, parseXml, xml, type XmlElement } from './xml.ts'
 
 /*
- * Objects Herald keeps without editing them (charts, SmartArt, embedded objects): the frame's XML
+ * Objects Bantu keeps without editing them (charts, SmartArt, embedded objects): the frame's XML
  * goes back where the element is in the drawing order, moved and sized to its box, and the parts it
  * names are copied in under fresh names, each with its own relationships to the parts it names in
  * turn, so several objects copied from one file never share a part. The frame names its parts by

@@ -112,7 +112,7 @@ export function CaptureEditor({ file }: { file?: string }) {
     }
 
     let cancelled = false
-    window.heraldOS.capture
+    window.bantuOS.capture
       .readImage(file)
       .then(url => {
         const img = new Image()
@@ -223,7 +223,7 @@ export function CaptureEditor({ file }: { file?: string }) {
           <IconTrash />
         </GlassButton>
         <span className="flex-1" />
-        <GlassButton size="sm" variant="ghost" disabled={busy || !image} onClick={() => void act(async () => window.heraldOS.capture.copyImage(exportPng()).then(() => notify({ title: 'Copied', body: 'The marked-up picture is on the clipboard.', level: 'success' })))}>
+        <GlassButton size="sm" variant="ghost" disabled={busy || !image} onClick={() => void act(async () => window.bantuOS.capture.copyImage(exportPng()).then(() => notify({ title: 'Copied', body: 'The marked-up picture is on the clipboard.', level: 'success' })))}>
           <IconCopy />
           Copy
         </GlassButton>
@@ -233,7 +233,7 @@ export function CaptureEditor({ file }: { file?: string }) {
           disabled={busy || !image}
           onClick={() =>
             void act(async () => {
-              const saved = await window.heraldOS.capture.saveImage(markedUpName(file), exportPng())
+              const saved = await window.bantuOS.capture.saveImage(markedUpName(file), exportPng())
               askAbout(saved)
             })
           }
@@ -241,7 +241,7 @@ export function CaptureEditor({ file }: { file?: string }) {
           <NasTechAvatar size={16} rounded={4} />
           Ask NasTech
         </GlassButton>
-        <GlassButton size="sm" variant="primary" disabled={busy || !image} onClick={() => void act(async () => window.heraldOS.capture.saveImage(markedUpName(file), exportPng()).then(saved => notify({ title: 'Saved', body: saved.split('/').pop() ?? saved, level: 'success', actions: [{ label: 'Show', command: 'files.show', args: { path: saved } }] })))}>
+        <GlassButton size="sm" variant="primary" disabled={busy || !image} onClick={() => void act(async () => window.bantuOS.capture.saveImage(markedUpName(file), exportPng()).then(saved => notify({ title: 'Saved', body: saved.split('/').pop() ?? saved, level: 'success', actions: [{ label: 'Show', command: 'files.show', args: { path: saved } }] })))}>
           <IconDeviceFloppy />
           Save
         </GlassButton>

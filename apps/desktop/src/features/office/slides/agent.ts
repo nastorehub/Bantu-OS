@@ -47,11 +47,11 @@ import { decks, slidesSession as session } from './store.ts'
 import { loadCustomThemes } from './theme-store.ts'
 
 /*
- * What NasTech (and voice, the command bar and `herald-os slides`) does in Herald Slides. A command
+ * What NasTech (and voice, the command bar and `bantu-os slides`) does in Bantu Slides. A command
  * works on the presentation it names or the one in front. Open in a window, each change is one
  * step to undo there (a batch too) and saves the way the person's own edits do; a file that is not
  * open is read, changed and written back, unless reading it approximated something (then it has to
- * be opened first, so nothing is lost silently). Main backs a file up before Herald first writes over it.
+ * be opened first, so nothing is lost silently). Main backs a file up before Bantu first writes over it.
  */
 
 type Args = Record<string, unknown>
@@ -72,7 +72,7 @@ export async function located(ref: unknown): Promise<Local<Deck>> {
   const found = await locate('slides', session, ref)
 
   if (found.kind === 'remote') {
-    throw new Error(`${found.entry.name} is open in another Herald Slides window: ask there`)
+    throw new Error(`${found.entry.name} is open in another Bantu Slides window: ask there`)
   }
 
   return found
@@ -85,8 +85,8 @@ function targetsFor(found: Local<Deck>) {
     active: () => (found.kind === 'live' ? found.doc : session.active()),
     live: (key) => decks.get(key),
     changed: (doc) => session.changed(doc),
-    read: (file) => window.heraldOS.office.read(file),
-    write: (file, bytes) => window.heraldOS.office.write(file, bytes),
+    read: (file) => window.bantuOS.office.read(file),
+    write: (file, bytes) => window.bantuOS.office.write(file, bytes),
     adapter: slidesAdapter,
     flush: (doc) => flushTyping(doc)
   })
@@ -159,7 +159,7 @@ export async function stepOn(found: Local<Deck>, make: (deck: Deck, context: Ste
   return outcomeOf(await change(found, (deck, front) => make(deck, { ...read, front })))
 }
 
-/** The custom themes the person made, from disk; none when they cannot be read, so Herald's own still work. */
+/** The custom themes the person made, from disk; none when they cannot be read, so Bantu's own still work. */
 export async function customThemes(): Promise<Theme[]> {
   return loadCustomThemes().catch(() => [])
 }
@@ -173,14 +173,14 @@ async function picture(source: string): Promise<Picture> {
   }
 
   if (/^https?:/i.test(source)) {
-    throw new Error(`Herald Slides puts in pictures from files: save ${source} first and give its path`)
+    throw new Error(`Bantu Slides puts in pictures from files: save ${source} first and give its path`)
   }
 
   const file = resolve(source.replace(/^file:\/\//, ''))
   const type = IMAGE_TYPES[extensionOf(file).slice(1)] ?? ''
 
   if (!['image/png', 'image/jpeg', 'image/gif', 'image/webp', 'image/bmp'].includes(type)) {
-    throw new Error(`${fileName(file)} is not a picture Herald Slides shows (PNG, JPEG, GIF, WebP or BMP)`)
+    throw new Error(`${fileName(file)} is not a picture Bantu Slides shows (PNG, JPEG, GIF, WebP or BMP)`)
   }
 
   if (!(await exists(file))) {
@@ -188,9 +188,9 @@ async function picture(source: string): Promise<Picture> {
   }
 
   try {
-    return await readPicture(new Blob([(await window.heraldOS.office.read(file)).bytes as Uint8Array<ArrayBuffer>], { type }))
+    return await readPicture(new Blob([(await window.bantuOS.office.read(file)).bytes as Uint8Array<ArrayBuffer>], { type }))
   } catch {
-    throw new Error(`Herald Slides could not read the picture in ${fileName(file)}`)
+    throw new Error(`Bantu Slides could not read the picture in ${fileName(file)}`)
   }
 }
 
@@ -207,7 +207,7 @@ function selectionOf(said: string | undefined): SheetSource['selection'] {
 
 /**
  * A workbook a range comes from, as it is now: the live one open in this window (its formulas
- * worked out), else its file read as Herald Sheets reads it. One open in Herald Sheets' own window
+ * worked out), else its file read as Bantu Sheets reads it. One open in Bantu Sheets' own window
  * (panels mode) is read from its file when that file has all of it, that is, nothing is unsaved.
  */
 async function sheetSource(ref: unknown): Promise<SheetSource> {
@@ -221,11 +221,11 @@ async function sheetSource(ref: unknown): Promise<SheetSource> {
   }
 
   if (found.kind === 'remote' && (!found.entry.path || found.entry.modified)) {
-    throw new Error(`${found.entry.name} is open in Herald Sheets' own window with ${found.entry.path ? 'unsaved changes' : 'nothing saved yet'}: save it there first (sheets.save), then ask again`)
+    throw new Error(`${found.entry.name} is open in Bantu Sheets' own window with ${found.entry.path ? 'unsaved changes' : 'nothing saved yet'}: save it there first (sheets.save), then ask again`)
   }
 
   const file = found.kind === 'remote' ? found.entry.path! : found.path
-  const read = await sheetsAdapter.read((await window.heraldOS.office.read(file)).bytes, extensionOf(file), baseName(file))
+  const read = await sheetsAdapter.read((await window.bantuOS.office.read(file)).bytes, extensionOf(file), baseName(file))
 
   return { name: fileName(file), workbook: read.model, selection: found.kind === 'remote' ? selectionOf(found.entry.selection) : null }
 }
@@ -273,8 +273,8 @@ async function startDeck(deck: Deck, name: string | undefined, file: string | nu
 }
 
 /**
- * Panels mode, from the NasTech window with no Herald Slides window open: the new presentation is
- * made in Herald Slides' own window, which comes up with a blank one; the command runs there and fills it.
+ * Panels mode, from the NasTech window with no Bantu Slides window open: the new presentation is
+ * made in Bantu Slides' own window, which comes up with a blank one; the command runs there and fills it.
  */
 async function inSlidesWindow(command: string, args: Args, context: CommandContext): Promise<Outcome> {
   const before = new Set((await openEntries()).filter((entry) => entry.app === 'slides').map((entry) => entry.key))
@@ -286,17 +286,17 @@ async function inSlidesWindow(command: string, args: Args, context: CommandConte
     const entry = (await openEntries()).find((candidate) => candidate.app === 'slides' && !before.has(candidate.key))
 
     if (entry) {
-      const result = (await window.heraldOS.office.run({ app: 'slides', key: entry.key }, command, args, context.source)) as CommandResult | undefined
+      const result = (await window.bantuOS.office.run({ app: 'slides', key: entry.key }, command, args, context.source)) as CommandResult | undefined
 
       if (!result?.ok) {
-        throw new Error(result?.error ?? result?.summary ?? `Herald Slides did not run ${command}`)
+        throw new Error(result?.error ?? result?.summary ?? `Bantu Slides did not run ${command}`)
       }
 
       return { summary: result.summary, data: result.data }
     }
   }
 
-  throw new Error('Herald Slides did not open in time; try again')
+  throw new Error('Bantu Slides did not open in time; try again')
 }
 
 // Commands.
@@ -305,7 +305,7 @@ export async function open(args: Args): Promise<Outcome> {
   if (!text(args.path)) {
     openInOffice('slides')
 
-    return { summary: 'Opened Herald Slides' }
+    return { summary: 'Opened Bantu Slides' }
   }
 
   const file = resolve(text(args.path))
@@ -315,13 +315,13 @@ export async function open(args: Args): Promise<Outcome> {
   }
 
   if (officeAppFor(file, { libreOffice: false }) !== 'slides') {
-    throw new Error(`Herald Slides opens PowerPoint presentations (.pptx), not ${fileName(file)}`)
+    throw new Error(`Bantu Slides opens PowerPoint presentations (.pptx), not ${fileName(file)}`)
   }
 
   if (isPanels) {
     openInOffice('slides', { file })
 
-    return { summary: `Opened ${fileName(file)} in Herald Slides`, data: { path: file } }
+    return { summary: `Opened ${fileName(file)} in Bantu Slides`, data: { path: file } }
   }
 
   openApp('slides')
@@ -330,7 +330,7 @@ export async function open(args: Args): Promise<Outcome> {
   const deck = decks.get(doc.key)?.history.present ?? doc.initial
 
   return {
-    summary: `Opened ${doc.name} in Herald Slides: ${count(deck.slides.length, 'slide')}${doc.notes.length ? ` (shown differently: ${doc.notes.join('; ')})` : ''}`,
+    summary: `Opened ${doc.name} in Bantu Slides: ${count(deck.slides.length, 'slide')}${doc.notes.length ? ` (shown differently: ${doc.notes.join('; ')})` : ''}`,
     data: { name: doc.name, path: doc.path, slides: model.outline(deck).split('\n'), ...(doc.notes.length ? { approximated: doc.notes } : {}) }
   }
 }
@@ -372,7 +372,7 @@ export async function list(): Promise<Outcome> {
   const current = presentations.find((entry) => entry.active) ?? presentations[0]
 
   return {
-    summary: presentations.length ? `${count(presentations.length, 'presentation')} open${current ? `; in front: ${current.name}${current.selection ? ` (${current.selection})` : ''}` : ''}` : 'Nothing is open in Herald Slides',
+    summary: presentations.length ? `${count(presentations.length, 'presentation')} open${current ? `; in front: ${current.name}${current.selection ? ` (${current.selection})` : ''}` : ''}` : 'Nothing is open in Bantu Slides',
     data: { presentations: presentations.map(({ key: _key, app: _app, front: _front, ...entry }) => entry), current: current ? (current.path ?? current.name) : null }
   }
 }
@@ -451,8 +451,8 @@ export async function edit(args: Args): Promise<Outcome> {
 }
 
 /**
- * A document's content: through Herald Docs in this window, or (panels mode, where it is open in
- * Herald Docs' own window) as the Markdown that window reads it as, where Title and Subtitle are headings.
+ * A document's content: through Bantu Docs in this window, or (panels mode, where it is open in
+ * Bantu Docs' own window) as the Markdown that window reads it as, where Title and Subtitle are headings.
  */
 async function documentFor(ref: unknown, context: CommandContext): Promise<{ name: string; path: string | null; json: DocJSON }> {
   const { documentJSON } = await import('../docs/agent.ts')
@@ -464,11 +464,11 @@ async function documentFor(ref: unknown, context: CommandContext): Promise<{ nam
     const entries = await openEntries()
     const entry = asked ? findEntry(entries, 'docs', asked, isPathLike(asked) ? resolve(asked) : null) : (entries.find((candidate) => candidate.app === 'docs' && candidate.active) ?? null)
 
-    if (!entry || loadedSessions.get('docs')?.summaries().some((doc) => doc.key === entry.key) || typeof window.heraldOS.office.run !== 'function') {
+    if (!entry || loadedSessions.get('docs')?.summaries().some((doc) => doc.key === entry.key) || typeof window.bantuOS.office.run !== 'function') {
       throw error
     }
 
-    const result = (await window.heraldOS.office.run({ app: 'docs', key: entry.key }, 'docs.read', { document: entry.path ?? entry.name, part: 'markdown', maxChars: 200000 }, context.source)) as CommandResult | undefined
+    const result = (await window.bantuOS.office.run({ app: 'docs', key: entry.key }, 'docs.read', { document: entry.path ?? entry.name, part: 'markdown', maxChars: 200000 }, context.source)) as CommandResult | undefined
     const markdown = result?.ok && typeof result.data?.content === 'string' ? result.data.content : null
 
     if (markdown === null) {
@@ -482,7 +482,7 @@ async function documentFor(ref: unknown, context: CommandContext): Promise<{ nam
 }
 
 /**
- * A Herald Docs document (open, or a file) as slides, made as File > New from Document and Insert >
+ * A Bantu Docs document (open, or a file) as slides, made as File > New from Document and Insert >
  * Slides from Document make them: in a new presentation named after it, or added to the end of one.
  */
 export async function fromDocument(args: Args, context: CommandContext): Promise<Outcome> {
@@ -508,7 +508,7 @@ export async function fromDocument(args: Args, context: CommandContext): Promise
   return stepOn(await located(args.presentation), (deck) => documentSlidesStep(deck, source.json, { name: source.name, from: source.path ?? source.name }, options))
 }
 
-/** A range of a Herald Sheets workbook (open, or a file) as a table on a slide (or new slides), as its cells show, as Insert > Table from Sheet puts it in. */
+/** A range of a Bantu Sheets workbook (open, or a file) as a table on a slide (or new slides), as its cells show, as Insert > Table from Sheet puts it in. */
 export async function insertRange(args: Args): Promise<Outcome> {
   const sheets = await sheetSources([text(args.workbook)])
 
@@ -521,7 +521,7 @@ export async function save(args: Args): Promise<Outcome> {
   to = to && !extensionOf(to) ? `${to}.pptx` : to
 
   if (to && extensionOf(to) !== '.pptx') {
-    throw new Error(`Herald Slides saves presentations as .pptx, not ${extensionOf(to)}`)
+    throw new Error(`Bantu Slides saves presentations as .pptx, not ${extensionOf(to)}`)
   }
 
   if (to && (await exists(to)) && args.overwrite !== true) {
@@ -536,9 +536,9 @@ export async function save(args: Args): Promise<Outcome> {
     // Save as for a file: read, and written again under the new name.
     const { on } = await reading(found)
     const written = await slidesAdapter.write(on.deck, '.pptx', undefined)
-    await window.heraldOS.office.write(to, written.bytes)
+    await window.bantuOS.office.write(to, written.bytes)
 
-    return { summary: `Saved ${fileName(found.path)} as ${fileName(to)}${on.notes.length ? ` (as Herald shows it: ${on.notes.join('; ')})` : ''}`, data: { path: to, ...(on.notes.length ? { approximated: on.notes } : {}) } }
+    return { summary: `Saved ${fileName(found.path)} as ${fileName(to)}${on.notes.length ? ` (as Bantu shows it: ${on.notes.join('; ')})` : ''}`, data: { path: to, ...(on.notes.length ? { approximated: on.notes } : {}) } }
   }
 
   const { doc } = found
@@ -571,7 +571,7 @@ export async function exportPdf(args: Args): Promise<Outcome> {
   if (found.kind === 'file') {
     const { on } = await reading(found)
     const view = await slidesAdapter.print(on.deck, name)
-    await window.heraldOS.office.exportPdf({ html: view.html, suggestedName: name, landscape: view.landscape, path: file })
+    await window.bantuOS.office.exportPdf({ html: view.html, suggestedName: name, landscape: view.landscape, path: file })
   } else if (!(await session.exportPdf(found.doc, file))) {
     throw new Error(`Could not export ${name} as a PDF`)
   }
@@ -583,7 +583,7 @@ export async function step(direction: 'undo' | 'redo', args: Args): Promise<Outc
   const found = await located(args.presentation)
 
   if (found.kind === 'file') {
-    throw new Error(`Undo works in the open Herald Slides window: ${fileName(found.path)} is not open`)
+    throw new Error(`Undo works in the open Bantu Slides window: ${fileName(found.path)} is not open`)
   }
 
   const { doc } = found
@@ -591,7 +591,7 @@ export async function step(direction: 'undo' | 'redo', args: Args): Promise<Outc
   const live = decks.get(doc.key)
 
   if (!live) {
-    throw new Error(`${doc.name} is not showing in Herald Slides`)
+    throw new Error(`${doc.name} is not showing in Bantu Slides`)
   }
 
   flushTyping(live)

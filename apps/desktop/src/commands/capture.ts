@@ -1,5 +1,5 @@
 import type { CaptureTool, ScreenshotMode } from '../../shared/ipc.ts'
-import { CLI_UNAVAILABLE_MESSAGE, runHeraldOs } from '../lib/herald-os-cli.ts'
+import { CLI_UNAVAILABLE_MESSAGE, runBantuOs } from '../lib/bantu-os-cli.ts'
 import { $env } from '../store/backend.ts'
 import { $recording, askAbout, offerCapture } from '../store/capture.ts'
 import { fail, ok, type OsCommand } from '../store/os-commands.ts'
@@ -8,9 +8,9 @@ import { $windows, closeWindow, openApp } from '../store/windows.ts'
 
 /* The capture suite: screenshots, recording, the colour picker, QR codes, text, markup, the camera. */
 
-/** A Herald OS Linux tool run through the CLI (it draws its own selection where it needs one). */
+/** A Bantu OS Linux tool run through the CLI (it draws its own selection where it needs one). */
 async function linuxTool(argv: string[], title: string) {
-  const outcome = await runHeraldOs(argv)
+  const outcome = await runBantuOs(argv)
 
   if (outcome.unavailable) {
     return fail(`${title}: ${CLI_UNAVAILABLE_MESSAGE.toLowerCase()}.`)
@@ -27,7 +27,7 @@ async function screenTool(tool: CaptureTool, linuxArgv: string[], title: string)
     return linuxTool(linuxArgv, title)
   }
 
-  const result = await window.heraldOS.capture.tool(tool)
+  const result = await window.bantuOS.capture.tool(tool)
 
   if (result.cancelled) {
     return fail(`${title}: cancelled.`)
@@ -54,7 +54,7 @@ export const captureCommands: readonly OsCommand[] = [
     ],
     phrases: ['take a screenshot', { phrase: 'screenshot the whole screen', args: { mode: 'screen' } }, { phrase: 'screenshot this window', args: { mode: 'window' } }],
     run: async ({ mode, edit }, context) => {
-      const file = await window.heraldOS.capture.screenshot(mode as ScreenshotMode)
+      const file = await window.bantuOS.capture.screenshot(mode as ScreenshotMode)
 
       if (!file) {
         return fail('No screenshot: the selection was cancelled.')
@@ -76,12 +76,12 @@ export const captureCommands: readonly OsCommand[] = [
     tier: 'act',
     args: [
       { name: 'action', type: 'string', description: 'toggle, start or stop', enum: ['toggle', 'start', 'stop'] },
-      { name: 'region', type: 'boolean', description: 'Select a region to record (Herald OS Linux)' },
+      { name: 'region', type: 'boolean', description: 'Select a region to record (Bantu OS Linux)' },
       { name: 'audio', type: 'boolean', description: 'Record the microphone too' }
     ],
     phrases: [{ phrase: 'start recording the screen', args: { action: 'start' } }, { phrase: 'stop recording', args: { action: 'stop' } }, { phrase: 'record my screen', args: { action: 'start' } }],
     run: async ({ action, region, audio }) => {
-      const state = await window.heraldOS.capture.record((action as 'toggle' | 'start' | 'stop') ?? 'toggle', { region: Boolean(region), audio: Boolean(audio) })
+      const state = await window.bantuOS.capture.record((action as 'toggle' | 'start' | 'stop') ?? 'toggle', { region: Boolean(region), audio: Boolean(audio) })
 
       return ok(state.recording ? 'Recording the screen; run it again (or click the red dot) to stop' : state.file ? `Saved ${state.file.split('/').pop()}` : 'Not recording', { data: { ...state } })
     }
@@ -107,7 +107,7 @@ export const captureCommands: readonly OsCommand[] = [
     args: [{ name: 'file', type: 'string', description: 'The picture', required: true }],
     hidden: true,
     run: async ({ file }) => {
-      await window.heraldOS.capture.copyImage(String(file))
+      await window.bantuOS.capture.copyImage(String(file))
 
       return ok('Copied to the clipboard')
     }
@@ -158,7 +158,7 @@ export const captureCommands: readonly OsCommand[] = [
   {
     id: 'capture.transcode',
     title: 'Convert a recording',
-    description: 'Turn a recording into a GIF, a smaller MP4 or a WebM (Herald OS Linux, with ffmpeg).',
+    description: 'Turn a recording into a GIF, a smaller MP4 or a WebM (Bantu OS Linux, with ffmpeg).',
     tier: 'act',
     args: [
       { name: 'file', type: 'string', description: 'The recording', required: true },
@@ -169,7 +169,7 @@ export const captureCommands: readonly OsCommand[] = [
   {
     id: 'capture.share',
     title: 'Share a file',
-    description: 'Copy a file to the clipboard and open LocalSend when it is installed (Herald OS Linux).',
+    description: 'Copy a file to the clipboard and open LocalSend when it is installed (Bantu OS Linux).',
     tier: 'act',
     args: [{ name: 'file', type: 'string', description: 'The file', required: true }],
     run: ({ file }) => linuxTool(['capture', 'share', String(file)], 'Share')
@@ -184,7 +184,7 @@ export const captureCommands: readonly OsCommand[] = [
     run: async ({ enabled }) => {
       if (enabled === false) {
         if (isPanels) {
-          await window.heraldOS.shell.close('window:camera')
+          await window.bantuOS.shell.close('window:camera')
         } else {
           Object.values($windows.get())
             .filter(win => win.appId === 'camera')

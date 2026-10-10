@@ -1,5 +1,5 @@
 /*
- * Free Transform for Herald Canvas. A frame (a placement box, like a layer's) goes around the
+ * Free Transform for Bantu Canvas. A frame (a placement box, like a layer's) goes around the
  * picked layers, with handles to scale it, a ring outside the corners to turn it, and the inside to
  * move it; the layers follow the frame through their transforms, so their pixels stay as they are.
  * A free distort pins the four corners anywhere: a perspective the format cannot hold, so it is
