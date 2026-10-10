@@ -1,12 +1,17 @@
 name: Release
 
-# Builds what Bantu OS ships. A tag (v0.2.0) attaches the builds to a draft GitHub release; a manual
-# run only uploads them as workflow artifacts. Nothing here makes the repository or a release public.
+# Builds what Bantu OS ships. A tag (v0.2.0), or a manual run with a release tag, attaches the builds
+# to a draft GitHub release. Nothing here makes the repository or a release public.
 
 on:
   push:
     tags: ['v*']
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Version tag for the draft release, for example v0.1.0-alpha.4'
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -14,6 +19,10 @@ permissions:
 concurrency:
   group: release-${{ github.ref }}
   cancel-in-progress: false
+
+env:
+  # A tag push uses the pushed tag; a manual run supplies the tag explicitly.
+  RELEASE_TAG: ${{ inputs.release_tag || github.ref_name }}
 
 jobs:
   mac:
@@ -71,13 +80,14 @@ jobs:
             apps/desktop/release/*.zip
           if-no-files-found: error
       - name: Attach to the draft release
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: startsWith(github.ref, 'refs/tags/v') || inputs.release_tag != ''
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          [[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]] || { echo "::error::release_tag must look like v1.2.3 or v1.2.3-beta.1"; exit 1; }
           files=(apps/desktop/release/*.dmg apps/desktop/release/*.zip)
-          gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1 || gh release create "$GITHUB_REF_NAME" --draft --title "Bantu OS $GITHUB_REF_NAME" --notes "Draft written by the release workflow."
-          gh release upload "$GITHUB_REF_NAME" "${files[@]}" --clobber
+          gh release view "$RELEASE_TAG" >/dev/null 2>&1 || gh release create "$RELEASE_TAG" --draft --title "Bantu OS $RELEASE_TAG" --notes "Draft written by the release workflow."
+          gh release upload "$RELEASE_TAG" "${files[@]}" --clobber
 
   linux:
     name: Linux tarball (${{ matrix.arch }})
@@ -122,9 +132,10 @@ jobs:
             apps/desktop/release/bantu-os-*-linux-*.tar.gz.sha256
           if-no-files-found: error
       - name: Attach to the draft release
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: startsWith(github.ref, 'refs/tags/v') || inputs.release_tag != ''
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1 || gh release create "$GITHUB_REF_NAME" --draft --title "Bantu OS $GITHUB_REF_NAME" --notes "Draft written by the release workflow."
-          gh release upload "$GITHUB_REF_NAME" apps/desktop/release/bantu-os-*-linux-*.tar.gz apps/desktop/release/bantu-os-*-linux-*.tar.gz.sha256 --clobber
+          [[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]] || { echo "::error::release_tag must look like v1.2.3 or v1.2.3-beta.1"; exit 1; }
+          gh release view "$RELEASE_TAG" >/dev/null 2>&1 || gh release create "$RELEASE_TAG" --draft --title "Bantu OS $RELEASE_TAG" --notes "Draft written by the release workflow."
+          gh release upload "$RELEASE_TAG" apps/desktop/release/bantu-os-*-linux-*.tar.gz apps/desktop/release/bantu-os-*-linux-*.tar.gz.sha256 --clobber
